@@ -192,23 +192,23 @@ project(':multiverse-gamma') {
         archives javadocJar
     }
 
-    uploadArchives() {
-        repositories.mavenDeployer {
-            name = 'sshDeployer'
-            uniqueVersion = false
-            configuration = configurations.deployerJars
-            repository(
-                    id: 'multiverse-releases',
-                    url: 'dav:https://dav.codehaus.org/repository/multiverse/') {
-                authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
-            }
-            snapshotRepository(
-                    id: 'multiverse-snapshots',
-                    url: 'dav:https://dav.codehaus.org/snapshots.repository/multiverse/') {
-                authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
-            }
-        }
-    }
+    //uploadArchives() {
+    //    repositories.mavenDeployer {
+    //        name = 'sshDeployer'
+    //        uniqueVersion = false
+    //        configuration = configurations.deployerJars
+    //        repository(
+    //                id: 'multiverse-releases',
+    //                url: 'dav:https://dav.codehaus.org/repository/multiverse/') {
+    //            authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
+    //        }
+    //        snapshotRepository(
+    //                id: 'multiverse-snapshots',
+    //                url: 'dav:https://dav.codehaus.org/snapshots.repository/multiverse/') {
+    //            authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
+    //        }
+    //    }
+   // }
 }
 
 project(':multiverse-site') {
