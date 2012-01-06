@@ -3,3 +3,5 @@
 .DS_Store*
 multiverse-gamma/build/
 multiverse-site/build/
+*.iml
+.idea/
