@@ -1,0 +1,110 @@
+<h1>Multiverse 0.7</h1>
+
+Multiverse 0.7 was released at 1 May 2011 and was a total rewrite from the 0.6 release. The main features are:
+<ol>
+    <li><b>Removal of the central clock</b>. The STM design before 0.7 was based on MVCC (TL2 to be more specific) and
+        although it is really amazing, and readonly transactions can be made really cheap, update transaction still need
+        to contend for the
+        central clock to increment. There are some optimizations that can be applied to remove contention on this clock,
+        but the clock
+        is still required. The STM of Multiverse 0.7 is based around the idea of the SkySTM where no central clock is
+        needed.
+    </li>
+
+    <li>
+        <b>Isolation Levels</b>. Multiverse 0.7 supports the following isolation levels:
+        <ul>
+            <li>read committed: where a transaction will only see committed state, but no other consistency guarantees
+                are provided. Read committed isolation level
+                allows for much higher concurrency (it won't fail unlike the other isolation levels) and therefor scales
+                better, at the cost of reduced consistency. The
+                dirty read isolation level is not supported since a transaction will never see changes made by another
+                transaction.
+            </li>
+            <li>repeatable read:</li>
+            <li>snapshot: the Oracle version of the Serialized isolation level</li>
+            <li>serialized: provides a truly serialized execution of transaction where the writeskew problem is not
+                allowed.
+                explicit support for enabling/disabling the writeskew problem from happening has been removed
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <b>Pessimistic locking: </b> to compensate for the optimistic behavior STM's normally provide. It can be done on
+        the reference level using ensure/privatize,
+        but can also be done on the transaction level using the following pessimistic lock levels:
+        <ul>
+            <li>None: default. Nothing is locked during the execution of the transaction.</li>
+            <li>Ensure writes: when this pessimistic lock level is used, you essentially get the same behavior as in the
+                Oracle database, where each update/delete/insert automatically is locked for the remaining duration of
+                the
+                transaction.
+            </li>
+            <li>Ensure reads</li>
+            <li>Privatize writes</li>
+            <li>Privatize reads</li>
+        </ul>
+        Other added features are accessing the current locking status of a reference (to see if it ensured/privatized by
+        itself or by others).
+    </li>
+
+    <li>
+        <b>Deferred ensure: </b> makes it possible to deal optimistically with the writeskew problem on the ref level
+        without causing
+        overhead on all ref/transactional objects.
+    </li>
+
+    <li>
+        <b>Improved performance: </b> a lot of effort was spend on improving the performance of the STM. One of the big
+        improvements was the removal of all unwanted
+        object creation by adding an object pool to each transaction (which also can be reused).
+    </li>
+
+    <li>
+        <b>Atomic operations on refs</b> the api of the references has been improved greatly and one of the new features
+        is support
+        for atomic operations. Atomic operations are easier to do and a lot faster and can be a better solution than
+        using a transaction
+        where only one ref is updated. The following atomic operations are available:
+        <ul>
+            <li>atomicGet</li>
+            <li>atomicWeakGet</li>
+            <li>atomicGetAndSet</li>
+            <li>atomicSetAndGet</li>
+            <li>atomicAlterAndGet</li>
+            <li>atomicGetAndAlter</li>
+            <li>atomicCompareAndSet</li>
+            <li>atomicIsNull</li>
+            <li>atomicIsFree</li>
+            <li>atomicIsPrivatized</li>
+            <li>atomicIsEnsured</li>
+            <li>atomicIncrementAndGet</li>
+            <li>atomicGetAndIncrement</li>
+        </ul>
+    </li>
+
+    <li>
+        <b>Alter</b>
+    </li>
+
+    <li>
+        <b>Commute:</b>
+    </li>
+
+    <li>
+        <b>Transaction.abortOnly</b>
+    </li>
+</ol>
+
+<h2>Removal of functionality</h2>
+Some features have been removed from the 0.7 release:
+<ol>
+    <li>Instrumentation: will be added in the future again</li>
+    <li>TransactionalExecutor: will be added in the future</li>
+    <li>Transactional datastructures: will be added in the 0.8 release</li>
+    <li>Groovy support: we are working on integrating Multiverse directly with Groovy/GPars</li>
+    <li>Scala support: all Scala support is done through the Akka project and we are planning to provide an
+        implementation that implements the Scala STM API
+    </li>
+</ol>

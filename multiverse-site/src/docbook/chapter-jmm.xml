@@ -1,0 +1,83 @@
+<chapter xml:id="chapter-jmm">
+
+    <title>STM and the Java Memory Model</title>
+    <sect1>
+        <title>Introduction</title>
+    <para>
+        Prior to Java 5, the Java Memory Model (JMM) was broken. It was possible to get all kinds of strange results
+        like unpredictable merged writes made by concurrent executing threads, unexpected reordering of instructions,
+        and even final fields were not guaranteed to be final. With Java 5 and JSR-133, the Java Memory Model is clearly
+        specified. This specification makes it possible to write code that performs, but doesn't cause concurrency
+        problems.
+    </para>
+    </sect1>
+
+    <sect1>
+        <title>Happens before rules</title>
+        <para>
+            The Java Memory Model is specified in happens before rules, e.g.:
+        </para>
+            <itemizedlist>
+                <listitem>
+                    <para>monitor lock rule: all writes executed before some lock is released, are visible when
+                        the same lock is acquired.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>volatile variable rule: all writes executed before some volatile variable is written,
+                            are visible when the same volatile variable is read.</para>
+                 </listitem>
+            </itemizedlist>
+        <para>
+            The happens before rules clearly specify which visibility guarantees are provided on memory content and
+            which reordering are allowed. Without these rules it would not be possible to write concurrent code in Java.
+        </para>
+        <para>
+            For a more detailed explanation, please check ... or "Java Concurrency in Practice by Brian Goetz.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Transaction rule</title>
+        <para>
+            Multiverse also provides a happens before rule called the transaction rule. It guarantees that a
+            write on a transactional object is visible after the transaction commits and before another transaction
+            reads the same transactional object. On a lower level this is realized by lifting on the volatile variable
+            or lock rule.
+        </para>
+
+        <para>
+            Check out at the following code fragment for an example:
+        <programlisting language="java">
+     public class Foo{
+          private final IntRef value = newIntRef();
+
+          public void write(final int newValue){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    value.set(newValue);
+                }
+            });
+          }
+
+          public int read(){
+            return execute(new AtomicIntClosure()){
+                public void execute(Transaction tx){
+                    return value.get();
+                }
+            });
+          }
+     }
+        </programlisting>
+        In this example there is a happens before relation between the commit of the write transaction and the start of
+        the read transaction.
+        </para>
+
+        <para>
+            For developers this means that you don't need to worry about the JMM when transactions are used and
+            you don't need to define variable as volatile or synchronized blocks to introduce the needed memory
+            fences; this is all done for you.
+        </para>
+    </sect1>
+</chapter>
+

@@ -1,0 +1,14 @@
+<h1>Update Benchmarks</h1>
+
+<ul>
+    <li><a href="#monoUpdate">Mono Update</a></li>
+</ul>
+
+<h2 id="#monoUpdates">Updates</h2>
+The new BetaStm that was introduced in Multiverse 0.7, does not longer rely on a shared clock. TL2/MVCC based STM's
+rely on a shared clock (atomic lock) which needs to be updated by updating threads even though they don't
+share any other state. There are some optimizations that can be applied to reduce contention, but in the long
+run I think it is better to remove the clock altogether. As you can see in the graph, the STM's scale linearly
+as long as there is no contention.
+<a href="charts/uncontended_mono_update_line_wide.png"><img src="charts/uncontended_mono_update_line_narrow.png"/></a>
+<a href="charts/contended_counter_line_wide.png"><img src="charts/contended_counter_line_narrow.png"/></a>

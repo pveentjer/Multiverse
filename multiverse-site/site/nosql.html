@@ -1,0 +1,213 @@
+<h1>NoSQL</h1>
+
+<ul>
+    <li><a href="#introduction">1 Introduction</a></li>
+    <li><a href="#excellent.performance">2 Excellent performance</a></li>
+    <li><a href="#perfect.isolation">3 Perfect isolation</a>
+        <ul>
+            <li><a href="#not.only.isolation.also.notification">3.1 Also notification</a></li>
+        </ul>
+    </li>
+    <li><a href="#consistency.through.java.objects">4 Consistency through Java Objects</a></li>
+    <li><a href="#atomicity">5 Atomicity</a></li>
+    <li><a href="#durability">6 Durability</a>
+        <ul>
+            <li><a href="#flashback.queries">6.1 Flashback queries</a></li>
+            <li><a href="#buildin.audit.trail">6.2 Build-in audit trail</a></li>
+        </ul>
+    </li>
+    <li><a href="#schema.free">7 Schema Free</a>
+        <ul>
+            <li><a href="#no.or.mapping">7.1 No or-mapping</a></li>
+        </ul>
+    </li>
+    <li><a href="#bad.scalability">8 Bad scalability</a></li>
+    <li><a href="#low.availability">9 Low Availability</a></li>
+    <li><a href="#easy.deployment">10 Easy deployment</a></li>
+    <li><a href="#not.limited">11 Not limited to vendor specific data-structures</a></li>
+    <li><a href="#also.works.as.messagequeue">12 Also works as message queue</a></li>
+</ul>
+
+<h2 id="introduction">1 Introduction</h2>
+The NoSQL database movement promotes migrating away from traditional sql databases as the default solution
+to share state and synchronize state changes between transactions. I have seen enough customers with:
+<ol>
+    <li>
+        <b>high development costs:</b> caused by complex software. Often the mismatch between objects and
+        relational databases is the cause although a good or-mapper can ease the pain. Another cause
+        is that developers need to work around database limitations (e.g. the lack of thread notification).
+    </li>
+    <li><b>performance problems:</b> caused by too much contention, or just overflowing it with too many
+        small queries instead of using a caching solution. I often see databases being misused for managing very
+        volatile information like tracking the progress of some task.
+    </li>
+    <li>
+        <b>scalability problems:</b> distributed databases are not mainstream. There are all kinds of workarounds
+        to let traditional databases scale further (e.g. replication of readonly data or partitioning), but it
+        becomes quite expensive very quickly. Luckily the last few years a lot of good data grid solutions have
+        appeared,
+        like Gigaspaces (we are relying heavily on it at my employer) and Oracle Coherence, that reduce the stress
+        on the database.
+    </li>
+    <li>
+        <b>race problems:</b> although databases provide a declarative form of concurrency control using isolation
+        levels, it is hard to get right because using the highest isolation level often is not an option
+        and you need to deal with race problems or use database specific extensions like the select for update.
+    </li>
+    <li>
+        <b>high deployment costs:</b> adding a database to the equation causes a lot of extra work; installing,
+        tuning and maintaining the database and of course struggling with database and infrastructure level security.
+    </li>
+    <li>
+        <b>high license costs:</b> some databases are free, but the big ones cost money. It is important to
+        understand that I'm not saying that commercial databases are no good, but if have seen enough projects
+        where that money better could have been spend on good cluster software (like Gigaspaces or Oracle Coherence)
+        than on very expensive database solutions (for example Oracle Real Application Cluster).
+    </li>
+</ol>
+Picking the best 'database' solution depends on a lot of factors and using a standard relational database for every
+situation, is just making software development more expensive than it needs to be. By relaxing some parts (e.g.
+transactional behavior) and improving on others (e.g. scalability), NoSQL databases can be a fit.
+<p/>
+I think Multiverse and transactional memory systems in general, could play a role in the NoSQL movement by providing
+a solution with unique properties like excelent performance, perfect isolation and support for notification,
+and making it possible to build advanced concurrent datastructures without the complexity of a lock based approach.
+
+<h2 id="excellent.performance">2 Excellent performance</h2>
+I think it is going to be very hard to outperform a STM on a single JVM if you compare it to any commercial or opensource
+SQL database out there. If everything is done in memory (so no netwerk or disk io)
+performance could be hundreds or even thousands of times higher than if you are using a traditional database.
+<p/>
+Doing hondred thousands to a few million update transaction per second, and perhaps a another magnitude more
+readonly transactions, is realizable with STM. Ofcourse this depends on the transaction being executed (it could be
+suffering from contention or do a lot of work for example). And once transactional memory instructions has been added
+to the CPU's, you could have hybrid transactional memory systems that can outperform any software based one. That is
+why I expect that transactional memory systems are going to play a very important role in the future.
+<p/>
+Ofcourse to get this performance, some consessions need to be done. On of the most important one is relaxation
+of the durability property. If a persistance mechanism eventually is added to Multiverse, there propably
+will be a delay between the moment the commit finished and the moment that the changes have been saved on
+disk and are able to survive a powerloss. This is called a 'write behind' and a technique a lot of big players
+like Gigaspaces/Terracotta in the grid industry apply to get good performance.
+
+<h2 id="perfect.isolation">3 Perfect isolation</h2>
+Traditional SQL Databases defined a set of isolation levels that define which isolation problems
+are and are not allowed. And you can choose between performance and correctness. The big advantage
+of Software Transactional Memory (at least the TL2 based ones) is that is doesn't allow a lot
+of lower isolation problems to happen (no dirty reads, always repeatable reads and never phantom reads).
+So you get a serialized isolation level out of the box (almost serialized, see... for more information
+about the writeskew problem). And you can even make it more strict than is possible on MVCC
+databases like Oracle/Postgresql/MySQL + Innodb.
+
+<h3 id="not.only.isolation.also.notification">3.1 Not only isolation also notification</h3>
+One of the things that always annoys me with databases, it that it is hard to listen to changes. In most cases some
+kind of polling mechanism is added (often Quartz or ScheduledExecutor based) that checks the database for
+changes. But a more fine grained mechanism isn't available. With software transactional memory it is possible to
+create very advanced blocking datastructures (ConcurrentMaps, Executors, BlockingDeques) with a lot less hassly
+than using a lock based approach. Transactional memory also provides the possibility to block on multiple
+transactional objects, instead of a single one. This is caused by the
+limitation that a thread can only wait in a single waitset. And composing blocking operations also is extremely
+simple that is very hard to realize with a lock based approach.
+<p/>
+With Multiverse you are able to listen to changes and combined with non blocking transactions, you could create
+millions of transactions that all are blocking on different sets of data, while only using a few threads.
+
+<h2 id="consistency.through.java.objects">4 Consistency through Java objects</h2>
+Consistency is the property that guarantees that all transaction start with a consistent view of the system
+and leave the system in a consistent state. In traditional databases in some cases you need to struggle
+with triggers, but in Multiverse it all can be done in memory by the Java objects themselves. So no
+other mechanism is needed, just write well behaving java objects. And if you really can't say anything
+anymore about consistency, just abort the transaction and pray it works better next time (or finally start
+throwing TooManyRetriesException if the stm detects that a transaction is livelocking.
+
+<h2 id="atomicity">5 Atomicity</h2>
+Failure atomicity is the property that guarantees that all writes are written, or non of them happen. For example
+when a transfer of money between two accounts is executed, the changes on both accounts will be written
+or no changes at all will be written. Out of the box all Multiverse transactions will guarantee this
+behavior.
+
+<h2 id="durability">6 Durability</h2>
+If you need the state to be persisted, it is best to
+allow for write behind (so the actual state becomes durable after the transaction commit)
+instead of a write through solution (that becomes durable in the commit).
+<p/>
+Once Multiverse exposes access to the tranlocals to be stored, I think some really cool stuff could be done.
+One of the simlest things is to write the content periodically to file (in large batches).
+With multiverse you also can have access to all the changes made in the transaction (there is
+a perfect and stable before view and a perfect after after (although you could get read conflicts if
+reads are not tracked because other transactions have updated, and the older versions dont exist anymore.
+
+If the persistance is in place, you really have <a href="persistant.datastructures">Persistent datastructures</a>
+in place/
+
+<h3 id="flashback.queries">6.1 Flashback queries</h3>
+With Multiversioning, you can have a perfect view on every commit done in the system. If previous state is persisted,
+you could execute transaction that go back in time. Oracle provides this feature and calls it flashback queries.
+But once the persistance mechanism is added, this would be peanuts.
+
+So not only the actual state is updated, the previous versions also are available.
+
+<h3 id="buildin.audit.trail">6.2 Build-in audit trail</h3>
+As soon as the persistance mechanism is added, it can also be used as audit trail. You can see
+exactly wich changes have been made after each commit. Normally you would have to need some
+audit trail logic manually, but with Multiverse and flashback queries you can see the 'world' as at was
+at any moment in time (as long as the history still exists of course).
+
+<h2 id="schema.free">7 Schema Free</h2>
+There is no need to create an upfront database schema containing all the tables and columns. Just create the
+Java Objects and the STM will take care of the rest (perhaps with a little bit of assistance from the instrumentation
+process). So this also takes away the hasle of keeping the schema in sync with your objects.
+
+<h2 id="no.or.mapping">7.1 No or-mapping</h2>
+No or-mapping, so don't need to deal with the mismatch between the database and objects. Just a the TransactionalObject
+annotation to the object that needs to be transactional, and you are done in most cases. This is a lot less
+complex then dealing with traditional databases, even if you are using an or mapper like Hibernate.
+
+<h4>Sidenote</h4>
+I personally prefer having an explicit database scheme than letting the or-mapper maintain it for me. Especially
+if you are doing a version upgrade, you need a reliable way to migrate the database from one version to the next.
+
+<h2 id="bad.scalability">8 Bad scalability</h2>
+This is going to be a hard nut to crack I think. Multiverse (and all other TL2 based STM's) have a single
+shared clock (could be an AtomicLong) to determine if read or write problems occurred. If the transactional
+objects are distributed, the clock needs to be distributed as well and this is going to be a scalability
+bottleneck. If the increase of the clock takes 1 ms over the cluster, the maximum number of transactions/second
+would be 1000. No matter how much hardware you are adding to the equation (eventually the performance could
+start to decrease).
+<p/>
+Ofcourse you could always add some form of partitioning the the system, that multiple STM instances could
+run in parallel.
+
+<h2 id="low.availability">9 Low Availability</h2>
+This is also a weakspot since the nature of STM is to deal with volatile data but also since most
+current stm implementations are hard to scale caused by the global clock. But as soon as durability is added to
+Multiverse, replicating state between machines would not be that hard. So keeping a backup in sync should not be
+that hard to realize (especially if you allow for a delay between synchronization and having a window of
+inconsistency).
+
+<h2 id="easy.deployment">10 Easy deployment</h2>
+With traditional databases you need to deal with all kinds of issues. First of all you need to get the database
+up and running on your machine, an it also needs to be set up in the rest of the environments (acceptance
+and production for example). Next to that yo need to deal with getting the schema up and running on
+each system and make sure that the rights and firewalls are configured correctly. This is one of the things
+that always annoys me when dealing with databases.
+<p/>
+With Multiverse the 'database' is running in the same JVM as the application and automatically is started and
+stopped when the JVM starts and stops. And combine this with that Multiverse doesn't need a schema, and the
+deployment is practical non existent.
+
+<h2 id="not.limited">11 Not limited to vendor specific data-structures</h2>
+Although databases use very sophisticated datastructures internally, as a developer you don't have much influence
+on these structures. You can place an index and in most cases that is it (unless you are going to use
+database specific extensions). If you need to rely on a different form of data, like spatial data,
+you have to 'force' your model in relational model or use a non standard database. The cool thing about
+Multiverse (or Transactional Memory in general) is that you can create any structures you need. So you can
+create trees, hashtables, skiplists etc etc. In most cases your imagination will be the limiting factor and
+not the technology used.
+
+<h2 id="also.works.as.messagequeue">12 Also works as message queue</h2>
+Since transactional memory is very flexibile, it can not only coordinate state changes but also coordinate
+notification, it would not be that hard to create a message queue implementation, for example a JMS implementation.
+And instead of relying on an expense 2 phase commit between de database and the message queue, or accepting that
+the message queue or database could get in an inconsistent state because one of them fails while doing a commit,
+you can using a single software transactional memory transaction.

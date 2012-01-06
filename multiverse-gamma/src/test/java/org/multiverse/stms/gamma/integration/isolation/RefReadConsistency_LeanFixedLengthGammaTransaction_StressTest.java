@@ -1,0 +1,82 @@
+package org.multiverse.stms.gamma.integration.isolation;
+
+import org.junit.Test;
+import org.multiverse.api.AtomicBlock;
+import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransactionFactory;
+
+/**
+ * The refCount in some cases is set to an unrealistic high value because
+ * normally you want to have a 10/20 refs inside max since a full conflict
+ * scan needs to be done. But it is a nice way to check if it still is able
+ * to deal with read consistency.
+ */
+public class RefReadConsistency_LeanFixedLengthGammaTransaction_StressTest extends RefReadConsistency_AbstractTest {
+
+    private int refCount;
+
+    @Test
+    public void testWith2Refs() {
+        refCount = 2;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith4Refs() {
+        refCount = 4;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith8Refs() {
+        refCount = 8;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith16Refs() {
+        refCount = 16;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith32Refs() {
+        refCount = 32;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith64Refs() {
+        refCount = 64;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith128Refs() {
+        refCount = 128;
+        run(refCount);
+    }
+
+    @Test
+    public void testWith512Refs() {
+        refCount = 512;
+        run(refCount);
+    }
+
+    @Override
+    protected AtomicBlock createReadBlock() {
+        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+                .setMaximumPoorMansConflictScanLength(refCount)
+                .setMaxRetries(10000);
+        return new LeanGammaAtomicBlock(new LeanFixedLengthGammaTransactionFactory(config));
+    }
+
+    @Override
+    protected AtomicBlock createWriteBlock() {
+        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+                .setMaximumPoorMansConflictScanLength(refCount)
+                .setMaxRetries(10000);
+        return new LeanGammaAtomicBlock(new LeanFixedLengthGammaTransactionFactory(config));
+    }
+}

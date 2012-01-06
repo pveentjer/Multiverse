@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head><title>Multiverse : Software Transactional Memory for Java & the JVM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+
+    <!-- start of google analytics stuff -->
+    <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        _uacct = "UA-2882464-4";
+        urchinTracker();
+    </script>
+    <!-- end of google analytics stuff -->
+</head>
+<body>
+
+<div id="main-header">
+    <div>
+        <h1 class="main-header-left">Software Transactional Memory for Java & the JVM</h1>
+        <hr class="hide"/>
+    </div>
+</div>
+
+<div id="header">
+    <div id="header-title">
+        <h1>Multiverse</h1>
+
+        <p>Founded by Peter Veentjer</p>
+    </div>
+    <!-- div id="header-logo" -->
+    <!-- a id="header-logo" href="http://www.codehaus.org">codehaus.org</a -->
+    <!-- /div -->
+    <hr class="hide"/>
+</div>
+
+<div id="content">
+    <div id="side">
+<% for(menu in menus){%>
+        <div class="nav-title">
+            <div><h3>${menu.name}</h3></div>
+        </div>
+        <ul class="nav">
+<%      for(item in menu.items) {
+            def onpage = item.pageid == page.pageid
+            def clazz = onpage ? 'selected' : 'unselected'
+            if(item.url){%>
+            <li><a class="$clazz" href="${item.url}">${item.title}</a>
+<%          }else{%>
+            <li><a class="$clazz" href="${item.pageid}.html">${item.title}</a>
+<%          }%>
+<%          if(item.items && (onpage || item.containsSubMenuItem(page.pageid))){ %>
+            <div id="features_submenu" class="submenu">
+                  <ul>
+<%              for(subItem in item.items){
+                      onpage = subItem.pageid == page.pageid
+                      clazz = onpage ? 'selected' : 'unselected'
+
+                        if(subItem.url){%>
+                        <li><a class="$clazz" href="${subItem.url}">${subItem.title}</a>
+<%                      }else{%>
+                          <li><a class="$clazz" href="${subItem.pageid}.html">${subItem.title}</a>
+<%                      }%>
+<%              }%>
+                  </ul>
+            </div>
+<%      }%>
+            </li>
+<%  }%>
+        </ul>
+        <div class="nav-footer">
+            <div></div>
+        </div>
+        <hr class="hide"/>
+<%}%>
+    </div>
+
+    <div id="mainContent">
+        ${pagecontent}
+    </div>
+
+    <!-- end of main content -->
+
+    <div id="footer">
+        <hr class="hide"/>
+        <div id="footer-contents">Last updated: ${lastupdate}
+            <br/>
+            Copyright © 2011
+        </div>
+    </div>
+</div>
+<!-- content -->
+</body>
+</html>

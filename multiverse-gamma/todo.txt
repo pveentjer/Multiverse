@@ -1,0 +1,240 @@
+ideas:
+
+- fast 'write' on orec.depart when exclusive lock and no surplus
+
+- fast readset validation on committing transaction if the conflict counter has not changed
+needs more research.
+
+- stripe of conflict counters.
+
+- optimize the tx-pool logic (instead of using an array, use a single linked list)..
+transactions can also act as node (no need to introduce additional datastructures).
+
+- Collections
+
+    - 'size' structure to help with an approximate size for collections
+
+- instead of going through the transaction to deal with tranlocals, one you have a reference to one,
+all operations like openForWrite/checkConflict/ensure etc.
+
+- ensure on the transaction? To make all changes 'committable'.
+
+- selective notifies in transaction, instead of always waking up.. one could provide a function that only wakes
+ up under certain conditions.
+
+- actor atomic block, doesn't look at an existing transaction. Automatically exposes the onAbort/onCommit
+
+- on read/ on write function
+    - stuff like encryption and security could be added through this general purpose mechanism
+
+- reset the speculative stuff once and a while.
+
+- some spinning is allowed for the read conflict scan:
+    is this desirable? If it is locked, chances are high that and update already is done or is going
+    to be done.
+
+- cheap writeskew detection; first lock all writes.. if conflict counter hasn't changed, you know that
+there are no read conflicts..
+
+- write validation: can it be optimized? If the conflict counter has not changed, you know that no other
+transaction has caused any conflicting writes. So you know that there is no write conflict.
+
+- when a transaction needs to wait for a lock, can it help another transaction?
+
+- contention management.
+
+- the class index makes it easy to create some kind of arrays that store all kind of information
+  on the transactional class level. The question is how to to do it for transactions. You don't want to
+  publish it every time.
+
+- is it possible to combine pessimistic locking with blocking? What if a transaction wants to wait for a lock
+to become free... so can when a lock release is done, see if there are listeners before releasing the lock? If
+done before, the transaction knows it can remove the current listeners with the a cas, and add them to the set
+of listeners that to be notified. If a transaction wants to block ...
+when a normal transaction... when a lock is acquired, a retry error should also be thrown.
+
+- durability:
+    only when committing, a dirty transactional object needs to be checked if it is durable. If it isn't
+    no unitofwrite needs to be used. If it is, a unit of write needs to be used. So the commit needs to
+
+- create an orec that never become readbiased (useful for performance comparison).
+
+- transactional treemap
+
+- transactional treeset
+
+- a reference that always causes a privatization.
+
+- transactional array
+
+- use a retry policy for re-acquiring lock. atm only spinning is used.
+
+- cram all logic of the tranlocal in a long
+
+- tryEnsure
+
+- tryPrivatize
+
+- tryEnsureWhen
+
+- tryPrivatizeWhen
+
+- reading and backoff? Atm only spinning is used.
+
+- acquire commit lock. atm only some spinning is used
+
+- clojure: add watch. Basic functionality already is there, but atm it is done to all
+     reads and not specific ones.
+
+- commute: commuting functions are executed in reverse order.
+
+- blocking and speculative readtracking?
+
+- lean mono should not upgrade to array when untracked read is done, but should just attach it to the transaction.
+
+- rollbackfor/rollnotbackfor exception configuration
+
+- profiler
+
+- full transactional objects
+
+    - logic for full transactional objects needs to be fixed.
+
+    - pooling for generic transactional object tranlocals.
+
+- jmm issue with commit and listeners, it could happen that a write is done after a check is done if a listeners
+  is available. This could lead to a deadlock since the listener that is set after the write
+
+- adding read committed isolation level
+
+--------------------------------------------------------------------
+                        to do
+--------------------------------------------------------------------
+
+- CountDownCommitBarrier: RestorePartiesCompensatingTask
+
+- iterators and transactional collections
+
+- transactional collections and check on isolation level of transaction
+
+- pre/post start listeners and fat gamma block
+
+- AbstractTransactionalCollection:flatMap
+
+- AbstractTransactionalCollection:foldRight
+
+- NaiveTransactionalHashMap & todo's
+
+- NaiveTransactionalhashSet & todo's
+
+- NaiveTransactionalLinkedList & todo's
+
+- CommitBarrier & todo's
+
+- testing: prepare of transactions and excusive lock isolation level
+
+- testing: listeners & exceptions
+
+- testing: commute and locking
+
+- testing: atomic change operations and globalconflictcounter increment
+
+- testing: local conflict counter should be set if needed when the flatten commute is called.
+
+- testing: GammaRef_getAndAlterTest
+
+- testing: PhantomReadTest
+
+- Javadoc: TransactionalCollection
+
+- Javadoc: TransactionalCollectionFactory
+
+- Javadoc: TransactionalDeque
+
+- Javadoc: TransactionalIterable
+
+- Javadoc: TransactionalList
+
+- Javadoc: TransactionalMap
+
+- Javadoc: TransactionalQueue
+
+- Javadoc: TransactionalSet
+
+- Javadoc: TransactionalStack
+
+- Javadoc: BinaryFunction
+
+- Javadoc: Isolation Level
+
+- cleanup git repo: needs to be published to trunk instead of multiverse-beta
+
+- cleanup codehaus uploads
+
+- automatic publication of SNAPSHOT javadoc on codehaus
+
+- automatic publication of javadoc on codehaus
+
+- automatic publication of site on codehaus
+
+- publication of benchy
+
+----------------------------------------------------------------------
+                                done
+----------------------------------------------------------------------
+
+- removal of the ReadCommitted isolation level
+
+- upload of sources in jar form
+
+- upload of Javadoc in jar form
+
+- Improved message on the abortOnEnsureOnBadStatus
+
+- testing: Lock.acquire0Test
+
+- testing: Lock_getLockMode0Test
+
+- testing: lean transaction and readonly? no checking is done but what if configured as readonly
+
+- testing: repeatable read isolation level
+
+- testing: GammaRef_atomicAlterAndGetTest
+
+- testing: GammaRef_atomicGetAndAlterTest
+
+- testing: GammaRef_commuteTest
+
+- testing: GammaRef_commute1Test
+
+- testing: GammaRef_atomicGetAndSetTest
+
+- testing: GammaLongRef_atomicGetAndSetTest
+
+- Improved Javadoc: StmUtils
+
+- Improved Javadoc: TransactionFactoryBuilder
+
+- Improved JavaDoc: TransactionalObject
+
+- Improved Javadoc: Improve Javadoc on AtomicBlock
+
+- Improved Javadoc: Stm
+
+- Improved Javadoc on the Transaction life-cycle functionality.
+
+- Improved Javadoc for Functions
+
+- Improved Javadoc for all exceptions
+
+- Improved Javadoc on ControlFlowError
+
+- Improved Javadoc on TransactionStatus
+
+- Improved Javadoc on Lock
+
+- Improved Javadoc on LockMode
+
+- Improved Javadoc on Transaction
+
+- Improved Javadoc on Ref

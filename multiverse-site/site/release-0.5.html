@@ -1,0 +1,85 @@
+<h1>Multiverse 0.5</h1>
+
+Multiverse 0.5 was released at 2 May 2010 and contains the following features:
+<ol>
+    <li>Multiverse Compiler: responsible for compile-time instrumentation. The instrumentation architecture
+        is now set up in such a way the the same mechanism can be used for the compiletime and runtime
+        instrumentation
+    </li>
+    <li>New Transactional collections:
+        <ul>
+            <li>TransactionalReferenceArray</li>
+            <li>TransactionalArrayList</li>
+        </ul>
+    </li>
+    <li>
+        Transactions that only create new Transactional Objects and don't update existing transactional
+        objects, have become a lot cheaper. They don't need to acquire/release their locks and they don't need
+        to increase the shared clock.
+    </li>
+    <li>
+        Many bytecode optimizations:
+        <ul>
+            <li>Inlining getters/setters: because additional code is generated, simple inlining of getters/setters
+                could be obstructed in the JIT. That is why an explicit getter/setter inliner for managed fields
+                is added to the Multiverse Compiler, that is applied before all other transformations.
+            </li>
+            <li>Staying inside transactional methods: the instrumentation generates additional methods
+                for every transactional method. The original method is stripped from all logic which is replaced
+                by transaction management logic. The original logic is moved to new synthetic methods. But because you
+                know that once you enter such a method, the transaction management already is done, you can safely call
+                other 'synthetic' methods that already have transaction management done.
+            <li>Transactional this: transactional methods in Multiverse are modified, and in this case they
+                are modified in such a way that the tranlocal of the 'this', is added to all transactional instance
+                methods of that class. The advantage is that instead of going through a transaction to
+                retrieve the tranlocal, it always will be available in a local variable. So a read/write
+                on managed field of will be almost as fast as in uninstrumented code. And if a instance
+                method calls another instance methods of itself, it can pass the tranlocal
+                (doesn't need to be retrieved again from the transaction).
+            </li>
+        </ul>
+    </li>
+    <li>
+        Spinning: in the 0.4 release when a transaction wants to to open a transactional object for reading
+        or writing, and the object is locked (for committing), it fails immediately and is retried. With the
+        0.5 release spinning is added to prevent failing immediately.
+    </li>
+    <li>
+        Scalability improvements in the AlphaSTM by reducing lock time and removing unwanted cas
+        instructions. Locks are now released as soon as the write has completed instead of of waiting
+        for the whole transaction to complete.
+    </li>
+    <li>
+        Timed blocking transactions. In the 0.4 release it was only possible to do blocking operations that
+        potentially block forever. With the timed blocking transaction it is now possible to configure a
+        timeout.
+    </li>
+    <li>
+        New integration API for JVM based languages that don't want to rely on the instrumentation,
+        or on STM specifics implementation details. The references created by this API already contain
+        optimizations that will be added to the instrumentation process of Multiverse 0.6. 'Atomic' getters
+        (so setters that don't rely on a transaction) have the speed comparable to a volatile read. Atomic setters are a
+        little bit
+        more expensive. The idea is that if you can deal with relaxed consistency, they you can get the most
+        out of performance. If a normal finds that no transaction is running, it will forward to the atomic
+        version is one is available.
+    </li>
+    <li>
+        Initial support for commuting operations. This was needed to have better scalable transactional
+        data-structures because they won't conflict on the size field anymore. It currently is only accessible
+        through the new Integration API, but will be made generally available in Multiverse in the near future.
+    </li>
+    <li>
+        Configurable blocking transactions. This feature was added for environments that don't want to allow
+        blocking transactions, but don't have control if a retry is done.
+    </li>
+    <li>
+        Self learning transaction system based on speculative execution, is now able to detect when a transaction
+        needs to be readonly or an update. The same goes for detecting if read tracking for blocking operations
+        should be enabled. This means that these properties don't need to be specified explicitly by the developer.
+    </li>
+    <li>
+        Guaranteed to work with the Sun 1.6 / IBM 1.6 / OpenJDK 1.7 (all tests are executed on the newest
+        versions every night).
+    </li>
+</ol>

@@ -1,0 +1,70 @@
+<chapter xml:id="chapter-pessimistic-locking">
+
+    <title>Pessimistic Locking (in progress)</title>
+
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            Normally STM's are very optimistic, so this means that a transaction can fail when it commits because
+            anothertransaction has updated data it has read. When this happens, a
+            org.multiverse.api.exceptions.ControlFlowError is thrown (in this case a org.multiverse.api.exceptions.ReadWriteConflict),
+            which is caught by the org.multiverse.api.AtomicBlock and the transaction is retried. In some cases the optimistic nature
+            can be problematic and something more pessimistic is needed. Multiverse provides support for pessimistic behavior on the
+            Ref level using the Ref.getLock or on the Transaction level by setting the readLockMode or writeLockMode.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Lock modes</title>
+        <para>
+            The Lock has 4 different Lock modes:
+        </para>
+        <itemizedlist>
+            <listitem>
+                <itemizedlist>
+                    <listitem>
+                        <para>LockMode.None: no pessimistic lock is acquired</para>
+                    </listitem>
+                    <listitem>
+                        <para>LockMode.Read: a readlock is acquired that prevents other transactions from acquiring a
+                            writelock or exclusive lock, but it still always others to read.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>LockMode.Write: a writelock is acquired that prevents other transactions from acquiring
+                            the
+                            readlock/writelock or exclusive lock. But it is important to realize that others still are
+                            allowed
+                            to read it.
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>LockMode.Exclusive: an exclusive lock is acquired that prevents other transactions from
+                            acquiring any form of lock or do any reads/wites.
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+
+    <sect1>
+        <title>Lock upgrade</title>
+        <para>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Pessimistic locking on ref level</title>
+        <para>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Pessimistic locking on transaction level</title>
+        <para>
+            Pessimistic locking can be done on all reads made by a transaction by configuring the
+        </para>
+    </sect1>
+
+</chapter>

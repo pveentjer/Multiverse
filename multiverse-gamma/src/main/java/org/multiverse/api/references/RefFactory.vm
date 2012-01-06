@@ -1,0 +1,21 @@
+package org.multiverse.api.references;
+
+/**
+* A Factory for creating references.
+*
+* @author Peter Veentjer.
+*/
+public interface RefFactory {
+#foreach($ref in $refs)
+    #if(${ref.isReference})
+
+    /**
+    * Creates a committed ${ref.referenceInterface}.
+    *
+    * @param value the initial value.
+    * @return the created ${ref.referenceInterface}.
+    */
+        ${ref.typeParameter} ${ref.referenceInterface}${ref.typeParameter} new${ref.referenceInterface}(${ref.type} value);
+    #end
+#end
+}

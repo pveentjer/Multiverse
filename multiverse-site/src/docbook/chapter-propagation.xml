@@ -1,0 +1,89 @@
+<chapter xml:id="chapter-propagation">
+
+    <title>Propagation</title>
+
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            It can happen that AtomicBlocks are called within the execution of other AtomicBlock and this leads to
+            transaction nesting. In a lot of cases you want to allow this, but in some cases you want to control it.
+            This can be done by configuration the transaction propagation.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>PropagationLevel</title>
+        <para>
+            Multiverse supports propagation by setting the correct PropagationLevel on the TransactionFactoryBuilder
+            (defaults to PropagationLevel.Requires). The following propagation levels are supported:
+            <itemizedlist>
+                <listitem>
+                    <para>PropagationLevel.RequiresNew: Indicates that a new transaction always is started, even when
+                        there is an active transaction. The active transaction is postponed and used again after the
+                        nested transaction commits. It could be that the outer transaction conflicts made on changes
+                        by the inner transaction.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>PropagationLevel.Requires: Indicates that a new transaction will be used if none exists. If
+                        one exists, the logic will lift on that transaction. This is the default propagation level
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>PropagationLevel.Supports: Indicates that it the logic can either be run with or without
+                        transaction.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>PropagationLevel.Never: Indicates that no active transaction should be available. If a
+                        transaction is found, a org.multiverse.api.exceptions.TransactionNotAllowedException is thrown.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>PropagationLevel.Mandatory: Indicates that a transaction should always be available. If not, a
+                        org.multiverse.api.exceptions.TransactionMandatoryException is thrown.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            An example of configuring the propagation level:
+
+            <programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+    import static org.multiverse.api.GlobalStmInstance.*
+
+    public class Account{
+         private final static AtomicBlock transferBlock = getGlobalStmInstance()
+              .newTransactionFactoryBuilder()
+              .setPropagationLevel(PropagationLevel.Requires)
+              .newAtomicBlock();
+
+         private final IntRef amount = newIntRef(0);
+
+         public void transfer(final int a){
+            transferBlock.execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    amount.incrementAndGet(tx, a);
+                }
+            });
+         }
+
+         ...
+    }
+
+            </programlisting>
+            In this example the transfer method will lift on an already running transaction, but if none is found,
+            it will use it own.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Warning</title>
+        <para>
+            Atm there are no checks if outer AtomicBlock violates the inner AtomicBlock. If the inner AtomicBlock is configured
+            as readonly and the outer as an update transaction, an outer transaction is able to make updates.
+        </para>
+    </sect1>
+</chapter>

@@ -1,0 +1,96 @@
+body, td, th, input {
+/* redundant rules for bad browsers  */
+    font-family: verdana, sans-serif;
+    font-size: x-small;
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    font-size: small;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: arial, verdana, sans-serif;
+}
+
+h1, h2, h3 {
+    border-bottom: 1px solid #ccc;
+}
+
+h1 {
+    font-size: 160%;
+    font-weight: normal;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 150%;
+    font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 85%;
+}
+
+h3 {
+    font-size: 120%;
+    width: 70%;
+    min-width: 250px;
+}
+
+h4 {
+    font-size: 100%;
+}
+
+h5 {
+    font-size: 90%;
+}
+
+h6 {
+    font-size: 90%;
+    border: 0;
+}
+
+pre {
+    font-size: 110%;
+    padding: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    background-color: #f3f5e9;
+}
+
+:link {
+    color: #039;
+}
+
+:visited {
+    color: #039;
+}
+
+:link:hover, :visited:hover {
+    color: #333;
+}
+
+:link:active, :link:active {
+    color: #000;
+}
+
+body {
+    padding: 10;
+    color: #333;
+    min-width: 610px;
+    max-width: 900px;
+    background: #efefef;
+}
+
+form {
+    margin: 0;
+}
+
+img {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.hide {
+    display: none;
+}

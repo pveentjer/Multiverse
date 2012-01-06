@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>yourapplication</artifactId>
+    <groupId>org.yourgroup</groupId>
+    <version>1.0</version>
+
+    <properties>
+        <multiverse.version>0.5</multiverse.version>
+        <sourceEncoding>UTF-8</sourceEncoding>
+        <targetJdk>1.6</targetJdk>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>repository.codehaus.org</id>
+            <name>Codehaus Maven Repository</name>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <configuration>
+                    <argLine>
+                        -javaagent:${settings.localRepository}/org/multiverse/multiverse-alpha/${multiverse.version}/multiverse-alpha-${multiverse.version}.jar
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <encoding>${sourceEncoding}</encoding>
+                        <source>${targetJdk}</source>
+                        <target>${targetJdk}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.multiverse</groupId>
+            <artifactId>multiverse-alpha</artifactId>
+            <version>${multiverse.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

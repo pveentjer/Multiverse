@@ -1,0 +1,32 @@
+<chapter xml:id="chapter-deferred-and-compensating-tasks">
+
+    <title>2 Phase Commit (in progress)</title>
+
+    <sect1>
+        <title>Introduction</title>
+        <para>
+
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>CommitBarrier</title>
+    </sect1>
+
+    <sect1>
+        <title>CountDownCommitBarrier</title>
+        <para>
+            The CountDownCommitBarrier is a CommitBarrier implementation comparable to the java.util.concurrent.CountDownLatch where
+            all pending transactions can continue when the configured number of parties have arrived.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>VetoCommitBarrier</title>
+        <para>
+            The VetoCommitBarrier is a CommitBarrier implementation where all pending transactions can continue when one of the Transactions
+            veto's the VetoCommitBarrier to open.
+        </para>
+    </sect1>
+
+</chapter>

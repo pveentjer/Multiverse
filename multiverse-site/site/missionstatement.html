@@ -1,0 +1,28 @@
+<h1>Mission statement</h1>
+<ol>
+    <li>
+        <b>Reduce complexity of concurrency control</b> where applicable by raising the abstraction level. The goal
+        is not to replace traditional concurrency control completely, but to provide an alternative programming
+        model. I see Multiverse as filling the gap between traditional databases and traditional concurrency
+        control. In the future, extensions for durability and clustering are expected.
+    </li>
+    <li>
+        <b>Seamless integration in the Java Language</b>. In most cases this can be done through annotations
+        in combination with instrumentation. So you don't need to extend any classes, implement interfaces
+        impose limitations on the type of fields, or otherwise damage your oo design.
+    </li>
+    <li>
+        <b>To be integrated in other JVM based languages</b> like Scala, Groovy or JRuby. The STM implementation
+        itself doesn't care about the language used, it only cares about classes implementing certain
+        interfaces. So it should be possible to combine transactional objects written in different
+        languages, in the same STM.
+    </li>
+    <li>
+        <b>Production environment quality.</b> Multiverse is not an academic experiment. The goal is
+        to create a product that can be used in the most demanding production environments.
+    </li>
+    <li>
+        <b>Provide a framework for STM experiments.</b> It should be easy to swap/tune the STM implementation
+        without changing everything.
+    </li>
+</ol>

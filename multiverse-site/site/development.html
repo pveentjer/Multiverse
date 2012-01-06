@@ -1,0 +1,67 @@
+<h1>Development</h1>
+On this page you can find all information related to developing Multiverse. For more information about how to set up
+your project that depends on Multiverse, check the <a href="developconfiguration.html">following</a> page.
+
+<h2>Links</h2>
+Underneath you can find the most important links:
+<ul>
+    <li><a href="http://git.codehaus.org/gitweb.cgi?p=multiverse.git">Web-based GIT viewer</a>.</li>
+    <li><a href="http://jira.codehaus.org/browse/MULTIVERSE">Jira</a> to track the issue. The issues
+        still need to be migrated from the old website to JIRA.
+    </li>
+    <li><a href="http://docs.codehaus.org/display/MULTIVERSE">Confluence:</a> the (still empty) wiki</li>
+    <li><a href="http://bamboo.ci.codehaus.org/browse/MULTIVERSE-DEF">Bamboo:</a> our continuous
+        integration server.
+    </li>
+    <li><a href="http://multiverse.codehaus.org/maven-site/index.html">Maven Site:</a> the default (and) ugly
+        generated maven site containing all the reports.
+    </li>
+</ul>
+
+<h2>Downloading the sources</h2>
+If you are not a committer you can execute the following command:
+<pre>
+git clone git://git.codehaus.org/multiverse.git multiverse
+</pre>
+This command can be executed in the directory you want the Multiverse project to be checked out. The multiverse directory
+automatically is created for you.
+<p>
+    If you are a committer you can execute the following command:
+<pre>
+git clone ssh://git@git.codehaus.org/multiverse.git
+</pre>
+If you execute this command, and you haven't registered a 'Authorized Keys' at Codehaus, you will be asked for a
+password. I don't know what the password is and it is best to create an key and upload it to codehaus.
+For more information about creating a key, check the following
+<a href="http://docs.codehaus.org/display/HAUS/SSH+Guide">SSH Guide on Codehaus</a> and the public part of the key
+can be copy/paste to your
+<a href="http://xircles.codehaus.org/my/details">Codehaus details page</a>
+A better manual will be provided in the future because this 'getting up and running' stuff always irritates me and
+wastes my precious time.
+
+<h2>Building the project</h2>
+You need to install <a href="http://www.gradle.org">Gradle</a> 0.9 Preview 1
+(<a href="http://dist.codehaus.org/gradle/gradle-0.9-preview-1-all.zip">download</a>). If you go to the root directory
+and type 'gradle -i' (the -i adds progress information) the project will automatically be compiled and the
+artifacts will also be stored in your local maven repository. Other important commands:
+<pre>
+    //builds the jar from scratch (unit tests are not executed)
+    gradle -i clean install
+
+    //runs the tests
+    gradle -i test
+
+    //runs the integration tests (this can some time).
+    gradle -i integrationtest
+</pre>
+The integrationtests take a serious amount of time (more than an hour). In the 0.6 release it is going to be
+possible to configure from the buildscript/commandline how long the tests should run. Also make sure that you have
+Java 1.6 or higher installed; Sun/IBM/Open(6,7)-JDK should work without a problem since they are tested.
+
+<h2>Setting up IDEA</h2>
+Currently the Maven POMS are still available and kept in sync with the Gradle script, so you can use
+that as a bases when creating a Idea project.
+
+<h2>Setting up Eclipse</h2>
+Currently the Maven POMS are still available and kept in sync with the Gradle script, so you can use
+mvn eclipse:eclipse to generate the required Eclipse project files.

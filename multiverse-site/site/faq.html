@@ -1,0 +1,270 @@
+<h1>Frequent asked questions</h1>
+
+<ol>
+    <li><a href="#question.1">Does Multiverse rely on instrumentation?</a></li>
+    <li><a href="#question.2">Can Multiverse be used with different languages?</a></li>
+    <li><a href="#question.3">Can I use arbitrary threads?</a></li>
+    <li><a href="#question.4">Can multiple STM instances be used within the same JVM?</a></li>
+    <li><a href="#question.5">Do I need a special JVM?</a></li>
+    <li><a href="#question.6">Can the changes be persisted?</a></li>
+    <li><a href="#question.7">Can TransactionalObjects be combined with JPA/Hibernate annotations?</a></li>
+    <li><a href="#question.8">Can Multiverse be distributed?</a></li>
+    <li><a href="#question.9">Which License is used?</a></li>
+    <li><a href="#question.10">Does Multiverse support blocking transactions?</a></li>
+    <li><a href="#question.11">Does Multiverse scale linearly?</a></li>
+    <li><a href="#question.12">Does Multiverse prevent deadlocking?</a></li>
+    <li><a href="#question.13">Does Multiverse prevent livelocking?</a></li>
+    <li><a href="#question.14">Does Multiverse prevent starvation?</a></li>
+    <li><a href="#question.14">Can Multiverse transactions participate in a distributed transaction?</a></li>
+    <li><a href="#question.15">Does Multiverse suffer from Zombie threads?</a></li>
+    <li><a href="#question.16">Can non transactional objects be used in transactions?</a></li>
+    <li><a href="#question.17">Can IO be done in transactions?</a></li>
+    <li><a href="#question.18">Does Multiverse provide support for pessimistic locking?</a></li>
+    <li><a href="#question.19">Does Multiverse support nesting of transactions?</a></li>
+    <li><a href="#question.20">Does Multiverse allow non transaction access?</a></li>
+    <li><a href="#question.21">Does Multiverse support early or late conflict detection?</a></li>
+    <li><a href="#question.22">Does Multiverse support direct or deferred updates?</a></li>
+    <li><a href="#question.23">Can Multiverse be combined with traditional lock based technology?</a></li>
+    <li><a href="#question.24">Does Multiverse support privatization?</a></li>
+    <li><a href="#question.25">Does Multiverse need special factories for creating transactional objects?</a></li>
+    <li><a href="#question.26">Are Multiverse Transactions thread-safe?</a></li>
+    <li><a href="#question.27">Is lock based concurrency control bad?</a></li>
+    <li><a href="#question.28">Multiverse and the Java Memory Model</a></li>
+    <li><a href="#question.29">Does Multiverse have object or field granularity?</a></li>
+    <li><a href="#question.30">Does Multiverse have provides support for contention management?</a></li>
+    <li><a href="#question.31">Do I need some fetch strategy for fields?</a></li>
+    <li><a href="#question.32">Can Multiverse be combined with Spring/Guice/...?</a></li>
+    <li><a href="#question.33">What is wrong with read or write conflicts?</a></li>
+    <li><a href="#question.34">Does Multiverse touch java.util classes?</a></li>
+    <li><a href="#question.35">Does Multiverse work with the IBM JDK?</a></li>
+    <li><a href="#question.36">Does Multiverse work with the Open JDK?</a></li>
+</ol>
+
+<h2 id="question.1">Does Multiverse rely on instrumentation</h2>
+No; although instrumentation is useful for seamless integration in the Java language, the STM itself can
+perfectly be used without instrumentation. Since Multiverse 0.5 it is possible to a Javaagent (dynamic
+instrumentation) or compiletime instrumentation.
+
+<h2 id="question.2">Can Multiverse be used with different languages?</h2>
+Multiverse can be used with different Java based languages like Groovy or Scala. For more information see the
+<a href="otherjvmlanguages.html">Other JVM languages</a> page.
+
+<h2 id="question.3">Can I use arbitrary threads?</h2>
+Yes you can. Multiverse doesn't require any special threads or any special settings on threads.
+
+<h2 id="question.4">Can multiple STM instances be used within the same JVM?</h2>
+It depends. If you are not using the instrumentation, and not share any transactional objects between STM instances,
+then you can use multiple STM instances. But once the instrumentation is used, the system always makes use of the
+GlobalStmInstance. In the future this limitation may be removed, but there must be some mechanism for the transacional
+methods to get their hands on a STM instance (perhaps a threadlocal that contains the stm instance to use).
+
+<h2 id="question.5">Do I need a special JVM?</h2>
+No you don't. You can use an ordinary Java 1.6+ JVM like the JVM from Sun or IBM.
+
+<h2 id="question.6">Can the changes be persisted?</h2>
+No, for the moment this isn't possible. But hooking some kind of persistance mechanism up to the stm shouldn't be
+impossible and is planned for the future.
+
+<h2 id="question.7">Can TransactionalObjects be combined with JPA/Hibernate annotations?</h2>
+Probably not. Although no tests have been executed to make sure it doesn't work, the instrumentation process modifies
+the class structure (and introduces new classes) of transactional objects. This probably is not going to be
+a good match.
+
+<h2 id="question.8">Can Multiverse be distributed</h2>
+No, for the moment Multiverse doesn't support any functionality for creating a distributed STM. Although in theory
+it would be possible (for example by using a transparant clustering technology like Terracotta), it would not
+be very scalable. The main STM implementation, called the AlphaSTM, relies on a logical clock. When this clock
+is distributed, the performance of the system is limited to the rate the clock can be increased over the network.
+If a single increase takes 1ms, the maximum performance of the STM would be 1000 transactions/second no matter
+how many machines you add (it probably is going to degrade because the time it to increase the clock is going
+to increase). In the future we want to experiment with different approaches, but it doesn't have the highest
+priority atm.
+
+<h2 id="question.9">Which License is used</h2>
+Multiverse is released under the <a href="license.html">Apache 2 License</a>.
+
+<h2 id="question.10">Does Multiverse support blocking transactions?</h2>
+Yes. For more information about blocking operations, check the <a href="manual-blocking.html">5 Minute guide to
+    blocking transactions</a>.
+
+<h2 id="question.11">Does Multiverse scale linearly?</h2>
+No. Transactions that doesn't share state, should scale linearly (throw in twice as much hardware, and you will
+get twice the performance). But there is 1 central component touched by every transaction: the clock.
+This clock (an AtomicLong) will eventually cause a bottleneck. This issue is going to get a lot of attention.
+
+<h2 id="question.12">Does Multiverse prevent deadlocking?</h2>
+Yes. As long as transactional resources of Multiverse are used, transactions won't deadlock. There are 2 requirements
+for a deadlock:
+<ol>
+    <li>uncontrolled order of locking</li>
+    <li>uncontrolled waiting</li>
+</ol>
+Acquiring locks in Multiverse is done with a maximum waiting time, so the second condition for a deadlock is
+not present. The lock behavior can be customized by providing a custom CommitLockPolicy implementation.
+
+<h2 id="question.13">Does Multiverse prevent livelocking?</h2>
+Multiverse is very optimistic, so it could be that while reading/writing to transactional object a failure is encountered
+or when the transaction commits. The transaction management automatically retries the transaction in the hope that it
+will succeed next time. Oncontrolled retrying could lead to livelocking because resources are consumed (memory
+and cpu cycles) but no progress is made because transactions keep aborting. But retrying in Multiverse is bounded.
+And can be configured with the maxRetries property of the TransactionalMethod annotation.
+
+<h2 id="question.14">Does Multiverse prevent starvation?</h2>
+No. Multiverse doesn't provide any guarantee that transaction that content over resources are going to commit. Meaning
+that a transaction eventually fails with a TooManyRetriesException. A practical example of starving transactions
+are long running transactions, the keep conflicting on very short running transactions. In the future a
+contention manager is going to be added, but for the time being there is no support available.
+
+<h2 id="question.15">Does Multiverse suffer from Zombie threads?</h2>
+No. A transaction will always get transaction level read consistency. So it is impossible that a transaction sees
+state that it shouldn't and could enter some infinite loop and becomes a zombie.
+
+<h2 id="question.16">Can non transactional objects be used in transactions?</h2>
+Yes you can. Normal objects can be used on transactions, for example a normal Person POJO (without the
+TransactionalObject annotation) be exchanged over a transactional BlockingQueue (the TransactionalLinkedList)
+for example. But changes made on these objects won't be protected by the transaction, so you need to
+know what you are doing.
+
+<h2 id="question.17">Can IO be used in transactions?</h2>
+It is possible to do IO  in a transaction, but it could be that the transaction is aborted and restarted many times
+(for example because a read conflict or write conflict is encountered). It is possible to register tasks to be executed
+when a Transaction aborts or commits, giving the option to 'undo' what is done. Support for transacional IO is planned,
+but doesn't have a high priority at the moment.
+
+<h2 id="question.18">Does Multiverse provide support for pessimistic locking?</h2>
+Not yet. In a transaction it isn't possible to 'claim' resources.  In the MVCC database Oracle (and MySQL + InnoDB and
+Postgresql) it is possible to do a pessimistic lock using 'select .. for update'. In the near future such a mechanism
+will be provided, but for the time being this
+functionality is not available.
+
+<h2 id="question.19">Does Multiverse provide support for nesting transactions?</h2>
+Yes. Transactions can be nested and atm they will always be flattened (so only the other transaction counts). An abort
+or commit will always be executed on the while transaction and not subtransactions. In the future different
+progagation levels will be added (for example open nesting).
+
+<h2 id="question.20">Does Multiverse allow non transaction access?</h2>
+No this is not possible. The mutable state of a transactional object is moved to a tranlocal; object that contains
+the transaction local state of a transactional object. To access the tranlocal, you always need a transaction.
+When a transactional method is called without a transaction, a transaction automatically is started and
+committed/aborted when the method completes.
+
+<h2 id="question.21">Does Multiverse support early or late conflict detection?</h2>
+It depends.
+
+<h2 id="question.22">Does Multiverse support direct or deferred updates?</h2>
+Multiverse only supports updates, so the changes are made when the transaction commits and not when the change (the
+write on a transactional object) is made.
+
+<h2 id="question.23">Can Multiverse be combined with traditional lock based technology?</h2>
+Yes, it can. But this is not without risc; changes made in non transactional resources are not protected by the STM.
+And blocking operations on non transactional resouces, doesnt benefit from deadlock detection, listening
+to multiple blocking resources, etc. So if you know what you are doing, traditional lock based technology can
+be combined with Multiverse.
+
+<h2 id="question.24">Does Multiverse support privatization?</h2>
+No. Privatization is a technique that can be used to temporary remove a transactional object from the STM so a transaction
+has exclusive access.
+
+<h2 id="question.25">Does Multiverse need special factories for creating transactional objects?</h2>
+No. Transactional Object can be created with ordinary constructors.
+
+<h2 id="question.26">Are Multiverse Transactions thread-safe?</h2>
+No, a transaction is not thread-safe to use and therefor can't be used by multiple threads
+concurrently. It is possible however to hand over a transaction from one thread to another
+because the transation itself doesn't rely on any thread/threadlocal information. But it could
+be that the systems in front of the STM (e.g. the instrumentation) does rely on this. So threads
+can safely be handed over from one thread to another, if you really know what you are doing.
+<p>
+    The org.multiverse.api.Transaction can be compared to the Hibernate Session, that also isn't threadsafe to use.
+
+<h2 id="question.27">Is lock based concurrency control bad?</h2>
+I certainly don't think that lock based concurrency control is bad. Multiverse even couldn't exist with low
+level synchronization structures like locks or cas instructions (AtomicLongs for example). But I do think that
+lock based concurrency control is very complex; it is very easy to get in all sorts of traditional problems (race problems,
+deadlocks etc) even for the more experienced developer. And next these well known issues, it also is quite
+easy to introduce reordening or visibility problems if you don't understand the Java Memory Model well.
+<p>
+    That is why I think that STM's are a very valuable tool in the toolbox of developers, that could boost
+    productivity if used correctly. You could compare it with Hibernate and raw SQL; Hibernate makes live easy
+    because you don't need to deal with all the SQL issues all the time. But from time to time, you need to get
+    dirty and use SQL directly to get the things done.
+
+<h2 id="question.28">Multiverse and the Java Memory Model</h2>
+The Java Memory Model is defined in happens before rules, for example the volatile variable rule that states
+that all changes made before a volatile write, will be visible when a volatile read is done. Using this mechanism
+it is possible to hand over an object graph from one thread to another without worrying about visibility
+or reordering issues. Multiverse also provides a happens before rule: all changes made before a transaction commits,
+will be visible to all starting transactions. So you don't need to worry about reordering or visibility problems.
+<p>
+    On a lower level this behavior is realized using CAS instructions (for example an AtomicReference) that provides
+    the same happens before semantics as volatile variables.
+
+<h2 id="question.29">Does Multiverse have object or field granularity?</h2>
+It depends. The main STM implementation; the AlphaStm doesn't impose any restrictions on this behavior. It manages
+'tranlocals' (transaction local state). And it doesn't matter if this is a single field (so field granularity)
+or a complete object (object granularity). The advantage of object granularity is that there is less overhead.
+The advantage of field granularity is that there will be less read or write conflicts. If the TransactionalObject
+annotation is used, automatically object granularity is used. But if the org.multiverse.transactions.refs are
+used, you have field granularity.
+
+<h2 id="question.30">Does Multiverse have provides support for contention management?</h2>
+No. Currently Multiverse doesn't provide any support for contention management. Contention management if very
+usefull to provide certain fairness guarantees and to prevent livelocking and will be added in the future.
+The big problem I currently see is that it could cause a lot of overhead and adding it all over could
+impact performance all over. I believe that you only should pay for something when you are using it.
+
+<h2 id="question.31">Do I need some fetch strategy for fields?</h2>
+No, this isn't needed. Transactional objects that are fields of other transactional objects,
+are loaded just in time (so just before a read or write happens). With databases this would lead to a lot
+of small queries instead of catching them in 1 big batch and that is one of the reasons why you want
+to influence the fetching behavior. But with Multiverse everything is in memory, so it doesn't matter if a
+lot of small actions are done.
+
+<h2 id="question.32">Can Multiverse be combined with Spring/Guice/...?</h2>
+Yes it can. But atm there is no spring TransactionManager, so you have to make use of the instrumentation
+or you have to make use of a more explicit approach (TransactionlReference/TransactionTemplate).
+
+<h2 id="question.33">What is wrong with read or write conflicts?</h2>
+During the execution of transactions it could be that a transaction is aborted because a read or write conflict
+happened. Read and write conflicts are the way for software transactional memory to prevent unwanted interleavings
+of transactions, and since no partial changes will be written (transactions are atomic), it doesn't cause
+problems in transactional resources. But if there are a lot of conflicts, the processors will doing a lot of work and
+consume memory (opening tranlocals, trying to commit, perhaps executing a lot of code in the transactional objects) without
+making any progress. This is called a lifelock and something you want to prevent. If certain objects cause a lot
+read/write locks then they cause contention and these structures will not scale. I think this is one of the main
+areas of research for transactional memory to lower the amount of contention (for example transactional boosting).
+<p>
+    Atm Multiverse doesn't provide much support for this situation, except the
+    <a href="manual-mapping.html#fieldgranularity">1.6 @FieldGranularity</a> annotation. But a lot of work will be
+    done in this area.
+    The most important low hanging fruit are the Multiverse collection implementations and the size field. For
+    the time being these structures are not going to scale because they will conflict on this field, so it is important
+    that for the time being to keep transactions on these structures short if there is contention.
+
+<p>
+    Multiverse provides basic support for preving transactions to livelock by limiting the maximum number of retries
+    ( can be configured with the maxRetries) in combination with a backoff policy. Bby default an exponential backoff
+    policy is used.
+
+<h2 id="question.34">Does Multiverse touch java.util classes?</h2>
+No, Multiverse doesn't instrument any classes in the java.util library. Only the classes you want to be instrumented,
+are instrumented.
+
+<h2 id="question.35">Does Multiverse work with the IBM JDK?</h2>
+Yes. All unit and integration tests are executed using the IBM J9 1.6 JDK.  This is the exact version
+used:
+<pre>
+    java version "1.6.0"
+    Java(TM) SE Runtime Environment (build pxa6460sr7-20091215_02(SR7))
+    IBM J9 VM (build 2.4, JRE 1.6.0 IBM J9 2.4 Linux amd64-64 jvmxa6460sr7-20091214_49398 (JIT enabled, AOT enabled)
+</pre>
+I don't have performance numbers (yet).
+
+<h2 id="question.36">Does Multiverse work with the Open JDK?</h2>
+Yes. All unit and integration tests are executed using Open JDK. This is the exact version used:
+<pre>
+    java version "1.7.0-ea"
+    Java(TM) SE Runtime Environment (build 1.7.0-ea-b89)
+    Java HotSpot(TM) Server VM (build 18.0-b02, mixed mode)
+</pre>
+I don't have performance numbers (yet).        

@@ -1,0 +1,98 @@
+<chapter xml:id="chapter-introduction">
+<title>Introduction</title>
+<sect1>
+<title>Traditional Concurrency Control (in progress)</title>
+<para>
+    Traditional concurrency control is complex because you need to worry about a lot of problems. First of all you need to make sure
+    that the program does no bad things (so no race problems), and you also need to worry about that good things happen eventually (
+    so no deadlocks, livelocks or starvation). Lock based concurrency control is well known but also dreaded because even simple code
+    can very quickly become too complex to reason about.
+</para>
+
+<para>
+    The idea behind Software Transactional Memory (STM), is that a database like programming model can be provided on in memory datastructures.
+    The STM is going to worry about read/write inconsistencies, deadlocks etc and makes sure that all changes make it or none make it. To give
+    you an example:
+</para>
+<programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+
+    public class Account{
+        private final IntRef amount = newIntRef(0);
+
+        public void transfer(final int a){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    amount.increment(a);
+                }
+            });
+        }
+
+        public int getAmount(){
+            execute(new AtomicIntClosure()){
+                public int execute(Transaction tx){
+                    return amount.get();
+                }
+            });
+        }
+    }
+</programlisting>
+<para>
+    As you can see, the Account class has a single field 'amount' which is of class IntRef; a transactional reference. All reads/writes
+    on this ref are coordinated and perhaps tracked by the transaction. The logic of both methods is captured in an AtomicClosure. There
+    are different types of Closures for the different return types. There are also primitive versions that prevent unwanted autoboxing.
+    An AtomicClosure is executed by an AtomicBlock (in our case this AtomicBlock is stored in the StmUtils and exposed through the
+    execute methods.
+</para>
+
+<para>
+    In the previous example, only a single field was updated, but there are no restructions in the number of fields. If you want you could add more:
+</para>
+    <programlisting language="java">
+        import org.multiverse.api.*;
+        import org.multiverse.api.refs.*;
+        import static org.multiverse.api.StmUtils.*;
+
+        public class Account{
+            final private IntRef amount = newIntRef(0);
+            final private Ref date = newRef(new Date());
+
+            public void transfer(final int a){
+                execute(new AtomicVoidClosure()){
+                    public void execute(Transaction tx){
+                        amount.increment(a);
+                        lastModifiedDate.set(new Date());
+                    }
+                });
+            }
+
+            public Date getLastModifiedDate(){
+                execute(new AtomicClosure()){
+                    public Date execute(Transaction tx){
+                        return lastModifiedDate.get();
+                    }
+                });
+            }
+
+            public int getAmount(){
+                execute(new AtomicIntClosure()){
+                    public int execute(Transaction tx){
+                        return amount.get();
+                    }
+                });
+            }
+        }
+    </programlisting>
+</sect1>
+
+<sect1>
+    <title>Composition</title>
+    <para>
+        Transactions can be composed
+    </para>
+</sect1>
+
+</chapter>

@@ -1,0 +1,53 @@
+package org.multiverse.api;
+
+import org.multiverse.*;
+import org.multiverse.api.closures.*;
+
+/**
+* The OrElse is responsible for executing the either block, or in case of a retry, the orelse block is executed.
+*
+* Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
+* It also provides an execute for a AtomicVoidClosure which doesn't force a developer to return something when
+* nothing needs to be returned.
+*
+* @author Peter Veentjer.
+*/
+public interface OrElseBlock extends MultiverseConstants{
+
+#foreach($closure in $closures)
+   /**
+    * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
+    * possible.
+    *
+    * If in the execution of the closure a checked exception is thrown, the exception
+    * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
+    * getCause method.
+    *
+    * @param either
+    * @param orelse
+#if(${closure.type} ne 'void')
+    * @return the result of the execution.
+#end
+    * @throws NullPointerException if either or orelse is null.
+    * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    */
+    ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse);
+
+    /**
+    * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
+    * possible.
+    *
+    * @param either
+    * @param orelse
+#if(${closure.type} ne 'void')
+    * @return the result of the execution.
+#end
+    * @throws NullPointerException if either or orelse is null.
+    * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+    * @throws Exception if the execute call fails.
+    */
+    ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception;
+
+#end
+}

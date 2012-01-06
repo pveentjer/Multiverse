@@ -1,0 +1,88 @@
+<chapter xml:id="chapter-transactional-references">
+    <title>Transactional References (in progress)</title>
+
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            In Multiverse all coordinated state changes need to be done through transactional references. These references
+            can be compared to the java.util.concurrent.atomic references, except that they can participate in transactions.
+            So if you have worked with these references before, it shouldn't be too hard to grasp. Check out the following
+            code fragment:
+         <programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+
+    public class Account{
+        private final IntRef amount = newIntRef(0);
+        private final Ref&lt;Date&gt; lastModified = newRef(new Date());
+
+        ...
+    }
+        </programlisting>
+        Changes made on the amount and lastModified ref are coordinated through a transaction where all changes happen
+        isolated and are consistent. It is best to make these fields final, since they should not be changed after
+        creation.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Types</title>
+        <para>
+            There aren't different types of transactional refs. Some are optimized for primitive types, while the
+            'Ref' is optimized for object references:
+            <itemizedlist>
+                <listitem>
+                    <para>IntRef: a transactional ref for primitive int.</para>
+                </listitem>
+                <listitem>
+                    <para>BooleanRef: a transactional refs for the primitive boolean.</para>
+                </listitem>
+                <listitem>
+                    <para>LongRef: a transactional ref for the primitive long.</para>
+                </listitem>
+                <listitem>
+                    <para>DoubleRef: a transactional ref for the primitive double.</para>
+                 </listitem>
+                 <listitem>
+                   <para>Ref: a transactional ref for storing a object reference.</para>
+                 </listitem>
+            </itemizedlist>
+            The advantage of the primitive types is that they not only have methods only useful for their specific type (like increment)
+            but also that they prevent unwanted autoboxing. Generating millions of objects per second, just kills performance and
+            scalability.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Atomic methods</title>
+        <para>
+            The different ref implementation also expose atomic methods like atomicGet/atomicSet (and many more). These methods
+            automatically run under their own 'transaction' and ignoring the current transaction if one is available. Atomic methods
+            are very fast since a lot of overhead of the transaction is removed.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Commute</title>
+        <para>
+            It is important to realize that although certain operations commute, e.g. the add or multiply, but they don't have to commute with
+            each other. So be careful when combining different commuting operations.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Alter</title>
+        <para>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Blocking methods</title>
+        <para>
+        </para>
+    </sect1>
+
+
+</chapter>

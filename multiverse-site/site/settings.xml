@@ -1,0 +1,42 @@
+<settings>
+
+    <servers>
+        <server>
+            <id>multiverse-releases</id>
+            <username>username</username>
+            <password>password</password>
+        </server>
+
+        <server>
+            <id>multiverse-snapshots</id>
+            <username>username</username>
+            <password>password</password>
+        </server>
+
+        <server>
+            <id>multiverse-snapshots</id>
+            <username>username</username>
+            <password>password</password>
+        </server>
+
+        <server>
+            <id>multiverse-site</id>
+            <username>username</username>
+            <password>password</password>
+        </server>
+
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <properties>
+                <maven.clover.licenseLocation>/home/alarmnummer/.m2/clover.license</maven.clover.licenseLocation>
+            </properties>
+        </profile>
+    </profiles>
+
+    <activeProfiles>
+        <activeProfile>default</activeProfile>
+    </activeProfiles>
+</settings>

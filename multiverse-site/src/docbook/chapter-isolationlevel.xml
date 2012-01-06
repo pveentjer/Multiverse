@@ -1,0 +1,87 @@
+<chapter xml:id="chapter-isolationlevel">
+
+    <title>Isolation Level (in progress)</title>
+    <sect1>
+        <title>Introduction</title>
+    <para>
+    </para>
+    </sect1>
+
+    <sect1>
+        <title>Isolation Level</title>
+        <para>
+            The Lock has 3 different isolation levels atm:
+        <itemizedlist>
+            <listitem>
+                <para>IsolationLevel.RepeatableRead</para>
+            </listitem>
+            <listitem>
+                <para>IsolationLevel.Snapshot. This provides the Oracle version of the Serializable isolation level,
+                      but still alows the writeskew to happen. This is the default isolation level.
+                </para>
+            </listitem>
+            <listitem>
+                 <para>IsolationLevel.Serializable</para>
+            </listitem>
+        </itemizedlist>
+            The IsolationLevel can be set using the TransactionFactoryBuilder, e.g.:
+            <programlisting language="java">
+
+    public class Counter{
+        private final static AtomicBlock awaitBlock = getGlobalStmInstance()
+                 .newTransactionFactoryBuilder()
+                 .setIsolationLevel(IsolationLevel.Serializable)
+                 .newAtomicBlock();
+
+        private final IntRef value = newIntRef(0);
+
+        public void await(final int a){
+            awaitBlock.execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    if(value.get()&lt;a){
+                        retry();
+                    }
+                }
+            });
+        }
+
+        ...
+    }
+            </programlisting>
+        </para>
+    </sect1>
+
+    <sect1>
+         <title>Readonly transaction</title>
+         <para>
+             Transactions that are readonly, can't suffer from the writeskew problem. So if they are configured using the Snapshot IsolationLevel,
+             they have the same isolation guarantees as when the IsolationLevel.Serializable is configured.
+         </para>
+    </sect1>
+
+    <sect1>
+        <title>Dirty read</title>
+        <para>A dirty read happens when a transactions reads information written by another transaction, but the transaction fails in the end.
+        The problem is that values can be seen, that never made it in the system. Multiverse doesn't support (or have the need to) for dealing
+        with dirty reads. So they can't happen.</para>
+    </sect1>
+
+    <sect1>
+        <title>Non repeatable read</title>
+    </sect1>
+
+    <sect1>
+        <title>Writeskew</title>
+    </sect1>
+
+    <sect1>
+        <title>Ensure</title>
+    </sect1>
+
+    <sect1>
+        <title>DeferredEnsure</title>
+    </sect1>
+</chapter>
+
+
+

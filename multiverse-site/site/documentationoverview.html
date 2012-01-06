@@ -1,0 +1,117 @@
+<h1>Documentation overview</h1>
+
+<ul>
+    <li><a href="#introductions">Introductions</a></li>
+    <li><a href="#reference.manual">Multiverse Reference and API</a></li>
+    <li><a href="faq.html">Frequent Asked Questions</a></li>
+    <li><a href="#recommended.papers">Recommend Papers</a></li>
+    <li><a href="#recommended.books">Recommend Books</a></li>
+</ul>
+
+<h2 id="introductions">Introductions</h2>
+<ul>
+    <li><a href="60second.html">60 Second guide to Multiverse:</a> a short introduction to see what
+        Multiverse is all about.
+    </li>
+    <!-- li>
+        <b><a href="tutorial.html">Tutorial:</a></b> about Multiverse. The easiest way to get familiar with
+        Multiverse.
+    </li -->
+    <!-- li>
+        <b><a href="flyingstart.html">Flying start:</a></b> contains a completely working example based on Maven
+        This project is very useful if you want to experiment without wasting a lot of time on setting up the
+        environment (including javaagent) by hand.
+    </li -->
+    <li><a href="otherjvmlanguages.html">Multiverse without instrumentation:</a> describes how to use
+        Multiverse without relying on instrumentation; useful if you want to integrate Multiverse
+        with a language other than Java.
+    </li>
+    <li>
+        <a href="developconfiguration.html">Configuring the development environment:</a> explains how to
+        set up your development environment (IDE, Maven, command line).
+    </li>
+    <li>
+        <a href="nosql.html">Multiverse and NoSQL:</a> how Multiverse can be seen
+        in the context of the NoSQL movement.
+    </li>
+</ul>
+
+<h2 id="reference.manual">Multiverse 0.5 Reference and API</h2>
+For a more thorough explanation of Multiverse and how to configure it, check out one of the following
+manuals.
+<ul>
+    <li><a href="manual.html">Reference Manual:</a> all you need to know to use Multiverse.
+    </li>
+    <li><a href="architecture.html">Architecture:</a> an overview of the architectural concepts
+        behind Multiverse.
+    </li>
+    <!-- li><b><a href="setup-javaagent.html">Setup Java Agent:</a></b> information about how to configure
+        the Multiverse Javaagent
+    </li -->
+</ul>
+
+And don't be scared to check out the Javadoc and source code. Understanding the source also helps to
+understand how to use Multiverse more effectivly or how to extend it.
+<ul>
+    <li><a href="http://multiverse.codehaus.org/maven-site/apidocs/">API</a> (Javadoc)</li>
+    <li><a href="http://multiverse.codehaus.org/development.html">Browse Source</a></li>
+</ul>
+Or check the <a href="download.html">download page</a> to download Multiverse artifacts.
+
+<h2 id="recommended.papers">Recommended Papers</h2>
+A lot of research has been done on transactional memory by many very smart people. Multiverse relies on a lot of the
+concepts and techniques discovered and invented by them. This is a listing of the most influencal papers for
+Multiverse.
+<ul>
+    <li><a
+            href="https://urresearch.rochester.edu/fileDownloadForInstitutionalItem.action;jsessionid=4C3236204647E5EC1DBFE56C56EFED7D?itemId=3698&itemFileId=5277">What
+        really makes transactions faster</a></li>
+    <li><a href="http://home.comcast.net/~pjbishop/Dave/GVTL-TL2-Disc06-060711-Camera.pdf">Transactional Locking
+        II:</a> a lot of information about the general principles
+        behind the AlphaStm implementation (the main STM implementation of Multiverse)
+    </li>
+    <li><a href="">Transactional Boosting: </a></li>
+</ul>
+
+<h2 id="recommended.books">Recommended Books</h2>
+<ul>
+    <li><a
+            href="http://www.amazon.com/Transactional-Information-Systems-Algorithms-Concurrency/dp/1558605088/ref=sr_1_1?ie=UTF8&s=books&qid=1273055244&sr=8-1">Transactional
+        Information Systems: Theory, Algorithms, and the Practice of Concurrency Control and Recovery</a></li>
+    <li><a href="http://www.morganclaypool.com/toc/cac/1/1">Transactional Memory (Synthesis Lectures on Computer
+        Architecture)</a></li>
+    <li><a
+            href="http://www.amazon.com/Art-Multiprocessor-Programming-Maurice-Herlihy/dp/0123705916/ref=sr_1_1?ie=UTF8&s=books&qid=1273055142&sr=8-1">The
+        Art of Multiprocessor Programming</a> not only contains a lot of information about
+        the theories behind concurrent programming, but also has a chapter about Software Transactional Memory
+    </li>
+    <li><a
+            href="http://www.amazon.com/Concurrent-Programming-Java-TM-Principles/dp/0201310090/ref=sr_1_1?ie=UTF8&s=books&qid=1273055182&sr=8-1">Concurrent
+        Programming in Java(TM): Design Principles and Pattern (2nd Edition)</a></li>
+    <li><a
+            href="http://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601/ref=sr_1_1?ie=UTF8&s=books&qid=1273055213&sr=8-1">Java
+        Concurrency in Practice</a> <span style="text-decoration: underline;">the</span> book about practical concurrent
+        programming
+        in Java.
+    </li>
+    <li><a
+            href="http://www.amazon.com/Principles-Transaction-Processing-Kaufmann-Management/dp/1558606238/ref=sr_1_3?ie=UTF8&s=books&qid=1273055244&sr=8-3">Principles
+        of Transaction Processing, Second Edition</a></li>
+    <li>
+        One of the books of Thomas Kyte about Oracle. Oracle uses Multiversion Concurrency Control (MVCC), just like
+        MySql + InnoDb
+        and Postgresql. Multiverse essentially is a MVCC implementation:
+        <ul>
+            <li>
+                <a href="http://www.amazon.com/Expert-Oracle-Database-Architecture-Programming/dp/1430229462/ref=sr_1_1?ie=UTF8&s=books&qid=1273055896&sr=8-1">Expert
+                    Oracle Database Architecture: Oracle Database Programming 9i, 10g, and 11g Techniques and Solutions,
+                    Second Edition</a>
+            </li>
+            <li>
+                <a href="http://www.amazon.com/Expert-One-Oracle-2001-publication/dp/B003HZQ5FE/ref=sr_1_2?ie=UTF8&s=books&qid=1273056006&sr=8-2">Expert
+                    One on One - Oracle</a>
+            </li>
+        </ul>
+
+    </li>
+</ul>

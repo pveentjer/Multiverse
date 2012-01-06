@@ -1,0 +1,71 @@
+<chapter xml:id="chapter-controlflow-errors">
+
+    <title>Design guidelines</title>
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            This chapter contains information contains information about design guidelines for setting
+            up a system that uses STM.
+        </para>
+        <para>
+            Another set of design guidelines can be found in the 'performance tuning' chapter.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Customize the AtomicBlock</title>
+        <para>
+            In Multiverse some convenience methods are added to make using the STM very easy. But if you
+            want to get most out of performance of want to tune behavior of an org.multiverse.api.AtomicBlock,
+            the AtomicBlock needs to be customized. E.g.:
+            <programlisting language="java">
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+    import static org.multiverse.api.GlobalStmInstance.*
+
+    public class Account{
+        private final static AtomicBlock transferBlock = getGlobalStmInstance()
+            .newTransactionFactoryBuilder()
+            .newAtomicBlock();
+
+        private final IntRef amount = newIntRef(0);
+
+        public void foo(){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    ...
+                    register(new Runna
+                }
+            });
+        }
+
+        ...
+    }
+            </programlisting>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>AtomicBlock per atomic method</title>
+        <para>
+            It is best, if there are more than 1 method that needs to have its own transaction, that each of these
+            methods gets it own AtomicBlock. It is useful for debugging purposes because you can see which transaction
+            is causing problems. It also is more useful for the speculative mechanism, so that the system is able to
+            learn from each AtomicBlock independently, and is able to infer the optimal configuration for each
+            individual method.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>AtomicBlock at service level</title>
+        <para>
+            It is best to prevent making every method transaction (so have it own AtomicBlock). In most
+            cases it is best to have one high level methods that should be have an AtomicBlock, and the internals
+            can lift on the transaction provided. This is comparable to using database transactions; you create
+            your transactional services, but underneath no transaction management is needed.
+        </para>
+    </sect1>
+
+</chapter>
+

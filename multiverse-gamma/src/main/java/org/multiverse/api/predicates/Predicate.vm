@@ -1,0 +1,174 @@
+package org.multiverse.api.predicates;
+
+/**
+ * A predicate that checks if some value leads to true or false.
+ *
+ * @author Peter Veentjer.
+ */
+#if(${transactionalObject.referenceInterface} eq 'Ref')
+public interface ${transactionalObject.predicateClass}${transactionalObject.typeParameter}{
+
+    /**
+     * Evaluates the predicate.
+     *
+     * @param value the value to evaluate.
+     * @return true or false.
+     */
+    boolean evaluate(${transactionalObject.type} value);
+}
+#else
+public abstract class ${transactionalObject.predicateClass} implements Predicate<${transactionalObject.objectType}>{
+
+#if(${transactionalObject.referenceInterface} eq 'LongRef')
+    public static LongPredicate newEqualsPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current == value;
+            }
+        };
+    }
+
+    public static LongPredicate newNotEqualsPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current != value;
+            }
+        };
+    }
+
+    public static LongPredicate newLargerThanPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current > value;
+            }
+        };
+    }
+
+    public static LongPredicate newLargerThanOrEqualsPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current >= value;
+            }
+        };
+    }
+
+    public static LongPredicate newSmallerThanPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current < value;
+            }
+        };
+    }
+
+    public static LongPredicate newSmallerThanOrEqualsPredicate(final long value) {
+        return new LongPredicate() {
+            @Override
+            public boolean evaluate(final long current) {
+                return current <= value;
+            }
+        };
+    }
+#elseif (${transactionalObject.referenceInterface} eq 'IntRef')
+     public static IntPredicate newEqualsPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(int current) {
+                return current == value;
+            }
+        };
+    }
+
+    public static IntPredicate newNotEqualsPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(final int current) {
+                return current != value;
+            }
+        };
+    }
+
+    public static IntPredicate newLargerThanPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(final int current) {
+                return current > value;
+            }
+        };
+    }
+
+    public static IntPredicate newLargerThanOrEqualsPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(final int current) {
+                return current >= value;
+            }
+        };
+    }
+
+    public static IntPredicate newSmallerThanPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(final int current) {
+                return current < value;
+            }
+        };
+    }
+
+    public static IntPredicate newSmallerThanOrEqualsPredicate(final int value) {
+        return new IntPredicate() {
+            @Override
+            public boolean evaluate(final int current) {
+                return current <= value;
+            }
+        };
+    }
+#elseif (${transactionalObject.referenceInterface} eq 'BooleanRef')
+   public static BooleanPredicate newEqualsPredicate(final boolean value) {
+        return new BooleanPredicate() {
+            @Override
+            public boolean evaluate(final boolean current) {
+                return current == value;
+            }
+        };
+    }
+
+     public static BooleanPredicate newNotEqualsPredicate(final boolean value) {
+        return new BooleanPredicate() {
+            @Override
+            public boolean evaluate(final boolean current) {
+                return current != value;
+            }
+        };
+    }
+
+#elseif (${transactionalObject.referenceInterface} eq 'DoubleRef')
+    public static DoublePredicate newEqualsPredicate(final double value) {
+      return new DoublePredicate() {
+          @Override
+          public boolean evaluate(double current) {
+              return current == value;
+          }
+      };
+  }
+
+#end
+
+    /**
+     * Evaluates the predicate
+     *
+     * @param current the current value.
+     * @return true or false.
+     */
+    public abstract boolean evaluate(${transactionalObject.type} current);
+
+    @Override
+    public final boolean evaluate(${transactionalObject.objectType} arg) {
+        return evaluate((${transactionalObject.type}) arg);
+    }
+}
+#end

@@ -1,0 +1,147 @@
+<chapter xml:id="chapter-deferred-and-compensating-tasks">
+
+    <title>Deferred and compensating tasks (in progress)</title>
+
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            When a Multiverse transaction is used, all changes made to transactional references during that transactions
+            are either committed or aborted. So it won't happen that changes of an uncommitted transaction ever become
+            visible in another transaction. But in some cases you need to execute logic that is not managed by a
+            transaction, e.g. cleaning up resources. This can be done using:
+            <itemizedlist>
+                <listitem>
+                    <para>Deferred tasks: executed after transaction commit</para>
+                </listitem>
+                <listitem>
+                    <para>Compensating tasks: executed after transaction abort</para>
+                </listitem>
+            </itemizedlist>
+        </para>
+
+        <para>
+            In Multiverse there are 2 different tastes of deferred and compensating actions:
+            <itemizedlist>
+                <listitem>
+                    normal tasks: these tasks are registered during the execution of the transaction,
+                    and are automatically cleared on transaction commit/abort. This type of task is useful,
+                    if it depends on logic executed during the execution of the transaction.
+                </listitem>
+                <listitem>
+                    permanent tasks: these tasks are registered when the org.multiverse.api.AtomicBlock is created.
+                    The advantage of permanent tasks is that they don't need to be registered
+                    every time the transaction runs, so there is a lot less overhead (especially gc). Permanent listeners
+                    are also useful if Multiverse needs to be integrated in other systems/languages so that integration
+                    logic can be executed.
+                </listitem>
+            </itemizedlist>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Normal compensating task</title>
+        <para>
+            When a transaction commits, using the normal compensating tasks, additional logic can be executed after the
+            commit of the transaction.
+        <programlisting language="java">
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+    import static org.multiverse.api.GlobalStmInstance.*
+
+    public class Foo{
+
+        public void foo(){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                     ... logic
+
+                     scheduleDeferredTask(new Runnable()){
+                        public void run(){
+                            System.out.println("Transaction committed");
+                        }
+                     });
+
+                    ... more logic
+                }
+            });
+        }
+
+        ...
+    }
+        </programlisting>
+        The StmUtils.scheduleDeferredTask forwards to the Transaction.register(TransactionListener) method and uses the Transaction
+        stored on the ThreadLocalTransaction. Normal compensating tasks are always executed in the order they were registered.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Normal deferred task</title>
+       <para>
+            When a transaction aborts, using the normal compensating tasks, additional logic can be executed after the
+            abort of the transaction.
+        <programlisting language="java">
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+    import static org.multiverse.api.GlobalStmInstance.*
+
+    public class Foo{
+
+        public void foo(){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                     ... logic
+
+                     scheduleCompensatingTask(new Runnable()){
+                        public void run(){
+                            System.out.println("Transaction aborted");
+                        }
+                     });
+
+                    ... more logic
+                }
+            });
+        }
+
+        ...
+    }
+        </programlisting>
+        The StmUtils.scheduleCompensatingTask forwards to the Transaction.register(TransactionListener) method and uses the Transaction
+        stored on the ThreadLocalTransaction. Normal compensating tasks are always executed in the order they are registered.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Permanent deferred task</title>
+        <para>
+            In some cases you want logic to be executed after a Transaction commits. This can be done using a
+            compensating task.
+        </para>
+        <programlisting language="java">
+
+        </programlisting>
+    </sect1>
+
+    <sect1>
+        <title>Permanent compensating task</title>
+        <para>
+            In some cases you want logic to be executed after a Transaction fails. This can be done using a deferred
+            task.
+        </para>
+        <programlisting language="java">
+
+        </programlisting>
+    </sect1>
+
+    <sect1>
+        <title>org.multiverse.api.lifecycle.TransactionListener</title>
+        <para>
+
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Execution order</title>
+    </sect1>
+</chapter>

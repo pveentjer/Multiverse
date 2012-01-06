@@ -1,0 +1,71 @@
+<!DOCTYPE book [
+        <!ENTITY chapter-introduction SYSTEM "chapter-introduction.xml">
+        <!ENTITY chapter-transactional-references SYSTEM "chapter-transactional-references.xml">
+        <!ENTITY chapter-deferredandcompensatingtasks SYSTEM "chapter-deferredandcompensatingtasks.xml">
+        <!ENTITY chapter-performance-tuning SYSTEM "chapter-performance-tuning.xml">
+        <!ENTITY chapter-blockingtransactions SYSTEM "chapter-blocking-transactions.xml">
+        <!ENTITY chapter-pessimistic-locking SYSTEM "chapter-pessimistic-locking.xml">
+        <!ENTITY chapter-isolationlevel SYSTEM "chapter-isolationlevel.xml">
+        <!ENTITY chapter-gammastm SYSTEM "chapter-gammastm.xml">
+        <!ENTITY chapter-propagation SYSTEM "chapter-propagation.xml">
+        <!ENTITY chapter-transaction SYSTEM "chapter-transaction.xml">
+        <!ENTITY chapter-2pc SYSTEM "chapter-2pc.xml">
+        <!ENTITY chapter-controlflow-errors SYSTEM "chapter-controlflow-errors.xml">
+        <!ENTITY chapter-designguidelines SYSTEM "chapter-designguidelines.xml">
+        <!ENTITY chapter-jmm SYSTEM "chapter-jmm.xml">
+        ]>
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+    <bookinfo>
+        <title>Manual Multiverse 0.7</title>
+
+        <author>
+            <firstname>Peter</firstname>
+            <surname>Veentjer</surname>
+            <affiliation>
+                <address>
+                    <email>alarmnummer@gmail.com</email>
+                </address>
+            </affiliation>
+        </author>
+
+        <copyright>
+            <year>2011</year>
+            <holder>Peter Veentjer</holder>
+        </copyright>
+
+        <abstract>
+            <para>The Manual for Multiverse 0.7.</para>
+        </abstract>
+    </bookinfo>
+
+    <preface>
+        <title>Preface</title>
+
+        <para>After almost a year of hard and backbreaking work, Multiverse 0.7 was finally released. It is a complete
+            rewrite from the previous releases where a lot of effort was made on removing some fundamental problems with
+            the 0.6 design (the need for a shared clock was reduced considerably), so it should scale a lot better.
+            Also the performance was increased considerably, and last but not least a whole new set of new features are added
+            like commuting operations, pessimistic locking, isolation and propagation levels etc.
+        </para>
+
+        <para>
+            Also the instrumentation was removed and the focus for this release is completely on transactional references.
+            The instrumentation will be added in the future.
+        </para>
+    </preface>
+
+    &chapter-introduction;
+    &chapter-transactional-references;
+    &chapter-transaction;;
+    &chapter-propagation;
+    &chapter-blockingtransactions;
+    &chapter-controlflow-errors;
+    &chapter-pessimistic-locking;
+    &chapter-deferredandcompensatingtasks;
+    &chapter-isolationlevel;
+    &chapter-gammastm;
+    &chapter-performance-tuning;
+    &chapter-jmm;
+    &chapter-designguidelines;
+    &chapter-2pc;
+</book>

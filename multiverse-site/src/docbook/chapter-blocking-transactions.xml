@@ -1,0 +1,216 @@
+<chapter xml:id="chapter-blocking-transactions">
+
+<title>Blocking Transactions (in progress)</title>
+
+<sect1>
+    <title>Introduction</title>
+<para>
+     With traditional concurrency control, one can write blocking structures (so structures where a thread waits until some condition changes) based on primitive
+    synchronization structures like the waitset/java.util.concurrent.locks.Condition. Or using some higher blocking primitives like the java.util.concurrent.CountDownLatch
+    or java.util.concurrent.Future. With Stm it also is possible to write blocking datastructures using the retry primitive.
+</para>
+    <para>
+        The following example shows a Counter, where a thread can block until the counter has reached some value.
+    <programlisting language="java">
+
+       import org.multiverse.api.*;
+       import org.multiverse.api.refs.*;
+       import static org.multiverse.api.StmUtils.*;
+
+       public class Counter{
+           private final IntRef value = newIntRef(0);
+
+           public void increment(){
+                execute(new AtomicVoidClosure()){
+                   public void execute(Transaction tx){
+                       value.increment(1);
+                   }
+               });
+           }
+
+           public void await(final int expected){
+               execute(new AtomicVoidClosure()){
+                   public void execute(Transaction tx){
+                       if(value.get()&lt;expected){
+                           retry();
+                       }
+                   }
+               });
+           }
+
+           ...
+       }
+       </programlisting>
+       In this example, when a transaction executed the await and finds that the value has not reached the expected value, the transaction will block until
+       the value become equal or larger to the expected value.
+</para>
+    <para>
+        For explanation purposes, the code is more elaborate than strictly needed. The IntRef has different methods for waiting on certain values and the
+        Counter.increment could be simplified by calling an IntRef.atomicIncrement().
+    </para>
+</sect1>
+
+<sect1>
+    <title>RetryError</title>
+    <para>
+        The blocking functionality works like this: when a retry is called, the transaction will register a listener on all reads it has executed, aborts
+        the transaction and throws a org.multiverse.api.exceptions.RetryError (an instance of the org.multiverse.api.exceptions.ControlFlowError). This Error
+        should only be caught by the AtomicBlock and till it is caught, it unwinds the callstack. When it is caught by the AtomicBlock, the RetryLatch.await
+        that was registered on all reads references, will be called and the transaction is going to block. So do not catch this Error unless you really know
+        what you are doing.
+    </para>
+</sect1>
+
+<sect1>
+    <title>Composition</title>
+    <para></para>
+</sect1>
+
+<sect1>
+    <title>Orelse</title>
+    <para></para>
+</sect1>
+
+<sect1>
+    <title>Blocking on multiple resources</title>
+    <para>
+          With traditional concurrency contol, it is hard to make it possible on multiple datastructures. If yuo have 2 BlockingQueues
+        for example, it is hard for a thread to wait for an element to be placed on either one of them. Luckily this problem is solved
+        when STM is used. Example:
+        <programlisting language="java">
+    public class Foo{
+        private final Counter counter1 = new Counter();
+        private final Counter counter2 = new Counter();
+
+        public void awaitBoth(final int value){
+            execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    if(counter1.get()&gt;=value &amp;&amp; counter2.get()&gt;value){
+                        return;
+                    }
+
+                    retry();
+                }
+            });
+        }
+
+        ...
+    }
+        This example show hows to wait until both counters have reached some value. A transaction will automatically block on all references
+        it has read.
+        </programlisting>
+
+    </para>
+</sect1>
+
+<sect1>
+    <title>Prevent blocking</title>
+    <para>
+        The default setting for a transaction, is that it is allowed to block. If you don't want a transaction to be able to block, the
+        TransactionFactoryBuilder.setBlockingAllowed can be called.
+    <programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+
+    public class Counter{
+        private final static AtomicBlock awaitBlock = getGlobalStmInstance()
+                 .newTransactionFactoryBuilder()
+                 .setBlockingAllowed(false)
+                 .newAtomicBlock();
+
+        private final IntRef value = newIntRef(0);
+
+        public void await(final int a){
+            awaitBlock.execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    if(value.get()&lt;a){
+                        retry();
+                    }
+                }
+            });
+        }
+
+        ...
+    }
+    </programlisting>
+    When the await method is called, and the amount is not sufficient, a retry is executed. But instead of blocking, a org.multiverse.api.exceptions.RetryNotAllowedException
+    is thrown.
+    </para>
+</sect1>
+
+<sect1>
+    <title>Timeout</title>
+    <para>
+        The default is that unbound waiting is used. But in some cases you want to configure how long a transaction is allowed to block
+        before throwing a org.multiverse.api.exceptions.RetryTimeoutException. This can be done through the TransactionFactoryBuilder.setTimeoutNs
+        method. Atm no support is provided to configure this on a lower level.
+    <programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+
+    public class Counter{
+        private final static AtomicBlock awaitBlock = getGlobalStmInstance()
+                 .newTransactionFactoryBuilder()
+                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
+                 .newAtomicBlock();
+
+        private final IntRef value = newIntRef(0);
+
+        public void await(final int a){
+            awaitBlock.execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    if(value.get()&lt;a){
+                        retry();
+                    }
+                }
+            });
+        }
+
+        ...
+    }
+    </programlisting>
+    </para>
+</sect1>
+
+<sect1>
+    <title>Interruptibility</title>
+    <para>
+          The default is that a transaction is not interruptible. But in some cases you want a transaction to be interruptible. This can be done using the
+          setInterruptible method on the org.multiverse.api.TransactionFactoryBuilder.
+    <programlisting language="java">
+
+    import org.multiverse.api.*;
+    import org.multiverse.api.refs.*;
+    import static org.multiverse.api.StmUtils.*;
+
+    public class Counter{
+        private final static AtomicBlock awaitBlock = getGlobalStmInstance()
+                 .newTransactionFactoryBuilder()
+                 .setInterruptible(true)
+                 .newAtomicBlock();
+
+        private final IntRef value = newIntRef(0);
+
+        public void await(final int a){
+            awaitBlock.execute(new AtomicVoidClosure()){
+                public void execute(Transaction tx){
+                    if(value.get()&lt;a){
+                        retry();
+                    }
+                }
+            });
+        }
+
+        ...
+    }
+    </programlisting>
+    If a thread blocks on the retry, it can be interrupted by a nother thread. Instead of the java.lang.InterruptedException is thrown, the
+        org.multiverse.api.exceptions.RetryInterruptedException is thrown which is unchecked.
+    </para>
+</sect1>
+
+</chapter>

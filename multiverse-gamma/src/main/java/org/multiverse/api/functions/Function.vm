@@ -1,0 +1,51 @@
+package org.multiverse.api.functions;
+
+#if(${transactionalObject.type} eq 'E')
+/**
+ * A Function that accepts an argument of a certain type and returns a new value of the same type.
+ *
+ * <p>Can be used for commuting functions or for the Ref.alter methods.
+ *
+ * <p>This class is generated.
+ *
+ * @author Peter Veentjer.
+ */
+public interface ${transactionalObject.functionClass}${transactionalObject.typeParameter}{
+
+    /**
+     * Evaluates the function.
+     *
+     * @param value the value to evaluate.
+     * @return the result of the evaluation
+     */
+    ${transactionalObject.type} call(${transactionalObject.type} value);
+}
+#else
+/**
+ * A {@link Function} for primitives that accepts an argument of type ${transactionalObject.type} and returns a new
+ * value of the same type.
+ *
+ * <p>The reason why {@link ${transactionalObject.functionClass}} is an abstract class instead of an ordinary interface, is that
+ * this class doesn't cause any unwanted boxing of primitives version of the call method is used instead of the one that
+ * accepts and returns a/an ${transactionalObject.objectType}).
+ *
+ * <p>This class is generated.
+ *
+ * @author Peter Veentjer.
+ */
+public abstract class ${transactionalObject.functionClass}${transactionalObject.typeParameter} implements Function<${transactionalObject.objectType}>{
+
+    /**
+     * Calculates the new value based on the current value.
+     *
+     * @param current the current value.
+     * @return the new value.
+     */
+    public abstract ${transactionalObject.type} call(${transactionalObject.type} current);
+
+    @Override
+    public final ${transactionalObject.objectType} call(${transactionalObject.objectType} arg) {
+        return call((${transactionalObject.type}) arg);
+    }
+}
+#end

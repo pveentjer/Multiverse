@@ -1,0 +1,75 @@
+<h1>Configuring the development environment</h1>
+<ul>
+    <li><a href="#command.line">Command-line</a></li>
+    <li><a href="#ant">Ant</a></li>
+    <li><a href="#maven2">Maven 2</a></li>
+    <li><a href="#intellij">IntelliJ Idea</a></li>
+    <li><a href="#eclipse">Eclipse</a></li>
+    <li><a href="#netbeans">Netbeans</a></li>
+</ul>
+
+<h2 id="command.line">Command-line</h2>
+If you want to execute your application (using Multiverse) from the command-line, you need to add the
+Java agent for Multiverse, e.g.:
+<pre>
+    java -javaagent:multiverse-alpha-0.5.jar ...
+</pre>
+This Java agent (for the AlphaStm) contains all libraries needed for Multiverse and can be
+downloaded <a
+        href="http://repository.codehaus.org/org/multiverse/multiverse-alpha/0.5/multiverse-alpha-0.5.jar">here</a>.
+So no worries about other dependencies. You don't need to the add 'multiverse-alpha-0.5.jar' classpath since it already
+will be made available through the Java agent mechanism. This jar is precompiled, so it can also be used directly in
+the production environment.
+
+<h2 id="ant">Ant</h2>
+Not available since we are not using Ant. Check the documentation for the other environments to see what needs
+to be done. And I would be very grateful if you can send me a short description so I can improve this documentation.
+
+<h2 id="maven2">Maven 2</h2>
+Check the following <a href="pom.xml">pom</a> for a complete working configuration. It is configured for the
+0.5 release. One of the things that has been added as is the Java agent configuration for the surefire plugin.
+<p>
+    Alternatively, you can try Multiverse's Maven project archetype. Install the <tt>multiverse-project-archetype</tt>
+    module locally, run <tt>mvn archetype:generate</tt> and choose the archetype in order to create a skeleton
+    project with the correct dependencies and settings.
+
+<h2 id="intellij">IntelliJ IDEA</h2>
+Under IntelliJ IDEA, you need to set the Java agent. This can be done by going to menu 'Run' -> 'Edit Configuration'.
+This will popup a dialog; press the 'edit defaults' button at the bottom left of this dialog. This will open the
+'Default Settings' dialog. Select 'Junit' and edit the 'VM Parameters' textfield. If you are using Maven 2
+for your project, you can enter the following string:
+<pre>-javaagent:/path/to/.m2/repository/org/multiverse/multiverse-alpha/0.5/multiverse-alpha-0.5.jar
+</pre>
+Make sure that that you replace '/path/to' by the location where your repository can be found and make sure
+that the multiverse-alpha jar has been downloaded in your repository.
+<p>
+    If you are not
+    using Maven 2, you need to <a href="download.html">download</a> Mutiverse, extract it somewhere and use the
+    following
+    text for the 'VM Parameters' textfield:
+<pre>
+-javaagent:SOMEDIR/multiverse-alpha-0.5.jar
+</pre>
+Make sure that you replace 'SOMEDIR' by the absolute path to the directory that contains the multiverse-alpha-0.5.jar.
+
+<h2 id="eclipse">Eclipse</h2>
+Much as for IDEA, the only thing needed to be done to run Multiverse from Eclipse is to correctly add the Java agent to the command line. This can be done via the 'Run' -> 'Run Configurations...' pop-up menu by adding the following to the 'VM arguments' box on the 'Arguments' tab:
+
+<pre>
+-javaagent:/path/to/.m2/repository/org/multiverse/multiverse-alpha/0.5/multiverse-alpha-0.5.jar
+</pre>
+
+Of course, you will need to modify the string to point to <em>your</em> local Maven repository.
+<p>
+    If you are not
+    using Maven 2, you need to <a href="download.html">download</a> Mutiverse, extract it somewhere and use the
+    following
+    text for the 'VM arguments' field:
+<pre>
+-javaagent:SOMEDIR/multiverse-alpha-0.5.jar
+</pre>
+Make sure that you replace 'SOMEDIR' by the absolute path to the directory that contains the multiverse-alpha-0.5.jar.
+
+<h2 id="netbeans">Netbeans</h2>
+Not available since we are not using Netbeans. Check the documentation for the other environments to see what needs
+to be done. And I would be very grateful if you can send me a short description so I can improve this documentation.

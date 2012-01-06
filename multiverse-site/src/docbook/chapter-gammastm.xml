@@ -1,0 +1,147 @@
+<chapter xml:id="chapter-gammastm">
+
+    <title>GammaStm</title>
+    <sect1>
+        <title>Introduction</title>
+        <para>
+            The new GammaStm (the default instance of the Stm interface, and stored in the GlobalStm) is a complete
+            rewrite
+            of the AlphaStm. The AlphaStm was based on the TL2 design of David Dice with some optimizations. But having
+            a central
+            clock (an AtomicLong) as a hidden contention point that makes is harder to writer scalable transactional
+            datastructures.
+            The new GammaStm make use of a conflict counter (comparable to that used in the SkySTM) which only is
+            increased on conflict.
+            This means that this conflict counter only needs to be increased if there are conflict, and not just on
+            every write. Which
+            means that the total pressure on the conflict counter will always be equal or smaller than that of the TL2
+            design.
+        </para>
+
+        <para>
+            Not only the fundamental design of the STM has been improved, also a very large effort was made
+            in preventing unjustifiably overhead. E.g. virtual method calls (prevent inlining), switch case statements
+            (causes problems with branch predication) etc. So a lot of stuff has been optimized and the code is not always
+            as pretty.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Orec</title>
+        <para>
+            Each transactional reference has a ownership record (just an long). Using bit-tweaking a lot of information
+            can be stored here:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        surplus: so the number of current readers
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        readonly count: so the number of transaction that have only read and not updated the
+                        transactional reference.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        read/update biased: if the orec is read or update biased.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        lock information: readlock (so the number of transaction that acquired the read-lock),
+                        write-lock and exclusive-lock.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            So a lot of operations like doing an arrive/depart or acquiring a lock, can all be done by a single cas.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>No Garbage</title>
+        <para>
+            One of the causes of a not scalable STM is that a lot of garbage is created. The new GammaStm is able to
+            reuse a lot of objects (so it pools internally) for almost all transactions. The only object that needs to
+            be created is the AtomicClosure. If you can even pool that, then there will be zero waste.
+        </para>
+
+        <para>
+            One of techniques used to deal with the primitive types and the reference type, is that code is generated
+            using Velocity. So the logic only needs to be written once, and the Java code that is optimized for a certain
+            type is generated. There is no runtime dependency on Velocity.
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Read consistency</title>
+        <para>
+            The new GammaStm uses 1 basic mechanism for providing read consistency. The basic mechanism is based is on
+            semi visible reads (so it is visible that other transactions have read the data, but not which ones). When
+            a transaction reads a ref, it increments the surplus, and when the transaction is done with it (so aborts or
+            commits), automatically a depart is done. When a transaction commits, and finds that there are reading
+            threads,
+            it increments the global conflict counter (which in the future probably will be striped). When a reading
+            transaction
+            sees that the global conflict counter has changed, it does a full conflict scan. Transactions used by the
+            GammaStm
+            always use readtracking.
+        </para>
+
+        <para>
+            2 Very important optimizations have been added to this design.
+            <itemizedlist>
+                <listitem>
+                    <para>Read biased references: if references are only read, they can become read biased. Once they
+                        have
+                        become read biased, no arrives/departs are required. So if you have a tree for example, the
+                        roots of the
+                        tree will no change very often, but without read biased references, they still require an
+                        arrive/depart, which
+                        in turn limits scalability. If they have become readbiased, and an update is done, the global
+                        conflict counter
+                        will always be increased and all transactions are forced to do a full conflict scan. Once a ref
+                        is written,
+                        it automatically become update biased until a certain number of reads have been done.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>Always do a full conflict scan: short transactions (so ranging to 20 refs.. this value is
+                        configurable)
+                        always do a full conflict scan. It should expensive, but in most cases it will only cause some
+                        volatile reads.
+                        The advantage of using this approach is that a short transaction never needs to do an
+                        arrive/depart and never
+                        cause the global conflict counter to increment. If only short transactions are used, independant
+                        datastructure
+                        will scale independently.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+    </sect1>
+
+    <sect1>
+        <title>Other features</title>
+
+        <itemizedlist>
+            <listitem>
+                <para>Pessimistic transactions</para>
+            </listitem>
+            <listitem>
+                <para>Propagation level</para>
+            </listitem>
+            <listitem>
+                <para>Isolation level</para>
+            </listitem>
+            <listitem>
+                <para>Commute</para>
+            </listitem>
+            <listitem>
+                <para>...</para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+</chapter>
+

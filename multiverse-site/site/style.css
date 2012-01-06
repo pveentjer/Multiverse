@@ -1,0 +1,460 @@
+body, td, th, input {
+/* redundant rules for bad browsers  */
+    font-family: verdana, sans-serif;
+    font-size: x-small;
+    voice-family: "\"}\"";
+    voice-family: inherit;
+    font-size: small;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 1em 0 0.2em 0;
+    font-family: arial, verdana, sans-serif;
+}
+
+h1, h2, h3 {
+    border-bottom: 1px solid #ccc;
+}
+
+li h1, li h2, li h3, li h4, li h5, li h6 {
+    border: none;
+}
+
+li {
+    padding: 2px 3px;
+}
+
+h1 {
+    font-size: 160%;
+    font-weight: normal;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 150%;
+    font-weight: normal;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 85%;
+}
+
+h3 {
+    font-size: 120%;
+    width: 70%;
+    min-width: 250px;
+}
+
+h4 {
+    font-size: 100%;
+}
+
+h5 {
+    font-size: 90%;
+}
+
+h6 {
+    font-size: 90%;
+    border: 0;
+}
+
+pre {
+    font-size: 110%;
+    padding: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    background-color: #f3f5e9;
+}
+
+:link {
+    color: #039;
+}
+
+:visited {
+    color: #039;
+}
+
+:link:hover, :visited:hover {
+    color: #333;
+}
+
+:link:active, :link:active {
+    color: #000;
+}
+
+body {
+    margin: 0 0 1em 0;
+    padding: 0; /* need for Opera */
+    color: #333;
+    min-width: 610px;
+    background: #efefef;
+}
+
+form {
+    margin: 0;
+}
+
+img {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#side {
+    float: left;
+    width: 23%;
+    margin-bottom: 1em;
+    margin-top: 1em;
+
+}
+
+#mainContent {
+    float: right;
+    width: 74%;
+    margin-bottom: 3em;
+}
+
+#footer {
+}
+
+.hide {
+    display: none;
+}
+
+#header, #content, #main-header {
+    padding: 0 50px;
+}
+
+#header, #main-header {
+    max-width: 900px;
+}
+
+#footer {
+    padding: 0 20px;
+    margin: 0 50px;
+}
+
+#main-header, #header, #content, #footer {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#content {
+    border: none;
+    /*margin: 0px 0px 0px 7px;
+padding: 4px 0px 0 0;*/
+}
+
+h1.main-header-left {
+    float: left;
+}
+
+h1.main-header-right {
+    float: right;
+}
+
+/* =========================================
+				header
+=========================================*/
+
+#header {
+    background: #4070A0;
+    color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px; /*border-bottom: 1px solid #A1A6B1;*/
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    z-index: 1;
+}
+
+#header-title {
+/*background:url("unity-codehaus-logo-only.png") no-repeat right;*/
+}
+
+#header-logo {
+    float: right;
+    background-color: red;
+    color: chartreuse;
+}
+
+#header h1 {
+    border: 0;
+    font-size: 250%;
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#header a:link, #header a:visited {
+    color: #FFFFFF;
+}
+
+/* =========================================
+        main-header
+=========================================*/
+
+#main-header {
+    background: #ccc;
+    padding-top: 5px;
+    padding-bottom: 8px;
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    height: 30px;
+}
+
+#main-header h1 {
+    border: 0;
+}
+
+#main-header h1 {
+    padding: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#content {
+    background-color: #ffffff;
+    border-left: 1px solid #333333;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+}
+
+.submenu {
+}
+
+.submenu ul {
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.submenu ul li {
+    font-size: 95%;
+    margin: 0;
+    padding: 0;
+}
+
+.submenu ul li a {
+    display: block;
+    border-bottom-color: #DDDDDD;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-color: #FFFFFF;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-bottom: 5px;
+    padding-left: 36px;
+    padding-right: 7px;
+    padding-top: 5px;
+    border-left-color: #DDDDDD;
+    border-left-style: solid;
+    border-left-width: 1px;
+    background: #FEFEFE;
+}
+
+/* ========================================
+                 Sidebar
+=========================================*/
+
+.nav-title {
+    background: #ccc;
+    border: 1px solid #AAA;
+    padding: 3px 0px 3px 0px;
+    width: auto !important;
+}
+
+.nav-title div {
+    width: 100%;
+}
+
+.nav-title div div {
+    background: none;
+    padding: 0;
+}
+
+.nav-title div h3 {
+    font-size: 100%;
+    font-weight: bold; /*color: #eef;*/
+    text-decoration: none;
+    border: none;
+    margin: 0 0 0 7px;
+    padding: 4px 0px 0 0;
+}
+
+.nav-footer {
+    border-top: 1px solid #fff;
+    height: 10px;
+    margin-bottom: 3em;
+}
+
+.nav-footer div {
+
+    width: 100%;
+    height: 10px;
+}
+
+.nav-footer div div {
+    background: none;
+    padding: 0;
+    height: 10px;
+}
+
+.nav {
+    border-right: 1px solid #ddd;
+}
+
+.nav, .nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nav li {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    font-size: 95%;
+}
+
+.nav li span {
+/* used for un-linked menu items */
+    display: block;
+    padding: 6px 10px;
+    font-weight: bold;
+    color: #666;
+}
+
+.nav li span#configParent,
+#nav li span #configuration {
+    display: inline;
+    font-weight: normal;
+    padding: 0;
+}
+
+.nav li a {
+    display: block;
+    text-decoration: none;
+    background: #F0F0F0;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #fff;
+    color: #225;
+    padding: 5px 7px;
+}
+
+/* =========================================
+				News
+=========================================*/
+
+.news {
+    border-right: 1px solid #AAA;
+    border-left: 1px solid #AAA;
+    padding: 0;
+    margin: 0;
+    background: #f0f0f0;
+    font-size: 100%;
+}
+
+.news-title {
+    background: #ccc;
+    border: 1px solid #AAA;
+    padding: 3px 0px 3px 0px;
+    width: auto !important;
+}
+
+.news-title h3 {
+    padding: 0 0 0 7px;
+    border: 0;
+    margin: 0;
+}
+
+.news-footer {
+    border-top: 1px solid #AAA;
+}
+
+.news dt {
+    padding: 3px 7px 0px 7px;
+    font-weight: bold;
+    border-top: 1px solid #fff;
+}
+
+.news dd {
+    padding: 0px 7px 10px 7px;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav li a.selected {
+    background: #FFE8A0;
+}
+
+.nav li a:hover {
+    background: #E4E4E4; /*#FFF0C0;*/
+}
+
+.nav li a.selected:hover {
+    background: #F4DE99; /*#FFF0C0;*/
+}
+
+.nav li li span {
+/* used for un-linked menu items */
+    padding: 4px 8px 4px 20px;
+}
+
+.nav li li a {
+    padding: 6px 8px 6px 20px;
+}
+
+#oN {
+    background-color: #E0E9E9;
+}
+
+#oN:hover {
+    background-color: #C6DCDC;
+}
+
+/* =========================================
+        Footer
+=========================================*/
+
+#footer {
+    clear: both;
+    margin-top: 3em;
+    margin-bottom: 1em;
+    color: #888;
+    padding: 25px 50px;
+    text-align: center;
+}
+
+#footer-contents {
+    padding: 0;
+    border-top: 1px solid #C9D0E0;
+}
+
+#footer ul#footer-menu {
+    position: relative;
+    top: -0.8em;
+    margin: 0 1em 0 1em;
+    padding: 0;
+    list-style-type: none;
+}
+
+#footer ul#footer-menu li {
+    display: inline;
+    background: #fff;
+    margin: 0 1em;
+}
+
+#footer ul#footer-menu li a {
+    margin: 0 1em;
+    white-space: nowrap;
+}
+
+#footer p {
+    margin: 0.3em;
+}
+
+#footer .site-tools {
+    display: none;
+}
