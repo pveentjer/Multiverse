@@ -47,12 +47,11 @@ project(':multiverse-gamma') {
     }
 
     repositories {
-        mavenRepo urls: localMavenRepo
+        mavenRepo(url: localMavenRepo)
         mavenCentral()
-        mavenRepo(urls: [
-                'http://snapshots.repository.codehaus.org',
-                'http://download.java.net/maven/2/',
-                'https://maven.atlassian.com/content/groups/public'])
+        mavenRepo(url: 'http://download.java.net/maven/2/')
+        mavenRepo(url: 'https://maven.atlassian.com/content/groups/public')
+        mavenRepo(url: 'http://snapshots.repository.codehaus.org')
     }
 
     dependencies {
