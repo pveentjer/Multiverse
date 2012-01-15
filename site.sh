@@ -1,3 +1,4 @@
+#!/bin/sh
 
 rm -dfr multiverse-site/build
 
