@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" tests="9" time="2.011" timestamp="2012-01-23T21:03:30">
+  <properties />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenInterruptedWhileWaiting" time="0.501" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenAborted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenCommitted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenAbortedWhileWaiting" time="1.002" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenCommittedWhileWaiting" time="0.502" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenNullTransaction" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenLastOneEntering" time="0.0010" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenTransactionAlreadyCommitted" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitTest" name="whenTransactionAlreadyAborted_thenDeadTransactionException" time="0.0" />
+  <system-out><![CDATA[Multiverse > TestThread-36 completed successfully
+Multiverse > TestThread-37 completed successfully
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

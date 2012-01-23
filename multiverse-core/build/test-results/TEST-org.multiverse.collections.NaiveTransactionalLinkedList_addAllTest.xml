@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" tests="7" time="0.01" timestamp="2012-01-23T21:03:21">
+  <properties />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenNullCollectionAdded_thenNullPointerException" time="0.0" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenOneOfItemsIsNull" time="0.0010" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenNonEmptyListAndEmptyCollection" time="0.0010" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenBothEmpty" time="0.0" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenEmptyListEmptyAndNonEmptyCollection" time="0.0" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenBothNonEmpty" time="0.0" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_addAllTest" name="whenCapacityExceeded" time="0.0010" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

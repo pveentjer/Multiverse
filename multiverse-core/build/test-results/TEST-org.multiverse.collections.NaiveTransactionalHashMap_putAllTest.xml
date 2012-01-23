@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" tests="5" time="0.0060" timestamp="2012-01-23T21:03:20">
+  <properties />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" name="whenNullMap_thenNullPointerException" time="0.0010" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" name="whenEmptyMapAdded" time="0.0010" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" name="whenOneOfTheItemsIsNull" time="0.0" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" name="whenAllDifferentItems" time="0.0010" />
+  <testcase classname="org.multiverse.collections.NaiveTransactionalHashMap_putAllTest" name="whenSomeItemsReplaced" time="0.0010" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

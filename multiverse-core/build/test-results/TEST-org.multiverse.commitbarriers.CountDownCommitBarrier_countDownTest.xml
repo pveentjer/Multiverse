@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.commitbarriers.CountDownCommitBarrier_countDownTest" tests="4" time="1.508" timestamp="2012-01-23T21:03:27">
+  <properties />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_countDownTest" name="whenAborted_thenIgnored" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_countDownTest" name="whenLastOne_thenBarrierOpened" time="0.502" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_countDownTest" name="whenNotLastOne" time="1.002" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_countDownTest" name="whenCommitted_thenIgnored" time="0.0010" />
+  <system-out><![CDATA[Multiverse > TestThread-28 completed successfully
+Multiverse > TestThread-29 completed successfully
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

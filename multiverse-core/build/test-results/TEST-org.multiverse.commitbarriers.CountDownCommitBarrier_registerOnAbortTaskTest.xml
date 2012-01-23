@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" tests="6" time="0.016" timestamp="2012-01-23T21:03:35">
+  <properties />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenAborted_thenCommitBarrierOpenException" time="0.0090" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenCommitted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenNullTask_thenNullPointerException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenAborted_thenTaskExecuted" time="0.0010" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenCommitted_thenTaskNotExecuted" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_registerOnAbortTaskTest" name="whenTaskThrowsRuntimeException_thenOtherTasksNotExecuted" time="0.0" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -119,7 +119,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
     ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.

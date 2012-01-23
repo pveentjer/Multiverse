@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" tests="7" time="3.01" timestamp="2012-01-23T21:03:11">
+  <properties />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenAlreadyOpenAndSameEra" time="0.0" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenAlreadyOpenAndDifferentEra" time="0.0" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenClosedButDifferentEra" time="0.0" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenSomeWaitingIsNeeded" time="0.502" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenStartingInterrupted" time="1.001" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenInterruptedWhileWaiting" time="1.002" />
+  <testcase classname="org.multiverse.api.blocking.DefaultRetryLatch_awaitUninterruptibleTest" name="whenResetWhileWaiting_thenSleepingThreadsNotified" time="0.501" />
+  <system-out><![CDATA[Multiverse > TestThread-4 completed successfully
+Multiverse > TestThread-5 completed successfully
+Multiverse > TestThread-6 completed successfully
+Multiverse > TestThread-7 completed successfully
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

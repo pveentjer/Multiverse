@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" tests="10" time="3.132" timestamp="2012-01-23T21:03:32">
+  <properties />
+  <ignored-testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenStartingInterrupted" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenAborted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenCommitted_thenCommitBarrierOpenException" time="0.0010" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenCommittedWhileWaiting" time="1.002" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenTransactionAborted_thenDeadTransactionException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenTransactionCommitted_thenDeadTransactionException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenTransactionNull_thenFailWithNullPointerException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenTransactionFailsToPrepare" time="0.119" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenInterruptedWhileWaiting_thenNoInterruption" time="1.002" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest" name="whenAbortedWhileWaiting_" time="1.002" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

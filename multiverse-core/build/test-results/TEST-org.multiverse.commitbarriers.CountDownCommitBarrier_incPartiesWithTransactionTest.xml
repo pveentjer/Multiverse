@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" tests="12" time="0.61" timestamp="2012-01-23T21:03:28">
+  <properties />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenNegativeNumber_thenIllegalArgumentException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenZeroExtraParties" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenPositiveNumber" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenPendingTransactions" time="0.602" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenAborted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenCommitted_thenCommitBarrierOpenException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenNullTransaction_thenNullPointerException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenTransactionPrepared_thenPreparedTransactionFailure" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenTransactionAborted_thenDeadTransactionException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenTransactionCommitted_thenDeadTransactionException" time="0.0" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenPartiesAdded_thenAdditionalJoinsNeedToBeExecuted" time="0.0010" />
+  <testcase classname="org.multiverse.commitbarriers.CountDownCommitBarrier_incPartiesWithTransactionTest" name="whenTransactionAborted_thenPartiesRestored" time="0.0" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

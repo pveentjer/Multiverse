@@ -22,7 +22,7 @@ allprojects {
     defaultTasks 'clean', 'install'
 }
 
-project(':multiverse-gamma') {
+project(':multiverse-core') {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'project-reports'

@@ -116,7 +116,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
     <E> E execute(AtomicClosure<E> closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.
@@ -138,7 +138,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
      int execute(AtomicIntClosure closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.
@@ -160,7 +160,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
      long execute(AtomicLongClosure closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.
@@ -182,7 +182,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
      double execute(AtomicDoubleClosure closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.
@@ -204,7 +204,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
      boolean execute(AtomicBooleanClosure closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.
@@ -225,7 +225,7 @@ public interface AtomicBlock extends MultiverseConstants{
     */
      void execute(AtomicVoidClosure closure);
 
-    /**
+   /**
     * Executes the closure.
     *
     * @param closure the closure to execute.

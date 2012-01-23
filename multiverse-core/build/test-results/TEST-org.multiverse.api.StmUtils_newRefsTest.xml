@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.api.StmUtils_newRefsTest" tests="10" time="0.028" timestamp="2012-01-23T21:03:10">
+  <properties />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewRefWithDefaultValue" time="0.0010" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewRef" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewIntRefWithDefaultValue" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewIntRef" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewLongRefWithDefaultValue" time="0.011" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewLongRef" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewBooleanRefWithDefaultValue" time="0.0020" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewBooleanRef" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewDoubleRefWithDefaultValue" time="0.0040" />
+  <testcase classname="org.multiverse.api.StmUtils_newRefsTest" name="whenNewDoubleRef" time="0.0010" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

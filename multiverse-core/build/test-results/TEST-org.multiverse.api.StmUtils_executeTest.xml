@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.api.StmUtils_executeTest" tests="7" time="0.136" timestamp="2012-01-23T21:03:09">
+  <properties />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenNullClosure_thenNullPointerException" time="0.047" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteSuccess" time="0.021" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteThrowsCheckedException" time="0.0010" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteThrowsUncheckedException" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteCheckedSuccess" time="0.0" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteCheckedThrowsCheckedException" time="0.0010" />
+  <testcase classname="org.multiverse.api.StmUtils_executeTest" name="whenExecuteCheckedThrowsUncheckedException" time="0.0020" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Jan 23, 2012 11:03:09 PM org.multiverse.api.GlobalStmInstance <clinit>
+INFO: Initializing GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+Jan 23, 2012 11:03:10 PM org.multiverse.api.GlobalStmInstance <clinit>
+INFO: Successfully initialized GlobalStmInstance using factoryMethod 'org.multiverse.stms.gamma.GammaStm.createFast'.
+]]></system-err>
+</testsuite>

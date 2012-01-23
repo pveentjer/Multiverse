@@ -141,7 +141,7 @@ settingsxml.text = new File("$basedir/multiverse-site/site/settings.xml").text
 def index = new File("$outputdirectory/index.html")
 index.text = new File("$basedir/multiverse-site/site/index.html").text
 
-def pomxml = new File("$outputdirectory/pom.xml")
-pomxml.text = new File("$basedir/multiverse-site/site/pom.xml").text
+//def pomxml = new File("$outputdirectory/pom.xml")
+//pomxml.text = new File("$basedir/multiverse-site/site/pom.xml").text
 
 println('finished')
