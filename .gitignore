@@ -1,7 +1,7 @@
 *.class
 .gradle/
 .DS_Store*
-multiverse/build/
+multiverse-gamma/build/
 multiverse-site/build/
 *.iml
 .idea/

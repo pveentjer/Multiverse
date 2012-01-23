@@ -221,39 +221,5 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      */
     boolean addAll(Transaction tx, TransactionalCollection<? extends E> c);
 
-    TransactionalCollection<E> drop(int numToDrop);
-
-    TransactionalCollection<E> drop(Transaction tx, int numToDrop);
-
-    TransactionalCollection<E> dropWhile(Predicate<E> predicate);
-
-    TransactionalCollection<E> dropWhile(Transaction tx, Predicate<E> predicate);
-
     String toString(Transaction tx);
-
-    E foldLeft(BinaryFunction<E> function, E initial);
-
-    E foldLeft(Transaction tx, BinaryFunction<E> function, E initial);
-
-    E foldRight(BinaryFunction<E> function, E initial);
-
-    E foldRight(Transaction tx, BinaryFunction<E> function, E initial);
-
-    TransactionalCollection<E> map(Function<E> function);
-
-    TransactionalCollection<E> map(Transaction tx, Function<E> function);
-
-    TransactionalCollection<E> flatMap(Function<E> function);
-
-    TransactionalCollection<E> flatMap(Transaction tx, Function<E> function);
-
-    TransactionalCollection<E> filter(Predicate<E> predicate);
-
-    TransactionalCollection<E> filter(Transaction tx, Predicate<E> predicate) throws CloneNotSupportedException;
-
-    void foreach(Function<E> function);
-
-    void foreach(Transaction tx, Function<E> function);
-
-    TransactionalCollection<E> buildNew();
 }

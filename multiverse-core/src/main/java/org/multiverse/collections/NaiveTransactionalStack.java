@@ -224,11 +224,6 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
         return sb.toString();
     }
 
-    @Override
-    public TransactionalCollection<E> buildNew() {
-        return new NaiveTransactionalStack(stm);
-    }
-
     static class Node<E> {
         final Node<E> next;
         final E value;

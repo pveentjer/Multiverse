@@ -43,7 +43,7 @@ project(':multiverse-core') {
     }
 
     javadoc {
-        title = "Multiverse $version"
+        title = "Multiverse Core $version"
     }
 
     repositories {
@@ -227,8 +227,6 @@ project(':multiverse-site') {
         ant.copy(todir: "${projectDir}/build/site") {
             fileset(dir: "../charts")
         }
-
-
 
         println "Finished copying charts"
     }

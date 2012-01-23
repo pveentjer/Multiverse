@@ -90,9 +90,4 @@ public final class NaiveTransactionalHashSet<E>
     public String toString(Transaction tx) {
         throw new TodoException();
     }
-
-    @Override
-    public TransactionalCollection<E> buildNew() {
-        return new NaiveTransactionalHashSet(stm);
-    }
 }

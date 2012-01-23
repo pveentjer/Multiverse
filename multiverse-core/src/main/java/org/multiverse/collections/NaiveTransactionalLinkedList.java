@@ -640,11 +640,6 @@ public final class NaiveTransactionalLinkedList<E> extends AbstractTransactional
         return sb.toString();
     }
 
-    @Override
-    public TransactionalCollection<E> buildNew() {
-        return new NaiveTransactionalLinkedList(stm);
-    }
-
     static class Entry<E> {
         private final Ref<Entry<E>> next;
         private final Ref<Entry<E>> previous;

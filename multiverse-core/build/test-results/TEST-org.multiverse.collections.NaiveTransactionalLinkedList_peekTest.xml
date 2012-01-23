@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite errors="0" failures="0" hostname="PVeentjer.local" name="org.multiverse.collections.NaiveTransactionalLinkedList_peekTest" tests="3" time="0.0040" timestamp="2012-01-23T21:03:21">
-  <properties />
-  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_peekTest" name="whenEmpty" time="0.0010" />
-  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_peekTest" name="whenSingleItem" time="0.0010" />
-  <testcase classname="org.multiverse.collections.NaiveTransactionalLinkedList_peekTest" name="whenMultipleItems" time="0.0010" />
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
