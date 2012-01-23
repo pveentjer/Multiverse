@@ -55,10 +55,10 @@ project(':multiverse-gamma') {
     }
 
     dependencies {
-        deployerJars "org.apache.maven.wagon:wagon-ssh:1.0-beta-2"
-        testCompile group: 'junit', name: 'junit', version: '4.8.2'
-        testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.2'
+        testCompile group: 'junit', name: 'junit', version: '4.10'
+        testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.0'
         testCompile group: 'org.benchy', name: 'benchy-driver', version: '0.1-SNAPSHOT'
+        deployerJars "org.apache.maven.wagon:wagon-ssh:1.0-beta-2"
         deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '1.0-beta-6'
     }
 
