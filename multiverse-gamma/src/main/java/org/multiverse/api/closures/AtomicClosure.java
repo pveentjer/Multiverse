@@ -3,10 +3,11 @@ package org.multiverse.api.closures;
 import org.multiverse.api.Transaction;
 
 /**
-* An AtomicClosure tailored for E
-*
-* @author Peter Veentjer.
-*/
+ * An AtomicClosure tailored for E
+ * An AtomicClosure that doesn't return a value.
+ *
+ * @author Peter Veentjer.
+ */
 public interface AtomicClosure<E>{
 
     /**

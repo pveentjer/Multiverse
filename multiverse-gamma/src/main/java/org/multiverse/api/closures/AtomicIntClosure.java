@@ -3,10 +3,11 @@ package org.multiverse.api.closures;
 import org.multiverse.api.Transaction;
 
 /**
-* An AtomicClosure tailored for int
-*
-* @author Peter Veentjer.
-*/
+ * An AtomicClosure tailored for int
+ * An AtomicClosure that doesn't return a value.
+ *
+ * @author Peter Veentjer.
+ */
 public interface AtomicIntClosure{
 
     /**

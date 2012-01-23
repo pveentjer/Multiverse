@@ -3,10 +3,10 @@ package org.multiverse.api.closures;
 import org.multiverse.api.Transaction;
 
 /**
-* An AtomicClosure tailored for void
-*
-* @author Peter Veentjer.
-*/
+ * An AtomicClosure that doesn't return a value.
+ *
+ * @author Peter Veentjer.
+ */
 public interface AtomicVoidClosure{
 
     /**
