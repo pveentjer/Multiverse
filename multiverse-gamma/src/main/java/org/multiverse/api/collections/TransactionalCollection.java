@@ -23,21 +23,12 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
     Stm getStm();
 
     /**
-     * {@inheritDoc}
-     *
-     * @return
-     */
-    boolean isEmpty();
-
-    /**
      * Returns <tt>true</tt> if this collection contains no elements.
      *
      * @param tx the transaction used for this operation.
      * @return <tt>true</tt> if this collection contains no elements
      */
     boolean isEmpty(Transaction tx);
-
-    int size();
 
     /**
      * Returns the number of elements in this collection.  If this collection
@@ -48,8 +39,6 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @return the number of elements in this collection
      */
     int size(Transaction tx);
-
-    boolean contains(Object o);
 
     /**
      * Returns <tt>true</tt> if this collection contains the specified element.
@@ -86,8 +75,6 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      */
     boolean containsAll(Transaction tx, Collection<?> c);
 
-    boolean remove(Object o);
-
     /**
      * Removes a single instance of the specified element from this
      * collection, if it is present (optional operation).  More formally,
@@ -109,8 +96,6 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      */
     boolean remove(Transaction tx, Object o);
 
-    void clear();
-
     /**
      * Removes all of the elements from this collection (optional operation).
      * The collection will be empty after this method returns.
@@ -120,8 +105,6 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                                       is not supported by this collection
      */
     void clear(Transaction tx);
-
-    boolean add(E item);
 
     /**
      * Ensures that this collection contains the specified element (optional
@@ -159,10 +142,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      */
     boolean add(Transaction tx, E e);
 
-
-    boolean addAll(Collection<? extends E> c);
-
-    /**
+/**
      * Adds all of the elements in the specified collection to this collection
      * (optional operation).  The behavior of this operation is undefined if
      * the specified collection is modified while the operation is in progress.

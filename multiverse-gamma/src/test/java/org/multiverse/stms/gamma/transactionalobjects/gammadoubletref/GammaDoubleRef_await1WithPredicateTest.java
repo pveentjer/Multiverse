@@ -13,6 +13,8 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaDoubleRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
 
+import java.util.concurrent.Callable;
+
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.multiverse.TestUtils.*;
@@ -208,18 +210,23 @@ public class GammaDoubleRef_await1WithPredicateTest {
     }
 
     @Test
-    @Ignore
     public void whenSomeWaitingNeeded() {
         int initialValue = 0;
         GammaDoubleRef ref = new GammaDoubleRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaDoubleRefAwaitThread thread1 = new GammaDoubleRefAwaitThread(ref, 10);
-        GammaDoubleRefAwaitThread thread2 = new GammaDoubleRefAwaitThread(ref, 20);
+        final GammaDoubleRefAwaitThread thread1 = new GammaDoubleRefAwaitThread(ref, 10);
+        final GammaDoubleRefAwaitThread thread2 = new GammaDoubleRefAwaitThread(ref, 20);
         thread1.start();
         thread2.start();
 
-        sleepMs(1000);
+        assertEventuallyTrue(new Callable<Boolean>(){
+            @Override
+            public Boolean call() throws Exception {
+                return isAlive(thread1, thread2);
+            }
+        });
+        
         assertAlive(thread1, thread2);
 
         ref.atomicSet(10);

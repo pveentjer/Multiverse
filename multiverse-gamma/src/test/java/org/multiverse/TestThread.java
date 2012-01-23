@@ -1,5 +1,7 @@
 package org.multiverse;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import static org.junit.Assert.*;
 
 /**
@@ -9,6 +11,8 @@ import static org.junit.Assert.*;
  */
 public abstract class TestThread extends Thread {
 
+    private final static AtomicLong idGenerator  = new AtomicLong();
+    
     private volatile Throwable throwable;
     private volatile Boolean endedWithInterruptStatus;
     private volatile boolean startInterrupted;
@@ -17,7 +21,7 @@ public abstract class TestThread extends Thread {
 
 
     public TestThread() {
-        this("TestThread");
+        this("TestThread-"+idGenerator.incrementAndGet());
     }
 
     public TestThread(String name) {

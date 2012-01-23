@@ -3,10 +3,13 @@ package org.multiverse.api.closures;
 import org.multiverse.api.Transaction;
 
 /**
-* An AtomicClosure tailored for ${closure.type}
-*
-* @author Peter Veentjer.
-*/
+#if(${closure.type} ne 'void')
+ * An AtomicClosure tailored for ${closure.type}
+#end
+ * An AtomicClosure that doesn't return a value.
+ *
+ * @author Peter Veentjer.
+ */
 public interface ${closure.name}${closure.typeParameter}{
 
     /**

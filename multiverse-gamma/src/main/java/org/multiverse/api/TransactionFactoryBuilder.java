@@ -20,7 +20,7 @@ import org.multiverse.api.lifecycle.TransactionListener;
 public interface TransactionFactoryBuilder {
 
     /**
-     * Returns the {@link }TransactionConfiguration} used by this TransactionFactoryBuilder.
+     * Returns the {@link TransactionConfiguration} used by this TransactionFactoryBuilder.
      *
      * @return the used TransactionConfiguration.
      */
@@ -77,7 +77,7 @@ public interface TransactionFactoryBuilder {
     TransactionFactoryBuilder setReadLockMode(LockMode lockMode);
 
     /**
-     * Sets the {@link Transaction{} {@link LockMode} for all writes. For a write, always a read needs to be done, so if the read LockMode is
+     * Sets the {@link Transaction} {@link LockMode} for all writes. For a write, always a read needs to be done, so if the read LockMode is
      *
      * <p>Freshly constructed objects that are not committed, automatically are locked with {@link LockMode#Exclusive}.
      *

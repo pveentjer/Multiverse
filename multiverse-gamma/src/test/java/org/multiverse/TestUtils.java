@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
@@ -180,10 +181,20 @@ public class TestUtils implements MultiverseConstants {
 
     public static void assertAlive(Thread... threads) {
         for (Thread thread : threads) {
-            assertTrue(thread.getState().toString(), thread.isAlive());
+            assertTrue(thread.getName(), thread.isAlive());
         }
     }
+    
+    public static boolean isAlive(Thread... threads){
+        for(Thread thread: threads){
+            if(!thread.isAlive()){
+                return false;
+            }
+        }
 
+        return true;
+    }
+    
     public static void assertNotAlive(Thread... threads) {
         for (Thread thread : threads) {
             assertFalse(thread.isAlive());
@@ -195,6 +206,46 @@ public class TestUtils implements MultiverseConstants {
             thread.start();
         }
     }
+
+    public static void assertEventuallyFalse(Callable<Boolean> f) {
+        assertEventually(f, false);
+    }
+
+    public static void assertEventuallyFalse(Callable<Boolean> f, long timeoutMs) {
+        assertEventually(f, false, timeoutMs);
+    }
+
+    public static void assertEventually(Callable<Boolean> f, boolean value) {
+        assertEventually(f, value, 60 * 1000);
+    }
+
+    public static void assertEventuallyTrue(Callable<Boolean> f) {
+        assertEventually(f, true);
+    }
+
+    public static void assertEventuallyTrue(Callable<Boolean> f, long timeoutMs) {
+        assertEventually(f, true, timeoutMs);
+    }
+
+    public static void assertEventually(Callable<Boolean> f, boolean value, long timeoutMs) {
+        long endTime = System.currentTimeMillis() + timeoutMs;
+        for (; ; ) {
+            try {
+                if (f.call() == value) {
+                    return;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            sleepMs(100);
+
+            if (endTime > System.currentTimeMillis()) {
+                fail("Failed to become true in the given timeout");
+            }
+        }
+    }
+
 
     public static void sleepRandomUs(int maxUs) {
         Bugshaker.sleepUs((long) randomInt(maxUs));
@@ -236,7 +287,7 @@ public class TestUtils implements MultiverseConstants {
         long durationMs = 0;
 
         while (!uncompleted.isEmpty()) {
-            for (Iterator<TestThread> it = uncompleted.iterator(); it.hasNext();) {
+            for (Iterator<TestThread> it = uncompleted.iterator(); it.hasNext(); ) {
                 TestThread thread = it.next();
                 try {
                     if (System.currentTimeMillis() > maxTimeMs) {
@@ -273,9 +324,9 @@ public class TestUtils implements MultiverseConstants {
         sb.append("Uncompleted threads:\n");
         for (TestThread thread : uncompleted) {
             sb.append("-------------------------------------------------------------------\n");
-            sb.append(thread.getName()+"\n");
+            sb.append(thread.getName() + "\n");
             for (StackTraceElement element : thread.getStackTrace()) {
-                    sb.append("\tat " + element+"\n");
+                sb.append("\tat " + element + "\n");
             }
         }
         sb.append("-------------------------------------------------------------------\n");

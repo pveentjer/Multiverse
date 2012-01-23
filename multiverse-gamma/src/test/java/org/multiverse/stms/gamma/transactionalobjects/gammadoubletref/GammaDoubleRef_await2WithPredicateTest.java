@@ -187,7 +187,6 @@ public class GammaDoubleRef_await2WithPredicateTest {
     }
 
     @Test
-    @Ignore
     public void whenSomeWaitingNeeded() {
         int initialValue = 0;
         GammaDoubleRef ref = new GammaDoubleRef(stm, initialValue);
