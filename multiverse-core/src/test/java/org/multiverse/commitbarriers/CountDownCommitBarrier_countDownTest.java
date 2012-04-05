@@ -33,8 +33,7 @@ public class CountDownCommitBarrier_countDownTest {
 
         assertTrue(barrier.isCommitted());
         joinAll(t1, t2);
-        t1.assertNothingThrown();
-        t1.assertNothingThrown();
+        assertNothingThrown(t1,t2);
     }
 
     @Test

@@ -59,7 +59,7 @@ public class VetoCommitBarrier_tryAwaitOpenUninterruptiblyTest {
         t.interrupt();
 
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(t.hasEndedWithInterruptStatus());
         assertTrue(barrier.isClosed());
     }
@@ -83,7 +83,7 @@ public class VetoCommitBarrier_tryAwaitOpenUninterruptiblyTest {
         barrier.atomicVetoCommit();
 
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(barrier.isCommitted());
     }
 
@@ -106,7 +106,7 @@ public class VetoCommitBarrier_tryAwaitOpenUninterruptiblyTest {
         barrier.abort();
 
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(barrier.isAborted());
     }
 
@@ -124,7 +124,7 @@ public class VetoCommitBarrier_tryAwaitOpenUninterruptiblyTest {
 
         t.start();
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
     }
 
     @Test

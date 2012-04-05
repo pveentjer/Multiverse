@@ -11,6 +11,7 @@ import org.multiverse.api.references.IntRef;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.multiverse.TestUtils.assertNothingThrown;
 import static org.multiverse.TestUtils.sleepMs;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.newIntRef;
@@ -31,7 +32,7 @@ public class TimeoutTestLongTest {
         thread.start();
 
         thread.join();
-        thread.assertNothingThrown();
+        assertNothingThrown(thread);
     }
 
     @Test

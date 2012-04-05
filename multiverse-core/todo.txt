@@ -119,10 +119,6 @@ when a normal transaction... when a lock is acquired, a retry error should also 
 
 - pre/post start listeners and fat gamma block
 
-- AbstractTransactionalCollection:flatMap
-
-- AbstractTransactionalCollection:foldRight
-
 - NaiveTransactionalHashMap & todo's
 
 - NaiveTransactionalhashSet & todo's
@@ -167,8 +163,6 @@ when a normal transaction... when a lock is acquired, a retry error should also 
 
 - Javadoc: Isolation Level
 
-- cleanup git repo: needs to be published to trunk instead of multiverse-beta
-
 - cleanup codehaus uploads
 
 - automatic publication of SNAPSHOT javadoc on codehaus
@@ -183,58 +177,3 @@ when a normal transaction... when a lock is acquired, a retry error should also 
                                 done
 ----------------------------------------------------------------------
 
-- removal of the ReadCommitted isolation level
-
-- upload of sources in jar form
-
-- upload of Javadoc in jar form
-
-- Improved message on the abortOnEnsureOnBadStatus
-
-- testing: Lock.acquire0Test
-
-- testing: Lock_getLockMode0Test
-
-- testing: lean transaction and readonly? no checking is done but what if configured as readonly
-
-- testing: repeatable read isolation level
-
-- testing: GammaRef_atomicAlterAndGetTest
-
-- testing: GammaRef_atomicGetAndAlterTest
-
-- testing: GammaRef_commuteTest
-
-- testing: GammaRef_commute1Test
-
-- testing: GammaRef_atomicGetAndSetTest
-
-- testing: GammaLongRef_atomicGetAndSetTest
-
-- Improved Javadoc: StmUtils
-
-- Improved Javadoc: TransactionFactoryBuilder
-
-- Improved JavaDoc: TransactionalObject
-
-- Improved Javadoc: Improve Javadoc on AtomicBlock
-
-- Improved Javadoc: Stm
-
-- Improved Javadoc on the Transaction life-cycle functionality.
-
-- Improved Javadoc for Functions
-
-- Improved Javadoc for all exceptions
-
-- Improved Javadoc on ControlFlowError
-
-- Improved Javadoc on TransactionStatus
-
-- Improved Javadoc on Lock
-
-- Improved Javadoc on LockMode
-
-- Improved Javadoc on Transaction
-
-- Improved Javadoc on Ref

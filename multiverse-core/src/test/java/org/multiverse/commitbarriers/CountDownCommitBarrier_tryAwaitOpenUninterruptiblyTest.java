@@ -65,7 +65,7 @@ public class CountDownCommitBarrier_tryAwaitOpenUninterruptiblyTest {
 
         barrier.countDown();
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(barrier.isCommitted());
     }
 

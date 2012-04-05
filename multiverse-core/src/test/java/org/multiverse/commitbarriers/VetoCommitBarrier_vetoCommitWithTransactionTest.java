@@ -86,7 +86,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
 
         barrier.atomicVetoCommit();
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(barrier.isCommitted());
         assertEquals(1, ref.atomicGet());
         assertEquals(0, barrier.getNumberWaiting());

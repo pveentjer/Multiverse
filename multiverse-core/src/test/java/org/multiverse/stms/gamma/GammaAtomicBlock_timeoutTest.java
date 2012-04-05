@@ -69,7 +69,7 @@ public class GammaAtomicBlock_timeoutTest {
         });
 
         joinAll(t);
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertEquals(2, ref.atomicGet());
     }
 
@@ -92,7 +92,7 @@ public class GammaAtomicBlock_timeoutTest {
         t.start();
 
         joinAll(t);
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertEquals(2, ref.atomicGet());
     }
 

@@ -208,17 +208,14 @@ public class GammaLongRef_await2WithPredicateTest {
 
         ref.atomicSet(10);
 
-        sleepMs(1000);
-
-        assertNotAlive(thread1);
-        thread1.assertNothingThrown();
+        assertEventuallyNotAlive(thread1);
+        assertNothingThrown(thread1);
         assertAlive(thread2);
 
         ref.atomicSet(20);
 
-        sleepMs(500);
-        assertNotAlive(thread2);
-        thread2.assertNothingThrown();
+        assertEventuallyNotAlive(thread2);
+        assertNothingThrown(thread2);
 
         assertVersionAndValue(ref, initialVersion + 2, 20);
     }

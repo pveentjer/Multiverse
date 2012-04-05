@@ -163,7 +163,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         sleepMs(500);
 
         t.join();
-        t.assertNothingThrown();
+        assertNothingThrown(t);
         assertTrue(barrier.isCommitted());
         assertEquals(1, ref.atomicGet());
         assertEquals(0, barrier.getNumberWaiting());

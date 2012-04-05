@@ -8,6 +8,9 @@ import org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject;
 import org.multiverse.utils.Bugshaker;
 import org.multiverse.utils.ThreadLocalRandom;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -184,20 +187,65 @@ public class TestUtils implements MultiverseConstants {
             assertTrue(thread.getName(), thread.isAlive());
         }
     }
-    
-    public static boolean isAlive(Thread... threads){
-        for(Thread thread: threads){
-            if(!thread.isAlive()){
+
+    public static boolean isAlive(Thread... threads) {
+        for (Thread thread : threads) {
+            if (!thread.isAlive()) {
                 return false;
             }
         }
 
         return true;
     }
+
+    public static void assertNothingThrown(TestThread... threads){
+        for(TestThread t: threads){
+            Throwable throwable = t.getThrowable();
+            if(throwable != null){
+                fail(String.format("TestThread [%s] failed with the following exception\n%s",
+                        t.getName(),getStackTrace(throwable)));
+
+            }
+        }
+    }
+    
+    public static String getStackTrace(Throwable aThrowable) {
+        final Writer result = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(result);
+        aThrowable.printStackTrace(printWriter);
+        return result.toString();
+      }
     
     public static void assertNotAlive(Thread... threads) {
         for (Thread thread : threads) {
             assertFalse(thread.isAlive());
+        }
+    }
+
+    public static void assertEventuallyNotAlive(Thread... threads){
+       assertEventuallyNotAlive(60 * 1000, threads);
+    }
+    
+    public static void assertEventuallyNotAlive(long timeoutMs, Thread... threads) {
+        for (Thread thread : threads) {
+            if(timeoutMs <=0){
+                fail("There is no remaining timeout");
+            }
+
+            long startMs = System.currentTimeMillis();
+            try {
+                thread.join(timeoutMs);
+            } catch (InterruptedException e) {
+                fail("Failed to join thread: " + thread.getName());
+            }
+            long elapsed = System.currentTimeMillis() - startMs;
+
+            if (thread.isAlive()) {
+                fail(format("Thread [%s] is still alive after a timeout of [%s] ms", thread, timeoutMs));
+            }
+
+            assertFalse(thread.isAlive());
+            timeoutMs -= elapsed;
         }
     }
 

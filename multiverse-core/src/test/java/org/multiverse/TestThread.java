@@ -1,5 +1,6 @@
 package org.multiverse;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.*;
@@ -18,7 +19,7 @@ public abstract class TestThread extends Thread {
     private volatile boolean startInterrupted;
     private volatile boolean printStackTrace = true;
     private long durationMs = -1;
-
+    private CountDownLatch latch;
 
     public TestThread() {
         this("TestThread-"+idGenerator.incrementAndGet());
@@ -31,6 +32,10 @@ public abstract class TestThread extends Thread {
     public TestThread(String name, boolean startInterrupted) {
         super(name);
         this.startInterrupted = startInterrupted;
+    }
+
+    public void setLatch(CountDownLatch latch) {
+        this.latch = latch;
     }
 
     public void setStartInterrupted(boolean startInterrupted) {
@@ -55,6 +60,10 @@ public abstract class TestThread extends Thread {
 
     @Override
     public final void run() {
+        if(latch!=null){
+            latch.countDown();
+        }
+
         if (startInterrupted) {
             interrupt();
         }

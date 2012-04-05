@@ -208,8 +208,7 @@ public class GammaLongRef_await1WithPredicateTest {
     }
 
     @Test
-    @Ignore
-    public void whenSomeWaitingNeeded() {
+   public void whenSomeWaitingNeeded() {
         int initialValue = 0;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -224,17 +223,14 @@ public class GammaLongRef_await1WithPredicateTest {
 
         ref.atomicSet(10);
 
-        sleepMs(1000);
-
-        assertNotAlive(thread1);
-        thread1.assertNothingThrown();
+        assertEventuallyNotAlive(thread1);
+        assertNothingThrown(thread1);
         assertAlive(thread2);
 
         ref.atomicSet(20);
 
-        sleepMs(500);
-        assertNotAlive(thread2);
-        thread2.assertNothingThrown();
+        assertEventuallyNotAlive(thread2);
+        assertNothingThrown(thread2);
 
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion + 2, 20);
