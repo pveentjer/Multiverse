@@ -3,6 +3,7 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
@@ -12,7 +13,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalHashMap_putAllTest {
@@ -29,7 +29,7 @@ public class NaiveTransactionalHashMap_putAllTest {
 
     @Test
     public void whenNullMap_thenNullPointerException() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -45,7 +45,7 @@ public class NaiveTransactionalHashMap_putAllTest {
 
     @Test
     public void whenEmptyMapAdded() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 map.putAll(new HashMap<String, String>());
@@ -62,7 +62,7 @@ public class NaiveTransactionalHashMap_putAllTest {
 
     @Test
     public void whenAllDifferentItems() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 map.put("1", "a");
@@ -89,7 +89,7 @@ public class NaiveTransactionalHashMap_putAllTest {
 
     @Test
     public void whenSomeItemsReplaced() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 map.put("1", "a");

@@ -98,7 +98,7 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
         final AtomicBlock popBlock = newPopBlock();
 
         public void push(final E item) {
-            pushBlock.execute(new AtomicVoidClosure() {
+            pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -108,7 +108,7 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
         }
 
         public E pop() {
-            return popBlock.execute(new AtomicClosure<E>() {
+            return popBlock.atomic(new AtomicClosure<E>() {
                 @Override
                 public E execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

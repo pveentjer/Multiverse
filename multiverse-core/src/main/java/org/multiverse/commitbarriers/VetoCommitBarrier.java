@@ -7,7 +7,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 /**
- * The VetoCommitBarrier is a synchronization primitive that makes it possible to execute a 2 phase commit;
+ * The VetoCommitBarrier is a synchronization primitive that makes it possible to atomicChecked a 2 phase commit;
  * so all transaction within a VetoCommitBarrier commit, or they all abort. The VetoCommitBarrier is useful if
  * there is a veto situation; so one transaction is able to commit all others.
  * <p/>

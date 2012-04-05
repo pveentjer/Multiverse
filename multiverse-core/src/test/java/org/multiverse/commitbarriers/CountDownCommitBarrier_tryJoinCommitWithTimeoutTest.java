@@ -95,7 +95,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+                stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getAndIncrement(tx, 1);

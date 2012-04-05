@@ -88,7 +88,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         void push(final String item) {
-            pushBlock.execute(new AtomicVoidClosure() {
+            pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     isNotFull.awaitTrue();
@@ -105,7 +105,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         String pop() {
-            return popBlock.execute(new AtomicClosure<String>() {
+            return popBlock.atomic(new AtomicClosure<String>() {
                 @Override
                 public String execute(Transaction tx) throws Exception {
                     isNotEmpty.awaitTrue();

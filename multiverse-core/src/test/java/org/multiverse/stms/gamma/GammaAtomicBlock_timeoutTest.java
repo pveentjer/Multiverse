@@ -60,7 +60,7 @@ public class GammaAtomicBlock_timeoutTest {
         sleepMs(500);
         assertAlive(t);
 
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -75,7 +75,7 @@ public class GammaAtomicBlock_timeoutTest {
 
     @Test
     public void whenNoWaitingNeededAndZeroTimeout() {
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -106,7 +106,7 @@ public class GammaAtomicBlock_timeoutTest {
 
         @Override
         public void doRun() throws Exception {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

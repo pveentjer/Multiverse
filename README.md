@@ -17,6 +17,10 @@ Example
         private final Ref<Date> lastModified = newRef(new Date());
         private final LongRef amount = newLongRef();
 
+        public Account(long amount){
+           this.amount.set(amount);
+        }
+
         public Date getLastModifiedDate(){
             return lastModified.get();
         }
@@ -26,7 +30,7 @@ Example
         }
 
         public static void transfer(final Account from, final Account to, final long amount){
-            execute(new AtomicVoidClosure()){
+            atomic(new AtomicVoidClosure()){
                 public void execute(Transaction t){
                     Date date = new Date();
 
@@ -39,3 +43,14 @@ Example
             }
         }
     }
+
+    And it can be called like this:
+
+    Account account1 = new Account(10);
+    Account account2 = new Account(20)
+    Account.transfer(account1, account2, 5);
+
+
+No instrumentation.
+-------------------------
+Multiverse doesn't rely on instrumentation, so is easy to integrate in existing projects.

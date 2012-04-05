@@ -3,6 +3,7 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
@@ -11,7 +12,6 @@ import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_containsAllTest {
@@ -27,7 +27,7 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenNullCollection_thenNullPointerException() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -47,7 +47,7 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenBothEmpty() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 boolean result = list.containsAll(new LinkedList());
@@ -63,7 +63,7 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenlistEmpty_andCollectionNonEmpty() {
        final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 boolean result = list.containsAll(Arrays.asList("1", "2"));
@@ -79,7 +79,7 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenlistNonEmpty_andCollectionEmpty() {
        final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -98,12 +98,12 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenExactMatch() {
          final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
                 list.add("2");
-                boolean result = list.containsAll(Arrays.asList("1","2"));
+                boolean result = list.containsAll(Arrays.asList("1", "2"));
 
                 assertTrue(result);
                 assertEquals("[1, 2]", list.toString());
@@ -116,13 +116,13 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenOrderDifferentThanStillMatch() {
           final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("1");
-                boolean result = list.containsAll(Arrays.asList("1","2"));
+                boolean result = list.containsAll(Arrays.asList("1", "2"));
 
                 assertTrue(result);
                 assertEquals("[1, 2, 1]", list.toString());
@@ -135,13 +135,13 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenNoneMatch() {
          final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
-                boolean result = list.containsAll(Arrays.asList("a","b"));
+                boolean result = list.containsAll(Arrays.asList("a", "b"));
 
                 assertFalse(result);
                 assertEquals("[1, 2, 3]", list.toString());
@@ -154,13 +154,13 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenSomeMatch() {
              final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
-                boolean result = list.containsAll(Arrays.asList("1","b"));
+                boolean result = list.containsAll(Arrays.asList("1", "b"));
 
                 assertFalse(result);
                 assertEquals("[1, 2, 3]", list.toString());
@@ -173,18 +173,18 @@ public class NaiveTransactionalLinkedList_containsAllTest {
     public void whenSomeElementsNull() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-          execute(new AtomicVoidClosure() {
-            @Override
-            public void execute(Transaction tx) throws Exception {
-                list.add("1");
-                list.add("2");
-                list.add("3");
-                boolean result = list.containsAll(Arrays.asList("1", null));
+          StmUtils.atomic(new AtomicVoidClosure() {
+              @Override
+              public void execute(Transaction tx) throws Exception {
+                  list.add("1");
+                  list.add("2");
+                  list.add("3");
+                  boolean result = list.containsAll(Arrays.asList("1", null));
 
-                assertFalse(result);
-                assertEquals("[1, 2, 3]", list.toString());
-                assertEquals(3, list.size());
-            }
-        });
+                  assertFalse(result);
+                  assertEquals("[1, 2, 3]", list.toString());
+                  assertEquals(3, list.size());
+              }
+          });
     }
 }

@@ -72,7 +72,7 @@ public class ReadonlyRepeatableReadStressTest {
 
 
             while (!stop) {
-                block.execute(closure);
+                block.atomic(closure);
                 sleepRandomMs(5);
             }
         }
@@ -112,10 +112,10 @@ public class ReadonlyRepeatableReadStressTest {
             while (!stop) {
                 switch (k % 2) {
                     case 0:
-                        readTrackingReadonlyBlock.execute(closure);
+                        readTrackingReadonlyBlock.atomic(closure);
                         break;
                     case 1:
-                        readTrackingUpdateBlock.execute(closure);
+                        readTrackingUpdateBlock.atomic(closure);
                         break;
                     default:
                         throw new IllegalStateException();

@@ -114,7 +114,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    <E> E execute(AtomicClosure<E> closure);
+    <E> E atomic(AtomicClosure<E> closure);
 
    /**
     * Executes the closure.
@@ -124,7 +124,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    <E> E executeChecked(AtomicClosure<E> closure)throws Exception;
+    <E> E atomicChecked(AtomicClosure<E> closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -136,7 +136,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     int execute(AtomicIntClosure closure);
+     int atomic(AtomicIntClosure closure);
 
    /**
     * Executes the closure.
@@ -146,7 +146,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     int executeChecked(AtomicIntClosure closure)throws Exception;
+     int atomicChecked(AtomicIntClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -158,7 +158,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     long execute(AtomicLongClosure closure);
+     long atomic(AtomicLongClosure closure);
 
    /**
     * Executes the closure.
@@ -168,7 +168,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     long executeChecked(AtomicLongClosure closure)throws Exception;
+     long atomicChecked(AtomicLongClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -180,7 +180,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     double execute(AtomicDoubleClosure closure);
+     double atomic(AtomicDoubleClosure closure);
 
    /**
     * Executes the closure.
@@ -190,7 +190,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     double executeChecked(AtomicDoubleClosure closure)throws Exception;
+     double atomicChecked(AtomicDoubleClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -202,7 +202,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     boolean execute(AtomicBooleanClosure closure);
+     boolean atomic(AtomicBooleanClosure closure);
 
    /**
     * Executes the closure.
@@ -212,7 +212,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     boolean executeChecked(AtomicBooleanClosure closure)throws Exception;
+     boolean atomicChecked(AtomicBooleanClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -223,7 +223,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     void execute(AtomicVoidClosure closure);
+     void atomic(AtomicVoidClosure closure);
 
    /**
     * Executes the closure.
@@ -232,6 +232,6 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     void executeChecked(AtomicVoidClosure closure)throws Exception;
+     void atomicChecked(AtomicVoidClosure closure)throws Exception;
 
 }

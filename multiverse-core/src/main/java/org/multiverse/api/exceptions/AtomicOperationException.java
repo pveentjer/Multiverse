@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TransactionExecutionException} thrown when an atomic operation has failed (e.g. because the ref
+ * A {@link TransactionExecutionException} thrown when an atomicChecked operation has failed (e.g. because the ref
  * was locked).
  *
  * @author Peter Veentjer.

@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_takeFirstTest {
@@ -27,7 +27,7 @@ public class NaiveTransactionalLinkedList_takeFirstTest {
     @Test
     @Ignore
     public void whenEmpty() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 String item = list.takeFirst();
@@ -41,7 +41,7 @@ public class NaiveTransactionalLinkedList_takeFirstTest {
 
     @Test
     public void whenMultipleItems() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.offerLast("1");
@@ -59,7 +59,7 @@ public class NaiveTransactionalLinkedList_takeFirstTest {
 
     @Test
     public void whenSingleItem() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 String item = "1";

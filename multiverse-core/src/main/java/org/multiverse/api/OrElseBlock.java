@@ -7,7 +7,7 @@ import org.multiverse.api.closures.*;
  * The OrElse is responsible for executing the either block, or in case of a retry, the orelse block is executed.
  * <p/>
  * Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
- * It also provides an execute for a AtomicVoidClosure which doesn't force a developer to return something when
+ * It also provides an atomicChecked for a AtomicVoidClosure which doesn't force a developer to return something when
  * nothing needs to be returned.
  *
  * @author Peter Veentjer.
@@ -42,7 +42,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     <E> E executeChecked(AtomicClosure<E> either, AtomicClosure<E> orelse) throws Exception;
 
@@ -73,7 +73,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     int executeChecked(AtomicIntClosure either, AtomicIntClosure orelse) throws Exception;
 
@@ -104,7 +104,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     long executeChecked(AtomicLongClosure either, AtomicLongClosure orelse) throws Exception;
 
@@ -135,7 +135,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     double executeChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse) throws Exception;
 
@@ -166,7 +166,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     boolean executeChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse) throws Exception;
 
@@ -195,7 +195,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @throws NullPointerException         if either or orelse is null.
      * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
-     * @throws Exception                    if the execute call fails.
+     * @throws Exception                    if the atomicChecked call fails.
      */
     void executeChecked(AtomicVoidClosure either, AtomicVoidClosure orelse) throws Exception;
 

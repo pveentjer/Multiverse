@@ -30,18 +30,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
     }
 
     @Override
-    public final <E> E executeChecked(
+    public final <E> E atomicChecked(
         final AtomicClosure<E> closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final <E> E execute(final AtomicClosure<E> closure){
+    public final <E> E atomic(final AtomicClosure<E> closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -136,18 +136,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
      @Override
-    public final  int executeChecked(
+    public final  int atomicChecked(
         final AtomicIntClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  int execute(final AtomicIntClosure closure){
+    public final  int atomic(final AtomicIntClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -242,18 +242,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
      @Override
-    public final  long executeChecked(
+    public final  long atomicChecked(
         final AtomicLongClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  long execute(final AtomicLongClosure closure){
+    public final  long atomic(final AtomicLongClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -348,18 +348,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
      @Override
-    public final  double executeChecked(
+    public final  double atomicChecked(
         final AtomicDoubleClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  double execute(final AtomicDoubleClosure closure){
+    public final  double atomic(final AtomicDoubleClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -454,18 +454,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
      @Override
-    public final  boolean executeChecked(
+    public final  boolean atomicChecked(
         final AtomicBooleanClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  boolean execute(final AtomicBooleanClosure closure){
+    public final  boolean atomic(final AtomicBooleanClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -560,18 +560,18 @@ public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
      @Override
-    public final  void executeChecked(
+    public final  void atomicChecked(
         final AtomicVoidClosure closure)throws Exception{
 
         try{
-            execute(closure);
+            atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  void execute(final AtomicVoidClosure closure){
+    public final  void atomic(final AtomicVoidClosure closure){
 
         if(closure == null){
             throw new NullPointerException();

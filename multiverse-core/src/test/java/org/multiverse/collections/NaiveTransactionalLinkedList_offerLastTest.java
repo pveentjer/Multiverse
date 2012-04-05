@@ -4,13 +4,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
+import static org.multiverse.api.StmUtils.atomic;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_offerLastTest {
@@ -27,7 +28,7 @@ public class NaiveTransactionalLinkedList_offerLastTest {
     public void whenNullItem_thenNullPointerException() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -47,7 +48,7 @@ public class NaiveTransactionalLinkedList_offerLastTest {
         final NaiveTransactionalLinkedList<String> list =
                 new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 String item = "1";
@@ -64,7 +65,7 @@ public class NaiveTransactionalLinkedList_offerLastTest {
         final NaiveTransactionalLinkedList<String> list =
                 new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.offerLast("1");

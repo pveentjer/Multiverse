@@ -54,7 +54,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            block.execute(closure);
+            block.atomic(closure);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

@@ -105,7 +105,7 @@ public abstract class Commute_AbstractTest {
             int k = 0;
             while (!stop) {
                 AtomicLongClosure closure = randomOneOf(10) ? nonCommutingClosure : commutingClosure;
-                count += block.execute(closure);
+                count += block.atomic(closure);
                 k++;
 
                 if (k % 100000 == 0) {

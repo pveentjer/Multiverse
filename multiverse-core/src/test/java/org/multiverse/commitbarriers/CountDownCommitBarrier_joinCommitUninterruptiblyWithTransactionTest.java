@@ -113,7 +113,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+                stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
@@ -145,7 +145,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+                stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
@@ -178,7 +178,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+                stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getAndIncrement(tx, 1);

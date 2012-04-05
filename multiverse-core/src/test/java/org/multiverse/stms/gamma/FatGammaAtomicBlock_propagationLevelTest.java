@@ -41,7 +41,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
         AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
 
         try {
-            block.execute(closure);
+            block.atomic(closure);
             fail();
         } catch (TransactionNotAllowedException expected) {
         }
@@ -65,7 +65,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTransaction());
@@ -80,7 +80,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
         AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
 
         try {
-            block.execute(closure);
+            block.atomic(closure);
             fail();
         } catch (TransactionMandatoryException expected) {
         }
@@ -106,7 +106,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -131,7 +131,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = new FatGammaAtomicBlock(txFactory).execute(closure);
+        int result = new FatGammaAtomicBlock(txFactory).atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTransaction());
@@ -159,7 +159,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = new FatGammaAtomicBlock(txFactory).execute(closure);
+        int result = new FatGammaAtomicBlock(txFactory).atomic(closure);
 
         assertEquals(10, result);
         assertSame(existingTx, getThreadLocalTransaction());
@@ -186,7 +186,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(10, result);
         assertEquals(1, ref.atomicGet());
@@ -215,7 +215,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(1, result);
         assertEquals(11, ref.atomicGet());
@@ -240,7 +240,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -261,7 +261,7 @@ public class FatGammaAtomicBlock_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.execute(closure);
+        int result = block.atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTransaction());

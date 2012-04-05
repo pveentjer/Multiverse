@@ -3,12 +3,12 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_indexOfTest {
@@ -25,7 +25,7 @@ public class NaiveTransactionalLinkedList_indexOfTest {
 
     @Test
     public void whenNullItem_thenMinusOne() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 int result = list.indexOf(null);
@@ -37,7 +37,7 @@ public class NaiveTransactionalLinkedList_indexOfTest {
 
     @Test
     public void whenEmptyList() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 int result = list.indexOf("a");
@@ -49,7 +49,7 @@ public class NaiveTransactionalLinkedList_indexOfTest {
 
     @Test
     public void whenNotFound_thenMinusOne() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -66,7 +66,7 @@ public class NaiveTransactionalLinkedList_indexOfTest {
 
     @Test
     public void whenOnlyOnceInCollection() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -83,21 +83,21 @@ public class NaiveTransactionalLinkedList_indexOfTest {
 
     @Test
     public void whenMultipleTimesInCollection() {
-          execute(new AtomicVoidClosure() {
-            @Override
-            public void execute(Transaction tx) throws Exception {
-                list.add("1");
-                list.add("2");
-                list.add("3");
-                list.add("4");
-                list.add("2");
-                list.add("5");
+          StmUtils.atomic(new AtomicVoidClosure() {
+              @Override
+              public void execute(Transaction tx) throws Exception {
+                  list.add("1");
+                  list.add("2");
+                  list.add("3");
+                  list.add("4");
+                  list.add("2");
+                  list.add("5");
 
 
-                int result = list.indexOf("2");
-                assertEquals(1, result);
-                assertEquals("[1, 2, 3, 4, 2, 5]", list.toString());
-            }
-        });
+                  int result = list.indexOf("2");
+                  assertEquals(1, result);
+                  assertEquals("[1, 2, 3, 4, 2, 5]", list.toString());
+              }
+          });
     }
 }

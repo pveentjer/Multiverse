@@ -24,18 +24,18 @@ public class ComposabilityTest {
         final int initialValue = 10;
         final IntRef ref = newIntRef(initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.increment();
                     }
                 });
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         assertEquals(initialValue + 1, ref.get());
@@ -52,17 +52,17 @@ public class ComposabilityTest {
 
     @Test
     public void whenMultipleSiblings_thenSameTransaction() {
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(final Transaction outerTx) throws Exception {
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction innerTx) throws Exception {
                         assertSame(innerTx, outerTx);
                     }
                 });
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction innerTx) throws Exception {
                         assertSame(innerTx, outerTx);
@@ -74,10 +74,10 @@ public class ComposabilityTest {
 
     @Test
     public void whenComposingTransaction_thenInnerAndOuterTransactionAreTheSame() {
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(final Transaction outerTx) throws Exception {
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction innerTx) throws Exception {
                         assertSame(innerTx, outerTx);
@@ -93,10 +93,10 @@ public class ComposabilityTest {
         final IntRef ref = newIntRef(initialValue);
 
         try {
-            StmUtils.execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
-                    StmUtils.execute(new AtomicVoidClosure() {
+                    StmUtils.atomic(new AtomicVoidClosure() {
                         @Override
                         public void execute(Transaction tx) throws Exception {
                             ref.increment();
@@ -119,12 +119,12 @@ public class ComposabilityTest {
         final IntRef ref = newIntRef(initialValue);
 
         try {
-            StmUtils.execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.increment();
 
-                    StmUtils.execute(new AtomicVoidClosure() {
+                    StmUtils.atomic(new AtomicVoidClosure() {
                         @Override
                         public void execute(Transaction tx) throws Exception {
                             throw new SomeUncheckedException();
@@ -145,19 +145,19 @@ public class ComposabilityTest {
         final IntRef ref = newIntRef(initialValue);
 
         try {
-            StmUtils.execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.increment();
 
-                    StmUtils.execute(new AtomicVoidClosure() {
+                    StmUtils.atomic(new AtomicVoidClosure() {
                         @Override
                         public void execute(Transaction tx) throws Exception {
                             ref.increment();
                         }
                     });
 
-                    StmUtils.execute(new AtomicVoidClosure() {
+                    StmUtils.atomic(new AtomicVoidClosure() {
                         @Override
                         public void execute(Transaction tx) throws Exception {
                             throw new SomeUncheckedException();
@@ -177,12 +177,12 @@ public class ComposabilityTest {
         final int initialValue = 10;
         final IntRef ref = newIntRef(initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.increment();
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         assertEquals(initialValue + 1, ref.get());
@@ -199,11 +199,11 @@ public class ComposabilityTest {
         final int initialValue = 10;
         final IntRef ref = newIntRef(initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.increment();
@@ -222,12 +222,12 @@ public class ComposabilityTest {
         final int initialValue = 10;
         final IntRef ref = newIntRef(initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.increment();
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.increment();

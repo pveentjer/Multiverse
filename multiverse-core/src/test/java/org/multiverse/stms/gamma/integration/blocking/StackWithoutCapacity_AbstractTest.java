@@ -113,7 +113,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         private final AtomicBlock popBlock = newPopAtomicBLock();
 
         public void push(final E item) {
-            pushBlock.execute(new AtomicVoidClosure() {
+            pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     head.set(new Node<E>(item, head.get()));
@@ -122,7 +122,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         }
 
         public E pop() {
-            return popBlock.execute(new AtomicClosure<E>() {
+            return popBlock.atomic(new AtomicClosure<E>() {
                 @Override
                 public E execute(Transaction tx) throws Exception {
                     Node<E> node = head.awaitNotNullAndGet();

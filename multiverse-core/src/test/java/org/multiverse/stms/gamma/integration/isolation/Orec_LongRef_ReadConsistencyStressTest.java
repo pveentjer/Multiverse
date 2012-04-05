@@ -113,7 +113,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
             int iteration = 0;
             while (!stop) {
-                block.execute(closure);
+                block.atomic(closure);
                 sleepRandomUs(100);
                 iteration++;
 
@@ -459,7 +459,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         }
 
         private void singleRun() {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     fullRead((GammaTransaction) tx);

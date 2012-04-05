@@ -21,7 +21,7 @@ public class JoinCommitThread extends TestThread {
 
     @Override
     public void doRun() throws Exception {
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertNotNull(tx);

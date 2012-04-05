@@ -26,7 +26,7 @@ public class LifecycleTest {
     public void whenTransactionCommit_thenCompensatingOrDeferredTaskExecuted() {
         final Runnable task = mock(Runnable.class);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);
@@ -42,7 +42,7 @@ public class LifecycleTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
@@ -61,7 +61,7 @@ public class LifecycleTest {
     public void whenTransactionCommit_thenDeferredOperationCalled() {
         final Runnable task = mock(Runnable.class);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleDeferredTask(task);
@@ -76,7 +76,7 @@ public class LifecycleTest {
     public void whenTransactionCommit_thenCompensatingOperationNotCalled() {
         final Runnable task = mock(Runnable.class);
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleCompensatingTask(task);
@@ -92,7 +92,7 @@ public class LifecycleTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleDeferredTask(task);
@@ -112,7 +112,7 @@ public class LifecycleTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleCompensatingTask(task);

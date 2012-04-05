@@ -110,7 +110,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         int take() {
-            return takeBlock.execute(new AtomicClosure<Integer>() {
+            return takeBlock.atomic(new AtomicClosure<Integer>() {
                 @Override
                 public Integer execute(Transaction tx) throws Exception {
                     if (size.get() == 0) {
@@ -124,7 +124,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         void put(final int item) {
-            putBlock.execute(new AtomicVoidClosure() {
+            putBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (size.get() >= MAX_CAPACITY) {

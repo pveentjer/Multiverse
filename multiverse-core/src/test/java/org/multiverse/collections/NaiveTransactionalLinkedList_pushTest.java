@@ -3,13 +3,13 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_pushTest {
@@ -25,7 +25,7 @@ public class NaiveTransactionalLinkedList_pushTest {
     public void whenNullItem_thenNullPointerException() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -44,7 +44,7 @@ public class NaiveTransactionalLinkedList_pushTest {
     public void whenEmpty() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.push("1");
@@ -59,7 +59,7 @@ public class NaiveTransactionalLinkedList_pushTest {
     public void whenNotEmpty() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -75,7 +75,7 @@ public class NaiveTransactionalLinkedList_pushTest {
     public void whenFull() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm, 2);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");

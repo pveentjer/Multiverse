@@ -89,7 +89,7 @@ public class VetoCommitBarrier_joinCommitTest {
         thread.start();
 
         sleepMs(1000);
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
@@ -118,7 +118,7 @@ public class VetoCommitBarrier_joinCommitTest {
                     .setSpeculative(false)
                     .setMaxRetries(0)
                     .newAtomicBlock()
-                    .execute(new AtomicVoidClosure() {
+                    .atomic(new AtomicVoidClosure() {
                         @Override
                         public void execute(Transaction tx) throws Exception {
                             //we need to load it to cause a conflict
@@ -219,7 +219,7 @@ public class VetoCommitBarrier_joinCommitTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.incrementAndGet(tx, 1);

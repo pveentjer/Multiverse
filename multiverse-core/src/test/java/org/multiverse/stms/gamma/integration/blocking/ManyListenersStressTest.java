@@ -62,7 +62,7 @@ public class ManyListenersStressTest {
         @Override
         public void doRun() throws Exception {
             while (!stop) {
-                execute(new AtomicVoidClosure() {
+                atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         for (LongRef ref : refs) {

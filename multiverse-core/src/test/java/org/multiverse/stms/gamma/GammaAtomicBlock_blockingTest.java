@@ -34,7 +34,7 @@ public class GammaAtomicBlock_blockingTest {
         sleepMs(1000);
         assertAlive(t);
 
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -56,7 +56,7 @@ public class GammaAtomicBlock_blockingTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

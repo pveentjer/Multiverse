@@ -82,7 +82,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                 count++;
                 switch (TestUtils.randomInt(3)) {
                     case 0:
-                        block.execute(new AtomicVoidClosure() {
+                        block.atomic(new AtomicVoidClosure() {
                             @Override
                             public void execute(Transaction tx) {
                                 if (notifier.get() != null) {
@@ -96,7 +96,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 1:
-                        block.execute(new AtomicVoidClosure() {
+                        block.atomic(new AtomicVoidClosure() {
                             @Override
                             public void execute(Transaction tx) {
                                 if (notifier.get() != null) {
@@ -110,7 +110,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 2:
-                        block.execute(new AtomicVoidClosure() {
+                        block.atomic(new AtomicVoidClosure() {
                             @Override
                             public void execute(Transaction tx) {
                                 if (notifier.get() != null) {
@@ -127,7 +127,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         throw new RuntimeException();
                 }
             }
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     notifier.awaitNull();
@@ -163,7 +163,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         }
 
         private boolean makeCigarette() {
-            return block.execute(new AtomicBooleanClosure() {
+            return block.atomic(new AtomicBooleanClosure() {
                 @Override
                 public boolean execute(Transaction tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {

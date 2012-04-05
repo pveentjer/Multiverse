@@ -76,7 +76,7 @@ public class PingPongStressTest {
         sleepMs(30 * 1000);
         stop = true;
 
-        stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.set(-abs(ref.get()));
@@ -142,7 +142,7 @@ public class PingPongStressTest {
                     System.out.println(getName() + " " + count);
                 }
 
-                if (!block.execute(closure)) {
+                if (!block.atomic(closure)) {
                     break;
                 }
                 count++;

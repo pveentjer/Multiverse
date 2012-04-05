@@ -117,7 +117,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} closure);
+    ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} closure);
 
    /**
     * Executes the closure.
@@ -129,7 +129,7 @@ public interface AtomicBlock extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} closure)throws Exception;
+    ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} closure)throws Exception;
 
 #end
 }

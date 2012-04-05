@@ -122,7 +122,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void releaseForks() {
-            releaseForksBlock.execute(new AtomicVoidClosure() {
+            releaseForksBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     leftFork.set(false);
@@ -133,7 +133,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void takeForks() {
-            takeForksBlock.execute(new AtomicVoidClosure() {
+            takeForksBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (leftFork.get() || rightFork.get()) {

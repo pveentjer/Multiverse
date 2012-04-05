@@ -47,7 +47,7 @@ public class TimeoutRollbackTest {
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(1))
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;

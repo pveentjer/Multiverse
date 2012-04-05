@@ -30,7 +30,7 @@ package org.multiverse.api;
  * released once the transaction commits/aborts. This is essentially the same behavior you get with Oracle once
  * a update/delete/insert is done, or when the record is locked manually by executing the 'select for update'. For
  * this to work it is very important that the {@link org.multiverse.api.exceptions.ControlFlowError} is not caught
- * by the logic executed in an atomic block, but is caught by the AtomicBlock itself.
+ * by the logic executed in an atomicChecked block, but is caught by the AtomicBlock itself.
  *
  * <h3>Blocking</h3>
  *

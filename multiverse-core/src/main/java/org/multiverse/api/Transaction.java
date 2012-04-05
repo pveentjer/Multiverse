@@ -27,12 +27,12 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * <li>normal listeners: are registered during the execution of a transaction using the
  * {@link Transaction#register(org.multiverse.api.lifecycle.TransactionListener)} method. If the transactions aborts/commits
  * these listeners are removed. So if the transaction is retried, the listeners need to be registered (this is easy since
- * the logic inside the atomic block that did the register, is executed again.
+ * the logic inside the atomicChecked block that did the register, is executed again.
  * </li>
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
  * AtomicBlock level using the {@link TransactionFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
  * or it can be done on the Stm level. Permanent listeners are suited for products that want to integrate with Multiverse and always
- * execute some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
+ * atomicChecked some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
  * the implementations for more details. Permanent listeners are always executed after the normal listeners.
  * </li>
  * </ol>
@@ -40,8 +40,8 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * <h3>Storing transaction references</h3>
  *
  * <p>Transaction instances should not be stored since they are likely to be pooled by the STM. So it could be that the same
- * transaction instance is re-used to execute a completely unrelated piece of logic, and it can also be that different instances
- * are used to execute the same logic.
+ * transaction instance is re-used to atomicChecked a completely unrelated piece of logic, and it can also be that different instances
+ * are used to atomicChecked the same logic.
  *
  * @author Peter Veentjer.
  */

@@ -135,11 +135,11 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} closure){
+    public static ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} closure){
 #if(${closure.type} eq 'void')
-        defaultAtomicBlock.execute(closure);
+        defaultAtomicBlock.atomic(closure);
 #else
-        return defaultAtomicBlock.execute(closure);
+        return defaultAtomicBlock.atomic(closure);
 #end
     }
 
@@ -158,11 +158,11 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} closure) throws Exception{
+   public static ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} closure) throws Exception{
 #if(${closure.type} eq 'void')
-       defaultAtomicBlock.executeChecked(closure);
+       defaultAtomicBlock.atomicChecked(closure);
 #else
-       return defaultAtomicBlock.executeChecked(closure);
+       return defaultAtomicBlock.atomicChecked(closure);
 #end
    }
 
@@ -181,7 +181,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse){
+    public static ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse){
 #if(${closure.type} ne 'void')
         return orelseBlock.execute(either,orelse);
 #else
@@ -200,7 +200,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception{
+    public static ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception{
 #if(${closure.type} ne 'void')
         return orelseBlock.executeChecked(either,orelse);
 #else

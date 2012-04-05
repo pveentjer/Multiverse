@@ -3,12 +3,12 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalHashMap_putTest {
@@ -25,7 +25,7 @@ public class NaiveTransactionalHashMap_putTest {
 
     @Test
     public void whenEmpty() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 String result = map.put("key", "value");
@@ -39,7 +39,7 @@ public class NaiveTransactionalHashMap_putTest {
 
     @Test
     public void whenReplacingExistingKey() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 map.put("1", "a");
@@ -58,7 +58,7 @@ public class NaiveTransactionalHashMap_putTest {
 
     @Test
     public void whenNullKey_thenNullPointerException() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -80,7 +80,7 @@ public class NaiveTransactionalHashMap_putTest {
 
         for (int k = 0; k < itemCount; k++) {
             final int key = k;
-            execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     map.put("" + key, "" + key);
@@ -90,7 +90,7 @@ public class NaiveTransactionalHashMap_putTest {
 
         System.out.println("Finished inserting");
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertEquals(itemCount, map.size());
@@ -101,7 +101,7 @@ public class NaiveTransactionalHashMap_putTest {
 
         for (int k = 0; k < itemCount; k++) {
             final int key = k;
-            execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     assertEquals("" + key, map.get("" + key));

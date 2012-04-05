@@ -28,7 +28,7 @@ public class NoBlockingTest {
     @Test
     public void whenNothingRead_thenNoRetryPossibleException() {
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     retry();
@@ -44,7 +44,7 @@ public class NoBlockingTest {
         final LongRef ref = newLongRef();
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.commute(Functions.incLongFunction());
@@ -59,7 +59,7 @@ public class NoBlockingTest {
     @Test
     public void whenContainsConstructing_thenNoRetryPossibleException() {
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -82,7 +82,7 @@ public class NoBlockingTest {
                 .newAtomicBlock();
 
         try {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.set(1);

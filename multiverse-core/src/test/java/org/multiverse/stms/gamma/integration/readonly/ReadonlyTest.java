@@ -43,7 +43,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -66,7 +66,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -88,7 +88,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newAtomicBlock();
 
-        return block.execute(new AtomicClosure<Integer>() {
+        return block.atomic(new AtomicClosure<Integer>() {
             @Override
             public Integer execute(Transaction tx) throws Exception {
                 return new Integer(value);
@@ -109,7 +109,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newAtomicBlock();
 
-        return block.execute(new AtomicLongClosure() {
+        return block.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -130,7 +130,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newAtomicBlock();
 
-        return block.execute(new AtomicClosure<GammaLongRef>() {
+        return block.atomic(new AtomicClosure<GammaLongRef>() {
             @Override
             public GammaLongRef execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -153,7 +153,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newAtomicBlock();
 
-        return block.execute(new AtomicClosure<Integer>() {
+        return block.atomic(new AtomicClosure<Integer>() {
             @Override
             public Integer execute(Transaction tx) throws Exception {
                 return new Integer(value);
@@ -175,7 +175,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newAtomicBlock();
 
-        return block.execute(new AtomicLongClosure() {
+        return block.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -196,7 +196,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertFalse(tx.getConfiguration().isReadonly());
@@ -216,7 +216,7 @@ public class ReadonlyTest {
 
 
     public void defaultTransactionalMethod(final GammaLongRef ref) {
-        stm.newTransactionFactoryBuilder().newAtomicBlock().execute(new AtomicVoidClosure() {
+        stm.newTransactionFactoryBuilder().newAtomicBlock().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertFalse(tx.getConfiguration().isReadonly());

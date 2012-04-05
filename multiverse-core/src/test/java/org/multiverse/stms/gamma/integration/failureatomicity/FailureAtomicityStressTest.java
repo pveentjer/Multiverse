@@ -90,7 +90,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modify() {
-            atomicBlock.execute(new AtomicVoidClosure() {
+            atomicBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -101,7 +101,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modifyButAbort() {
-            atomicBlock.execute(new AtomicVoidClosure() {
+            atomicBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

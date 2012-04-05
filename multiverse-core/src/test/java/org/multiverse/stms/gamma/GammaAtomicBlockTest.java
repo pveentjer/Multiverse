@@ -27,7 +27,7 @@ public class GammaAtomicBlockTest {
 
     @Test
     public void whenAtomicIntClosureUsed() {
-        int result = block.execute(new AtomicIntClosure() {
+        int result = block.atomic(new AtomicIntClosure() {
             @Override
             public int execute(Transaction tx) throws Exception {
                 return 10;
@@ -39,7 +39,7 @@ public class GammaAtomicBlockTest {
 
     @Test
     public void whenAtomicLongClosureUsed() {
-        long result = block.execute(new AtomicLongClosure() {
+        long result = block.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
                 return 10;
@@ -51,7 +51,7 @@ public class GammaAtomicBlockTest {
 
     @Test
     public void whenAtomicVoidClosureUsed() {
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
             }
@@ -60,7 +60,7 @@ public class GammaAtomicBlockTest {
 
     @Test
     public void whenAtomicClosureUsed() {
-        String result = block.execute(new AtomicClosure<String>() {
+        String result = block.atomic(new AtomicClosure<String>() {
             @Override
             public String execute(Transaction tx) throws Exception {
                 return "foo";

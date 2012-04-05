@@ -61,7 +61,7 @@ public class RetryInterruptibleTest {
                     .setInterruptible(true)
                     .newAtomicBlock();
 
-            block.executeChecked(new AtomicVoidClosure() {
+            block.atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

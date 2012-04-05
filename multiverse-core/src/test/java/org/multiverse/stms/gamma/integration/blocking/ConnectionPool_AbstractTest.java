@@ -84,7 +84,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         final GammaRef<Node<Connection>> head = new GammaRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
-            stm.getDefaultAtomicBlock().execute(new AtomicVoidClosure() {
+            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) {
                     size.set(poolsize);
@@ -99,7 +99,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         Connection takeConnection() {
-            return takeConnectionBlock.execute(new AtomicClosure<Connection>() {
+            return takeConnectionBlock.atomic(new AtomicClosure<Connection>() {
                 @Override
                 public Connection execute(Transaction tx) {
                     if (size.get() == 0) {
@@ -115,7 +115,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         void returnConnection(final Connection c) {
-            returnConnectionBlock.execute(new AtomicVoidClosure() {
+            returnConnectionBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     size.incrementAndGet(1);
@@ -127,7 +127,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         int size() {
-            return sizeBlock.execute(new AtomicIntClosure() {
+            return sizeBlock.atomic(new AtomicIntClosure() {
                 @Override
                 public int execute(Transaction tx) throws Exception {
                     return size.get();

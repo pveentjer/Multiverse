@@ -3,6 +3,7 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
+import static org.multiverse.api.StmUtils.atomic;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_getLastTest {
@@ -27,7 +28,7 @@ public class NaiveTransactionalLinkedList_getLastTest {
 
     @Test
     public void whenEmpty() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -45,7 +46,7 @@ public class NaiveTransactionalLinkedList_getLastTest {
 
     @Test
     public void whenMultipleItems() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.offerLast("1");
@@ -63,7 +64,7 @@ public class NaiveTransactionalLinkedList_getLastTest {
 
     @Test
     public void whenSingleItem() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 String item = "1";

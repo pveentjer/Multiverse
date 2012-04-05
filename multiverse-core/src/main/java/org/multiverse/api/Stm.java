@@ -11,11 +11,11 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * is coordinated through a transaction. An example of the TransactionalObject is the {@link org.multiverse.api.references.Ref},
  * but it could just as easily by a more complex transactional datastructure that is enhanced by instrumentation.
  * </li>
- * <li>{@link Transaction}: responsible for making sure that all changes on transactionalobjects are atomic, isolated and consistent.
+ * <li>{@link Transaction}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
  * </li>
  * <li>{@link AtomicBlock}: responsible for starting/committing/aborting/retrying transactions. The AtomicBlock executes an
  * {@link org.multiverse.api.closures.AtomicClosure} (there are different tastes for return values). The AtomicClosure contains
- * the logic that needs to be executed atomic, isolated and consistent.
+ * the logic that needs to be executed atomicChecked, isolated and consistent.
  * </li>
  * </ol>
  *
@@ -49,11 +49,11 @@ import org.multiverse.api.references.RefFactoryBuilder;
 public interface Stm {
 
     /**
-     * Gets the {@link TransactionFactoryBuilder} that needs to be used to execute a {@link Transaction} created by this Stm.
+     * Gets the {@link TransactionFactoryBuilder} that needs to be used to atomicChecked a {@link Transaction} created by this Stm.
      * See the {@link TransactionFactoryBuilder} for more info. The TransactionFactoryBuilder also is responsible for creating
      * the AtomicBlock since the Transaction and AtomicBlock can be tightly coupled.
      *
-     * @return the TransactionFactoryBuilder that is used to execute transactions on this Stm.
+     * @return the TransactionFactoryBuilder that is used to atomicChecked transactions on this Stm.
      */
     TransactionFactoryBuilder newTransactionFactoryBuilder();
 
@@ -69,7 +69,7 @@ public interface Stm {
     Transaction newDefaultTransaction();
 
     /**
-     * Returns the default atomic block that is useful for testing/experimentation purposes. This method is purely for easy to use access,
+     * Returns the default atomicChecked block that is useful for testing/experimentation purposes. This method is purely for easy to use access,
      * but it doesn't provide any configuration options. See the {@link #newTransactionFactoryBuilder()} for something more configurable.
      *
      * <p>Transactions used in this Block are not speculative.

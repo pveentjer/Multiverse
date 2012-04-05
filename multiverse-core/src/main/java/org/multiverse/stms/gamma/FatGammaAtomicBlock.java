@@ -32,17 +32,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
     }
 
     @Override
-    public final <E> E executeChecked(
+    public final <E> E atomicChecked(
         final AtomicClosure<E> closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public <E> E execute(final AtomicClosure<E> closure){
+     public <E> E atomic(final AtomicClosure<E> closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -74,7 +74,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -145,7 +145,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -159,7 +159,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
                         }
@@ -192,7 +192,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private <E> E execute(
+    private <E> E atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicClosure<E> closure)throws Exception{
         Error cause = null;
 
@@ -266,17 +266,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
          @Override
-    public final  int executeChecked(
+    public final  int atomicChecked(
         final AtomicIntClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  int execute(final AtomicIntClosure closure){
+     public  int atomic(final AtomicIntClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -308,7 +308,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -379,7 +379,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -393,7 +393,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
                         }
@@ -426,7 +426,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private  int execute(
+    private  int atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicIntClosure closure)throws Exception{
         Error cause = null;
 
@@ -500,17 +500,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
          @Override
-    public final  long executeChecked(
+    public final  long atomicChecked(
         final AtomicLongClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  long execute(final AtomicLongClosure closure){
+     public  long atomic(final AtomicLongClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -542,7 +542,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -613,7 +613,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -627,7 +627,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
                         }
@@ -660,7 +660,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private  long execute(
+    private  long atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicLongClosure closure)throws Exception{
         Error cause = null;
 
@@ -734,17 +734,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
          @Override
-    public final  double executeChecked(
+    public final  double atomicChecked(
         final AtomicDoubleClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  double execute(final AtomicDoubleClosure closure){
+     public  double atomic(final AtomicDoubleClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -776,7 +776,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -847,7 +847,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -861,7 +861,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
                         }
@@ -894,7 +894,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private  double execute(
+    private  double atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicDoubleClosure closure)throws Exception{
         Error cause = null;
 
@@ -968,17 +968,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
          @Override
-    public final  boolean executeChecked(
+    public final  boolean atomicChecked(
         final AtomicBooleanClosure closure)throws Exception{
 
         try{
-            return execute(closure);
+            return atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  boolean execute(final AtomicBooleanClosure closure){
+     public  boolean atomic(final AtomicBooleanClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -1010,7 +1010,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -1081,7 +1081,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
                             if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -1095,7 +1095,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
                         }
@@ -1128,7 +1128,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private  boolean execute(
+    private  boolean atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicBooleanClosure closure)throws Exception{
         Error cause = null;
 
@@ -1202,17 +1202,17 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
 
          @Override
-    public final  void executeChecked(
+    public final  void atomicChecked(
         final AtomicVoidClosure closure)throws Exception{
 
         try{
-            execute(closure);
+            atomic(closure);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  void execute(final AtomicVoidClosure closure){
+     public  void atomic(final AtomicVoidClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -1244,7 +1244,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        execute(tx, transactionContainer,pool, closure);
+                        atomic(tx, transactionContainer,pool, closure);
                         return;
                     } else {
                         if (TRACING_ENABLED) {
@@ -1319,7 +1319,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
 
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
-                        execute(tx, transactionContainer, pool, closure);
+                        atomic(tx, transactionContainer, pool, closure);
                         return;
                     } else {
                         if(TRACING_ENABLED){
@@ -1334,7 +1334,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
-                            execute(tx, transactionContainer, pool, closure);
+                            atomic(tx, transactionContainer, pool, closure);
                             return;
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
@@ -1369,7 +1369,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
         }
     }
 
-    private  void execute(
+    private  void atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final AtomicVoidClosure closure)throws Exception{
         Error cause = null;
 

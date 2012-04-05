@@ -3,13 +3,13 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_get_int_test {
@@ -26,7 +26,7 @@ public class NaiveTransactionalLinkedList_get_int_test {
 
     @Test
     public void whenIndexTooSmall() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -46,7 +46,7 @@ public class NaiveTransactionalLinkedList_get_int_test {
 
     @Test
     public void whenIndexTooBig() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -66,7 +66,7 @@ public class NaiveTransactionalLinkedList_get_int_test {
 
     @Test
     public void whenListContainsSingleItem() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -81,7 +81,7 @@ public class NaiveTransactionalLinkedList_get_int_test {
 
     @Test
     public void whenMultipleItems() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");

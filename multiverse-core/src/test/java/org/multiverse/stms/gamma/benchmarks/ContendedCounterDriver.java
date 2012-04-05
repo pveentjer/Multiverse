@@ -86,7 +86,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
             };
 
             for (long k = 0; k < _incCount; k++) {
-                block.execute(closure);
+                block.atomic(closure);
             }
         }
     }

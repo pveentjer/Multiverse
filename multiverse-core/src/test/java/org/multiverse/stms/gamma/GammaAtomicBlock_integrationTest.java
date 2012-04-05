@@ -30,7 +30,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         AtomicBlock block = stm.newTransactionFactoryBuilder().newAtomicBlock();
-        long result = block.execute(new AtomicLongClosure() {
+        long result = block.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
                 assertSame(tx, getThreadLocalTransaction());
@@ -47,7 +47,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
         final GammaLongRef ref = new GammaLongRef(stm, 0);
 
         AtomicBlock block = stm.newTransactionFactoryBuilder().newAtomicBlock();
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
@@ -69,7 +69,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
                     .setMaxRetries(100)
                     .newAtomicBlock();
 
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.get(tx);
@@ -89,7 +89,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
         AtomicBlock block = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 for (int k = 0; k < 10; k++) {

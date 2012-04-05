@@ -82,7 +82,7 @@ public abstract class ReentrantMutex_AbstractTest {
         private final GammaAtomicBlock unlockBlock = newUnlockBlock();
 
         public void lock(final Thread thread) {
-            lockBlock.execute(new AtomicVoidClosure() {
+            lockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (owner.get() == null) {
@@ -102,7 +102,7 @@ public abstract class ReentrantMutex_AbstractTest {
         }
 
         public void unlock(final Thread thread) {
-            unlockBlock.execute(new AtomicVoidClosure() {
+            unlockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (owner.get() != thread) {

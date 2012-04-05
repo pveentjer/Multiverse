@@ -164,7 +164,7 @@ public abstract class CommitBarrier {
     /**
      * Executes the tasks. Can be called with a null argument.
      *
-     * @param tasks the tasks to execute.
+     * @param tasks the tasks to atomicChecked.
      */
     protected static void executeTasks(final List<Runnable> tasks) {
         if (tasks == null) {

@@ -23,7 +23,7 @@ public class OrElseTest {
     public void whenCalledWithoutTransaction_thenTransactionMandatoryException() {
         AtomicClosure closure = mock(AtomicClosure.class);
 
-        StmUtils.execute(closure, closure);
+        StmUtils.atomic(closure, closure);
     }
 
     @Test
@@ -31,10 +31,10 @@ public class OrElseTest {
         final LongRef ref1 = newLongRef(1);
         final LongRef ref2 = newLongRef(0);
 
-        long value = StmUtils.execute(new AtomicLongClosure() {
+        long value = StmUtils.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
-                return StmUtils.execute(new GetClosure(ref1), new GetClosure(ref2));
+                return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });
 
@@ -64,10 +64,10 @@ public class OrElseTest {
         final LongRef ref1 = newLongRef(0);
         final LongRef ref2 = newLongRef(2);
 
-        long value = StmUtils.execute(new AtomicLongClosure() {
+        long value = StmUtils.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
-                return StmUtils.execute(new GetClosure(ref1), new GetClosure(ref2));
+                return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });
 

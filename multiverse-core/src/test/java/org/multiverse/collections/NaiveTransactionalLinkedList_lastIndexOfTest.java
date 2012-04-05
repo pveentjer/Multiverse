@@ -3,12 +3,14 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
+
+import static org.multiverse.api.StmUtils.atomic;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_lastIndexOfTest {
@@ -25,7 +27,7 @@ public class NaiveTransactionalLinkedList_lastIndexOfTest {
 
     @Test
     public void whenNullItem_thenMinusOne() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 int result = list.lastIndexOf(null);
@@ -37,7 +39,7 @@ public class NaiveTransactionalLinkedList_lastIndexOfTest {
 
     @Test
     public void whenEmptyList() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 int result = list.lastIndexOf("a");
@@ -49,7 +51,7 @@ public class NaiveTransactionalLinkedList_lastIndexOfTest {
 
     @Test
     public void whenNotFound_thenMinusOne() {
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -66,7 +68,7 @@ public class NaiveTransactionalLinkedList_lastIndexOfTest {
 
     @Test
     public void whenOnlyOnceInCollection() {
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -83,21 +85,21 @@ public class NaiveTransactionalLinkedList_lastIndexOfTest {
 
     @Test
     public void whenMultipleTimesInCollection() {
-          execute(new AtomicVoidClosure() {
-            @Override
-            public void execute(Transaction tx) throws Exception {
-                list.add("1");
-                list.add("2");
-                list.add("3");
-                list.add("4");
-                list.add("2");
-                list.add("5");
+          StmUtils.atomic(new AtomicVoidClosure() {
+              @Override
+              public void execute(Transaction tx) throws Exception {
+                  list.add("1");
+                  list.add("2");
+                  list.add("3");
+                  list.add("4");
+                  list.add("2");
+                  list.add("5");
 
 
-                int result = list.lastIndexOf("2");
-                assertEquals(4, result);
-                assertEquals("[1, 2, 3, 4, 2, 5]", list.toString());
-            }
-        });
+                  int result = list.lastIndexOf("2");
+                  assertEquals(4, result);
+                  assertEquals("[1, 2, 3, 4, 2, 5]", list.toString());
+              }
+          });
     }
 }

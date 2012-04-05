@@ -71,7 +71,7 @@ public class SleepingBarberStressTest {
             };
 
             while (!stop) {
-                execute(closure);
+                atomic(closure);
             }
 
             barberShop.atomicClose();
@@ -85,7 +85,7 @@ public class SleepingBarberStressTest {
 
         @Override
         public void doRun() throws Exception {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (barberShop.closed.get()) {

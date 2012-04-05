@@ -79,7 +79,7 @@ public class TimeoutTestLongTest {
                     .setTimeoutNs(TimeUnit.SECONDS.toNanos(5))
                     .newAtomicBlock();
 
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.await(1);

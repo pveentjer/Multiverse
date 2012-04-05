@@ -164,7 +164,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void addInterest(final float rate) {
-            addInterrestBlock.execute(new AtomicVoidClosure() {
+            addInterrestBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     for (Account a : accounts) {
@@ -177,7 +177,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public double computeTotal() {
-            return computeTotalBlock.execute(new AtomicDoubleClosure() {
+            return computeTotalBlock.atomic(new AtomicDoubleClosure() {
                 @Override
                 public double execute(Transaction tx) throws Exception {
                     double total = 0.0;
@@ -192,7 +192,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void transfer(final Account src, final Account dst, final float amount) throws OverdraftException {
-            transferBlock.execute(new AtomicVoidClosure() {
+            transferBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     dst.deposit(amount);

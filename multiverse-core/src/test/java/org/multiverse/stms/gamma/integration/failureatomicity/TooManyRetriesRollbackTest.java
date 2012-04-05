@@ -54,7 +54,7 @@ public class TooManyRetriesRollbackTest {
                 .setMaxRetries(10)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -89,7 +89,7 @@ public class TooManyRetriesRollbackTest {
             };
 
             while (!finished) {
-                block.execute(closure);
+                block.atomic(closure);
             }
         }
     }

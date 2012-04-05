@@ -3,6 +3,7 @@ package org.multiverse.collections;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
+import org.multiverse.api.StmUtils;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
@@ -13,7 +14,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.execute;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
 public class NaiveTransactionalLinkedList_addAllTest {
@@ -30,7 +30,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenNullCollectionAdded_thenNullPointerException() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 try {
@@ -49,7 +49,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
         try {
-            execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     List<String> c = Arrays.asList("a", "b", null, "d");
@@ -69,7 +69,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
         } catch (NullPointerException expected) {
         }
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertEquals("[]", list.toString());
@@ -82,7 +82,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenNonEmptyListAndEmptyCollection() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -99,7 +99,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenBothEmpty() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.addAll(new LinkedList<String>());
@@ -114,7 +114,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenEmptyListEmptyAndNonEmptyCollection() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 List<String> c = Arrays.asList("1", "2");
@@ -131,7 +131,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenBothNonEmpty() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 List<String> c = Arrays.asList("2", "1");
@@ -150,7 +150,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
     public void whenCapacityExceeded() {
         final NaiveTransactionalLinkedList<String> list = new NaiveTransactionalLinkedList<String>(stm, 2);
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 list.add("1");
@@ -158,7 +158,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
         });
 
         try {
-            execute(new AtomicVoidClosure() {
+            StmUtils.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     List<String> c = Arrays.asList("2", "3");
@@ -180,7 +180,7 @@ public class NaiveTransactionalLinkedList_addAllTest {
 
         }
 
-        execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertEquals(1, list.size());

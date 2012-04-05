@@ -53,7 +53,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 System.out.println(tx.getClass());
@@ -92,7 +92,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -116,7 +116,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -141,7 +141,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -166,7 +166,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -190,7 +190,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -215,7 +215,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertSame(tx, getThreadLocalTransaction());
@@ -247,7 +247,7 @@ public class GammaAtomicBlock_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newAtomicBlock();
 
-        block.execute(new AtomicVoidClosure() {
+        block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 assertSame(tx, getThreadLocalTransaction());

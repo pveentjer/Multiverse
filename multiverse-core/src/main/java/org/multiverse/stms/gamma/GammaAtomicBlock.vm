@@ -37,14 +37,14 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
 
 #foreach($closure in $closures)
     @Override
-    public final ${closure.typeParameter} ${closure.type} executeChecked(
+    public final ${closure.typeParameter} ${closure.type} atomicChecked(
         final ${closure.name}${closure.typeParameter} closure)throws Exception{
 
         try{
 #if(${closure.type} eq 'void')
-            execute(closure);
+            atomic(closure);
 #else
-            return execute(closure);
+            return atomic(closure);
 #end
         }catch(InvisibleCheckedException e){
             throw e.getCause();
@@ -53,7 +53,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
 
 #if(${atomicBlock.lean})
     @Override
-    public final ${closure.typeParameter} ${closure.type} execute(final ${closure.name}${closure.typeParameter} closure){
+    public final ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -88,7 +88,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
         }
 
 #else ## end of atomicblock.lean
-    public ${closure.typeParameter} ${closure.type} execute(final ${closure.name}${closure.typeParameter} closure){
+    public ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -121,10 +121,10 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
 #if($closure.type eq 'void')
-                        execute(tx, transactionContainer,pool, closure);
+                        atomic(tx, transactionContainer,pool, closure);
                         return;
 #else
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
 #end
                     } else {
                         if (TRACING_ENABLED) {
@@ -212,10 +212,10 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
                         tx = transactionFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
 #if($closure.type eq 'void')
-                        execute(tx, transactionContainer, pool, closure);
+                        atomic(tx, transactionContainer, pool, closure);
                         return;
 #else
-                        return execute(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, closure);
 #end
                     } else {
                         if(TRACING_ENABLED){
@@ -231,10 +231,10 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
                         transactionContainer.tx = tx;
                         try {
 #if($closure.type eq 'void')
-                            execute(tx, transactionContainer, pool, closure);
+                            atomic(tx, transactionContainer, pool, closure);
                             return;
 #else
-                            return execute(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, closure);
 #end
                         } finally {
                             transactionContainer.tx = suspendedTransaction;
@@ -273,7 +273,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
         }
     }
 
-    private ${closure.typeParameter} ${closure.type} execute(
+    private ${closure.typeParameter} ${closure.type} atomic(
         GammaTransaction tx, final ThreadLocalTransaction.Container transactionContainer, GammaTransactionPool pool, final ${closure.name}${closure.typeParameter} closure)throws Exception{
         Error cause = null;
 

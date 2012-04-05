@@ -117,7 +117,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         private void runWithoutPooledClosure() {
             while (!shutdown) {
-                pushBlock.execute(new AtomicVoidClosure() {
+                pushBlock.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         stack.push(tx, "item");
@@ -128,7 +128,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
 
             for (int k = 0; k < popThreadCount; k++) {
-                pushBlock.execute(new AtomicVoidClosure() {
+                pushBlock.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         stack.push(tx, "end");
@@ -143,13 +143,13 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
             while (!shutdown) {
                 pushClosure.item = "item";
-                pushBlock.execute(pushClosure);
+                pushBlock.atomic(pushClosure);
                 count++;
             }
 
             for (int k = 0; k < popThreadCount; k++) {
                 pushClosure.item = "end";
-                pushBlock.execute(pushClosure);
+                pushBlock.atomic(pushClosure);
             }
         }
 
@@ -190,7 +190,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
         private void runWithPooledClosure() {
             boolean end = false;
             while (!end) {
-                end = popBlock.execute(new AtomicBooleanClosure() {
+                end = popBlock.atomic(new AtomicBooleanClosure() {
                     @Override
                     public boolean execute(Transaction tx) throws Exception {
                         return !stack.pop(tx).equals("end");
@@ -205,7 +205,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             PopClosure popClosure = new PopClosure();
             boolean end = false;
             while (!end) {
-                end = popBlock.execute(popClosure);
+                end = popBlock.atomic(popClosure);
                 count++;
             }
         }

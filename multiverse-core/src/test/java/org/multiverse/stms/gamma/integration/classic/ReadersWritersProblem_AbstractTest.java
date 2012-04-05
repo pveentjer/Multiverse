@@ -163,7 +163,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         }
 
         public void acquireReadLock() {
-            acquireReadLockBlock.execute(new AtomicVoidClosure() {
+            acquireReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (readerCount.get() == -1) {
@@ -176,7 +176,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         }
 
         public void acquireWriteLock() {
-            acquireWriteLockBlock.execute(new AtomicVoidClosure() {
+            acquireWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (readerCount.get() != 0) {

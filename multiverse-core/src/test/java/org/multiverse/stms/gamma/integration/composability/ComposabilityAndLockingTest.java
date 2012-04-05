@@ -29,12 +29,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final LongRef ref = new GammaLongRef(stm, initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
@@ -53,12 +53,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final LongRef ref = new GammaLongRef(stm, initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
@@ -77,12 +77,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final LongRef ref = new GammaLongRef(stm, initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
@@ -101,12 +101,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final LongRef ref = new GammaLongRef(stm, initialValue);
 
-        StmUtils.execute(new AtomicVoidClosure() {
+        StmUtils.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
-                StmUtils.execute(new AtomicVoidClosure() {
+                StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);

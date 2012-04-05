@@ -132,8 +132,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static <E> E execute(AtomicClosure<E> closure){
-        return defaultAtomicBlock.execute(closure);
+    public static <E> E atomic(AtomicClosure<E> closure){
+        return defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -149,8 +149,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static <E> E executeChecked(AtomicClosure<E> closure) throws Exception{
-       return defaultAtomicBlock.executeChecked(closure);
+   public static <E> E atomicChecked(AtomicClosure<E> closure) throws Exception{
+       return defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -166,7 +166,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static <E> E execute(AtomicClosure<E> either, AtomicClosure<E> orelse){
+    public static <E> E atomic(AtomicClosure<E> either, AtomicClosure<E> orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -179,7 +179,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static <E> E executeChecked(AtomicClosure<E> either, AtomicClosure<E> orelse)throws Exception{
+    public static <E> E atomicChecked(AtomicClosure<E> either, AtomicClosure<E> orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -200,8 +200,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  int execute(AtomicIntClosure closure){
-        return defaultAtomicBlock.execute(closure);
+    public static  int atomic(AtomicIntClosure closure){
+        return defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -217,8 +217,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  int executeChecked(AtomicIntClosure closure) throws Exception{
-       return defaultAtomicBlock.executeChecked(closure);
+   public static  int atomicChecked(AtomicIntClosure closure) throws Exception{
+       return defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -234,7 +234,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  int execute(AtomicIntClosure either, AtomicIntClosure orelse){
+    public static  int atomic(AtomicIntClosure either, AtomicIntClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -247,7 +247,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  int executeChecked(AtomicIntClosure either, AtomicIntClosure orelse)throws Exception{
+    public static  int atomicChecked(AtomicIntClosure either, AtomicIntClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -268,8 +268,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  long execute(AtomicLongClosure closure){
-        return defaultAtomicBlock.execute(closure);
+    public static  long atomic(AtomicLongClosure closure){
+        return defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -285,8 +285,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  long executeChecked(AtomicLongClosure closure) throws Exception{
-       return defaultAtomicBlock.executeChecked(closure);
+   public static  long atomicChecked(AtomicLongClosure closure) throws Exception{
+       return defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -302,7 +302,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  long execute(AtomicLongClosure either, AtomicLongClosure orelse){
+    public static  long atomic(AtomicLongClosure either, AtomicLongClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -315,7 +315,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  long executeChecked(AtomicLongClosure either, AtomicLongClosure orelse)throws Exception{
+    public static  long atomicChecked(AtomicLongClosure either, AtomicLongClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -336,8 +336,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  double execute(AtomicDoubleClosure closure){
-        return defaultAtomicBlock.execute(closure);
+    public static  double atomic(AtomicDoubleClosure closure){
+        return defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -353,8 +353,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  double executeChecked(AtomicDoubleClosure closure) throws Exception{
-       return defaultAtomicBlock.executeChecked(closure);
+   public static  double atomicChecked(AtomicDoubleClosure closure) throws Exception{
+       return defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -370,7 +370,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  double execute(AtomicDoubleClosure either, AtomicDoubleClosure orelse){
+    public static  double atomic(AtomicDoubleClosure either, AtomicDoubleClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -383,7 +383,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  double executeChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse)throws Exception{
+    public static  double atomicChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -404,8 +404,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  boolean execute(AtomicBooleanClosure closure){
-        return defaultAtomicBlock.execute(closure);
+    public static  boolean atomic(AtomicBooleanClosure closure){
+        return defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -421,8 +421,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  boolean executeChecked(AtomicBooleanClosure closure) throws Exception{
-       return defaultAtomicBlock.executeChecked(closure);
+   public static  boolean atomicChecked(AtomicBooleanClosure closure) throws Exception{
+       return defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -438,7 +438,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  boolean execute(AtomicBooleanClosure either, AtomicBooleanClosure orelse){
+    public static  boolean atomic(AtomicBooleanClosure either, AtomicBooleanClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -451,7 +451,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  boolean executeChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse)throws Exception{
+    public static  boolean atomicChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -471,8 +471,8 @@ public final class StmUtils {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  void execute(AtomicVoidClosure closure){
-        defaultAtomicBlock.execute(closure);
+    public static  void atomic(AtomicVoidClosure closure){
+        defaultAtomicBlock.atomic(closure);
     }
 
    /**
@@ -487,8 +487,8 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  void executeChecked(AtomicVoidClosure closure) throws Exception{
-       defaultAtomicBlock.executeChecked(closure);
+   public static  void atomicChecked(AtomicVoidClosure closure) throws Exception{
+       defaultAtomicBlock.atomicChecked(closure);
    }
 
    /**
@@ -503,7 +503,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  void execute(AtomicVoidClosure either, AtomicVoidClosure orelse){
+    public static  void atomic(AtomicVoidClosure either, AtomicVoidClosure orelse){
         orelseBlock.execute(either,orelse);
     }
 
@@ -515,7 +515,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  void executeChecked(AtomicVoidClosure either, AtomicVoidClosure orelse)throws Exception{
+    public static  void atomicChecked(AtomicVoidClosure either, AtomicVoidClosure orelse)throws Exception{
         orelseBlock.executeChecked(either,orelse);
     }
 

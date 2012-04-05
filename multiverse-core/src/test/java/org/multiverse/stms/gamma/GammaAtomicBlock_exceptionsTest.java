@@ -29,7 +29,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final Exception ex = new Exception();
 
         try {
-            block.executeChecked(new AtomicVoidClosure() {
+            block.atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -53,7 +53,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            block.executeChecked(new AtomicVoidClosure() {
+            block.atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -78,7 +78,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final Error ex = new Error();
 
         try {
-            block.executeChecked(new AtomicVoidClosure() {
+            block.atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -102,7 +102,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final Exception ex = new Exception();
 
         try {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -126,7 +126,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -151,7 +151,7 @@ public class GammaAtomicBlock_exceptionsTest implements GammaConstants {
         final Error ex = new Error();
 
         try {
-            block.execute(new AtomicVoidClosure() {
+            block.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

@@ -88,7 +88,7 @@ public abstract class Semaphore_AbstractTest {
         }
 
         public void up() {
-            upBlock.execute(new AtomicVoidClosure() {
+            upBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.set(ref.get() + 1);
@@ -104,7 +104,7 @@ public abstract class Semaphore_AbstractTest {
         public void down() {
             users.decrementAndGet();
 
-            downBlock.execute(new AtomicVoidClosure() {
+            downBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (ref.get() == 0) {

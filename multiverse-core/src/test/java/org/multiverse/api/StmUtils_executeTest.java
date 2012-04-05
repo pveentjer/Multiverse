@@ -19,14 +19,14 @@ public class StmUtils_executeTest {
 
     @Test(expected = NullPointerException.class)
     public void whenNullClosure_thenNullPointerException() {
-        StmUtils.execute((AtomicVoidClosure) null);
+        StmUtils.atomic((AtomicVoidClosure) null);
     }
 
     @Test
     public void whenExecuteSuccess() {
         final IntRef ref = newIntRef();
 
-        execute(new AtomicVoidClosure() {
+        atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.incrementAndGet(10);
@@ -42,7 +42,7 @@ public class StmUtils_executeTest {
         final Exception ex = new Exception();
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -64,7 +64,7 @@ public class StmUtils_executeTest {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            execute(new AtomicVoidClosure() {
+            atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -83,7 +83,7 @@ public class StmUtils_executeTest {
     public void whenExecuteCheckedSuccess() throws Exception {
         final IntRef ref = newIntRef();
 
-        executeChecked(new AtomicVoidClosure() {
+        atomicChecked(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.incrementAndGet(10);
@@ -99,7 +99,7 @@ public class StmUtils_executeTest {
         final Exception ex = new Exception();
 
         try {
-            executeChecked(new AtomicVoidClosure() {
+            atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -121,7 +121,7 @@ public class StmUtils_executeTest {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            executeChecked(new AtomicVoidClosure() {
+            atomicChecked(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.incrementAndGet(10);

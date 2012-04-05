@@ -93,7 +93,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
 
         public void acquireReadLock() {
-            acquireReadLockBlock.execute(new AtomicVoidClosure() {
+            acquireReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (lock.get() < 0) {
@@ -113,7 +113,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
             readers.decrementAndGet();
             assertEquals(0, writers.get());
 
-            releaseReadLockBlock.execute(new AtomicVoidClosure() {
+            releaseReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (lock.get() <= 0) {
@@ -126,7 +126,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         }
 
         public void acquireWriteLock() {
-            acquireWriteLockBlock.execute(new AtomicVoidClosure() {
+            acquireWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (lock.get() != 0) {
@@ -145,7 +145,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
             writers.decrementAndGet();
             assertEquals(0, readers.get());
 
-            releaseWriteLockBlock.execute(new AtomicVoidClosure() {
+            releaseWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     if (lock.get() != -1) {

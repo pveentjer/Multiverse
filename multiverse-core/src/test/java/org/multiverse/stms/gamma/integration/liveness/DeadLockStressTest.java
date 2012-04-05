@@ -133,7 +133,7 @@ public class DeadLockStressTest {
         }
 
         public void normal() {
-            normalBlock.execute(new AtomicVoidClosure() {
+            normalBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     doIt((GammaTransaction) tx);
@@ -142,7 +142,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeReadLevel() {
-            pessimisticReadLevelBlock.execute(new AtomicVoidClosure() {
+            pessimisticReadLevelBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     doIt((GammaTransaction) tx);
@@ -151,7 +151,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeWriteLevel() {
-            pessimisticWriteLevelBlock.execute(new AtomicVoidClosure() {
+            pessimisticWriteLevelBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     doIt((GammaTransaction) tx);

@@ -296,7 +296,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReadLevel() {
-            pessimisticReadsBlock.execute(new AtomicVoidClosure() {
+            pessimisticReadsBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -306,7 +306,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWriteLevel() {
-            pessimisticWritesBlock.execute(new AtomicVoidClosure() {
+            pessimisticWritesBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -316,7 +316,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSerializedIsolation() {
-            serializedBlock.execute(new AtomicVoidClosure() {
+            serializedBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -326,7 +326,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSnapshotIsolation() {
-            snapshotBlock.execute(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -336,7 +336,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReads() {
-            snapshotBlock.execute(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -346,7 +346,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWrites() {
-            snapshotBlock.execute(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
