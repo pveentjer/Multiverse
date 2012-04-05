@@ -6,6 +6,8 @@ under A (atomicity), C (consistency), I (isolation) semantics.
 
 h2. Example
 
+import org.multiverse.api.*;
+import org.multiverse.closures.*;
 import org.multiverse.api.references.*;
 import static org.multiverse.api.StmUtils.*;
 
