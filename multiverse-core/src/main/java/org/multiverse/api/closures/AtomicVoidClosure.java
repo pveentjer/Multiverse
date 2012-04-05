@@ -12,7 +12,7 @@ public interface AtomicVoidClosure{
     /**
      * Executes the closure.
      *
-     * @param tx the Transaction. Depending on the TransactionPropagation level, this could
+     * @param tx the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.
      * @throws Exception if unable to compute a result
      */

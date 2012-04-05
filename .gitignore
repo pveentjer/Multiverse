@@ -1,6 +1,7 @@
 *.class
 .gradle/
 .DS_Store*
+out/
 multiverse-core/build/
 multiverse-site/build/
 *.iml

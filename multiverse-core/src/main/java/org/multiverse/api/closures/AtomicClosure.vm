@@ -4,9 +4,14 @@ import org.multiverse.api.Transaction;
 
 /**
 #if(${closure.type} ne 'void')
- * An AtomicClosure tailored for ${closure.type}
-#end
+ * An atomic closure tailored for returning a primitive type: ${closure.type}. Using this ${closure.name} instead of
+ * the {@link AtomicClosure} is that no object wrappers need to be created and there is no reason to deal with a potential
+ * null value.
+#elseif(${closure.type} eq 'E')
+ * An AtomicClosure tailored for returning an object reference.
+#else
  * An AtomicClosure that doesn't return a value.
+#end
  *
  * @author Peter Veentjer.
  */
@@ -15,12 +20,13 @@ public interface ${closure.name}${closure.typeParameter}{
     /**
      * Executes the closure.
      *
-     * @param tx the Transaction. Depending on the TransactionPropagation level, this could
+     * @param tx the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.
 #if(${closure.type} ne 'void')
      * @return the result of the execution.
-#end
+#else
      * @throws Exception if unable to compute a result
+#end
      */
      ${closure.type} execute(Transaction tx)throws Exception;
 }
