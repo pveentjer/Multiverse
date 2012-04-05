@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.GammaAtomicBlock;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.GammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
 
@@ -38,18 +38,18 @@ public class ReentrantMutex_FatFixedLengthGammaTransaction_StressTest extends Re
         run();
     }
 
-    protected GammaAtomicBlock newLockBlock() {
+    protected GammaTransactionExecutor newLockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
 
     }
 
-    protected GammaAtomicBlock newUnlockBlock() {
+    protected GammaTransactionExecutor newUnlockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
     }
 }

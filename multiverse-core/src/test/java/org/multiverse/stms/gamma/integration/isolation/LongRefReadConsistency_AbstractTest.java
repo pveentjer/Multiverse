@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -53,9 +53,9 @@ public abstract class LongRefReadConsistency_AbstractTest {
         }
     }
 
-    protected abstract AtomicBlock createReadBlock();
+    protected abstract TransactionExecutor createReadBlock();
 
-    protected abstract AtomicBlock createWriteBlock();
+    protected abstract TransactionExecutor createWriteBlock();
 
     public void run(int refCount) {
         refs = new GammaLongRef[refCount];
@@ -94,7 +94,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = createWriteBlock();
+            TransactionExecutor block = createWriteBlock();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
@@ -129,7 +129,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = createReadBlock();
+            TransactionExecutor block = createReadBlock();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.isolation;
 
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.api.TransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
 
@@ -124,18 +124,18 @@ public class LongRefReadConsistency_FatVariableLengthGammaTransaction_StressTest
     }
 
     @Override
-    protected AtomicBlock createReadBlock() {
+    protected TransactionExecutor createReadBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
     }
 
     @Override
-    protected AtomicBlock createWriteBlock() {
+    protected TransactionExecutor createWriteBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
     }
 }

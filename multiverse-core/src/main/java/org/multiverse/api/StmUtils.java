@@ -21,8 +21,8 @@ public final class StmUtils {
 
     private final static RefFactory refFactory
         = getGlobalStmInstance().getDefaultRefFactory();
-    private final static AtomicBlock defaultAtomicBlock
-        = getGlobalStmInstance().getDefaultAtomicBlock();
+    private final static TransactionExecutor defaultTransactionExecutor
+        = getGlobalStmInstance().getDefaultTransactionExecutor();
     private final static OrElseBlock orelseBlock
         = getGlobalStmInstance().newOrElseBlock();
     private final static TransactionalCollectionsFactory transactionalCollectionsFactory
@@ -116,15 +116,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicClosure} to execute.
      * @return the result of the execution
@@ -133,16 +133,16 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static <E> E atomic(AtomicClosure<E> closure){
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicClosure} to execute.
     * @return the result of the execution
@@ -150,7 +150,7 @@ public final class StmUtils {
     * @throws Exception is the closure throws an Exception
     */
    public static <E> E atomicChecked(AtomicClosure<E> closure) throws Exception{
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -184,15 +184,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicIntClosure} to execute.
      * @return the result of the execution
@@ -201,16 +201,16 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static  int atomic(AtomicIntClosure closure){
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicIntClosure} to execute.
     * @return the result of the execution
@@ -218,7 +218,7 @@ public final class StmUtils {
     * @throws Exception is the closure throws an Exception
     */
    public static  int atomicChecked(AtomicIntClosure closure) throws Exception{
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -252,15 +252,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicLongClosure} to execute.
      * @return the result of the execution
@@ -269,16 +269,16 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static  long atomic(AtomicLongClosure closure){
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicLongClosure} to execute.
     * @return the result of the execution
@@ -286,7 +286,7 @@ public final class StmUtils {
     * @throws Exception is the closure throws an Exception
     */
    public static  long atomicChecked(AtomicLongClosure closure) throws Exception{
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -320,15 +320,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicDoubleClosure} to execute.
      * @return the result of the execution
@@ -337,16 +337,16 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static  double atomic(AtomicDoubleClosure closure){
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicDoubleClosure} to execute.
     * @return the result of the execution
@@ -354,7 +354,7 @@ public final class StmUtils {
     * @throws Exception is the closure throws an Exception
     */
    public static  double atomicChecked(AtomicDoubleClosure closure) throws Exception{
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -388,15 +388,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicBooleanClosure} to execute.
      * @return the result of the execution
@@ -405,16 +405,16 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static  boolean atomic(AtomicBooleanClosure closure){
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicBooleanClosure} to execute.
     * @return the result of the execution
@@ -422,7 +422,7 @@ public final class StmUtils {
     * @throws Exception is the closure throws an Exception
     */
    public static  boolean atomicChecked(AtomicBooleanClosure closure) throws Exception{
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -456,15 +456,15 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link AtomicVoidClosure} to execute.
      * @throws NullPointerException if closure is null.
@@ -472,23 +472,23 @@ public final class StmUtils {
      *                                  if the closure throws a checked exception.
      */
     public static  void atomic(AtomicVoidClosure closure){
-        defaultAtomicBlock.atomic(closure);
+        defaultTransactionExecutor.atomic(closure);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link AtomicVoidClosure} to execute.
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
    public static  void atomicChecked(AtomicVoidClosure closure) throws Exception{
-       defaultAtomicBlock.atomicChecked(closure);
+       defaultTransactionExecutor.atomicChecked(closure);
    }
 
    /**
@@ -621,7 +621,7 @@ public final class StmUtils {
      * to happen on certain datastructures, e.g. an item to come available on a transactional blocking queue.
      *
      * <p>Under the hood the retry throws an Retry that will be caught up the callstack
-     * (by the {@link AtomicBlock} for example). The Retry should not be caught by user code in almost all cases.
+     * (by the {@link TransactionExecutor} for example). The Retry should not be caught by user code in almost all cases.
      */
     public static void retry() {
         Transaction tx = getRequiredThreadLocalTransaction();

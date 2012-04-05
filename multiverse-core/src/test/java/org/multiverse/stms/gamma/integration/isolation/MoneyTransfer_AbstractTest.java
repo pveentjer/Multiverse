@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -40,7 +40,7 @@ public abstract class MoneyTransfer_AbstractTest {
         }
     }
 
-    protected abstract AtomicBlock newAtomicBlock();
+    protected abstract TransactionExecutor newTransactionExecutor();
 
     public void run(int accountCount, int threadCount) {
         accounts = new GammaLongRef[accountCount];
@@ -89,7 +89,7 @@ public abstract class MoneyTransfer_AbstractTest {
         }
 
         public void doRun() {
-            AtomicBlock block = newAtomicBlock();
+            TransactionExecutor block = newTransactionExecutor();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

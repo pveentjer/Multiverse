@@ -10,18 +10,18 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaAtomicBlock made for the GammaStm.
+* An GammaTransactionExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
-    private static final Logger logger = Logger.getLogger(FatGammaAtomicBlock.class.getName());
+public final class FatGammaTransactionExecutor extends AbstractGammaTransactionExecutor{
+    private static final Logger logger = Logger.getLogger(FatGammaTransactionExecutor.class.getName());
 
     private final PropagationLevel propagationLevel;
 
-    public FatGammaAtomicBlock(final GammaTransactionFactory transactionFactory) {
+    public FatGammaTransactionExecutor(final GammaTransactionFactory transactionFactory) {
         super(transactionFactory);
         this.propagationLevel = transactionConfiguration.propagationLevel;
     }
@@ -96,7 +96,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -119,7 +119,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -330,7 +330,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -353,7 +353,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -564,7 +564,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -587,7 +587,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -798,7 +798,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -821,7 +821,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -1032,7 +1032,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -1055,7 +1055,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -1268,7 +1268,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -1292,7 +1292,7 @@ public final class FatGammaAtomicBlock extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );

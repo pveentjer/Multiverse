@@ -10,17 +10,17 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaAtomicBlock made for the GammaStm.
+* An GammaTransactionExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class LeanGammaAtomicBlock extends AbstractGammaAtomicBlock{
-    private static final Logger logger = Logger.getLogger(LeanGammaAtomicBlock.class.getName());
+public final class LeanGammaTransactionExecutor extends AbstractGammaTransactionExecutor{
+    private static final Logger logger = Logger.getLogger(LeanGammaTransactionExecutor.class.getName());
 
 
-    public LeanGammaAtomicBlock(final GammaTransactionFactory transactionFactory) {
+    public LeanGammaTransactionExecutor(final GammaTransactionFactory transactionFactory) {
         super(transactionFactory);
     }
 

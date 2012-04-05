@@ -1,14 +1,14 @@
 package org.multiverse.stms.gamma;
 
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
 
 /**
- * An {@link AtomicBlock} tailored for the GammaStm.
+ * An {@link org.multiverse.api.TransactionExecutor} tailored for the GammaStm.
  *
  * @author  Peter Veentjer.
  */
-public interface GammaAtomicBlock extends AtomicBlock {
+public interface GammaTransactionExecutor extends TransactionExecutor {
 
     @Override
     GammaTransactionFactory getTransactionFactory();

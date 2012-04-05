@@ -14,7 +14,7 @@ import org.multiverse.api.predicates.*;
  * <h3>ControlFlowError</h3>
  *
  * <p>All non atomic methods are able to throw a (subclass) of the {@link org.multiverse.api.exceptions.ControlFlowError}. This error should
- * not be caught, it is task of the {@link AtomicBlock} to deal with.
+ * not be caught, it is task of the {@link TransactionExecutor} to deal with.
  * 
  * <h3>TransactionExecutionException</h3>
  *
@@ -63,24 +63,24 @@ public interface LongRef extends TransactionalObject {
     /**
      * Gets the value using the provided transaction.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @return the value stored in the ref.
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long get(Transaction tx);
+    long get(Transaction txn);
 
     /**
      * Gets the value using the provided transaction and acquired the lock with the specified LockMode.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param lockMode the LockMode used
      * @return the value stored in the ref.
-     * @throws NullPointerException if tx is null or if lockMode is null. If LockMode is null and a running transaction is available
+     * @throws NullPointerException if txn is null or if lockMode is null. If LockMode is null and a running transaction is available
      *                              it will be aborted.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -88,7 +88,7 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long getAndLock(Transaction tx, LockMode lockMode);
+    long getAndLock(Transaction txn, LockMode lockMode);
 
     /**
      * Sets the new value.
@@ -125,26 +125,26 @@ public interface LongRef extends TransactionalObject {
    /**
     * Sets the new value using the provided transaction.
     *
-    * @param tx the {@link Transaction} used for this operation.
+    * @param txn the {@link Transaction} used for this operation.
     * @param value the new value
     * @return the old value
-    * @throws NullPointerException if tx is null.
+    * @throws NullPointerException if txn is null.
     * @throws org.multiverse.api.exceptions.TransactionExecutionException
     *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
     * @throws org.multiverse.api.exceptions.ControlFlowError
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
     *                  is guaranteed to have been aborted.
     */
-    long set(Transaction tx, long value);
+    long set(Transaction txn, long value);
 
     /**
     * Sets the new value using the provided transaction.
     *
-    * @param tx the {@link Transaction} used for this operation.
+    * @param txn the {@link Transaction} used for this operation.
     * @param value the new value
     * @param lockMode the lockMode used.
     * @return the old value
-    * @throws NullPointerException if tx is null or lockMode is null. If the lockMode is null and the transaction
+    * @throws NullPointerException if txn is null or lockMode is null. If the lockMode is null and the transaction
     *                              is alive, it will be aborted.
     * @throws org.multiverse.api.exceptions.TransactionExecutionException
     *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -152,7 +152,7 @@ public interface LongRef extends TransactionalObject {
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
     *                  is guaranteed to have been aborted.
     */
-    long setAndLock(Transaction tx, long value, LockMode lockMode);
+    long setAndLock(Transaction txn, long value, LockMode lockMode);
 
     /**
      * Sets the value the value and returns the new value.
@@ -190,16 +190,16 @@ public interface LongRef extends TransactionalObject {
      * Sets the value using the provided transaction.
      *
      * @param value the new value.
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @return the old value.
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long getAndSet(Transaction tx, long value);
+    long getAndSet(Transaction txn, long value);
 
     /**
      * Sets the value and acquired the Lock with the provided LockMode.
@@ -207,10 +207,10 @@ public interface LongRef extends TransactionalObject {
      * <p>This call lifts on the {@link org.multiverse.api.Transaction} stored in the {@link org.multiverse.api.ThreadLocalTransaction}.
      *
      * @param value the new value.
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param lockMode the LockMode used.
      * @return the old value.
-     * @throws NullPointerException if tx or LockMode is null. If the transaction is running, and the LockMode is null,
+     * @throws NullPointerException if txn or LockMode is null. If the transaction is running, and the LockMode is null,
      *                              it will be aborted.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -218,7 +218,7 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long getAndSetAndLock(Transaction tx, long value, LockMode lockMode);
+    long getAndSetAndLock(Transaction txn, long value, LockMode lockMode);
 
     /**
      * Atomically gets the value. The value could be stale as soon as it is returned. This
@@ -291,7 +291,7 @@ public interface LongRef extends TransactionalObject {
      *
      * <p>This call lifts on the {@link org.multiverse.api.Transaction} stored in the {@link org.multiverse.api.ThreadLocalTransaction}.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param function the function to apply to this reference.
      * @throws NullPointerException  if function is null. If there is an active transaction, it will be aborted.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -300,7 +300,7 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void commute(Transaction tx,LongFunction function);
+    void commute(Transaction txn,LongFunction function);
 
     /**
      * Atomically applies the function to the current value in this ref and returns the new value. This method doesn't care about
@@ -332,7 +332,7 @@ public interface LongRef extends TransactionalObject {
      * Alters the value stored in this Ref using the provided function and lifting on the provided transaction.
      *
      * @param function the function that alters the value stored in this Ref.
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @return the new value.
      * @throws NullPointerException if function or transaction is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -341,7 +341,7 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long alterAndGet(Transaction tx,LongFunction function);
+    long alterAndGet(Transaction txn,LongFunction function);
 
     /**
      * Atomically applies the function to alter the value stored in this ref and returns the old value. This method doesn't care about
@@ -374,7 +374,7 @@ public interface LongRef extends TransactionalObject {
      * Alters the value stored in this Ref using the function and returns the old value, using the provided transaction.
      *
      * @param function the function that alters the value stored in this Ref.
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @return the old value
      * @throws NullPointerException if function or transaction is null. The transaction will be aborted as well.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -383,7 +383,7 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long getAndAlter(Transaction tx, LongFunction function);
+    long getAndAlter(Transaction txn, LongFunction function);
 
     /**
      * Executes a compare and set atomically. This method doesn't care about any running transactions.
@@ -423,17 +423,17 @@ public interface LongRef extends TransactionalObject {
     /**
      * Increments the value and returns the old value using the provided transaction.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param amount the amount to increment with.
      * @return the old value.
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long getAndIncrement(Transaction tx, long amount);
+    long getAndIncrement(Transaction txn, long amount);
 
     /**
      * Atomically increments the value and returns the old value. This method doesn't care about any
@@ -463,17 +463,17 @@ public interface LongRef extends TransactionalObject {
     /**
      * Increments and gets the new value using the provided transaction.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param amount the amount to increment with.
      * @return the new value.
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    long incrementAndGet(Transaction tx, long amount);
+    long incrementAndGet(Transaction txn, long amount);
 
     /**
      * Increments the value by one.
@@ -497,15 +497,15 @@ public interface LongRef extends TransactionalObject {
      * <p>This call is able to commute if there are no dependencies on the value in the
      * transaction. That is why this method doesn't have a return value.
      *
-     * @param tx the {@link Transaction} used for this operation.
-     * @throws NullPointerException if tx is null.
+     * @param txn the {@link Transaction} used for this operation.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void increment(Transaction tx);
+    void increment(Transaction txn);
 
     /**
      * Increments the value by the given amount.
@@ -530,16 +530,16 @@ public interface LongRef extends TransactionalObject {
      * <p>This call is able to commute if there are no dependencies on the value in the
      * transaction. That is why this method doesn't have a return value.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param amount the amount to increment with
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void increment(Transaction tx, long amount);
+    void increment(Transaction txn, long amount);
 
     /**
      * Decrements the value by one.
@@ -563,15 +563,15 @@ public interface LongRef extends TransactionalObject {
      * <p>This call is able to commute if there are no dependencies on the value in the
      * transaction. That is why this method doesn't have a return value.
      *
-     * @param tx the {@link Transaction} used for this operation.
-     * @throws NullPointerException if tx is null.
+     * @param txn the {@link Transaction} used for this operation.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void decrement(Transaction tx);
+    void decrement(Transaction txn);
 
     /**
      * Decrements the value by the given amount.
@@ -596,16 +596,16 @@ public interface LongRef extends TransactionalObject {
      * <p>This call is able to commute if there are no dependencies on the value in the
      * transaction. That is why this method doesn't have a return value.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param amount the amount to decrement with
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void decrement(Transaction tx, long amount);
+    void decrement(Transaction txn, long amount);
 
     /**
      * Awaits for the value to become the given value. If the value already has the
@@ -626,16 +626,16 @@ public interface LongRef extends TransactionalObject {
      * Awaits for the reference to become the given value. If the value already has the
      * the specified value, the call continues, else a retry is done.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param value the value to wait for.
-     * @throws NullPointerException if tx is null.
+     * @throws NullPointerException if txn is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void await(Transaction tx,long value);
+    void await(Transaction txn,long value);
 
     /**
      * Awaits until the predicate holds.  If the value already evaluates to true, the call continues
@@ -660,9 +660,9 @@ public interface LongRef extends TransactionalObject {
      * else a retry is done. If the predicate throws an exception, the transaction is aborted and the
      * throwable is propagated.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param predicate the predicate to evaluate.
-     * @throws NullPointerException if predicate is null or tx is null. When there is a non dead transaction,
+     * @throws NullPointerException if predicate is null or txn is null. When there is a non dead transaction,
      *                              it will be aborted.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                  if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -670,5 +670,5 @@ public interface LongRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void await(Transaction tx, LongPredicate predicate);
+    void await(Transaction txn, LongPredicate predicate);
 }

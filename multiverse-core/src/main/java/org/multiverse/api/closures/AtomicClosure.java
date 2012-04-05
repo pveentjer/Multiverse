@@ -18,5 +18,5 @@ public interface AtomicClosure<E>{
      *           be null.
      * @return the result of the execution.
      */
-     E execute(Transaction tx)throws Exception;
+     E execute(Transaction txn)throws Exception;
 }

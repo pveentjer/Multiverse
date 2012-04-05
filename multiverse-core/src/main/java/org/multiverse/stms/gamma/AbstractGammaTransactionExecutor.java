@@ -5,16 +5,16 @@ import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
 
 /**
- * An abstract {@link GammaAtomicBlock} implementation.
+ * An abstract {@link GammaTransactionExecutor} implementation.
  *
  * @author Peter Veentjer.
  */
-public abstract class AbstractGammaAtomicBlock implements GammaAtomicBlock {
+public abstract class AbstractGammaTransactionExecutor implements GammaTransactionExecutor {
     protected final GammaTransactionFactory transactionFactory;
     protected final GammaTransactionConfiguration transactionConfiguration;
     protected final BackoffPolicy backoffPolicy;
 
-    public AbstractGammaAtomicBlock(final GammaTransactionFactory transactionFactory) {
+    public AbstractGammaTransactionExecutor(final GammaTransactionFactory transactionFactory) {
         if (transactionFactory == null) {
             throw new NullPointerException();
         }

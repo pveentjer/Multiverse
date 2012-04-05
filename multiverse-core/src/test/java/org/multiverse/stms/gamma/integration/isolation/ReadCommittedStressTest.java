@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
@@ -66,7 +66,7 @@ public class ReadCommittedStressTest {
 
         @Override
         public void doRun() {
-            AtomicBlock block = stm.getDefaultAtomicBlock();
+            TransactionExecutor block = stm.getDefaultTransactionExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
@@ -108,15 +108,15 @@ public class ReadCommittedStressTest {
                 }
             };
 
-            AtomicBlock readonlyReadtrackingBlock = stm.newTransactionFactoryBuilder()
+            TransactionExecutor readonlyReadtrackingBlock = stm.newTransactionFactoryBuilder()
                     .setReadonly(true)
                     .setReadTrackingEnabled(true)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
-            AtomicBlock updateReadtrackingBlock = stm.newTransactionFactoryBuilder()
+            TransactionExecutor updateReadtrackingBlock = stm.newTransactionFactoryBuilder()
                     .setReadonly(false)
                     .setReadTrackingEnabled(true)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             int k = 0;
             while (!stop) {

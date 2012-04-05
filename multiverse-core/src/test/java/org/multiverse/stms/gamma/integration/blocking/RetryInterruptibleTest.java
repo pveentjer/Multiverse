@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
@@ -57,9 +57,9 @@ public class RetryInterruptibleTest {
         }
 
         public void await() throws Exception {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setInterruptible(true)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             block.atomicChecked(new AtomicVoidClosure() {
                 @Override

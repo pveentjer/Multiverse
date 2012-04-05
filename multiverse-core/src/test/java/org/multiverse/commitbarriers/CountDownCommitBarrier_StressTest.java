@@ -137,7 +137,7 @@ public class CountDownCommitBarrier_StressTest {
         }
 
         public void doRun() {
-            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     sleepRandomMs(10);

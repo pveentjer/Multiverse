@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.LongRef;
@@ -33,9 +33,9 @@ public abstract class ReadersWritersProblem_AbstractTest {
     protected GammaStm stm;
 
 
-    protected abstract AtomicBlock newAcquiredBlock();
+    protected abstract TransactionExecutor newAcquiredBlock();
 
-    protected abstract AtomicBlock newAcquireBlock();
+    protected abstract TransactionExecutor newAcquireBlock();
 
     @Before
     public void setUp() {
@@ -154,8 +154,8 @@ public abstract class ReadersWritersProblem_AbstractTest {
 
         //-1  is write lock, 0 = free, positive number is readLock count.
         private final LongRef readerCount = newLongRef();
-        private AtomicBlock acquireReadLockBlock;
-        private AtomicBlock acquireWriteLockBlock;
+        private TransactionExecutor acquireReadLockBlock;
+        private TransactionExecutor acquireWriteLockBlock;
 
         public ReadersWritersLock() {
             acquireReadLockBlock = newAcquireBlock();

@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
 
@@ -36,16 +36,16 @@ public class QueueWithoutCapacity_FatVariableLengthGammaTransaction_StressTest e
     }
 
     @Override
-    protected AtomicBlock newPopBlock() {
+    protected TransactionExecutor newPopBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
     }
 
     @Override
-    protected AtomicBlock newPushBlock() {
+    protected TransactionExecutor newPushBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
     }
 }

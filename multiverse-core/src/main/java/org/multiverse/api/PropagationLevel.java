@@ -1,7 +1,7 @@
 package org.multiverse.api;
 
 /**
- * With the PropagationLevel you have control on how the {@link AtomicBlock} reacts on the existence or the non existence
+ * With the PropagationLevel you have control on how the {@link TransactionExecutor} reacts on the existence or the non existence
  * of a {@link Transaction}.
  *
  * @author Peter Veentjer.

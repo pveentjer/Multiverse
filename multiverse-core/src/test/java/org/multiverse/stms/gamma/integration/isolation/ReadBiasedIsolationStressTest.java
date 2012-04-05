@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
@@ -130,9 +130,9 @@ public class ReadBiasedIsolationStressTest {
 
         @Override
         public void doRun() {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setDirtyCheckEnabled(dirtyCheckEnabled)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             AtomicBooleanClosure closure = new AtomicBooleanClosure() {
                 @Override

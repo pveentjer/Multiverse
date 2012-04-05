@@ -18,5 +18,5 @@ public interface AtomicDoubleClosure{
      *           be null.
      * @return the result of the execution.
      */
-     double execute(Transaction tx)throws Exception;
+     double execute(Transaction txn)throws Exception;
 }

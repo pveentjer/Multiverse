@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.failureatomicity;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.TooManyRetriesException;
@@ -50,9 +50,9 @@ public class TooManyRetriesRollbackTest {
     }
 
     public void setAndAwaitUneven(final int value) {
-        AtomicBlock block = stm.newTransactionFactoryBuilder()
+        TransactionExecutor block = stm.newTransactionFactoryBuilder()
                 .setMaxRetries(10)
-                .newAtomicBlock();
+                .newTransactionExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -76,8 +76,8 @@ public class TooManyRetriesRollbackTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
-                    .newAtomicBlock();
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
+                    .newTransactionExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {

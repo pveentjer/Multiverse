@@ -18,5 +18,5 @@ public interface AtomicBooleanClosure{
      *           be null.
      * @return the result of the execution.
      */
-     boolean execute(Transaction tx)throws Exception;
+     boolean execute(Transaction txn)throws Exception;
 }

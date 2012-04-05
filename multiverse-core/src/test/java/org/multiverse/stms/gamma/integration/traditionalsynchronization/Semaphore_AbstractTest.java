@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -35,9 +35,9 @@ public abstract class Semaphore_AbstractTest {
         stop = false;
     }
 
-    protected abstract AtomicBlock newDownBlock();
+    protected abstract TransactionExecutor newDownBlock();
 
-    protected abstract AtomicBlock newUpBlock();
+    protected abstract TransactionExecutor newUpBlock();
 
     public void run() {
         semaphore = new Semaphore(resourceCount);
@@ -80,8 +80,8 @@ public abstract class Semaphore_AbstractTest {
 
         private GammaRef<Long> ref;
         private AtomicLong users = new AtomicLong();
-        private AtomicBlock upBlock = newUpBlock();
-        private AtomicBlock downBlock = newDownBlock();
+        private TransactionExecutor upBlock = newUpBlock();
+        private TransactionExecutor downBlock = newDownBlock();
 
         public Semaphore(int initial) {
             ref = new GammaRef<Long>(stm, new Long(initial));

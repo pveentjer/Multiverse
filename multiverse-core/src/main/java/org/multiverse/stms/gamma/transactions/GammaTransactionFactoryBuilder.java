@@ -7,7 +7,7 @@ import org.multiverse.api.PropagationLevel;
 import org.multiverse.api.TraceLevel;
 import org.multiverse.api.TransactionFactoryBuilder;
 import org.multiverse.api.lifecycle.TransactionListener;
-import org.multiverse.stms.gamma.GammaAtomicBlock;
+import org.multiverse.stms.gamma.GammaTransactionExecutor;
 
 /**
  * A {@link TransactionFactoryBuilder} tailored for the {@link org.multiverse.stms.gamma.GammaStm}.
@@ -79,5 +79,5 @@ public interface GammaTransactionFactoryBuilder extends TransactionFactoryBuilde
     GammaTransactionFactory newTransactionFactory();
 
     @Override
-    GammaAtomicBlock newAtomicBlock();
+    GammaTransactionExecutor newTransactionExecutor();
 }

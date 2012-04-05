@@ -7,11 +7,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
-import org.multiverse.stms.gamma.GammaAtomicBlock;
-import org.multiverse.stms.gamma.GammaConstants;
-import org.multiverse.stms.gamma.GammaObjectPool;
-import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.*;
+import org.multiverse.stms.gamma.GammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -65,11 +62,11 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            GammaAtomicBlock block = stm.newTransactionFactoryBuilder()
+            GammaTransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setSpeculative(false)
                     .setMaxRetries(100000)
                             //     .setReadLockMode(LockMode.Exclusive)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             final String name = getName();
 
@@ -521,7 +518,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
     class VariableReadingWithBlockThread extends TestThread {
 
-        private LeanGammaAtomicBlock block;
+        private LeanGammaTransactionExecutor block;
 
         public VariableReadingWithBlockThread(int id) {
             super("VariableReadingWithBlockThread-" + id);
@@ -535,7 +532,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
                     .setSpeculative(false)
                     .setDirtyCheckEnabled(false);
 
-            block = new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+            block = new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
 
             long iteration = 0;
             while (!stop) {
@@ -569,7 +566,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
     class FixedReadingWithBlockThread extends TestThread {
 
-        private LeanGammaAtomicBlock block;
+        private LeanGammaTransactionExecutor block;
         private GammaTransactionConfiguration config;
 
         public FixedReadingWithBlockThread(int id) {
@@ -582,7 +579,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
                     .setMaximumPoorMansConflictScanLength(0)
                     .setDirtyCheckEnabled(false);
 
-            block = new LeanGammaAtomicBlock(new FatFixedLengthGammaTransactionFactory(config));
+            block = new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
 
             long iteration = 0;
             while (!stop) {

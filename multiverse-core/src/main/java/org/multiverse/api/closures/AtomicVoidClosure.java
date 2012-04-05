@@ -16,5 +16,5 @@ public interface AtomicVoidClosure{
      *           be null.
      * @throws Exception if unable to compute a result
      */
-     void execute(Transaction tx)throws Exception;
+     void execute(Transaction txn)throws Exception;
 }

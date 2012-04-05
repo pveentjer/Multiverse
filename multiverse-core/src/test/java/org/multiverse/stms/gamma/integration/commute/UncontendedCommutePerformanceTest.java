@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.commute;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.functions.Functions;
@@ -65,9 +65,9 @@ public class UncontendedCommutePerformanceTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setDirtyCheckEnabled(false)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
@@ -90,8 +90,8 @@ public class UncontendedCommutePerformanceTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
-                    .newAtomicBlock();
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
+                    .newTransactionExecutor();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

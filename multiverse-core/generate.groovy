@@ -10,7 +10,7 @@ class AtomicClosure {
     String typeParameter
 }
 
-class AtomicBlock {
+class TransactionExecutor {
     String name
     boolean lean
 }
@@ -34,8 +34,8 @@ engine.init();
 
 def refs = createTransactionalObjects();
 def atomicClosures = createClosures();
-def atomicBlocks = [new AtomicBlock(name: 'FatGammaAtomicBlock', lean: false),
-        new AtomicBlock(name: 'LeanGammaAtomicBlock', lean: true)]
+def transactionExecutors = [new TransactionExecutor(name: 'FatGammaTransactionExecutor', lean: false),
+        new TransactionExecutor(name: 'LeanGammaTransactionExecutor', lean: true)]
 
 generateRefFactory(engine, refs);
 
@@ -49,13 +49,13 @@ for (def closure in atomicClosures) {
     generateAtomicClosure(engine, closure)
 }
 
-generateAtomicBlock(engine, atomicClosures)
+generateTransactionExecutor(engine, atomicClosures)
 //generateOrElseBlock(engine, atomicClosures)
 generateGammaOrElseBlock(engine, atomicClosures)
 generateStmUtils(engine, atomicClosures)
 
-for (def atomicBlock in atomicBlocks) {
-    generateGammaAtomicBlock(engine, atomicBlock, atomicClosures)
+for (def transactionExecutor in transactionExecutors) {
+    generateGammaTransactionExecutor(engine, transactionExecutor, atomicClosures)
 }
 
 
@@ -179,23 +179,23 @@ void generateAtomicClosure(VelocityEngine engine, AtomicClosure closure) {
     file.text = writer.toString()
 }
 
-void generateGammaAtomicBlock(VelocityEngine engine, AtomicBlock atomicBlock, List<AtomicClosure> closures) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaAtomicBlock.vm')
+void generateGammaTransactionExecutor(VelocityEngine engine, TransactionExecutor transactionExecutor, List<AtomicClosure> closures) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaTransactionExecutor.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('atomicBlock', atomicBlock)
+    context.put('transactionExecutor', transactionExecutor)
     context.put('closures', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File("src/main/java/org/multiverse/stms/gamma/${atomicBlock.name}.java")
+    File file = new File("src/main/java/org/multiverse/stms/gamma/${transactionExecutor.name}.java")
     file.createNewFile()
     file.text = writer.toString()
 }
 
-void generateAtomicBlock(VelocityEngine engine, List<AtomicClosure> closures) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/AtomicBlock.vm')
+void generateTransactionExecutor(VelocityEngine engine, List<AtomicClosure> closures) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/TransactionExecutor.vm')
 
     VelocityContext context = new VelocityContext()
     context.put('closures', closures)
@@ -203,7 +203,7 @@ void generateAtomicBlock(VelocityEngine engine, List<AtomicClosure> closures) {
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File('src/main/java/org/multiverse/api/AtomicBlock.java')
+    File file = new File('src/main/java/org/multiverse/api/TransactionExecutor.java')
     file.createNewFile()
     file.text = writer.toString()
 }

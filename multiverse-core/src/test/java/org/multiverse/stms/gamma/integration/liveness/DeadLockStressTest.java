@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.liveness;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -77,16 +77,16 @@ public class DeadLockStressTest {
 
     public class ChangeThread extends TestThread {
 
-        private final AtomicBlock normalBlock = stm.newTransactionFactoryBuilder()
-                .newAtomicBlock();
+        private final TransactionExecutor normalBlock = stm.newTransactionFactoryBuilder()
+                .newTransactionExecutor();
 
-        private final AtomicBlock pessimisticReadLevelBlock = stm.newTransactionFactoryBuilder()
+        private final TransactionExecutor pessimisticReadLevelBlock = stm.newTransactionFactoryBuilder()
                 .setReadLockMode(LockMode.Exclusive)
-                .newAtomicBlock();
+                .newTransactionExecutor();
 
-        private final AtomicBlock pessimisticWriteLevelBlock = stm.newTransactionFactoryBuilder()
+        private final TransactionExecutor pessimisticWriteLevelBlock = stm.newTransactionFactoryBuilder()
                 .setWriteLockMode(LockMode.Exclusive)
-                .newAtomicBlock();
+                .newTransactionExecutor();
 
         public ChangeThread(int id) {
             super("ChangeThread-" + id);

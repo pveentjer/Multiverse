@@ -5,7 +5,7 @@ package org.multiverse.api.exceptions;
  * failed, e.g. because it was locked or because a read or write conflict was detected.
  * <p/>
  * A ReadWriteConflict can in most cases be solved by retrying the {@link org.multiverse.api.Transaction} (this will
- * automatically be done by the {@link org.multiverse.api.AtomicBlock}).
+ * automatically be done by the {@link org.multiverse.api.TransactionExecutor}).
  *
  * @author Peter Veentjer.
  */

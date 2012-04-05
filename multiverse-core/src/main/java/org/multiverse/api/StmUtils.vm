@@ -21,8 +21,8 @@ public final class StmUtils {
 
     private final static RefFactory refFactory
         = getGlobalStmInstance().getDefaultRefFactory();
-    private final static AtomicBlock defaultAtomicBlock
-        = getGlobalStmInstance().getDefaultAtomicBlock();
+    private final static TransactionExecutor defaultTransactionExecutor
+        = getGlobalStmInstance().getDefaultTransactionExecutor();
     private final static OrElseBlock orelseBlock
         = getGlobalStmInstance().newOrElseBlock();
     private final static TransactionalCollectionsFactory transactionalCollectionsFactory
@@ -117,15 +117,15 @@ public final class StmUtils {
 
 #foreach($closure in $closures)
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+     * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
      * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
      * InvisibleCheckedException.
      *
-     * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-     * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+     * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
      *
      * @param closure The closure {@link ${closure.name}} to execute.
 #if(${closure.type} ne 'void')
@@ -137,19 +137,19 @@ public final class StmUtils {
      */
     public static ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} closure){
 #if(${closure.type} eq 'void')
-        defaultAtomicBlock.atomic(closure);
+        defaultTransactionExecutor.atomic(closure);
 #else
-        return defaultAtomicBlock.atomic(closure);
+        return defaultTransactionExecutor.atomic(closure);
 #end
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default AtomicBlock. If a
+    * Executes the closure transactionally on the GlobalStmInstance using the default TransactionExecutor. If a
     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
-    * <p>If you want to get most out of performance, it is best to make use of a customized {@link AtomicBlock} instead
-    * of relying on the default AtomicBlock that will always provide the most expensive transaction available.
+    * <p>If you want to get most out of performance, it is best to make use of a customized {@link TransactionExecutor} instead
+    * of relying on the default TransactionExecutor that will always provide the most expensive transaction available.
     *
     * @param closure The {@link ${closure.name}} to execute.
 #if(${closure.type} ne 'void')
@@ -160,9 +160,9 @@ public final class StmUtils {
     */
    public static ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} closure) throws Exception{
 #if(${closure.type} eq 'void')
-       defaultAtomicBlock.atomicChecked(closure);
+       defaultTransactionExecutor.atomicChecked(closure);
 #else
-       return defaultAtomicBlock.atomicChecked(closure);
+       return defaultTransactionExecutor.atomicChecked(closure);
 #end
    }
 
@@ -311,7 +311,7 @@ public final class StmUtils {
      * to happen on certain datastructures, e.g. an item to come available on a transactional blocking queue.
      *
      * <p>Under the hood the retry throws an Retry that will be caught up the callstack
-     * (by the {@link AtomicBlock} for example). The Retry should not be caught by user code in almost all cases.
+     * (by the {@link TransactionExecutor} for example). The Retry should not be caught by user code in almost all cases.
      */
     public static void retry() {
         Transaction tx = getRequiredThreadLocalTransaction();

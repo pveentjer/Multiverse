@@ -82,7 +82,7 @@ public interface TransactionConfiguration {
      * Checks if speculative configuration is enabled. When enabled the STM is able to select better
      * performing/scalable implementations at the cost of some
      * {@link org.multiverse.api.exceptions.SpeculativeConfigurationError}. This will be caught by the
-     * AtomicBlock and the transaction will be retried, so in most cases this is not something to worry
+     * TransactionExecutor and the transaction will be retried, so in most cases this is not something to worry
      * about, but it can be confusing in the beginning because of unexpected failures in the execution
      * of transactions.
      *

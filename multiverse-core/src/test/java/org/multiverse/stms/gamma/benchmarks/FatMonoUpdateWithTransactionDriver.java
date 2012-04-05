@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.stms.gamma.GammaAtomicBlock;
+import org.multiverse.stms.gamma.GammaTransactionExecutor;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -55,11 +55,11 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
         final GammaLongRef ref = new GammaLongRef(stm, 0);
         long initialVersion = ref.getVersion();
 
-        final GammaAtomicBlock block = stm.newTransactionFactoryBuilder()
+        final GammaTransactionExecutor block = stm.newTransactionFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(false)
                 .setWriteLockMode(writeLockMode)
-                .newAtomicBlock();
+                .newTransactionExecutor();
 
         final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override

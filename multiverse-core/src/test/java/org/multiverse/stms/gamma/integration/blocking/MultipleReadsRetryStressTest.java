@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
@@ -38,7 +38,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
     @Test
     public void withMapTransactionAnd2Threads() throws InterruptedException {
         FatVariableLengthGammaTransactionFactory txFactory = new FatVariableLengthGammaTransactionFactory(stm);
-        test(new LeanGammaAtomicBlock(txFactory), 10, 2);
+        test(new LeanGammaTransactionExecutor(txFactory), 10, 2);
     }
 
     @Test
@@ -46,13 +46,13 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         int refCount = 10;
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount + 1);
         FatFixedLengthGammaTransactionFactory txFactory = new FatFixedLengthGammaTransactionFactory(config);
-        test(new LeanGammaAtomicBlock(txFactory), refCount, 2);
+        test(new LeanGammaTransactionExecutor(txFactory), refCount, 2);
     }
 
     @Test
     public void withMapTransactionAnd5Threads() throws InterruptedException {
         FatVariableLengthGammaTransactionFactory txFactory = new FatVariableLengthGammaTransactionFactory(stm);
-        test(new LeanGammaAtomicBlock(txFactory), 10, 5);
+        test(new LeanGammaTransactionExecutor(txFactory), 10, 5);
     }
 
     @Test
@@ -60,10 +60,10 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         int refCount = 10;
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount + 1);
         FatFixedLengthGammaTransactionFactory txFactory = new FatFixedLengthGammaTransactionFactory(config);
-        test(new LeanGammaAtomicBlock(txFactory), refCount, 5);
+        test(new LeanGammaTransactionExecutor(txFactory), refCount, 5);
     }
 
-    public void test(AtomicBlock atomicBlock, int refCount, int threadCount) throws InterruptedException {
+    public void test(TransactionExecutor transactionExecutor, int refCount, int threadCount) throws InterruptedException {
         refs = new GammaLongRef[refCount];
         for (int k = 0; k < refs.length; k++) {
             refs[k] = new GammaLongRef(stm);
@@ -71,7 +71,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
         UpdateThread[] threads = new UpdateThread[threadCount];
         for (int k = 0; k < threads.length; k++) {
-            threads[k] = new UpdateThread(k, atomicBlock, threadCount);
+            threads[k] = new UpdateThread(k, transactionExecutor, threadCount);
         }
 
         startAll(threads);
@@ -106,14 +106,14 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
     private class UpdateThread extends TestThread {
 
-        private final AtomicBlock atomicBlock;
+        private final TransactionExecutor transactionExecutor;
         private final int id;
         private final int threadCount;
         private long count;
 
-        public UpdateThread(int id, AtomicBlock atomicBlock, int threadCount) {
+        public UpdateThread(int id, TransactionExecutor transactionExecutor, int threadCount) {
             super("UpdateThread-" + id);
-            this.atomicBlock = atomicBlock;
+            this.transactionExecutor = transactionExecutor;
             this.id = id;
             this.threadCount = threadCount;
         }
@@ -148,7 +148,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                 }
 
                 try {
-                    atomicBlock.atomic(closure);
+                    transactionExecutor.atomic(closure);
                 } catch (StopException e) {
                     break;
                 }

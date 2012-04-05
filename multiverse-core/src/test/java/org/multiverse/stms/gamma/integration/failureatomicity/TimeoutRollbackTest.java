@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.failureatomicity;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
@@ -43,9 +43,9 @@ public class TimeoutRollbackTest {
     }
 
     public void setAndTimeout() {
-        AtomicBlock block = stm.newTransactionFactoryBuilder()
+        TransactionExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(1))
-                .newAtomicBlock();
+                .newTransactionExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override

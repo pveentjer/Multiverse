@@ -74,7 +74,7 @@ public class CountDownCommitBarrier_IntegrationTest {
         public void doRun() throws Exception {
             final LongRef ref = stm.getDefaultRefFactory().newLongRef(1);
 
-            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     AwaitThread.this.tx = tx;

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicIntClosure;
@@ -41,9 +41,9 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         stop = false;
     }
 
-    protected abstract AtomicBlock newReturnBlock();
+    protected abstract TransactionExecutor newReturnBlock();
 
-    protected abstract AtomicBlock newTakeBlock();
+    protected abstract TransactionExecutor newTakeBlock();
 
     @Test
     public void sanityTest() {
@@ -74,17 +74,17 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
     }
 
     class ConnectionPool {
-        final AtomicBlock takeConnectionBlock = newTakeBlock();
+        final TransactionExecutor takeConnectionBlock = newTakeBlock();
 
-        final AtomicBlock returnConnectionBlock = newReturnBlock();
+        final TransactionExecutor returnConnectionBlock = newReturnBlock();
 
-        final AtomicBlock sizeBlock = stm.newTransactionFactoryBuilder().newAtomicBlock();
+        final TransactionExecutor sizeBlock = stm.newTransactionFactoryBuilder().newTransactionExecutor();
 
         final GammaIntRef size = new GammaIntRef(stm);
         final GammaRef<Node<Connection>> head = new GammaRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
-            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) {
                     size.set(poolsize);

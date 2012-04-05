@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * An {@link Error} thrown to regulate control flow inside multiverse {@link org.multiverse.api.AtomicBlock}. Normally
+ * An {@link Error} thrown to regulate control flow inside multiverse {@link org.multiverse.api.TransactionExecutor}. Normally
  * it would be a very bad thing to regulate control flow using an exception/error, but to make seamless integration in the Java
  * language possible, there is no better alternative. So these exceptions should not catch unless you really know know what you
  * are doing. So catching all Throwable instances (including Error) is a bad practice.
@@ -24,7 +24,7 @@ package org.multiverse.api.exceptions;
  *
  * <h3>Instance Caching</h3>
  *
- * <p>Normally ControlFlowErrors are cached to be reused because they can be thrown very often to be caught by the AtomicBlock
+ * <p>Normally ControlFlowErrors are cached to be reused because they can be thrown very often to be caught by the TransactionExecutor
  * and discarded. Especially the stacktrace is very expensive to create. By default all ControlFlowErrors are reused
  * but with the {@link org.multiverse.api.TransactionFactoryBuilder#setControlFlowErrorsReused(boolean)} this behavior
  * can be changed. It also can be configured on the Stm level, depending on the Stm implementation. For the

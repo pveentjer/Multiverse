@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -28,9 +28,9 @@ public abstract class ConditionVariable_AbstractTest {
         clearThreadLocalTransaction();
     }
 
-    protected abstract AtomicBlock newPopBlock();
+    protected abstract TransactionExecutor newPopBlock();
 
-    protected abstract AtomicBlock newPushBlock();
+    protected abstract TransactionExecutor newPushBlock();
 
 
     public void run() {
@@ -80,8 +80,8 @@ public abstract class ConditionVariable_AbstractTest {
         Ref<Node> head = newRef();
         IntRef size = newIntRef();
         final int capacity;
-        final AtomicBlock pushBlock = newPushBlock();
-        final AtomicBlock popBlock = newPopBlock();
+        final TransactionExecutor pushBlock = newPushBlock();
+        final TransactionExecutor popBlock = newPopBlock();
 
         Stack(int capacity) {
             this.capacity = capacity;

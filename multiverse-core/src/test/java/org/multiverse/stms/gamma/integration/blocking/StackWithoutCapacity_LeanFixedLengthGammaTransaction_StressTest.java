@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.api.TransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransactionFactory;
 
 public class StackWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest extends StackWithoutCapacity_AbstractTest {
@@ -13,12 +13,12 @@ public class StackWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest ext
     }
 
     @Override
-    protected AtomicBlock newPopAtomicBLock() {
-        return new LeanGammaAtomicBlock(new LeanFixedLengthGammaTransactionFactory(stm));
+    protected TransactionExecutor newPopTransactionExecutor() {
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(stm));
     }
 
     @Override
-    protected AtomicBlock newPushAtomicBLock() {
-        return new LeanGammaAtomicBlock(new LeanFixedLengthGammaTransactionFactory(stm));
+    protected TransactionExecutor newPushTransactionExecutor() {
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(stm));
     }
 }

@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -26,9 +26,9 @@ public abstract class ProducerConsumer_AbstractTest {
     private static final int MAX_CAPACITY = 100;
     protected GammaStm stm;
 
-    protected abstract AtomicBlock newPutBlock();
+    protected abstract TransactionExecutor newPutBlock();
 
-    protected abstract AtomicBlock newTakeBlock();
+    protected abstract TransactionExecutor newTakeBlock();
 
     @Before
     public void setUp() {
@@ -98,8 +98,8 @@ public abstract class ProducerConsumer_AbstractTest {
     class Buffer {
         private final IntRef size = newIntRef();
         private final IntRef[] items;
-        private final AtomicBlock takeBlock = newTakeBlock();
-        private final AtomicBlock putBlock = newPutBlock();
+        private final TransactionExecutor takeBlock = newTakeBlock();
+        private final TransactionExecutor putBlock = newPutBlock();
 
 
         Buffer() {

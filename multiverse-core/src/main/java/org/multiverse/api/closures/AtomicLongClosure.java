@@ -18,5 +18,5 @@ public interface AtomicLongClosure{
      *           be null.
      * @return the result of the execution.
      */
-     long execute(Transaction tx)throws Exception;
+     long execute(Transaction txn)throws Exception;
 }

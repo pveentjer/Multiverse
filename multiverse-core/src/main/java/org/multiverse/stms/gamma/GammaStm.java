@@ -35,7 +35,7 @@ public final class GammaStm implements Stm {
     public final GlobalConflictCounter globalConflictCounter = new GlobalConflictCounter();
     public final GammaRefFactoryImpl defaultRefFactory = new GammaRefFactoryImpl();
     public final GammaRefFactoryBuilder refFactoryBuilder = new GammaRefFactoryBuilderImpl();
-    public final GammaAtomicBlock defaultAtomicBlock;
+    public final GammaTransactionExecutor defaultTransactionExecutor;
     public final GammaTransactionConfiguration defaultConfig;
     public final NaiveTransactionalCollectionFactory defaultTransactionalCollectionFactory
             = new NaiveTransactionalCollectionFactory(this);
@@ -54,9 +54,9 @@ public final class GammaStm implements Stm {
         this.defaultBackoffPolicy = configuration.backoffPolicy;
         this.defaultConfig = new GammaTransactionConfiguration(this, configuration)
                 .setSpinCount(spinCount);
-        this.defaultAtomicBlock = newTransactionFactoryBuilder()
+        this.defaultTransactionExecutor = newTransactionFactoryBuilder()
                 .setSpeculative(false)
-                .newAtomicBlock();
+                .newTransactionExecutor();
         this.readBiasedThreshold = configuration.readBiasedThreshold;
     }
 
@@ -66,8 +66,8 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaAtomicBlock getDefaultAtomicBlock() {
-        return defaultAtomicBlock;
+    public final GammaTransactionExecutor getDefaultTransactionExecutor() {
+        return defaultTransactionExecutor;
     }
 
     @Override
@@ -262,17 +262,17 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaAtomicBlock newAtomicBlock() {
+        public final GammaTransactionExecutor newTransactionExecutor() {
             config.init();
 
-            if (leanAtomicBlock()) {
-                return new LeanGammaAtomicBlock(newTransactionFactory());
+            if (isLean()) {
+                return new LeanGammaTransactionExecutor(newTransactionFactory());
             } else {
-                return new FatGammaAtomicBlock(newTransactionFactory());
+                return new FatGammaTransactionExecutor(newTransactionFactory());
             }
         }
 
-        private boolean leanAtomicBlock() {
+        private boolean isLean() {
             return config.propagationLevel == PropagationLevel.Requires;
         }
 

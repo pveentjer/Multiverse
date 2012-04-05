@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
 
@@ -35,35 +35,35 @@ public class NonReentrantReadWriteLock_FatVariableLengthGammaTransaction_StressT
         run();
     }
 
-    protected AtomicBlock newReleaseWriteLockBlock() {
+    protected TransactionExecutor newReleaseWriteLockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
 
     }
 
-    protected AtomicBlock newAcquireWriteLockBlock() {
+    protected TransactionExecutor newAcquireWriteLockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
 
     }
 
-    protected AtomicBlock newReleaseReadLockBlock() {
+    protected TransactionExecutor newReleaseReadLockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
 
     }
 
-    protected AtomicBlock newAcquireReadLockBlock() {
+    protected TransactionExecutor newAcquireReadLockBlock() {
         GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaAtomicBlock(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
 
     }
 }

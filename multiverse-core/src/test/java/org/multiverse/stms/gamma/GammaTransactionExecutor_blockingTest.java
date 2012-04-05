@@ -14,7 +14,7 @@ import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
-public class GammaAtomicBlock_blockingTest {
+public class GammaTransactionExecutor_blockingTest {
 
     private GammaStm stm;
 
@@ -34,7 +34,7 @@ public class GammaAtomicBlock_blockingTest {
         sleepMs(1000);
         assertAlive(t);
 
-        stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -56,7 +56,7 @@ public class GammaAtomicBlock_blockingTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultAtomicBlock().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

@@ -7,7 +7,7 @@ import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaAtomicBlock;
+import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransactionFactory;
@@ -41,7 +41,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
         final GammaRef<String> ref = new GammaRef<String>(stm, null);
         long initialVersion = ref.getVersion();
 
-        final LeanGammaAtomicBlock block = new LeanGammaAtomicBlock(new LeanMonoGammaTransactionFactory(stm));
+        final LeanGammaTransactionExecutor block = new LeanGammaTransactionExecutor(new LeanMonoGammaTransactionFactory(stm));
 
         final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override

@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.TransactionMandatoryException;
  * The Container wraps the Transaction, so if a Thread gets a reference to that container and holds it, it
  * can modify the current transaction with a direct field access instead of another threadlocal access. It should
  * be used with extreme care, because the Container should not leak to another thread. It is very useful for the
- * {@link AtomicBlock} for example because a get/getAndSet/clear needs to be called otherwise.
+ * {@link TransactionExecutor} for example because a get/getAndSet/clear needs to be called otherwise.
  *
  * @author Peter Veentjer.
  */

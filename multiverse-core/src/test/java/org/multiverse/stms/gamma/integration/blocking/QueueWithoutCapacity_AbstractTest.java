@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -25,9 +25,9 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
     private Queue<Integer> queue;
     private int itemCount = 10 * 1000 * 1000;
 
-    protected abstract AtomicBlock newPopBlock();
+    protected abstract TransactionExecutor newPopBlock();
 
-    protected abstract AtomicBlock newPushBlock();
+    protected abstract TransactionExecutor newPushBlock();
 
     @Before
     public void setUp() {
@@ -94,8 +94,8 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
     class Queue<E> {
         final Stack<E> pushedStack = new Stack<E>();
         final Stack<E> readyToPopStack = new Stack<E>();
-        final AtomicBlock pushBlock = newPushBlock();
-        final AtomicBlock popBlock = newPopBlock();
+        final TransactionExecutor pushBlock = newPushBlock();
+        final TransactionExecutor popBlock = newPopBlock();
 
         public void push(final E item) {
             pushBlock.atomic(new AtomicVoidClosure() {

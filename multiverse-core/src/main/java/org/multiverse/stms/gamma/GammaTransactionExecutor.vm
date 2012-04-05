@@ -10,22 +10,22 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaAtomicBlock made for the GammaStm.
+* An GammaTransactionExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
-    private static final Logger logger = Logger.getLogger(${atomicBlock.name}.class.getName());
+public final class ${transactionExecutor.name} extends AbstractGammaTransactionExecutor{
+    private static final Logger logger = Logger.getLogger(${transactionExecutor.name}.class.getName());
 
-#if(!${atomicBlock.lean})
+#if(!${transactionExecutor.lean})
     private final PropagationLevel propagationLevel;
 #end
 
-    public ${atomicBlock.name}(final GammaTransactionFactory transactionFactory) {
+    public ${transactionExecutor.name}(final GammaTransactionFactory transactionFactory) {
         super(transactionFactory);
-#if(!${atomicBlock.lean})
+#if(!${transactionExecutor.lean})
         this.propagationLevel = transactionConfiguration.propagationLevel;
 #end
     }
@@ -51,7 +51,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
         }
     }
 
-#if(${atomicBlock.lean})
+#if(${transactionExecutor.lean})
     @Override
     public final ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
@@ -87,7 +87,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
 #transactionLogic()
         }
 
-#else ## end of atomicblock.lean
+#else ## end of transactionExecutor.lean
     public ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
         if(closure == null){
@@ -152,7 +152,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for atomicblock '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
                                     transactionConfiguration.familyName));
                         }
 
@@ -180,7 +180,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for atomicblock '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -281,7 +281,7 @@ public final class ${atomicBlock.name} extends AbstractGammaAtomicBlock{
 #transactionLogic()
         }
 
-    #end ##end of atomicblock.lean
+    #end ##end of transactionExecutor.lean
 #end ##end of for loop over closures
 #macro( transactionLogic )
             boolean abort = true;

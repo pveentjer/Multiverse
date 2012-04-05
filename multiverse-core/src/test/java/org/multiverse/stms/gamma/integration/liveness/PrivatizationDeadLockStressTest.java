@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.liveness;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -57,10 +57,10 @@ public class PrivatizationDeadLockStressTest {
 
         @Override
         public void doRun() throws Exception {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setSpinCount(1000)
                     .setMaxRetries(10000)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

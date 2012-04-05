@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.AtomicBlock;
+import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicLongClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
 
-public class GammaAtomicBlock_integrationTest implements GammaConstants {
+public class GammaTransactionExecutor_integrationTest implements GammaConstants {
 
     private GammaStm stm;
 
@@ -29,7 +29,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
     public void whenRead() {
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        AtomicBlock block = stm.newTransactionFactoryBuilder().newAtomicBlock();
+        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
         long result = block.atomic(new AtomicLongClosure() {
             @Override
             public long execute(Transaction tx) throws Exception {
@@ -46,7 +46,7 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
     public void whenUpdate() {
         final GammaLongRef ref = new GammaLongRef(stm, 0);
 
-        AtomicBlock block = stm.newTransactionFactoryBuilder().newAtomicBlock();
+        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
         block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
@@ -65,9 +65,9 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
         ref.openForWrite(otherTx, LOCKMODE_EXCLUSIVE);
 
         try {
-            AtomicBlock block = stm.newTransactionFactoryBuilder()
+            TransactionExecutor block = stm.newTransactionFactoryBuilder()
                     .setMaxRetries(100)
-                    .newAtomicBlock();
+                    .newTransactionExecutor();
 
             block.atomic(new AtomicVoidClosure() {
                 @Override
@@ -86,9 +86,9 @@ public class GammaAtomicBlock_integrationTest implements GammaConstants {
     public void whenMultipleUpdatesDoneInSingleTransaction() {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        AtomicBlock block = stm.newTransactionFactoryBuilder()
+        TransactionExecutor block = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
-                .newAtomicBlock();
+                .newTransactionExecutor();
         block.atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {

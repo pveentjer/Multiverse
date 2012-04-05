@@ -8,7 +8,7 @@
             Normally STM's are very optimistic, so this means that a transaction can fail when it commits because
             anothertransaction has updated data it has read. When this happens, a
             org.multiverse.api.exceptions.ControlFlowError is thrown (in this case a org.multiverse.api.exceptions.ReadWriteConflict),
-            which is caught by the org.multiverse.api.AtomicBlock and the transaction is retried. In some cases the optimistic nature
+            which is caught by the org.multiverse.api.TransactionExecutor and the transaction is retried. In some cases the optimistic nature
             can be problematic and something more pessimistic is needed. Multiverse provides support for pessimistic behavior on the
             Ref level using the Ref.getLock or on the Transaction level by setting the readLockMode or writeLockMode.
         </para>
