@@ -14,21 +14,21 @@ public interface TransactionalStack<E> extends TransactionalCollection<E> {
 
     void push(E item);
 
-    void push(Transaction tx, E item);
+    void push(Transaction txn, E item);
 
     boolean offer(E item);
 
-    boolean offer(Transaction tx, E item);
+    boolean offer(Transaction txn, E item);
 
     E pop();
 
-    E pop(Transaction tx);
+    E pop(Transaction txn);
 
     E poll();
 
-    E poll(Transaction tx);
+    E poll(Transaction txn);
 
     E peek();
 
-    E peek(Transaction tx);
+    E peek(Transaction txn);
 }

@@ -41,7 +41,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+     * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
      * @throws Exception                    if the atomicChecked call fails.
      */
     <E> E executeChecked(AtomicClosure<E> either, AtomicClosure<E> orelse) throws Exception;
@@ -58,7 +58,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+     * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */

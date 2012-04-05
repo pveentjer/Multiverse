@@ -13,21 +13,21 @@ public interface TransactionalQueue<E> extends TransactionalCollection<E>, Queue
 
     int getCapacity();
 
-    E remove(Transaction tx);
+    E remove(Transaction txn);
 
-    E element(Transaction tx);
+    E element(Transaction txn);
 
     boolean offer(Transaction tx, E item);
 
     void put(E item);
 
-    void put(Transaction tx, E item);
+    void put(Transaction txn, E item);
 
     E take();
 
-    E take(Transaction tx);
+    E take(Transaction txn);
 
-    E poll(Transaction tx);
+    E poll(Transaction txn);
 
-    E peek(Transaction tx);
+    E peek(Transaction txn);
 }

@@ -6,53 +6,53 @@ import java.util.Deque;
 
 public interface TransactionalDeque<E> extends TransactionalQueue<E>, Deque<E> {
 
-    boolean offerFirst(Transaction tx, E e);
+    boolean offerFirst(Transaction txn, E e);
 
-    E pollLast(Transaction tx);
+    E pollLast(Transaction txn);
 
-    E pollFirst(Transaction tx);
+    E pollFirst(Transaction txn);
 
-    E peekFirst(Transaction tx);
+    E peekFirst(Transaction txn);
 
     void putFirst(E item);
 
-    void putFirst(Transaction tx, E item);
+    void putFirst(Transaction txn, E item);
 
     E takeFirst();
 
-    E takeFirst(Transaction tx);
+    E takeFirst(Transaction txn);
 
-    boolean offerLast(Transaction tx, E e);
+    boolean offerLast(Transaction txn, E e);
 
-    E peekLast(Transaction tx);
+    E peekLast(Transaction txn);
 
     void putLast(E item);
 
-    void putLast(Transaction tx, E item);
+    void putLast(Transaction txn, E item);
 
     E takeLast();
 
-    E takeLast(Transaction tx);
+    E takeLast(Transaction txn);
 
-    void addFirst(Transaction tx, E e);
+    void addFirst(Transaction txn, E e);
 
-    void addLast(Transaction tx, E e);
+    void addLast(Transaction txn, E e);
 
-    E removeFirst(Transaction tx);
+    E removeFirst(Transaction txn);
 
-    E removeLast(Transaction tx);
+    E removeLast(Transaction txn);
 
-    E getFirst(Transaction tx);
+    E getFirst(Transaction txn);
 
-    E getLast(Transaction tx);
+    E getLast(Transaction txn);
 
-    boolean removeFirstOccurrence(Transaction tx, Object o);
+    boolean removeFirstOccurrence(Transaction txn, Object o);
 
-    boolean removeLastOccurrence(Transaction tx, Object o);
+    boolean removeLastOccurrence(Transaction txn, Object o);
 
-    void push(Transaction tx, E e);
+    void push(Transaction txn, E e);
 
-    E pop(Transaction tx);
+    E pop(Transaction txn);
 
-    TransactionalIterator<E> descendingIterator(Transaction tx);
+    TransactionalIterator<E> descendingIterator(Transaction txn);
 }

@@ -63,7 +63,7 @@ public interface BooleanRef extends TransactionalObject {
     /**
      * Gets the value using the provided transaction.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @return the value stored in the ref.
      * @throws NullPointerException if tx is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -72,12 +72,12 @@ public interface BooleanRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    boolean get(Transaction tx);
+    boolean get(Transaction txn);
 
     /**
      * Gets the value using the provided transaction and acquired the lock with the specified LockMode.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param lockMode the LockMode used
      * @return the value stored in the ref.
      * @throws NullPointerException if tx is null or if lockMode is null. If LockMode is null and a running transaction is available
@@ -88,7 +88,7 @@ public interface BooleanRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    boolean getAndLock(Transaction tx, LockMode lockMode);
+    boolean getAndLock(Transaction txn, LockMode lockMode);
 
     /**
      * Sets the new value.
@@ -135,7 +135,7 @@ public interface BooleanRef extends TransactionalObject {
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
     *                  is guaranteed to have been aborted.
     */
-    boolean set(Transaction tx, boolean value);
+    boolean set(Transaction txn, boolean value);
 
     /**
     * Sets the new value using the provided transaction.
@@ -152,7 +152,7 @@ public interface BooleanRef extends TransactionalObject {
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
     *                  is guaranteed to have been aborted.
     */
-    boolean setAndLock(Transaction tx, boolean value, LockMode lockMode);
+    boolean setAndLock(Transaction txn, boolean value, LockMode lockMode);
 
     /**
      * Sets the value the value and returns the new value.
@@ -199,7 +199,7 @@ public interface BooleanRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    boolean getAndSet(Transaction tx, boolean value);
+    boolean getAndSet(Transaction txn, boolean value);
 
     /**
      * Sets the value and acquired the Lock with the provided LockMode.
@@ -218,7 +218,7 @@ public interface BooleanRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    boolean getAndSetAndLock(Transaction tx, boolean value, LockMode lockMode);
+    boolean getAndSetAndLock(Transaction txn, boolean value, LockMode lockMode);
 
     /**
      * Atomically gets the value. The value could be stale as soon as it is returned. This
@@ -291,7 +291,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * <p>This call lifts on the {@link org.multiverse.api.Transaction} stored in the {@link org.multiverse.api.ThreadLocalTransaction}.
      *
-     * @param tx the {@link Transaction} used for this operation.
+     * @param txn the {@link Transaction} used for this operation.
      * @param function the function to apply to this reference.
      * @throws NullPointerException  if function is null. If there is an active transaction, it will be aborted.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -300,7 +300,7 @@ public interface BooleanRef extends TransactionalObject {
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *                  is guaranteed to have been aborted.
      */
-    void commute(Transaction tx,BooleanFunction function);
+    void commute(Transaction txn,BooleanFunction function);
 
     /**
      * Atomically applies the function to the current value in this ref and returns the new value. This method doesn't care about

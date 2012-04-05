@@ -126,7 +126,7 @@ public interface Lock {
      * Gets the LockMode the transaction has on the Lock. This call makes use of the tx. To retrieve the actual
      * LockMode of the Lock, you need to use the {@link #atomicGetLockMode()}
      *
-     * @param tx the Lock
+     * @param txn the Lock
      * @return the LockMode the transaction has on the Lock.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *          if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -136,7 +136,7 @@ public interface Lock {
      * @see #atomicGetLockMode()
      * @see #getLockMode(Transaction)
      */
-    LockMode getLockMode(Transaction tx);
+    LockMode getLockMode(Transaction txn);
 
     /**
      * Acquires a Lock with the provided LockMode. This call doesn't block if the Lock can't be upgraded, but throws
@@ -167,7 +167,7 @@ public interface Lock {
      *
      * <p>If the lockMode is lower than the LockMode the transaction already has on this Lock, the call is ignored.
      *
-     * @param tx              the Transaction used for this operation.
+     * @param txn              the Transaction used for this operation.
      * @param desiredLockMode the desired lockMode.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                              if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -177,5 +177,5 @@ public interface Lock {
      * @throws NullPointerException if tx or desiredLockMode is null. If an alive transaction is available, it will
      *                              be aborted.
      */
-    void acquire(Transaction tx, LockMode desiredLockMode);
+    void acquire(Transaction txn, LockMode desiredLockMode);
 }

@@ -115,13 +115,13 @@ public interface TransactionalObject {
     /**
      * Returns a String representation of the object using the provided {@link Transaction}.
      *
-     * @param tx the Transaction used.
+     * @param txn the Transaction used.
      * @return the String representation of the object.
      * @throws NullPointerException if tx is null.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
      */
-    String toString(Transaction tx);
+    String toString(Transaction txn);
 
     /**
      * Returns a String representation of the object using the provided transaction without looking

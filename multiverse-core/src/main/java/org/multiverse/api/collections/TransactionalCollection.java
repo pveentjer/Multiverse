@@ -25,20 +25,20 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
     /**
      * Returns <tt>true</tt> if this collection contains no elements.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @return <tt>true</tt> if this collection contains no elements
      */
-    boolean isEmpty(Transaction tx);
+    boolean isEmpty(Transaction txn);
 
     /**
      * Returns the number of elements in this collection.  If this collection
      * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
      * <tt>Integer.MAX_VALUE</tt>.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @return the number of elements in this collection
      */
-    int size(Transaction tx);
+    int size(Transaction txn);
 
     /**
      * Returns <tt>true</tt> if this collection contains the specified element.
@@ -46,7 +46,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * contains at least one element <tt>e</tt> such that
      * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @param o  element whose presence in this collection is to be tested
      * @return <tt>true</tt> if this collection contains the specified
      *         element
@@ -55,13 +55,13 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws NullPointerException if the specified element is null and this
      *                              collection does not permit null elements (optional)
      */
-    boolean contains(Transaction tx, Object o);
+    boolean contains(Transaction txn, Object o);
 
     /**
      * Returns <tt>true</tt> if this collection contains all of the elements
      * in the specified collection.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @param c  collection to be checked for containment in this collection
      * @return <tt>true</tt> if this collection contains all of the elements
      *         in the specified collection
@@ -73,7 +73,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                              elements (optional), or if the specified collection is null
      * @see #contains(Object)
      */
-    boolean containsAll(Transaction tx, Collection<?> c);
+    boolean containsAll(Transaction txn, Collection<?> c);
 
     /**
      * Removes a single instance of the specified element from this
@@ -84,7 +84,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * <tt>true</tt> if this collection contained the specified element (or
      * equivalently, if this collection changed as a result of the call).
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @param o element to be removed from this collection, if present
      * @return <tt>true</tt> if an element was removed as a result of this call
      * @throws ClassCastException            if the type of the specified element
@@ -94,17 +94,17 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws UnsupportedOperationException if the <tt>remove</tt> operation
      *                                       is not supported by this collection
      */
-    boolean remove(Transaction tx, Object o);
+    boolean remove(Transaction txn, Object o);
 
     /**
      * Removes all of the elements from this collection (optional operation).
      * The collection will be empty after this method returns.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @throws UnsupportedOperationException if the <tt>clear</tt> operation
      *                                       is not supported by this collection
      */
-    void clear(Transaction tx);
+    void clear(Transaction txn);
 
     /**
      * Ensures that this collection contains the specified element (optional
@@ -125,7 +125,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * the invariant that a collection always contains the specified element
      * after this call returns.
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @param e  element whose presence in this collection is to be ensured
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call
@@ -140,7 +140,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws IllegalStateException         if the element cannot be added at this
      *                                       time due to insertion restrictions
      */
-    boolean add(Transaction tx, E e);
+    boolean add(Transaction txn, E e);
 
 /**
      * Adds all of the elements in the specified collection to this collection
@@ -150,7 +150,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * specified collection is this collection, and this collection is
      * nonempty.)
      *
-     * @param tx the transaction used for this operation.
+     * @param txn the transaction used for this operation.
      * @param c collection containing elements to be added to this collection
      * @return <tt>true</tt> if this collection changed as a result of the call
      * @throws UnsupportedOperationException if the <tt>addAll</tt> operation
@@ -167,7 +167,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                                       this time due to insertion restrictions
      * @see #add(Object)
      */
-    boolean addAll(Transaction tx, Collection<? extends E> c);
+    boolean addAll(Transaction txn, Collection<? extends E> c);
 
     /**
      * Adds all of the elements in the specified collection to this collection
@@ -219,7 +219,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                                       this time due to insertion restrictions
      * @see #add(Object)
      */
-    boolean addAll(Transaction tx, TransactionalCollection<? extends E> c);
+    boolean addAll(Transaction txn, TransactionalCollection<? extends E> c);
 
-    String toString(Transaction tx);
+    String toString(Transaction txn);
 }

@@ -19,29 +19,29 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * map contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
      * <tt>Integer.MAX_VALUE</tt>.
      *
-     * @param tx
+     * @param txn
      * @return the number of key-value mappings in this map
      */
-    int size(Transaction tx);
+    int size(Transaction txn);
 
     /**
      * Returns <tt>true</tt> if this map contains no key-value mappings.
      *
-     * @param tx
+     * @param txn
      * @return <tt>true</tt> if this map contains no key-value mappings
      */
 
-    boolean isEmpty(Transaction tx);
+    boolean isEmpty(Transaction txn);
 
     /**
      * Removes all of the mappings from this map (optional operation).
      * The map will be empty after this call returns.
      *
-     * @param tx
+     * @param txn
      * @throws UnsupportedOperationException if the <tt>clear</tt> operation
      *                                       is not supported by this map
      */
-    void clear(Transaction tx);
+    void clear(Transaction txn);
 
     /**
      * Returns the value to which the specified key is mapped,
@@ -58,7 +58,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * explicitly maps the key to {@code null}.  The {@link #containsKey
      * containsKey} operation may be used to distinguish these two cases.
      *
-     * @param tx
+     * @param txn
      * @param key the key whose associated value is to be returned
      * @return the value to which the specified key is mapped, or
      *         {@code null} if this map contains no mapping for the key
@@ -68,7 +68,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                              does not permit null keys (optional)
      */
 
-    V get(Transaction tx, Object key);
+    V get(Transaction txn, Object key);
 
     /**
      * Returns <tt>true</tt> if this map contains a mapping for the specified
@@ -77,7 +77,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * <tt>(key==null ? k==null : key.equals(k))</tt>.  (There can be
      * at most one such mapping.)
      *
-     * @param tx
+     * @param txn
      * @param key key whose presence in this map is to be tested
      * @return <tt>true</tt> if this map contains a mapping for the specified
      *         key
@@ -86,7 +86,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @throws NullPointerException if the specified key is null and this map
      *                              does not permit null keys (optional)
      */
-    boolean containsKey(Transaction tx, Object key);
+    boolean containsKey(Transaction txn, Object key);
 
     /**
      * Returns <tt>true</tt> if this map maps one or more keys to the
@@ -96,7 +96,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * will probably require time linear in the map size for most
      * implementations of the <tt>Map</tt> interface.
      *
-     * @param tx
+     * @param txn
      * @param value value whose presence in this map is to be tested
      * @return <tt>true</tt> if this map maps one or more keys to the
      *         specified value
@@ -106,7 +106,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                              map does not permit null values (optional)
      */
 
-    boolean containsValue(Transaction tx, Object value);
+    boolean containsValue(Transaction txn, Object value);
 
     /**
      * Associates the specified value with the specified key in this map
@@ -116,7 +116,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * if {@link #containsKey(Object) m.containsKey(k)} would return
      * <tt>true</tt>.)
      *
-     * @param tx
+     * @param txn
      * @param key   key with which the specified value is to be associated
      * @param value value to be associated with the specified key
      * @return the previous value associated with <tt>key</tt>, or
@@ -134,7 +134,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                                       or value prevents it from being stored in this map
      */
 
-    V put(Transaction tx, K key, V value);
+    V put(Transaction txn, K key, V value);
 
     /**
      * Copies all of the mappings from the specified map to this map
@@ -144,7 +144,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * specified map.  The behavior of this operation is undefined if the
      * specified map is modified while the operation is in progress.
      *
-     * @param tx
+     * @param txn
      * @param m mappings to be stored in this map
      * @throws UnsupportedOperationException if the <tt>putAll</tt> operation
      *                                       is not supported by this map
@@ -156,7 +156,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @throws IllegalArgumentException      if some property of a key or value in
      *                                       the specified map prevents it from being stored in this map
      */
-    void putAll(Transaction tx, Map<? extends K, ? extends V> m);
+    void putAll(Transaction txn, Map<? extends K, ? extends V> m);
 
     /**
      * Removes the mapping for a key from this map if it is present
@@ -176,7 +176,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * <p>The map will not contain a mapping for the specified key once the
      * call returns.
      *
-     * @param tx
+     * @param txn
      * @param key key whose mapping is to be removed from the map
      * @return the previous value associated with <tt>key</tt>, or
      *         <tt>null</tt> if there was no mapping for <tt>key</tt>.
@@ -188,7 +188,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                                       map does not permit null keys (optional)
      */
 
-    V remove(Transaction tx, Object key);
+    V remove(Transaction txn, Object key);
 
     /**
      * Returns a {@link TransactionalCollection} view of the values contained in this map.
@@ -221,10 +221,10 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * <tt>retainAll</tt> and <tt>clear</tt> operations.  It does not
      * support the <tt>add</tt> or <tt>addAll</tt> operations.
      *
-     * @param tx
+     * @param txn
      * @return a collection view of the values contained in this map
      */
-    TransactionalCollection<V> values(Transaction tx);
+    TransactionalCollection<V> values(Transaction txn);
 
     /**
      * Returns a {@link TransactionalSet} view of the keys contained in this map.
@@ -256,10 +256,10 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * operations.  It does not support the <tt>add</tt> or <tt>addAll</tt>
      * operations.
      *
-     * @param tx
+     * @param txn
      * @return a set view of the keys contained in this map
      */
-    TransactionalSet<K> keySet(Transaction tx);
+    TransactionalSet<K> keySet(Transaction txn);
 
     /**
      * Returns a {@link TransactionalSet} view of the mappings contained in this map.
@@ -293,10 +293,10 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * <tt>clear</tt> operations.  It does not support the
      * <tt>add</tt> or <tt>addAll</tt> operations.
      *
-     * @param tx
+     * @param txn
      * @return a set view of the mappings contained in this map
      */
-    TransactionalSet<Entry<K, V>> entrySet(Transaction tx);
+    TransactionalSet<Entry<K, V>> entrySet(Transaction txn);
 
-    String toString(Transaction tx);
+    String toString(Transaction txn);
 }
