@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -34,13 +34,13 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         stop = false;
     }
 
-    protected abstract TransactionExecutor newReleaseWriteLockBlock();
+    protected abstract TxnExecutor newReleaseWriteLockBlock();
 
-    protected abstract TransactionExecutor newAcquireWriteLockBlock();
+    protected abstract TxnExecutor newAcquireWriteLockBlock();
 
-    protected abstract TransactionExecutor newReleaseReadLockBlock();
+    protected abstract TxnExecutor newReleaseReadLockBlock();
 
-    protected abstract TransactionExecutor newAcquireReadLockBlock();
+    protected abstract TxnExecutor newAcquireReadLockBlock();
 
     public void run() {
         readWriteLock = new ReadWriteLock();
@@ -86,10 +86,10 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         final GammaRef<Long> lock = new GammaRef<Long>(stm, 0L);
         final AtomicLong readers = new AtomicLong();
         final AtomicLong writers = new AtomicLong();
-        final TransactionExecutor acquireReadLockBlock = newAcquireReadLockBlock();
-        final TransactionExecutor releaseReadLockBlock = newReleaseReadLockBlock();
-        final TransactionExecutor acquireWriteLockBlock = newAcquireWriteLockBlock();
-        final TransactionExecutor releaseWriteLockBlock = newReleaseWriteLockBlock();
+        final TxnExecutor acquireReadLockBlock = newAcquireReadLockBlock();
+        final TxnExecutor releaseReadLockBlock = newReleaseReadLockBlock();
+        final TxnExecutor acquireWriteLockBlock = newAcquireWriteLockBlock();
+        final TxnExecutor releaseWriteLockBlock = newReleaseWriteLockBlock();
 
 
         public void acquireReadLock() {

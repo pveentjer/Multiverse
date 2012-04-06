@@ -14,7 +14,7 @@ import org.multiverse.api.predicates.*;
  * <h3>ControlFlowError</h3>
  *
  * <p>All non atomic methods are able to throw a (subclass) of the {@link org.multiverse.api.exceptions.ControlFlowError}. This error should
- * not be caught, it is task of the {@link TransactionExecutor} to deal with.
+ * not be caught, it is task of the {@link TxnExecutor} to deal with.
  * 
  * <h3>TransactionExecutionException</h3>
  *

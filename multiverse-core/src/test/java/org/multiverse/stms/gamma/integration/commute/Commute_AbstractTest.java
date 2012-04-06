@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.commute;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicLongClosure;
 import org.multiverse.api.functions.Functions;
@@ -30,7 +30,7 @@ public abstract class Commute_AbstractTest {
         stop = false;
     }
 
-    protected abstract TransactionExecutor newBlock();
+    protected abstract TxnExecutor newBlock();
 
     @Test
     public void test() {
@@ -78,7 +78,7 @@ public abstract class Commute_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            TransactionExecutor block = newBlock();
+            TxnExecutor block = newBlock();
 
             AtomicLongClosure commutingClosure = new AtomicLongClosure() {
                 @Override

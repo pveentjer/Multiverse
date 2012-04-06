@@ -10,22 +10,22 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaTransactionExecutor made for the GammaStm.
+* An GammaTxnExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class ${transactionExecutor.name} extends AbstractGammaTransactionExecutor{
-    private static final Logger logger = Logger.getLogger(${transactionExecutor.name}.class.getName());
+public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
+    private static final Logger logger = Logger.getLogger(${txnExecutor.name}.class.getName());
 
-#if(!${transactionExecutor.lean})
+#if(!${txnExecutor.lean})
     private final PropagationLevel propagationLevel;
 #end
 
-    public ${transactionExecutor.name}(final GammaTxnFactory txnFactory) {
+    public ${txnExecutor.name}(final GammaTxnFactory txnFactory) {
         super(txnFactory);
-#if(!${transactionExecutor.lean})
+#if(!${txnExecutor.lean})
         this.propagationLevel = txnConfiguration.propagationLevel;
 #end
     }
@@ -51,7 +51,7 @@ public final class ${transactionExecutor.name} extends AbstractGammaTransactionE
         }
     }
 
-#if(${transactionExecutor.lean})
+#if(${txnExecutor.lean})
     @Override
     public final ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
@@ -87,7 +87,7 @@ public final class ${transactionExecutor.name} extends AbstractGammaTransactionE
 #transactionLogic()
         }
 
-#else ## end of transactionExecutor.lean
+#else ## end of txnExecutor.lean
     public ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
 
         if(closure == null){
@@ -152,7 +152,7 @@ public final class ${transactionExecutor.name} extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -180,7 +180,7 @@ public final class ${transactionExecutor.name} extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -281,7 +281,7 @@ public final class ${transactionExecutor.name} extends AbstractGammaTransactionE
 #transactionLogic()
         }
 
-    #end ##end of transactionExecutor.lean
+    #end ##end of txnExecutor.lean
 #end ##end of for loop over closures
 #macro( transactionLogic )
             boolean abort = true;

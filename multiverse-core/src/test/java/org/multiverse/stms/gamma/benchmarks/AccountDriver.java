@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.benchy.BenchmarkDriver;
 import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicDoubleClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -152,9 +152,9 @@ public class AccountDriver extends BenchmarkDriver {
 
     class Bank {
         private final Account[] accounts;
-        private final TransactionExecutor addInterrestBlock = stm.newTransactionFactoryBuilder().newTransactionExecutor();
-        private final TransactionExecutor computeTotalBlock = stm.newTransactionFactoryBuilder().newTransactionExecutor();
-        private final TransactionExecutor transferBlock = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        private final TxnExecutor addInterrestBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
+        private final TxnExecutor computeTotalBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
+        private final TxnExecutor transferBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
 
         public Bank(int accountCount) {
             accounts = new Account[accountCount];

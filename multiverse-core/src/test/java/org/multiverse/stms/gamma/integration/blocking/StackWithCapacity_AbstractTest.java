@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -40,9 +40,9 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         stm = (GammaStm) getGlobalStmInstance();
     }
 
-    protected abstract TransactionExecutor newPopBlock();
+    protected abstract TxnExecutor newPopBlock();
 
-    protected abstract TransactionExecutor newPushBlock();
+    protected abstract TxnExecutor newPushBlock();
 
     public void run() {
         stack = new Stack<Integer>();
@@ -106,8 +106,8 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
     class Stack<E> {
         private final GammaRef<Node<E>> head = new GammaRef<Node<E>>(stm);
         private final GammaIntRef size = new GammaIntRef(stm);
-        private final TransactionExecutor pushBlock = newPushBlock();
-        private final TransactionExecutor popBlock = newPopBlock();
+        private final TxnExecutor pushBlock = newPushBlock();
+        private final TxnExecutor popBlock = newPopBlock();
 
         public void push(final E item) {
             pushBlock.atomic(new AtomicVoidClosure() {

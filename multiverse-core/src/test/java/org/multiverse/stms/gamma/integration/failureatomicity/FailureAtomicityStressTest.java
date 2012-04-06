@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.failureatomicity;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
@@ -61,8 +61,8 @@ public class FailureAtomicityStressTest {
     public class ModifyThread extends TestThread {
 
         long writeCount;
-        final TransactionExecutor transactionExecutor = stm.newTransactionFactoryBuilder()
-                .newTransactionExecutor();
+        final TxnExecutor txnExecutor = stm.newTransactionFactoryBuilder()
+                .newTxnExecutor();
 
         public ModifyThread(int id) {
             super("ModifyThread-" + id);
@@ -90,7 +90,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modify() {
-            transactionExecutor.atomic(new AtomicVoidClosure() {
+            txnExecutor.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;
@@ -101,7 +101,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modifyButAbort() {
-            transactionExecutor.atomic(new AtomicVoidClosure() {
+            txnExecutor.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     GammaTransaction btx = (GammaTransaction) tx;

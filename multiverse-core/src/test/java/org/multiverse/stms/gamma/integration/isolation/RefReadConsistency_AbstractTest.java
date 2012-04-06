@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -54,9 +54,9 @@ public abstract class RefReadConsistency_AbstractTest {
         }
     }
 
-    protected abstract TransactionExecutor createReadBlock();
+    protected abstract TxnExecutor createReadBlock();
 
-    protected abstract TransactionExecutor createWriteBlock();
+    protected abstract TxnExecutor createWriteBlock();
 
     public void run(int refCount) {
         refs = new GammaRef[refCount];
@@ -94,7 +94,7 @@ public abstract class RefReadConsistency_AbstractTest {
         public void doRun() throws Exception {
             final String value = getName();
 
-            TransactionExecutor block = createWriteBlock();
+            TxnExecutor block = createWriteBlock();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
@@ -133,7 +133,7 @@ public abstract class RefReadConsistency_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            TransactionExecutor block = createReadBlock();
+            TxnExecutor block = createReadBlock();
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

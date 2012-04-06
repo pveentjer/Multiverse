@@ -30,7 +30,7 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * the logic inside the atomicChecked block that did the register, is executed again.
  * </li>
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
- * TransactionExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
+ * TxnExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
  * or it can be done on the Stm level. Permanent listeners are suited for products that want to integrate with Multiverse and always
  * atomicChecked some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
  * the implementations for more details. Permanent listeners are always executed after the normal listeners.
@@ -140,7 +140,7 @@ public interface Transaction {
 
     /**
      * Retries the transaction. This call doesn't block, but if all goes well a {@link org.multiverse.api.exceptions.RetryError}
-     * is thrown which is caught by the {@link TransactionExecutor}.
+     * is thrown which is caught by the {@link TxnExecutor}.
      *
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *          if the transaction is not in a legal state for

@@ -42,7 +42,7 @@ public class StmUtilsTest {
     public void whenScheduleDeferredTaskAndCommit_thenCalled() {
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleDeferredTask(task);
@@ -57,7 +57,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleDeferredTask(task);
@@ -98,7 +98,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleCompensatingTask(task);
@@ -117,7 +117,7 @@ public class StmUtilsTest {
 
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleCompensatingTask(task);
@@ -150,7 +150,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
@@ -169,7 +169,7 @@ public class StmUtilsTest {
 
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);

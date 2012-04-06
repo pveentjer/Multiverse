@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
@@ -19,7 +19,7 @@ import static org.multiverse.TestUtils.sleepMs;
 import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
-public class GammaTransactionExecutor_interruptibleTest implements GammaConstants {
+public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
     private GammaStm stm;
 
@@ -33,9 +33,9 @@ public class GammaTransactionExecutor_interruptibleTest implements GammaConstant
     public void whenNoTimeoutAndInterruptible() throws InterruptedException {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setInterruptible(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, block);
         t.setPrintStackTrace(false);
@@ -56,10 +56,10 @@ public class GammaTransactionExecutor_interruptibleTest implements GammaConstant
     public void whenTimeoutAndInterruptible() throws InterruptedException {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
                 .setInterruptible(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, block);
         t.setPrintStackTrace(false);
@@ -79,9 +79,9 @@ public class GammaTransactionExecutor_interruptibleTest implements GammaConstant
 
     class WaitWithoutTimeoutThread extends TestThread {
         final GammaLongRef ref;
-        private TransactionExecutor block;
+        private TxnExecutor block;
 
-        public WaitWithoutTimeoutThread(GammaLongRef ref, TransactionExecutor block) {
+        public WaitWithoutTimeoutThread(GammaLongRef ref, TxnExecutor block) {
             this.ref = ref;
             this.block = block;
         }

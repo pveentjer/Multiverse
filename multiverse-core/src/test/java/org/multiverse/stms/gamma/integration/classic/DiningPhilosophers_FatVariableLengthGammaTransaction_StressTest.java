@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -36,19 +36,19 @@ public class DiningPhilosophers_FatVariableLengthGammaTransaction_StressTest ext
     }
 
     @Override
-    protected TransactionExecutor newTakeForksBlock() {
+    protected TxnExecutor newTakeForksBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
 
     }
 
     @Override
-    protected TransactionExecutor newReleaseForksBlock() {
+    protected TxnExecutor newReleaseForksBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

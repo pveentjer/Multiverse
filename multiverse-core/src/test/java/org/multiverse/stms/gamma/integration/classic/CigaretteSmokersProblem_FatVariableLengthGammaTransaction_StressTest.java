@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -36,9 +36,9 @@ public class CigaretteSmokersProblem_FatVariableLengthGammaTransaction_StressTes
     }
 
     @Override
-    protected TransactionExecutor newBlock() {
+    protected TxnExecutor newBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

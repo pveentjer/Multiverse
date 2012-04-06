@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -60,8 +60,8 @@ public class ReadonlyRepeatableReadStressTest {
 
         @Override
         public void doRun() {
-            TransactionExecutor block = stm.newTransactionFactoryBuilder()
-                    .newTransactionExecutor();
+            TxnExecutor block = stm.newTransactionFactoryBuilder()
+                    .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
@@ -80,15 +80,15 @@ public class ReadonlyRepeatableReadStressTest {
 
     class ReadThread extends TestThread {
 
-        private final TransactionExecutor readTrackingReadonlyBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor readTrackingReadonlyBlock = stm.newTransactionFactoryBuilder()
                 .setReadonly(true)
                 .setReadTrackingEnabled(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
-        private final TransactionExecutor readTrackingUpdateBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor readTrackingUpdateBlock = stm.newTransactionFactoryBuilder()
                 .setReadonly(false)
                 .setReadTrackingEnabled(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         private final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override

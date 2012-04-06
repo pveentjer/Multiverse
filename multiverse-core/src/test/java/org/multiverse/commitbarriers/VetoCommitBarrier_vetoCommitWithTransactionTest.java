@@ -67,7 +67,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.incrementAndGet(tx, 1);

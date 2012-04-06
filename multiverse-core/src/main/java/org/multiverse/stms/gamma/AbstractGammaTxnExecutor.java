@@ -5,16 +5,16 @@ import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 /**
- * An abstract {@link GammaTransactionExecutor} implementation.
+ * An abstract {@link GammaTxnExecutor} implementation.
  *
  * @author Peter Veentjer.
  */
-public abstract class AbstractGammaTransactionExecutor implements GammaTransactionExecutor {
+public abstract class AbstractGammaTxnExecutor implements GammaTxnExecutor {
     protected final GammaTxnFactory txnFactory;
     protected final GammaTxnConfiguration txnConfiguration;
     protected final BackoffPolicy backoffPolicy;
 
-    public AbstractGammaTransactionExecutor(final GammaTxnFactory txnFactory) {
+    public AbstractGammaTxnExecutor(final GammaTxnFactory txnFactory) {
         if (txnFactory == null) {
             throw new NullPointerException();
         }

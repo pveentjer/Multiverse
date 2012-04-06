@@ -55,7 +55,7 @@
             configuration mechanism starts with a settings, but as soon as it figures out that the settings are too
             cheap,
             it throws a org.multiverse.api.exceptions.SpeculativeConfigurationError. This error is caught by the
-            org.multiverse.api.TransactionExecutor and upgrades the transaction/settings. Once the AtomicBlock has learned, it
+            org.multiverse.api.TxnExecutor and upgrades the transaction/settings. Once the AtomicBlock has learned, it
             will not make the same mistakes again. So in the beginning there can be some unexpected failure, but
             after a few tries, they won't appear again. This mechanism can be disabled by setting the 'setSpeculative'
             to true on the org.multiverse.api.TxnFactoryBuilder.

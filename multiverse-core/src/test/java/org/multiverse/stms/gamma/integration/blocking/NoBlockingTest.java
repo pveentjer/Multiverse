@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
@@ -76,10 +76,10 @@ public class NoBlockingTest {
     public void whenBlockingNotAllowed_thenNoBlockingRetryAllowedException() {
         final LongRef ref = newLongRef();
 
-        TransactionExecutor block = getGlobalStmInstance()
+        TxnExecutor block = getGlobalStmInstance()
                 .newTransactionFactoryBuilder()
                 .setBlockingAllowed(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         try {
             block.atomic(new AtomicVoidClosure() {

@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -38,7 +38,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
     @Test
     public void withMapTransactionAnd2Threads() throws InterruptedException {
         FatVariableLengthGammaTxnFactory txFactory = new FatVariableLengthGammaTxnFactory(stm);
-        test(new LeanGammaTransactionExecutor(txFactory), 10, 2);
+        test(new LeanGammaTxnExecutor(txFactory), 10, 2);
     }
 
     @Test
@@ -46,13 +46,13 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         int refCount = 10;
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
         FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
-        test(new LeanGammaTransactionExecutor(txFactory), refCount, 2);
+        test(new LeanGammaTxnExecutor(txFactory), refCount, 2);
     }
 
     @Test
     public void withMapTransactionAnd5Threads() throws InterruptedException {
         FatVariableLengthGammaTxnFactory txFactory = new FatVariableLengthGammaTxnFactory(stm);
-        test(new LeanGammaTransactionExecutor(txFactory), 10, 5);
+        test(new LeanGammaTxnExecutor(txFactory), 10, 5);
     }
 
     @Test
@@ -60,10 +60,10 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         int refCount = 10;
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
         FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
-        test(new LeanGammaTransactionExecutor(txFactory), refCount, 5);
+        test(new LeanGammaTxnExecutor(txFactory), refCount, 5);
     }
 
-    public void test(TransactionExecutor transactionExecutor, int refCount, int threadCount) throws InterruptedException {
+    public void test(TxnExecutor txnExecutor, int refCount, int threadCount) throws InterruptedException {
         refs = new GammaLongRef[refCount];
         for (int k = 0; k < refs.length; k++) {
             refs[k] = new GammaLongRef(stm);
@@ -71,7 +71,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
         UpdateThread[] threads = new UpdateThread[threadCount];
         for (int k = 0; k < threads.length; k++) {
-            threads[k] = new UpdateThread(k, transactionExecutor, threadCount);
+            threads[k] = new UpdateThread(k, txnExecutor, threadCount);
         }
 
         startAll(threads);
@@ -106,14 +106,14 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
     private class UpdateThread extends TestThread {
 
-        private final TransactionExecutor transactionExecutor;
+        private final TxnExecutor txnExecutor;
         private final int id;
         private final int threadCount;
         private long count;
 
-        public UpdateThread(int id, TransactionExecutor transactionExecutor, int threadCount) {
+        public UpdateThread(int id, TxnExecutor txnExecutor, int threadCount) {
             super("UpdateThread-" + id);
-            this.transactionExecutor = transactionExecutor;
+            this.txnExecutor = txnExecutor;
             this.id = id;
             this.threadCount = threadCount;
         }
@@ -148,7 +148,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                 }
 
                 try {
-                    transactionExecutor.atomic(closure);
+                    txnExecutor.atomic(closure);
                 } catch (StopException e) {
                     break;
                 }

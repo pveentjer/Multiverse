@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
@@ -74,10 +74,10 @@ public class TimeoutTestLongTest {
 
         @Override
         public void doRun() throws Exception {
-            TransactionExecutor block = getGlobalStmInstance()
+            TxnExecutor block = getGlobalStmInstance()
                     .newTransactionFactoryBuilder()
                     .setTimeoutNs(TimeUnit.SECONDS.toNanos(5))
-                    .newTransactionExecutor();
+                    .newTxnExecutor();
 
             block.atomic(new AtomicVoidClosure() {
                 @Override

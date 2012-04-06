@@ -10,17 +10,17 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaTransactionExecutor made for the GammaStm.
+* An GammaTxnExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class LeanGammaTransactionExecutor extends AbstractGammaTransactionExecutor{
-    private static final Logger logger = Logger.getLogger(LeanGammaTransactionExecutor.class.getName());
+public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
+    private static final Logger logger = Logger.getLogger(LeanGammaTxnExecutor.class.getName());
 
 
-    public LeanGammaTransactionExecutor(final GammaTxnFactory txnFactory) {
+    public LeanGammaTxnExecutor(final GammaTxnFactory txnFactory) {
         super(txnFactory);
     }
 

@@ -3,10 +3,10 @@ package org.multiverse.api;
 import org.multiverse.api.lifecycle.TransactionListener;
 
 /**
- * A Builder for creating a {@link TxnFactory} and {@link TransactionExecutor}. This builder provides full control
+ * A Builder for creating a {@link TxnFactory} and {@link TxnExecutor}. This builder provides full control
  * on transaction settings.
  *
- * <p>Since the {@link Transaction} and {@link TransactionExecutor} are very closely integrated, both of them are created
+ * <p>Since the {@link Transaction} and {@link TxnExecutor} are very closely integrated, both of them are created
  * by this TxnFactoryBuilder.
  *
  * <p>Instances of this class are considered immutable, so when you call one of the modifying methods, make sure
@@ -38,7 +38,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setControlFlowErrorsReused(boolean reused);
 
     /**
-     * Sets the {@link Transaction} familyname. If an {@link TransactionExecutor} is used inside a method, a useful familyname could
+     * Sets the {@link Transaction} familyname. If an {@link TxnExecutor} is used inside a method, a useful familyname could
      * be the full name of the class and the method.
      * <p/>
      * The transaction familyName is useful debugging purposes, but has not other meaning.
@@ -271,12 +271,12 @@ public interface TxnFactoryBuilder {
     TxnFactory newTransactionFactory();
 
     /**
-     * Builds a new {@link TransactionExecutor} optimized for executing transactions created by this TxnFactoryBuilder.
+     * Builds a new {@link TxnExecutor} optimized for executing transactions created by this TxnFactoryBuilder.
      *
-     * @return the created TransactionExecutor.
+     * @return the created TxnExecutor.
      * @throws org.multiverse.api.exceptions.IllegalTransactionFactoryException
      *          if the TxnFactory could not be build
      *          because the configuration was not correct.
      */
-    TransactionExecutor newTransactionExecutor();
+    TxnExecutor newTxnExecutor();
 }

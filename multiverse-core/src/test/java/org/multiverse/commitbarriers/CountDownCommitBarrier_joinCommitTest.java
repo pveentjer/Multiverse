@@ -69,7 +69,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.set(tx, 10);
@@ -118,7 +118,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTransactionExecutor().atomicChecked(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomicChecked(new AtomicVoidClosure() {
                     @Override
                     public void execute(Transaction tx) throws Exception {
                         ref.set(tx, 10);

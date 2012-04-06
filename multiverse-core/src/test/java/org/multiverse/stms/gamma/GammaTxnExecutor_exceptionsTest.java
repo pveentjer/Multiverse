@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.transactions.GammaTransaction;
 import static org.junit.Assert.*;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
-public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
+public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     private GammaStm stm;
 
     @Before
@@ -23,7 +23,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenCheckedExceptionThrown() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final Exception ex = new Exception();
@@ -47,7 +47,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenRuntimeExceptionThrown() throws Exception {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
@@ -72,7 +72,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenErrorThrown() throws Exception {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final Error ex = new Error();
@@ -96,7 +96,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenCheckedExceptionThrown() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final Exception ex = new Exception();
@@ -120,7 +120,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenRuntimeExceptionThrown() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
@@ -145,7 +145,7 @@ public class GammaTransactionExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenErrorThrown() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder().newTransactionExecutor();
+        TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         final Error ex = new Error();

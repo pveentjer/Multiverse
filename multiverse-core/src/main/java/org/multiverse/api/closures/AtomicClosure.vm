@@ -20,7 +20,7 @@ public interface ${closure.name}${closure.typeParameter}{
     /**
      * Executes the closure.
      *
-     * @param tx the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
+     * @param txn the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.
 #if(${closure.type} ne 'void')
      * @return the result of the execution.

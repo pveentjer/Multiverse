@@ -3,12 +3,12 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -68,7 +68,7 @@ public class PingPongStressTest {
     }
 
     public void test(GammaTxnFactory transactionFactory, int threadCount) throws InterruptedException {
-        TransactionExecutor block = new LeanGammaTransactionExecutor(transactionFactory);
+        TxnExecutor block = new LeanGammaTxnExecutor(transactionFactory);
         PingPongThread[] threads = createThreads(block, threadCount);
 
         startAll(threads);
@@ -76,7 +76,7 @@ public class PingPongStressTest {
         sleepMs(30 * 1000);
         stop = true;
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref.set(-abs(ref.get()));
@@ -90,7 +90,7 @@ public class PingPongStressTest {
         System.out.println(stm.getGlobalConflictCounter().count());
     }
 
-    private PingPongThread[] createThreads(TransactionExecutor block, int threadCount) {
+    private PingPongThread[] createThreads(TxnExecutor block, int threadCount) {
         PingPongThread[] threads = new PingPongThread[threadCount];
         for (int k = 0; k < threads.length; k++) {
             threads[k] = new PingPongThread(k, block, threadCount);
@@ -107,12 +107,12 @@ public class PingPongStressTest {
     }
 
     private class PingPongThread extends TestThread {
-        private final TransactionExecutor block;
+        private final TxnExecutor block;
         private final int threadCount;
         private final int id;
         private long count;
 
-        public PingPongThread(int id, TransactionExecutor block, int threadCount) {
+        public PingPongThread(int id, TxnExecutor block, int threadCount) {
             super("PingPongThread-" + id);
             this.id = id;
             this.block = block;

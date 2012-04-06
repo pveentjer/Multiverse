@@ -10,7 +10,7 @@ class AtomicClosure {
     String typeParameter
 }
 
-class TransactionExecutor {
+class TxnExecutor {
     String name
     boolean lean
 }
@@ -34,8 +34,8 @@ engine.init();
 
 def refs = createTransactionalObjects();
 def atomicClosures = createClosures();
-def transactionExecutors = [new TransactionExecutor(name: 'FatGammaTransactionExecutor', lean: false),
-        new TransactionExecutor(name: 'LeanGammaTransactionExecutor', lean: true)]
+def txnExecutors = [new TxnExecutor(name: 'FatGammaTxnExecutor', lean: false),
+        new TxnExecutor(name: 'LeanGammaTxnExecutor', lean: true)]
 
 generateRefFactory(engine, refs);
 
@@ -49,13 +49,13 @@ for (def closure in atomicClosures) {
     generateAtomicClosure(engine, closure)
 }
 
-generateTransactionExecutor(engine, atomicClosures)
+generateTxnExecutor(engine, atomicClosures)
 //generateOrElseBlock(engine, atomicClosures)
 generateGammaOrElseBlock(engine, atomicClosures)
 generateStmUtils(engine, atomicClosures)
 
-for (def transactionExecutor in transactionExecutors) {
-    generateGammaTransactionExecutor(engine, transactionExecutor, atomicClosures)
+for (def txnExecutor in txnExecutors) {
+    generateGammaTxnExecutor(engine, txnExecutor, atomicClosures)
 }
 
 
@@ -179,23 +179,23 @@ void generateAtomicClosure(VelocityEngine engine, AtomicClosure closure) {
     file.text = writer.toString()
 }
 
-void generateGammaTransactionExecutor(VelocityEngine engine, TransactionExecutor transactionExecutor, List<AtomicClosure> closures) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaTransactionExecutor.vm')
+void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, List<AtomicClosure> closures) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaTxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('transactionExecutor', transactionExecutor)
+    context.put('txnExecutor', txnExecutor)
     context.put('closures', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File("src/main/java/org/multiverse/stms/gamma/${transactionExecutor.name}.java")
+    File file = new File("src/main/java/org/multiverse/stms/gamma/${txnExecutor.name}.java")
     file.createNewFile()
     file.text = writer.toString()
 }
 
-void generateTransactionExecutor(VelocityEngine engine, List<AtomicClosure> closures) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/TransactionExecutor.vm')
+void generateTxnExecutor(VelocityEngine engine, List<AtomicClosure> closures) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/TxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
     context.put('closures', closures)
@@ -203,7 +203,7 @@ void generateTransactionExecutor(VelocityEngine engine, List<AtomicClosure> clos
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File('src/main/java/org/multiverse/api/TransactionExecutor.java')
+    File file = new File('src/main/java/org/multiverse/api/TxnExecutor.java')
     file.createNewFile()
     file.text = writer.toString()
 }

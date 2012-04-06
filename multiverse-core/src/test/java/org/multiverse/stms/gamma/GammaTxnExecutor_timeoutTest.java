@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
@@ -18,7 +18,7 @@ import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
-public class GammaTransactionExecutor_timeoutTest {
+public class GammaTxnExecutor_timeoutTest {
 
     private GammaStm stm;
     private GammaLongRef ref;
@@ -34,9 +34,9 @@ public class GammaTransactionExecutor_timeoutTest {
 
     @Test
     public void whenTimeout() throws InterruptedException {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AwaitThread t = new AwaitThread(block);
         t.setPrintStackTrace(false);
@@ -49,9 +49,9 @@ public class GammaTransactionExecutor_timeoutTest {
 
     @Test
     public void whenSuccess() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AwaitThread t = new AwaitThread(block);
         t.setPrintStackTrace(false);
@@ -60,7 +60,7 @@ public class GammaTransactionExecutor_timeoutTest {
         sleepMs(500);
         assertAlive(t);
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -75,7 +75,7 @@ public class GammaTransactionExecutor_timeoutTest {
 
     @Test
     public void whenNoWaitingNeededAndZeroTimeout() {
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 GammaTransaction btx = (GammaTransaction) tx;
@@ -83,9 +83,9 @@ public class GammaTransactionExecutor_timeoutTest {
             }
         });
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(0)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AwaitThread t = new AwaitThread(block);
         t.setPrintStackTrace(false);
@@ -98,9 +98,9 @@ public class GammaTransactionExecutor_timeoutTest {
 
     class AwaitThread extends TestThread {
 
-        private final TransactionExecutor block;
+        private final TxnExecutor block;
 
-        public AwaitThread(TransactionExecutor block) {
+        public AwaitThread(TxnExecutor block) {
             this.block = block;
         }
 

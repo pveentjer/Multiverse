@@ -4,7 +4,7 @@ import org.multiverse.*;
 import org.multiverse.api.closures.*;
 
 /**
- * An TransactionExecutor is responsible for executing an atomic closure. It is created by the {@link TxnFactoryBuilder}
+ * An TxnExecutor is responsible for executing an atomic closure. It is created by the {@link TxnFactoryBuilder}
  * and this gives the {@link Stm} the opportunity to return different implementations based on the
  * {@link TxnFactory} configuration. And it also gives the opportunity to provide Stm specific transaction handling
  * mechanism. In the Multiverse 0.6 design and before, a single TransactionTemplate implementation was used that should
@@ -36,28 +36,28 @@ import org.multiverse.api.closures.*;
  *
  * <h3>Configuration</h3>
  *
- * <p>The {@link TransactionExecutor} can be configured through the {@link TransactionFactoryBuilder}. So that for more detail since
+ * <p>The {@link TxnExecutor} can be configured through the {@link TransactionFactoryBuilder}. So that for more detail since
  * there are tons of settings to choose from.
  *
  * <h3>Thread-safety</h3>
  *
- * <p>TransactionExecutors are threadsafe. The TransactionExecutor is designed to be shared between threads.
+ * <p>TxnExecutors are threadsafe. The TxnExecutor is designed to be shared between threads.
  *
  * <h3>Reuse</h3>
  *
- * <p>TransactionExecutors can be expensive to create and should be reused. Creating an TransactionExecutor can lead to a lot of objects being
+ * <p>TxnExecutor can be expensive to create and should be reused. Creating an TxnExecutor can lead to a lot of objects being
  * created and not reusing them leads to a lot of object waste (so put a lot of pressure on the garbage collector).
  *
- * <p>It is best to create the TransactionExecutor in the beginning and store it in a (static) field and reuse it. It is very
- * unlikely that an TransactionExecutor is going to be a contention point itself since in almost all cases only volatile reads are
+ * <p>It is best to create the TxnExecutor in the beginning and store it in a (static) field and reuse it. It is very
+ * unlikely that an TxnExecutor is going to be a contention point itself since in almost all cases only volatile reads are
  * required and for the rest it will be mostly immutable.
  *
  * <p>This is even more important when speculative transactions are used because speculative transactions learn on the
- * TransactionExecutor level. So if the TransactionExecutor is not reused, the speculative mechanism will not have full effect.
+ * TxnExecutor level. So if the TxnExecutor is not reused, the speculative mechanism will not have full effect.
  *
  * <h3>execute vs executeChecked</h3>
  *
- * <p>The TransactionExecutor provides two different types of execute methods:
+ * <p>The TxnExecutor provides two different types of execute methods:
  * <ol>
  * <li>execute: it will automatically wrap the checked exception that can be thrown from an AtomicClosure in a
  * {@link org.multiverse.api.exceptions.InvisibleCheckedException}. Unchecked exceptions are let through as is.
@@ -81,26 +81,26 @@ import org.multiverse.api.closures.*;
  * through the {@link TransactionFactoryBuilder#setPropagationLevel} where the {@link PropagationLevel#Requires} is the default.
  *
  * <p>Normally the system uses a flat-nesting approach, so only the outermost commit is going to lead to a commit. But if a commit
- * is done before the outer most TransactionExecutor completes, that commit is leading.
+ * is done before the outer most TxnExecutor completes, that commit is leading.
  *
  * <p>If the Transaction is committed (or aborted) manually, operations on the Transaction will fail with a
- * {@link org.multiverse.api.exceptions.IllegalTransactionStateException} exception. So in most cases you want to let the TransactionExecutor
+ * {@link org.multiverse.api.exceptions.IllegalTransactionStateException} exception. So in most cases you want to let the TxnExecutor
  * be in charge of committing/aborting. If also allows for a correct flattening of nested transactions.  If a transaction should
  * not commit, but you don't want to disrupt the code, the {@link Transaction#setAbortOnly} can be called, to make sure that the
  * transaction is not going to commit (or prepare) successfully.
  *
- * <p>The configuration of the outer most TransactionExecutor is leading. So if the outer TransactionExecutor is not readonly and the inner is,
+ * <p>The configuration of the outer most TxnExecutor is leading. So if the outer TxnExecutor is not readonly and the inner is,
  * the transaction will not be readonly. If this becomes an issue (e.g. for security) it can be implemented that some form of
  * runtime verification is done to prevent this behavior.
  *
  * @author Peter Veentjer.
  */
-public interface TransactionExecutor extends MultiverseConstants{
+public interface TxnExecutor extends MultiverseConstants{
 
    /**
-    * Returns the TransactionFactory that is used by this TransactionExecutor to create Transactions used inside.
+    * Returns the TransactionFactory that is used by this TxnExecutor to create Transactions used inside.
     *
-    * @return the TransactionFactory used by this TransactionExecutor.
+    * @return the TransactionFactory used by this TxnExecutor.
     */
     TxnFactory getTransactionFactory();
 

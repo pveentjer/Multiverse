@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions;
 import org.multiverse.api.*;
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.api.lifecycle.TransactionListener;
-import org.multiverse.stms.gamma.GammaTransactionExecutor;
+import org.multiverse.stms.gamma.GammaTxnExecutor;
 
 /**
  * A {@link org.multiverse.api.TxnFactoryBuilder} tailored for the {@link org.multiverse.stms.gamma.GammaStm}.
@@ -75,5 +75,5 @@ public interface GammaTxnFactoryBuilder extends TxnFactoryBuilder {
     GammaTxnFactory newTransactionFactory();
 
     @Override
-    GammaTransactionExecutor newTransactionExecutor();
+    GammaTxnExecutor newTxnExecutor();
 }

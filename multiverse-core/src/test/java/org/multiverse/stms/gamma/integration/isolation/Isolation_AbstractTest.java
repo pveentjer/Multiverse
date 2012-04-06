@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -40,7 +40,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
         stm = (GammaStm) getGlobalStmInstance();
     }
 
-    protected abstract TransactionExecutor newBlock(LockMode lockMode, boolean dirtyCheckEnabled);
+    protected abstract TxnExecutor newBlock(LockMode lockMode, boolean dirtyCheckEnabled);
 
     @Test
     public void withNoLockingDirtyCheck() {
@@ -159,7 +159,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
 
         @Override
         public void doRun() {
-            TransactionExecutor block = newBlock(lockMode, dirtyCheckEnabled);
+            TxnExecutor block = newBlock(lockMode, dirtyCheckEnabled);
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override

@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.isolation;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
@@ -49,9 +49,9 @@ public class MoneyTransfer_FatFixedLengthGammaTransaction_StressTest extends Mon
     }
 
     @Override
-    protected TransactionExecutor newTransactionExecutor() {
+    protected TxnExecutor newTxnExecutor() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm, accountCount)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 }

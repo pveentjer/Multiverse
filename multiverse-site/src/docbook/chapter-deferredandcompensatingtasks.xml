@@ -28,7 +28,7 @@
                     if it depends on logic executed during the execution of the transaction.
                 </listitem>
                 <listitem>
-                    permanent tasks: these tasks are registered when the org.multiverse.api.TransactionExecutor is created.
+                    permanent tasks: these tasks are registered when the org.multiverse.api.TxnExecutor is created.
                     The advantage of permanent tasks is that they don't need to be registered
                     every time the transaction runs, so there is a lot less overhead (especially gc). Permanent listeners
                     are also useful if Multiverse needs to be integrated in other systems/languages so that integration

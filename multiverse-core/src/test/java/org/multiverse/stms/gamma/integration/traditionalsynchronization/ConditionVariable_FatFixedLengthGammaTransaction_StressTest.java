@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
@@ -38,16 +38,16 @@ public class ConditionVariable_FatFixedLengthGammaTransaction_StressTest extends
     }
 
     @Override
-    protected TransactionExecutor newPushBlock() {
+    protected TxnExecutor newPushBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor newPopBlock() {
+    protected TxnExecutor newPopBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 }

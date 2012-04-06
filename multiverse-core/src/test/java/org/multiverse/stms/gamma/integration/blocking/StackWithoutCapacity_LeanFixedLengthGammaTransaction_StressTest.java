@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.api.TxnExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxnFactory;
 
 public class StackWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest extends StackWithoutCapacity_AbstractTest {
@@ -13,12 +13,12 @@ public class StackWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest ext
     }
 
     @Override
-    protected TransactionExecutor newPopTransactionExecutor() {
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(stm));
+    protected TxnExecutor newPopTxnExecutor() {
+        return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(stm));
     }
 
     @Override
-    protected TransactionExecutor newPushTransactionExecutor() {
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(stm));
+    protected TxnExecutor newPushTxnExecutor() {
+        return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(stm));
     }
 }

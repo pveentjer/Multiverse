@@ -6,7 +6,7 @@ import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.api.references.Ref;
-import org.multiverse.stms.gamma.GammaTransactionExecutor;
+import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.multiverse.TestUtils.*;
@@ -27,9 +27,9 @@ public abstract class ReentrantMutex_AbstractTest {
         stop = false;
     }
 
-    protected abstract GammaTransactionExecutor newUnlockBlock();
+    protected abstract GammaTxnExecutor newUnlockBlock();
 
-    protected abstract GammaTransactionExecutor newLockBlock();
+    protected abstract GammaTxnExecutor newLockBlock();
 
     public void run() {
         mutex = new ReentrantMutex();
@@ -78,8 +78,8 @@ public abstract class ReentrantMutex_AbstractTest {
     class ReentrantMutex {
         private final Ref<Thread> owner = newRef();
         private final IntRef count = newIntRef();
-        private final GammaTransactionExecutor lockBlock = newLockBlock();
-        private final GammaTransactionExecutor unlockBlock = newUnlockBlock();
+        private final GammaTxnExecutor lockBlock = newLockBlock();
+        private final GammaTxnExecutor unlockBlock = newUnlockBlock();
 
         public void lock(final Thread thread) {
             lockBlock.atomic(new AtomicVoidClosure() {

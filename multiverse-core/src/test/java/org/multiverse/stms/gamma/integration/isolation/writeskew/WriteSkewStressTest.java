@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation.writeskew;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
@@ -235,25 +235,25 @@ public class WriteSkewStressTest {
 
     public class TransferThread extends TestThread {
 
-        private final TransactionExecutor snapshotBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor snapshotBlock = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setMaxRetries(10000)
-                .newTransactionExecutor();
-        private final TransactionExecutor serializedBlock = stm.newTransactionFactoryBuilder()
+                .newTxnExecutor();
+        private final TxnExecutor serializedBlock = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .setMaxRetries(10000)
-                .newTransactionExecutor();
-        private final TransactionExecutor pessimisticReadsBlock = stm.newTransactionFactoryBuilder()
+                .newTxnExecutor();
+        private final TxnExecutor pessimisticReadsBlock = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setReadLockMode(LockMode.Read)
                 .setMaxRetries(10000)
-                .newTransactionExecutor();
-        private final TransactionExecutor pessimisticWritesBlock = stm.newTransactionFactoryBuilder()
+                .newTxnExecutor();
+        private final TxnExecutor pessimisticWritesBlock = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .setMaxRetries(10000)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
 
         public TransferThread(int id) {

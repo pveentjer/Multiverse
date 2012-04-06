@@ -5,7 +5,7 @@ package org.multiverse.api.exceptions;
  * With the {RetryError} it is possible to create blocking transactions.
  *
  * <p>An example is a transaction wants to pop an item from an empty queue. The Retry is caught by the transaction
- * handling logic (e.g the {@link org.multiverse.api.TransactionExecutor} and blocks until either a timeout happens or
+ * handling logic (e.g the {@link org.multiverse.api.TxnExecutor} and blocks until either a timeout happens or
  * an item is placed on the queue.
  *
  * @author Peter Veentjer.

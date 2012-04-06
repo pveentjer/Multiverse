@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.api.TxnExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxnFactory;
 
@@ -17,15 +17,15 @@ public class Semaphore_LeanMonoGammaTransaction_StressTest extends Semaphore_Abs
     }
 
     @Override
-    protected TransactionExecutor newDownBlock() {
+    protected TxnExecutor newDownBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
-        return new LeanGammaTransactionExecutor(new LeanMonoGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor newUpBlock() {
+    protected TxnExecutor newUpBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
-        return new LeanGammaTransactionExecutor(new LeanMonoGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(config));
     }
 }
 

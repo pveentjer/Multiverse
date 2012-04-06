@@ -13,12 +13,12 @@ package org.multiverse.api.exceptions;
  * <h3>Unexpected retries</h3>
  *
  * <p>Because a transaction can fail on a speculative failure more than once, it could be that the transaction is retried. Normally
- * this is not an issue, since the transaction will be retried, so is invisible. And once the {@link org.multiverse.api.TransactionExecutor}
+ * this is not an issue, since the transaction will be retried, so is invisible. And once the {@link org.multiverse.api.TxnExecutor}
  * has learned, it will not make the same mistakes again, but if you do io (e.g. print to the System.out or do logging) you can expect
  * to see aborts, even though there is no other reason to.
  *
  * Speculative behavior can be turned of (either on the Transaction or STM level) but you will not get the best out of performance. For
- * the speculative behavior to learn, it is important that the {@link org.multiverse.api.TransactionExecutor} is reused.
+ * the speculative behavior to learn, it is important that the {@link org.multiverse.api.TxnExecutor} is reused.
  *
  * @author Peter Veentjer.
  * @see org.multiverse.api.TxnFactoryBuilder#setSpeculative(boolean)

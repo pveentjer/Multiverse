@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -39,16 +39,16 @@ public class Semaphore_FatVariableLengthGammaTransaction_StressTest extends Sema
     }
 
     @Override
-    protected TransactionExecutor newDownBlock() {
+    protected TxnExecutor newDownBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor newUpBlock() {
+    protected TxnExecutor newUpBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

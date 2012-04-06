@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.isolation;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.api.TxnExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -124,18 +124,18 @@ public class LongRefReadConsistency_FatVariableLengthGammaTransaction_StressTest
     }
 
     @Override
-    protected TransactionExecutor createReadBlock() {
+    protected TxnExecutor createReadBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor createWriteBlock() {
+    protected TxnExecutor createWriteBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

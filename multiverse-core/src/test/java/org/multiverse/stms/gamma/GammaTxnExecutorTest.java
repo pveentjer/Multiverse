@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicIntClosure;
@@ -12,17 +12,17 @@ import org.multiverse.api.closures.AtomicVoidClosure;
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 
-public class GammaTransactionExecutorTest {
+public class GammaTxnExecutorTest {
 
     private GammaStm stm;
-    private TransactionExecutor block;
+    private TxnExecutor block;
 
     @Before
     public void setUp() {
         clearThreadLocalTransaction();
         stm = new GammaStm();
         block = stm.newTransactionFactoryBuilder()
-                .newTransactionExecutor();
+                .newTxnExecutor();
     }
 
     @Test

@@ -86,7 +86,7 @@ public class IsolationLevelSerializableTest {
 
         ref1.get(tx);
 
-        stm.getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 ref1.incrementAndGet(1);

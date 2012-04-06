@@ -7,11 +7,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
-import org.multiverse.stms.gamma.GammaTransactionExecutor;
-import org.multiverse.stms.gamma.GammaConstants;
-import org.multiverse.stms.gamma.GammaObjectPool;
-import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.*;
+import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -98,10 +95,10 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            GammaTransactionExecutor block = stm.newTransactionFactoryBuilder()
+            GammaTxnExecutor block = stm.newTransactionFactoryBuilder()
                     .setSpeculative(false)
                     .setMaxRetries(100000)
-                    .newTransactionExecutor();
+                    .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
@@ -431,7 +428,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
     class FatVariableLengthTransactionWithBlockThread extends TestThread {
 
-        private LeanGammaTransactionExecutor block;
+        private LeanGammaTxnExecutor block;
 
         public FatVariableLengthTransactionWithBlockThread(int id) {
             super("VariableReadingWithBlockThread-" + id);
@@ -445,7 +442,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
                     .setSpeculative(false)
                     .setDirtyCheckEnabled(false);
 
-            block = new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+            block = new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
 
             long iteration = 0;
             while (!stop) {

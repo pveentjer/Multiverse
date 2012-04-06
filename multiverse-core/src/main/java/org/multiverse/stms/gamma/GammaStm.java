@@ -35,7 +35,7 @@ public final class GammaStm implements Stm {
     public final GlobalConflictCounter globalConflictCounter = new GlobalConflictCounter();
     public final GammaRefFactoryImpl defaultRefFactory = new GammaRefFactoryImpl();
     public final GammaRefFactoryBuilder refFactoryBuilder = new GammaRefFactoryBuilderImpl();
-    public final GammaTransactionExecutor defaultTransactionExecutor;
+    public final GammaTxnExecutor defaultxnExecutor;
     public final GammaTxnConfiguration defaultConfig;
     public final NaiveTransactionalCollectionFactory defaultTransactionalCollectionFactory
             = new NaiveTransactionalCollectionFactory(this);
@@ -54,9 +54,9 @@ public final class GammaStm implements Stm {
         this.defaultBackoffPolicy = configuration.backoffPolicy;
         this.defaultConfig = new GammaTxnConfiguration(this, configuration)
                 .setSpinCount(spinCount);
-        this.defaultTransactionExecutor = newTransactionFactoryBuilder()
+        this.defaultxnExecutor = newTransactionFactoryBuilder()
                 .setSpeculative(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
         this.readBiasedThreshold = configuration.readBiasedThreshold;
     }
 
@@ -66,8 +66,8 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaTransactionExecutor getDefaultTransactionExecutor() {
-        return defaultTransactionExecutor;
+    public final GammaTxnExecutor getDefaultTxnExecutor() {
+        return defaultxnExecutor;
     }
 
     @Override
@@ -262,13 +262,13 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTransactionExecutor newTransactionExecutor() {
+        public final GammaTxnExecutor newTxnExecutor() {
             config.init();
 
             if (isLean()) {
-                return new LeanGammaTransactionExecutor(newTransactionFactory());
+                return new LeanGammaTxnExecutor(newTransactionFactory());
             } else {
-                return new FatGammaTransactionExecutor(newTransactionFactory());
+                return new FatGammaTxnExecutor(newTransactionFactory());
             }
         }
 

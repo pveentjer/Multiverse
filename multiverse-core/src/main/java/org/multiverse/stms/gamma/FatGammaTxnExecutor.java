@@ -10,18 +10,18 @@ import static java.lang.String.format;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
 /**
-* An GammaTransactionExecutor made for the GammaStm.
+* An GammaTxnExecutor made for the GammaStm.
 *
 * This code is generated.
 *
 * @author Peter Veentjer
 */
-public final class FatGammaTransactionExecutor extends AbstractGammaTransactionExecutor{
-    private static final Logger logger = Logger.getLogger(FatGammaTransactionExecutor.class.getName());
+public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
+    private static final Logger logger = Logger.getLogger(FatGammaTxnExecutor.class.getName());
 
     private final PropagationLevel propagationLevel;
 
-    public FatGammaTransactionExecutor(final GammaTxnFactory txnFactory) {
+    public FatGammaTxnExecutor(final GammaTxnFactory txnFactory) {
         super(txnFactory);
         this.propagationLevel = txnConfiguration.propagationLevel;
     }
@@ -96,7 +96,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -119,7 +119,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -330,7 +330,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -353,7 +353,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -564,7 +564,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -587,7 +587,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -798,7 +798,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -821,7 +821,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -1032,7 +1032,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -1055,7 +1055,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
@@ -1268,7 +1268,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                                 }
                             }
                             throw new TransactionMandatoryException(
-                                format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
+                                format("No transaction is found for TxnExecutor '%s' with 'Mandatory' propagation level",
                                     txnConfiguration.familyName));
                         }
 
@@ -1292,7 +1292,7 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         }
 
                         throw new TransactionNotAllowedException(
-                            format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
+                            format("No transaction is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
                                     txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );

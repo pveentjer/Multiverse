@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.GammaTransactionExecutor;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.GammaTxnExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -38,18 +38,18 @@ public class ReentrantMutex_FatVariableLengthGammaTransaction_StressTest extends
         run();
     }
 
-    protected GammaTransactionExecutor newLockBlock() {
+    protected GammaTxnExecutor newLockBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
 
     }
 
-    protected GammaTransactionExecutor newUnlockBlock() {
+    protected GammaTxnExecutor newUnlockBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

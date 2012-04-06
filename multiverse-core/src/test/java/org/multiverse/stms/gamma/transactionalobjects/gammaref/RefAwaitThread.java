@@ -26,7 +26,7 @@ public class RefAwaitThread<T> extends TestThread {
 
     @Override
     public void doRun() throws Exception {
-        ref.getStm().getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+        ref.getStm().getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
             public void execute(Transaction tx) throws Exception {
                 System.out.println("Starting wait and ref.value found: " + ref.get());

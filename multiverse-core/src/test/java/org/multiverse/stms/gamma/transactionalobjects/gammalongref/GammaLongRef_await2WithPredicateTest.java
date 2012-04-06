@@ -232,7 +232,7 @@ public class GammaLongRef_await2WithPredicateTest {
 
         @Override
         public void doRun() throws Exception {
-            ref.getStm().getDefaultTransactionExecutor().atomic(new AtomicVoidClosure() {
+            ref.getStm().getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     ref.await(tx, newLargerThanOrEqualsPredicate(minimumValue));

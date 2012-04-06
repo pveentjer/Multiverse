@@ -16,7 +16,7 @@
         <title>Customize the AtomicBlock</title>
         <para>
             In Multiverse some convenience methods are added to make using the STM very easy. But if you
-            want to get most out of performance of want to tune behavior of an org.multiverse.api.TransactionExecutor,
+            want to get most out of performance of want to tune behavior of an org.multiverse.api.TxnExecutor,
             the AtomicBlock needs to be customized. E.g.:
             <programlisting language="java">
     import org.multiverse.api.*;

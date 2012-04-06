@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
 
@@ -36,18 +36,18 @@ public class ReadersWriters_FatMonoGammaTransaction_StressTest extends ReadersWr
     }
 
     @Override
-    protected TransactionExecutor newAcquiredBlock() {
+    protected TxnExecutor newAcquiredBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatMonoGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor newAcquireBlock() {
+    protected TxnExecutor newAcquireBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new FatMonoGammaTxnFactory(config));
     }
 }

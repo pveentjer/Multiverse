@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.BooleanRef;
@@ -39,9 +39,9 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         stop = false;
     }
 
-    protected abstract TransactionExecutor newTakeForksBlock();
+    protected abstract TxnExecutor newTakeForksBlock();
 
-    protected abstract TransactionExecutor newReleaseForksBlock();
+    protected abstract TxnExecutor newReleaseForksBlock();
 
     public void run() {
         createForks();
@@ -89,8 +89,8 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         private int eatCount = 0;
         private final BooleanRef leftFork;
         private final BooleanRef rightFork;
-        private final TransactionExecutor releaseForksBlock = newReleaseForksBlock();
-        private final TransactionExecutor takeForksBlock = newTakeForksBlock();
+        private final TxnExecutor releaseForksBlock = newReleaseForksBlock();
+        private final TxnExecutor takeForksBlock = newTakeForksBlock();
 
         PhilosopherThread(int id, BooleanRef leftFork, BooleanRef rightFork) {
             super("PhilosopherThread-" + id);

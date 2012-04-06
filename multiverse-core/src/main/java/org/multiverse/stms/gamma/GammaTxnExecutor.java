@@ -1,14 +1,14 @@
 package org.multiverse.stms.gamma;
 
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 /**
- * An {@link org.multiverse.api.TransactionExecutor} tailored for the GammaStm.
+ * An {@link org.multiverse.api.TxnExecutor} tailored for the GammaStm.
  *
  * @author  Peter Veentjer.
  */
-public interface GammaTransactionExecutor extends TransactionExecutor {
+public interface GammaTxnExecutor extends TxnExecutor {
 
     @Override
     GammaTxnFactory getTransactionFactory();

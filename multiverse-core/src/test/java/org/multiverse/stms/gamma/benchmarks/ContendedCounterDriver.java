@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.benchy.BenchmarkDriver;
 import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -74,10 +74,10 @@ public class ContendedCounterDriver extends BenchmarkDriver {
         @Override
         public void doRun() throws Exception {
             final long _incCount = transactionsPerThread;
-            TransactionExecutor block = stm.newTransactionFactoryBuilder()
+            TxnExecutor block = stm.newTransactionFactoryBuilder()
                     .setReadLockMode(lockLevel)
                     .setDirtyCheckEnabled(dirtyCheck)
-                    .newTransactionExecutor();
+                    .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {

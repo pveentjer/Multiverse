@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.PropagationLevel;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicIntClosure;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.multiverse.TestUtils.assertIsActive;
 import static org.multiverse.api.ThreadLocalTransaction.*;
 
-public class FatGammaTransactionExecutor_propagationLevelTest implements GammaConstants {
+public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants {
     private GammaStm stm;
 
     @Before
@@ -31,9 +31,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenNeverAndTransactionAvailable_thenNoTransactionAllowedException() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         GammaTransaction otherTx = stm.newDefaultTransaction();
         setThreadLocalTransaction(otherTx);
@@ -53,9 +53,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenNeverAndNoTransactionAvailable() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
@@ -73,9 +73,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenMandatoryAndNoTransactionAvailable_thenNoTransactionFoundException() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
 
@@ -91,9 +91,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenMandatoryAndTransactionAvailable_thenExistingTransactionUsed() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         final GammaTransaction otherTx = stm.newDefaultTransaction();
         setThreadLocalTransaction(otherTx);
@@ -131,7 +131,7 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
             }
         };
 
-        int result = new FatGammaTransactionExecutor(txFactory).atomic(closure);
+        int result = new FatGammaTxnExecutor(txFactory).atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTransaction());
@@ -159,7 +159,7 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
             }
         };
 
-        int result = new FatGammaTransactionExecutor(txFactory).atomic(closure);
+        int result = new FatGammaTxnExecutor(txFactory).atomic(closure);
 
         assertEquals(10, result);
         assertSame(existingTx, getThreadLocalTransaction());
@@ -170,9 +170,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenRequiresNewAndNoTransactionAvailable_thenNewTransactionCreated() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         final GammaLongRef ref = new GammaLongRef(stm, 0);
 
@@ -195,9 +195,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenRequiresNewAndTransactionAvailable_thenExistingTransactionSuspended() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         final GammaTransaction otherTx = stm.newDefaultTransaction();
         setThreadLocalTransaction(otherTx);
@@ -225,9 +225,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenSupportsAndTransactionAvailable() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         final GammaTransaction otherTx = stm.newDefaultTransaction();
         setThreadLocalTransaction(otherTx);
@@ -249,9 +249,9 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenSupportsAndNoTransactionAvailable() {
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -36,9 +36,9 @@ public abstract class NonReentrantMutex_AbstractTest {
         stop = false;
     }
 
-    protected abstract TransactionExecutor newUnlockBlock();
+    protected abstract TxnExecutor newUnlockBlock();
 
-    protected abstract TransactionExecutor newLockBlock();
+    protected abstract TxnExecutor newLockBlock();
 
     public void run() {
         intValues = new ProtectedIntValue[accountCount];
@@ -112,8 +112,8 @@ public abstract class NonReentrantMutex_AbstractTest {
 
     class NonReentrantMutex {
         final GammaRef locked = new GammaRef(stm, null);
-        final TransactionExecutor lockBlock = newLockBlock();
-        final TransactionExecutor unlockBlock = newUnlockBlock();
+        final TxnExecutor lockBlock = newLockBlock();
+        final TxnExecutor unlockBlock = newUnlockBlock();
 
         final AtomicVoidClosure lockClosure = new AtomicVoidClosure() {
             @Override

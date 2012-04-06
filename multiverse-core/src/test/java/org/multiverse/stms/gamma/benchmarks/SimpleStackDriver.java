@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.benchy.BenchmarkDriver;
 import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
@@ -95,11 +95,11 @@ public class SimpleStackDriver extends BenchmarkDriver {
     class PushThread extends TestThread {
         private final Stack<String> stack;
         private long count;
-        private final TransactionExecutor pushBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pushBlock = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .setReadLockMode(readLockMode)
                 .setWriteLockMode(writeLockMode)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         public PushThread(int id, Stack<String> stack) {
             super("PushThread-" + id);
@@ -167,11 +167,11 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         private final Stack<String> stack;
         private long count;
-        private final TransactionExecutor popBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor popBlock = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .setReadLockMode(readLockMode)
                 .setWriteLockMode(writeLockMode)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         public PopThread(int id, Stack<String> stack) {
             super("PopThread-" + id);

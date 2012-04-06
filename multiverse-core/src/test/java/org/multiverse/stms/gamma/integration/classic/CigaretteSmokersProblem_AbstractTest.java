@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.classic;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -32,10 +32,10 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
     private SmokerThread matchProvider;
     private SmokerThread tobaccoProvider;
     private volatile boolean stop;
-    private TransactionExecutor block;
+    private TxnExecutor block;
     protected GammaStm stm;
 
-    protected abstract TransactionExecutor newBlock();
+    protected abstract TxnExecutor newBlock();
 
     @Before
     public void setUp() {

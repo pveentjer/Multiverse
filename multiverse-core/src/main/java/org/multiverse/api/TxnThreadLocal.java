@@ -7,15 +7,15 @@ import org.multiverse.api.exceptions.TransactionMandatoryException;
  * should not rely on threadlocals, they are only used for convenience to reduce the need to carry around a
  * Transaction.
  *
- * <p>This ThreadLocalTransaction has an optimization that prevents accessing the threadlocal too many times.
+ * <p>This TxnThreadLocal has an optimization that prevents accessing the threadlocal too many times.
  * The Container wraps the Transaction, so if a Thread gets a reference to that container and holds it, it
  * can modify the current transaction with a direct field access instead of another threadlocal access. It should
  * be used with extreme care, because the Container should not leak to another thread. It is very useful for the
- * {@link TransactionExecutor} for example because a get/getAndSet/clear needs to be called otherwise.
+ * {@link TxnExecutor} for example because a get/getAndSet/clear needs to be called otherwise.
  *
  * @author Peter Veentjer.
  */
-public final class ThreadLocalTransaction {
+public final class TxnThreadLocal {
 
     public final static ThreadLocal<Container> threadlocal = new ThreadLocal<Container>() {
         protected Container initialValue() {
@@ -60,7 +60,7 @@ public final class ThreadLocalTransaction {
         Transaction tx = threadlocal.get().tx;
 
         if (tx == null) {
-            throw new TransactionMandatoryException("No transaction is found on the ThreadLocalTransaction");
+            throw new TransactionMandatoryException("No transaction is found on the TxnThreadLocal");
         }
 
         return tx;
@@ -89,7 +89,7 @@ public final class ThreadLocalTransaction {
 
     //we don't want any instances.
 
-    private ThreadLocalTransaction() {
+    private TxnThreadLocal() {
     }
 
     public static class Container {

@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -27,7 +27,7 @@ import static org.multiverse.TestUtils.assertInstanceof;
 import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
 import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
 
-public class GammaTransactionExecutor_speculativeTest implements GammaConstants {
+public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
     private GammaStm stm;
 
@@ -47,11 +47,11 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
         final AtomicInteger attempt = new AtomicInteger(1);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setControlFlowErrorsReused(false)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -87,10 +87,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final GammaRef<String> ref = new GammaRef<String>(stm);
         final Function<String> function = mock(Function.class);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -111,10 +111,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
         final GammaRef<String> ref = new GammaRef<String>(stm);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(true)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -136,10 +136,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
     public void whenConstructing() {
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -161,10 +161,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -185,10 +185,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
         final GammaRef ref = new GammaRef(stm);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -210,10 +210,10 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
         final AtomicBoolean added = new AtomicBoolean();
         final TransactionListener listener = mock(TransactionListener.class);
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override
@@ -241,11 +241,11 @@ public class GammaTransactionExecutor_speculativeTest implements GammaConstants 
 
         final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
 
-        TransactionExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(1000)
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
-                .newTransactionExecutor();
+                .newTxnExecutor();
 
         block.atomic(new AtomicVoidClosure() {
             @Override

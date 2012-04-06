@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma.integration.isolation;
 
 import org.junit.Test;
-import org.multiverse.api.TransactionExecutor;
-import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
+import org.multiverse.api.TxnExecutor;
+import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxnFactory;
 
@@ -65,18 +65,18 @@ public class RefReadConsistency_LeanFixedLengthGammaTransaction_StressTest exten
     }
 
     @Override
-    protected TransactionExecutor createReadBlock() {
+    protected TxnExecutor createReadBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setMaximumPoorMansConflictScanLength(refCount)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(config));
     }
 
     @Override
-    protected TransactionExecutor createWriteBlock() {
+    protected TxnExecutor createWriteBlock() {
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setMaximumPoorMansConflictScanLength(refCount)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(config));
+        return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(config));
     }
 }

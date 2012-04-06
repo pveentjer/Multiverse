@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.TransactionExecutor;
+import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -108,12 +108,12 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
 
     class Stack<E> {
         private final GammaRef<Node<E>> head = new GammaRef<Node<E>>(stm);
-        private final TransactionExecutor pushBlock = newPushTransactionExecutor();
+        private final TxnExecutor pushExecutor = newPushTxnExecutor();
 
-        private final TransactionExecutor popBlock = newPopTransactionExecutor();
+        private final TxnExecutor popExecutor = newPopTxnExecutor();
 
         public void push(final E item) {
-            pushBlock.atomic(new AtomicVoidClosure() {
+            pushExecutor.atomic(new AtomicVoidClosure() {
                 @Override
                 public void execute(Transaction tx) throws Exception {
                     head.set(new Node<E>(item, head.get()));
@@ -122,7 +122,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         }
 
         public E pop() {
-            return popBlock.atomic(new AtomicClosure<E>() {
+            return popExecutor.atomic(new AtomicClosure<E>() {
                 @Override
                 public E execute(Transaction tx) throws Exception {
                     Node<E> node = head.awaitNotNullAndGet();
@@ -133,9 +133,9 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         }
     }
 
-    protected abstract TransactionExecutor newPopTransactionExecutor();
+    protected abstract TxnExecutor newPopTxnExecutor();
 
-    protected abstract TransactionExecutor newPushTransactionExecutor();
+    protected abstract TxnExecutor newPushTxnExecutor();
 
     class Node<E> {
         final E item;
