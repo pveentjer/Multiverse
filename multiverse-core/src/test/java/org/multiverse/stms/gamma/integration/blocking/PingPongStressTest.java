@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicBooleanClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnBooleanClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -76,7 +76,7 @@ public class PingPongStressTest {
         sleepMs(30 * 1000);
         stop = true;
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref.set(-abs(ref.get()));
@@ -121,7 +121,7 @@ public class PingPongStressTest {
 
         @Override
         public void doRun() {
-            AtomicBooleanClosure closure = new AtomicBooleanClosure() {
+            TxnBooleanClosure closure = new TxnBooleanClosure() {
                 @Override
                 public boolean execute(Txn tx) throws Exception {
                     if (ref.get() < 0) {

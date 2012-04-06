@@ -37,7 +37,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{

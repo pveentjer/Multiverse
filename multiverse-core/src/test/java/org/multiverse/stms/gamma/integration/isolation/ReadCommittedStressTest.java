@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -67,7 +67,7 @@ public class ReadCommittedStressTest {
         @Override
         public void doRun() {
             TxnExecutor block = stm.getDefaultTxnExecutor();
-            AtomicVoidClosure closure = new AtomicVoidClosure() {
+            TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -80,7 +80,7 @@ public class ReadCommittedStressTest {
                 try {
                     block.atomic(closure);
                     fail();
-                } catch (DeadTransactionException ignore) {
+                } catch (DeadTxnException ignore) {
                 }
 
                 sleepRandomMs(10);
@@ -97,7 +97,7 @@ public class ReadCommittedStressTest {
 
         @Override
         public void doRun() {
-            AtomicVoidClosure closure = new AtomicVoidClosure() {
+            TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -108,12 +108,12 @@ public class ReadCommittedStressTest {
                 }
             };
 
-            TxnExecutor readonlyReadtrackingBlock = stm.newTransactionFactoryBuilder()
+            TxnExecutor readonlyReadtrackingBlock = stm.newTxnFactoryBuilder()
                     .setReadonly(true)
                     .setReadTrackingEnabled(true)
                     .newTxnExecutor();
 
-            TxnExecutor updateReadtrackingBlock = stm.newTransactionFactoryBuilder()
+            TxnExecutor updateReadtrackingBlock = stm.newTxnFactoryBuilder()
                     .setReadonly(false)
                     .setReadTrackingEnabled(true)
                     .newTxnExecutor();

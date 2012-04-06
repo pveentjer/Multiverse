@@ -21,7 +21,7 @@ public class GammaObjectPool_tranlocalArrayTest implements GammaConstants {
     @Test
     public void whenItemPutInPool_thenPreparedForPooling() {
         GammaRefTranlocal[] array = new GammaRefTranlocal[2];
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
 
         array[0] = new GammaLongRef(stm).openForRead(tx, LOCKMODE_NONE);
         array[1] = new GammaLongRef(stm).openForRead(tx, LOCKMODE_NONE);

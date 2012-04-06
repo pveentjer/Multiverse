@@ -52,7 +52,7 @@ public class GammaLongRef_consistentLoadStressTest implements GammaConstants {
     }
 
     class ReadThread extends TestThread {
-        private final GammaTxn tx = stm.newDefaultTransaction();
+        private final GammaTxn tx = stm.newDefaultTxn();
 
         public ReadThread(int id) {
             super("ReadThread-" + id);

@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -65,7 +65,7 @@ public class GammaLongRef_getAndIncrement2Test {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
@@ -74,7 +74,7 @@ public class GammaLongRef_getAndIncrement2Test {
         try {
             ref.getAndIncrement(tx, 10);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -82,16 +82,16 @@ public class GammaLongRef_getAndIncrement2Test {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
         try {
             ref.getAndIncrement(tx, 10);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -99,7 +99,7 @@ public class GammaLongRef_getAndIncrement2Test {
     }
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
@@ -108,7 +108,7 @@ public class GammaLongRef_getAndIncrement2Test {
         try {
             ref.getAndIncrement(tx, 10);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);

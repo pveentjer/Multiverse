@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.junit.Test;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.assertNull;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertSurplus;
@@ -20,7 +20,7 @@ public class FatFixedLengthGammaTxn_commitTest extends FatGammaTxn_commitTest<Fa
     }
 
     @Override
-    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatFixedLengthGammaTxn(config);
     }
 
@@ -33,7 +33,7 @@ public class FatFixedLengthGammaTxn_commitTest extends FatGammaTxn_commitTest<Fa
     public void richmansConflict_multipleReadsOnSameRef() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTxn tx1 = new FatVariableLengthGammaTxn(config);

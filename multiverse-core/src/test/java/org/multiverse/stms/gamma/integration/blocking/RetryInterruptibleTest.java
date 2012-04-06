@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -57,11 +57,11 @@ public class RetryInterruptibleTest {
         }
 
         public void await() throws Exception {
-            TxnExecutor block = stm.newTransactionFactoryBuilder()
+            TxnExecutor block = stm.newTxnFactoryBuilder()
                     .setInterruptible(true)
                     .newTxnExecutor();
 
-            block.atomicChecked(new AtomicVoidClosure() {
+            block.atomicChecked(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

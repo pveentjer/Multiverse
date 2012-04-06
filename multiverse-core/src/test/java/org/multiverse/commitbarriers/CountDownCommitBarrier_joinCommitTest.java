@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 
@@ -48,7 +48,7 @@ public class CountDownCommitBarrier_joinCommitTest {
     public void whenLastOneEntering() throws InterruptedException {
         barrier = new CountDownCommitBarrier(1);
 
-        Txn tx = stm.newTransactionFactoryBuilder()
+        Txn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .newTransactionFactory()
                 .newTransaction();
@@ -69,7 +69,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
                         ref.set(tx, 10);
@@ -118,7 +118,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomicChecked(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomicChecked(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
                         ref.set(tx, 10);
@@ -144,13 +144,13 @@ public class CountDownCommitBarrier_joinCommitTest {
     public void whenTransactionAlreadyCommitted() throws InterruptedException {
         barrier = new CountDownCommitBarrier(1);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.commit();
 
         try {
             barrier.joinCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -158,16 +158,16 @@ public class CountDownCommitBarrier_joinCommitTest {
     }
 
     @Test
-    public void whenTransactionAlreadyAborted_thenDeadTransactionException() throws InterruptedException {
+    public void whenTransactionAlreadyAborted_thenDeadTxnException() throws InterruptedException {
         barrier = new CountDownCommitBarrier(1);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.abort();
 
         try {
             barrier.joinCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -179,7 +179,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
 
         try {
             barrier.joinCommit(tx);
@@ -195,7 +195,7 @@ public class CountDownCommitBarrier_joinCommitTest {
     public void whenCommitted_thenCommitBarrierOpenException() throws InterruptedException {
         barrier = new CountDownCommitBarrier(0);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
 
         try {
             barrier.joinCommit(tx);

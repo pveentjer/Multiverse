@@ -7,7 +7,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -63,7 +63,7 @@ public class WriteSkewStressTest {
         }
 
         GammaLongRef account = customer1.getRandomAccount();
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         account.openForWrite(tx, LOCKMODE_NONE).long_value = 1000;
         tx.commit();
     }
@@ -107,8 +107,8 @@ public class WriteSkewStressTest {
         Customer customer1 = new Customer();
         Customer customer2 = new Customer();
 
-        GammaTxn tx1 = stm.newDefaultTransaction();
-        GammaTxn tx2 = stm.newDefaultTransaction();
+        GammaTxn tx1 = stm.newDefaultTxn();
+        GammaTxn tx2 = stm.newDefaultTxn();
 
         customer1.account1.get(tx1);
         customer1.account2.get(tx1);
@@ -151,12 +151,12 @@ public class WriteSkewStressTest {
         Customer customer1 = new Customer();
         Customer customer2 = new Customer();
 
-        GammaTxn tx1 = stm.newTransactionFactoryBuilder()
+        GammaTxn tx1 = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
                 .newTransaction();
-        GammaTxn tx2 = stm.newTransactionFactoryBuilder()
+        GammaTxn tx2 = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
@@ -235,21 +235,21 @@ public class WriteSkewStressTest {
 
     public class TransferThread extends TestThread {
 
-        private final TxnExecutor snapshotBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor snapshotBlock = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setMaxRetries(10000)
                 .newTxnExecutor();
-        private final TxnExecutor serializedBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor serializedBlock = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .setMaxRetries(10000)
                 .newTxnExecutor();
-        private final TxnExecutor pessimisticReadsBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pessimisticReadsBlock = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setReadLockMode(LockMode.Read)
                 .setMaxRetries(10000)
                 .newTxnExecutor();
-        private final TxnExecutor pessimisticWritesBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pessimisticWritesBlock = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .setMaxRetries(10000)
@@ -296,7 +296,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReadLevel() {
-            pessimisticReadsBlock.atomic(new AtomicVoidClosure() {
+            pessimisticReadsBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -306,7 +306,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWriteLevel() {
-            pessimisticWritesBlock.atomic(new AtomicVoidClosure() {
+            pessimisticWritesBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -316,7 +316,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSerializedIsolation() {
-            serializedBlock.atomic(new AtomicVoidClosure() {
+            serializedBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -326,7 +326,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSnapshotIsolation() {
-            snapshotBlock.atomic(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -336,7 +336,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReads() {
-            snapshotBlock.atomic(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -346,7 +346,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWrites() {
-            snapshotBlock.atomic(new AtomicVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

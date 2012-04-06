@@ -28,7 +28,7 @@ public class Lock_atomicGetLockModeTest {
 
     public void test(LockMode lockMode){
          GammaLongRef ref = new GammaLongRef(stm);
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, lockMode);
 
         LockMode result = ref.atomicGetLockMode();

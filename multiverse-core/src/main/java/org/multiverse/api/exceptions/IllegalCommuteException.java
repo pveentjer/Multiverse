@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TransactionExecutionException} thrown when {@link org.multiverse.api.Txn} access is done while
+ * A {@link TxnExecutionException} thrown when {@link org.multiverse.api.Txn} access is done while
  * a commuting function is being evaluated.
  *
  * <p>The reason why Txn access is not allowed,  is that once other reads/writes are done while executing the commuting
@@ -12,7 +12,7 @@ package org.multiverse.api.exceptions;
  *
  * @author Peter Veentjer.
  */
-public class IllegalCommuteException extends TransactionExecutionException {
+public class IllegalCommuteException extends TxnExecutionException {
 
     private static final long serialVersionUID = 0;
 

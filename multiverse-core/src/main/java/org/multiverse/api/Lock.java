@@ -112,7 +112,7 @@ public interface Lock {
      * To retrieve the actual LockMode of the Lock, you need to use the {@link #atomicGetLockMode()}.
      *
      * @return the LockMode.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *          if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *          if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
@@ -128,7 +128,7 @@ public interface Lock {
      *
      * @param txn the Lock
      * @return the LockMode the transaction has on the Lock.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *          if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *          if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
@@ -149,7 +149,7 @@ public interface Lock {
      * <p>If the lockMode is lower than the LockMode the transaction already has on this Lock, the call is ignored.
      *
      * @param desiredLockMode the desired lockMode.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                              if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                              if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
@@ -169,7 +169,7 @@ public interface Lock {
      *
      * @param txn              the Txn used for this operation.
      * @param desiredLockMode the desired lockMode.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                              if something failed while using the transaction. The transaction is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                              if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction

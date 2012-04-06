@@ -38,7 +38,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNormalRead(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
                 .newTransaction();
@@ -66,7 +66,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNonDirtyWriteAndDirtyCheckEnabled(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
@@ -104,7 +104,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNormalDirtyWrite(LockMode lockMode, boolean dirtyCheck) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .newTransactionFactory()
@@ -135,7 +135,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNonDirtyWrite(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()

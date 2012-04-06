@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
@@ -27,7 +27,7 @@ public class StmUtilsTest {
         try {
             scheduleDeferredTask(task);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         verifyZeroInteractions(task);
@@ -42,7 +42,7 @@ public class StmUtilsTest {
     public void whenScheduleDeferredTaskAndCommit_thenCalled() {
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 scheduleDeferredTask(task);
@@ -57,7 +57,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     scheduleDeferredTask(task);
@@ -82,7 +82,7 @@ public class StmUtilsTest {
         try {
             scheduleCompensatingTask(task);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         verifyZeroInteractions(task);
@@ -98,7 +98,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     scheduleCompensatingTask(task);
@@ -117,7 +117,7 @@ public class StmUtilsTest {
 
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 scheduleCompensatingTask(task);
@@ -134,7 +134,7 @@ public class StmUtilsTest {
         try {
             scheduleCompensatingOrDeferredTask(task);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         verifyZeroInteractions(task);
@@ -150,7 +150,7 @@ public class StmUtilsTest {
         final Runnable task = mock(Runnable.class);
 
         try {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
@@ -169,7 +169,7 @@ public class StmUtilsTest {
 
         final Runnable task = mock(Runnable.class);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);

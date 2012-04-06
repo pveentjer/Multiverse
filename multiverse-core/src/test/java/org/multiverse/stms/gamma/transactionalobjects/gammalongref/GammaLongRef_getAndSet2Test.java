@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -63,7 +63,7 @@ public class GammaLongRef_getAndSet2Test {
     }
 
     @Test
-    public void whenPreparedTransaction_thenPreparedTransactionException() {
+    public void whenPreparedTransaction_thenPreparedTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
@@ -73,7 +73,7 @@ public class GammaLongRef_getAndSet2Test {
         try {
             ref.getAndSet(tx, 11);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -81,7 +81,7 @@ public class GammaLongRef_getAndSet2Test {
     }
 
     @Test
-    public void whenAbortedTransaction_thenDeadTransactionException() {
+    public void whenAbortedTransaction_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
         GammaTxn tx = transactionFactory.newTransaction();
@@ -90,7 +90,7 @@ public class GammaLongRef_getAndSet2Test {
         try {
             ref.getAndSet(tx, 11);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -107,7 +107,7 @@ public class GammaLongRef_getAndSet2Test {
         try {
             ref.getAndSet(tx, 11);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

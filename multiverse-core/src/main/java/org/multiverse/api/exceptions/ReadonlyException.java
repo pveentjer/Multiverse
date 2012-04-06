@@ -1,13 +1,13 @@
 package org.multiverse.api.exceptions;
 
 /**
- * An {@link IllegalTransactionStateException} thrown when a write action is executed using
+ * An {@link IllegalTxnStateException} thrown when a write action is executed using
  * a readonly {@link org.multiverse.api.Txn}.
  *
  * @author Peter Veentjer.
  * @see org.multiverse.api.TxnFactoryBuilder#setReadonly(boolean)
  */
-public class ReadonlyException extends IllegalTransactionStateException {
+public class ReadonlyException extends IllegalTxnStateException {
 
     private static final long serialVersionUID = 0;
 

@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.lean;
 
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public class LeanFixedLengthGammaTxn_openForReadTest extends LeanGammaTxn_openForReadTest<LeanFixedLengthGammaTxn> {
 
@@ -11,7 +11,7 @@ public class LeanFixedLengthGammaTxn_openForReadTest extends LeanGammaTxn_openFo
 
     @Override
     public int getMaximumLength() {
-        return new GammaTxnConfiguration(stm).maxFixedLengthTransactionSize;
+        return new GammaTxnConfig(stm).maxFixedLengthTransactionSize;
     }
 
 }

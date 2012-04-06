@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxnFactory;
 
 /**
@@ -18,13 +18,13 @@ public class Semaphore_LeanMonoGammaTxn_StressTest extends Semaphore_AbstractTes
 
     @Override
     protected TxnExecutor newDownBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         return new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(config));
     }
 
     @Override
     protected TxnExecutor newUpBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         return new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(config));
     }
 }

@@ -6,8 +6,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
@@ -50,7 +50,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenNoPendingTransactions() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.vetoCommit(tx);
 
         assertTrue(barrier.isCommitted());
@@ -67,7 +67,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
@@ -97,7 +97,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenTransactionFailedToPrepare_thenBarrierNotAbortedOrCommitted() {
         final GammaIntRef ref = new GammaIntRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
 
         //conflicting write
@@ -116,16 +116,16 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.abort();
 
         try {
             barrier.vetoCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -133,16 +133,16 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.commit();
 
         try {
             barrier.vetoCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -154,7 +154,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         VetoCommitBarrier barrier = new VetoCommitBarrier();
         barrier.atomicVetoCommit();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         try {
             barrier.vetoCommit(tx);
             fail();
@@ -170,7 +170,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         VetoCommitBarrier barrier = new VetoCommitBarrier();
         barrier.abort();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         try {
             barrier.vetoCommit(tx);
             fail();

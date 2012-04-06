@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.multiverse.SomeUncheckedException;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryError;
 import org.multiverse.api.predicates.LongPredicate;
 import org.multiverse.api.references.LongRef;
@@ -40,7 +40,7 @@ public class GammaLongRef_await2WithPredicateTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
                 .newTransaction();
@@ -62,7 +62,7 @@ public class GammaLongRef_await2WithPredicateTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
 
         ref.await(tx, newEqualsPredicate(initialValue));
 
@@ -80,7 +80,7 @@ public class GammaLongRef_await2WithPredicateTest {
 
         when(predicate.evaluate(initialValue)).thenThrow(new SomeUncheckedException());
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
 
         try {
             ref.await(tx, predicate);
@@ -98,7 +98,7 @@ public class GammaLongRef_await2WithPredicateTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
 
         try {
             ref.await(tx, null);
@@ -129,19 +129,19 @@ public class GammaLongRef_await2WithPredicateTest {
     }
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.prepare();
 
         LongPredicate predicate = mock(LongPredicate.class);
         try {
             ref.await(tx, predicate);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -150,19 +150,19 @@ public class GammaLongRef_await2WithPredicateTest {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
 
         LongPredicate predicate = mock(LongPredicate.class);
         try {
             ref.await(tx, predicate);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -171,19 +171,19 @@ public class GammaLongRef_await2WithPredicateTest {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.commit();
 
         LongPredicate predicate = mock(LongPredicate.class);
         try {
             ref.await(tx, predicate);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -232,7 +232,7 @@ public class GammaLongRef_await2WithPredicateTest {
 
         @Override
         public void doRun() throws Exception {
-            ref.getStm().getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     ref.await(tx, newLargerThanOrEqualsPredicate(minimumValue));

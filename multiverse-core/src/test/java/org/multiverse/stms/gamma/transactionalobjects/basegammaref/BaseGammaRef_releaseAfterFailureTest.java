@@ -31,7 +31,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
@@ -56,7 +56,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
     public void writeBiased_whenRead(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
 
         ref.releaseAfterFailure(tranlocal, tx.pool);
@@ -81,7 +81,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
     public void writeBiased_whenWrite(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
         tranlocal.isDirty = true;
 
@@ -104,7 +104,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
@@ -191,7 +191,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
 
     @Test
     public void whenConstructing() {
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaLongRef ref = new GammaLongRef(tx, 0);
         GammaRefTranlocal tranlocal = tx.locate(ref);
 

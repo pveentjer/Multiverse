@@ -72,7 +72,7 @@ public class GammaLongRef_increment1WithAmountTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .setSpeculative(false)
                 .newTransactionFactory()
@@ -178,7 +178,7 @@ public class GammaLongRef_increment1WithAmountTest {
         try {
             ref.increment(5);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -186,7 +186,7 @@ public class GammaLongRef_increment1WithAmountTest {
     }
 
     @Test
-    public void whenAbortedTransactionFound_thenDeadTransactionException() {
+    public void whenAbortedTransactionFound_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -198,7 +198,7 @@ public class GammaLongRef_increment1WithAmountTest {
         try {
             ref.increment(5);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -206,7 +206,7 @@ public class GammaLongRef_increment1WithAmountTest {
     }
 
     @Test
-    public void whenPreparedTransactionFound_thenPreparedTransactionException() {
+    public void whenPreparedTransactionFound_thenPreparedTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -218,7 +218,7 @@ public class GammaLongRef_increment1WithAmountTest {
         try {
             ref.increment(5);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -226,7 +226,7 @@ public class GammaLongRef_increment1WithAmountTest {
     }
 
     @Test
-    public void whenNoTransaction_thenTransactionMandatoryException() {
+    public void whenNoTransaction_thenTxnMandatoryException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -234,7 +234,7 @@ public class GammaLongRef_increment1WithAmountTest {
         try {
             ref.increment(5);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         assertVersionAndValue(ref, initialVersion, initialValue);

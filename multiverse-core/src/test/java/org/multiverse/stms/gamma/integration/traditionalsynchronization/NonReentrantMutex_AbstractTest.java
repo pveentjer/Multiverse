@@ -5,7 +5,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 
@@ -115,7 +115,7 @@ public abstract class NonReentrantMutex_AbstractTest {
         final TxnExecutor lockBlock = newLockBlock();
         final TxnExecutor unlockBlock = newUnlockBlock();
 
-        final AtomicVoidClosure lockClosure = new AtomicVoidClosure() {
+        final TxnVoidClosure lockClosure = new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 locked.awaitNull(tx);
@@ -123,7 +123,7 @@ public abstract class NonReentrantMutex_AbstractTest {
             }
         };
 
-        final AtomicVoidClosure unlockClosure = new AtomicVoidClosure() {
+        final TxnVoidClosure unlockClosure = new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 if (locked.isNull(tx)) {

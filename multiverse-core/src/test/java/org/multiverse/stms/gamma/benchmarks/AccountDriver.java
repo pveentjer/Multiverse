@@ -5,8 +5,8 @@ import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicDoubleClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnDoubleClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.DoubleRef;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -152,9 +152,9 @@ public class AccountDriver extends BenchmarkDriver {
 
     class Bank {
         private final Account[] accounts;
-        private final TxnExecutor addInterrestBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
-        private final TxnExecutor computeTotalBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
-        private final TxnExecutor transferBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
+        private final TxnExecutor addInterrestBlock = stm.newTxnFactoryBuilder().newTxnExecutor();
+        private final TxnExecutor computeTotalBlock = stm.newTxnFactoryBuilder().newTxnExecutor();
+        private final TxnExecutor transferBlock = stm.newTxnFactoryBuilder().newTxnExecutor();
 
         public Bank(int accountCount) {
             accounts = new Account[accountCount];
@@ -164,7 +164,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void addInterest(final float rate) {
-            addInterrestBlock.atomic(new AtomicVoidClosure() {
+            addInterrestBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     for (Account a : accounts) {
@@ -177,7 +177,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public double computeTotal() {
-            return computeTotalBlock.atomic(new AtomicDoubleClosure() {
+            return computeTotalBlock.atomic(new TxnDoubleClosure() {
                 @Override
                 public double execute(Txn tx) throws Exception {
                     double total = 0.0;
@@ -192,7 +192,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void transfer(final Account src, final Account dst, final float amount) throws OverdraftException {
-            transferBlock.atomic(new AtomicVoidClosure() {
+            transferBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     dst.deposit(amount);

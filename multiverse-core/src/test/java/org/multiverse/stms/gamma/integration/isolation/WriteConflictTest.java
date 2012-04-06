@@ -36,7 +36,7 @@ public class WriteConflictTest implements GammaConstants {
     public void whenDirtyCheckAndChange_ThenWriteConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
@@ -62,7 +62,7 @@ public class WriteConflictTest implements GammaConstants {
     public void whenDirtyCheckAndNoChange_ThenNoWriteConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
@@ -84,7 +84,7 @@ public class WriteConflictTest implements GammaConstants {
     public void whenNoDirtyCheckAndChange_ThenWriteConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
@@ -109,7 +109,7 @@ public class WriteConflictTest implements GammaConstants {
     public void whenNoDirtyCheckAndNoChange_ThenWriteConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()

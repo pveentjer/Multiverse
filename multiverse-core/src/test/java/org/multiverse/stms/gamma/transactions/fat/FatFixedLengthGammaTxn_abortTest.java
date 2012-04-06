@@ -1,7 +1,7 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.assertNull;
 
@@ -22,7 +22,7 @@ public class FatFixedLengthGammaTxn_abortTest extends FatGammaTxn_abortTest<FatF
     }
 
     @Override
-    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatFixedLengthGammaTxn(config);
     }
 }

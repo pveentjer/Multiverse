@@ -7,8 +7,8 @@ import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
@@ -276,7 +276,7 @@ public class GammaRef_commute2Test {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         Long initialValue = 10L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -289,7 +289,7 @@ public class GammaRef_commute2Test {
         try {
             ref.commute(tx, function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -299,7 +299,7 @@ public class GammaRef_commute2Test {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         Long initialValue = 20L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -312,7 +312,7 @@ public class GammaRef_commute2Test {
         try {
             ref.commute(tx, function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -322,7 +322,7 @@ public class GammaRef_commute2Test {
     }
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         Long initialValue = 10L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -335,7 +335,7 @@ public class GammaRef_commute2Test {
         try {
             ref.commute(tx, function);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);

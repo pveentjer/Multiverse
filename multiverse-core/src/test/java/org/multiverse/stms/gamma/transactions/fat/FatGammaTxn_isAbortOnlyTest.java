@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
@@ -55,40 +55,40 @@ public abstract class FatGammaTxn_isAbortOnlyTest<T extends GammaTxn> {
     }
 
     @Test
-    public void whenPreparedAndSetAbortOnly_thenPreparedTransactionException() {
+    public void whenPreparedAndSetAbortOnly_thenPreparedTxnException() {
         T tx = newTransaction();
         tx.prepare();
 
         try {
             tx.setAbortOnly();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
     }
 
     @Test
-    public void whenAborted_thenDeadTransactionException() {
+    public void whenAborted_thenDeadTxnException() {
         T tx = newTransaction();
         tx.abort();
         try {
             tx.isAbortOnly();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
     }
 
     @Test
-    public void whenCommitted_thenDeadTransactionException() {
+    public void whenCommitted_thenDeadTxnException() {
         T tx = newTransaction();
         tx.commit();
         try {
             tx.isAbortOnly();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

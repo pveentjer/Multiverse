@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxnFactory;
 
 public class NonReentrantMutex_FatMonoGammaTxn_StressTest extends NonReentrantMutex_AbstractTest {
@@ -37,7 +37,7 @@ public class NonReentrantMutex_FatMonoGammaTxn_StressTest extends NonReentrantMu
 
     @Override
     protected TxnExecutor newLockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(config));
@@ -45,7 +45,7 @@ public class NonReentrantMutex_FatMonoGammaTxn_StressTest extends NonReentrantMu
 
     @Override
     protected TxnExecutor newUnlockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new LeanFixedLengthGammaTxnFactory(config));

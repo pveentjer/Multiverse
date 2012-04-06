@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
@@ -93,7 +93,7 @@ public class GammaLongRef_alterAndGet2Test {
     }
 
     @Test
-    public void whenCommittedTransaction_thenDeadTransactionException() {
+    public void whenCommittedTransaction_thenDeadTxnException() {
         int initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -106,7 +106,7 @@ public class GammaLongRef_alterAndGet2Test {
         try {
             ref.alterAndGet(tx, function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -115,7 +115,7 @@ public class GammaLongRef_alterAndGet2Test {
     }
 
     @Test
-    public void whenPreparedTransaction_thenPreparedTransactionException() {
+    public void whenPreparedTransaction_thenPreparedTxnException() {
         int initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -128,7 +128,7 @@ public class GammaLongRef_alterAndGet2Test {
         try {
             ref.alterAndGet(tx, function);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -150,7 +150,7 @@ public class GammaLongRef_alterAndGet2Test {
         try {
             ref.alterAndGet(tx, function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);

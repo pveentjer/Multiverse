@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -33,7 +33,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
     public void whenNoTimeoutAndInterruptible() throws InterruptedException {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setInterruptible(true)
                 .newTxnExecutor();
 
@@ -56,7 +56,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
     public void whenTimeoutAndInterruptible() throws InterruptedException {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
                 .setInterruptible(true)
                 .newTxnExecutor();
@@ -88,7 +88,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            block.atomic(new AtomicVoidClosure() {
+            block.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

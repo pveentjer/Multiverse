@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
@@ -29,7 +29,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         stm = new GammaStm();
     }
 
-    protected abstract T newTransaction(GammaTxnConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfig config);
 
     protected abstract T newTransaction();
 
@@ -42,7 +42,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
 
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         T tx = newTransaction(config);
@@ -58,7 +58,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         GammaLongRef ref = new GammaLongRef(otherStm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
 
         try {
             ref.openForWrite(tx, LOCKMODE_NONE);
@@ -139,7 +139,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
     public void whenTransactionAbortOnly_thenWriteStillPossible() {
         GammaLongRef ref = new GammaLongRef(stm, 0);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.setAbortOnly();
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
@@ -152,7 +152,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
     public void whenTransactionAbortOnly_thenRereadStillPossible() {
         GammaLongRef ref = new GammaLongRef(stm, 0);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForWrite(tx, LOCKMODE_NONE);
         tx.setAbortOnly();
         GammaRefTranlocal reread = ref.openForWrite(tx, LOCKMODE_NONE);
@@ -220,7 +220,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         config.readonly = true;
         T tx = newTransaction(config);
 
@@ -390,7 +390,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         config.writeLockModeAsInt = transactionWriteLockMode;
         GammaTxn tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode);
@@ -757,7 +757,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
         GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setIsolationLevel(IsolationLevel.RepeatableRead);
         T tx = newTransaction(config);
 
@@ -794,7 +794,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
 
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         GammaTxn tx = newTransaction();
         tx.prepare();
 
@@ -805,7 +805,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         try {
             ref.openForWrite(tx, LOCKMODE_NONE);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -814,7 +814,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
     }
 
     @Test
-    public void whenTransactionAlreadyAborted_thenDeadTransactionException() {
+    public void whenTransactionAlreadyAborted_thenDeadTxnException() {
         GammaTxn tx = newTransaction();
         tx.abort();
 
@@ -825,7 +825,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         try {
             ref.openForWrite(tx, LOCKMODE_NONE);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertEquals(initialValue, ref.long_value);
@@ -833,7 +833,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
     }
 
     @Test
-    public void whenTransactionAlreadyCommitted_thenDeadTransactionException() {
+    public void whenTransactionAlreadyCommitted_thenDeadTxnException() {
         GammaTxn tx = newTransaction();
         tx.commit();
 
@@ -844,7 +844,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         try {
             ref.openForWrite(tx, LOCKMODE_NONE);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertEquals(initialValue, ref.long_value);

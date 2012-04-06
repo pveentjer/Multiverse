@@ -3,13 +3,13 @@ package org.multiverse.stms.gamma.transactions.lean;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
 
 import static org.junit.Assert.*;
@@ -45,7 +45,7 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         String newValue = "bar";
         ref.set(tx, newValue);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTxn otherTx = new FatVariableLengthGammaTxn(config);
@@ -227,7 +227,7 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         T tx = newTransaction();
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
         try {
@@ -314,7 +314,7 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         try {
             tx.commit();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);

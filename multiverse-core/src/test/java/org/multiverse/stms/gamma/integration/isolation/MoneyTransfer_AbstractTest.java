@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -91,7 +91,7 @@ public abstract class MoneyTransfer_AbstractTest {
         public void doRun() {
             TxnExecutor block = newTxnExecutor();
 
-            AtomicVoidClosure closure = new AtomicVoidClosure() {
+            TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

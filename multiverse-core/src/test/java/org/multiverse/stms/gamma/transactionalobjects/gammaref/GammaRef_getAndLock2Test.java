@@ -33,7 +33,7 @@ public class GammaRef_getAndLock2Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         long result = ref.getAndLock(tx, lockMode);
 
         assertEquals(initialValue,result);

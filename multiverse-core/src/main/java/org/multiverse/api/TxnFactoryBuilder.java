@@ -1,6 +1,6 @@
 package org.multiverse.api;
 
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnListener;
 
 /**
  * A Builder for creating a {@link TxnFactory} and {@link TxnExecutor}. This builder provides full control
@@ -15,16 +15,16 @@ import org.multiverse.api.lifecycle.TransactionListener;
  *
  * @author Peter Veentjer
  * @see TxnFactory
- * @see TxnConfiguration
+ * @see TxnConfig
  */
 public interface TxnFactoryBuilder {
 
     /**
-     * Returns the {@link TxnConfiguration} used by this TxnFactoryBuilder.
+     * Returns the {@link TxnConfig} used by this TxnFactoryBuilder.
      *
-     * @return the used TxnConfiguration.
+     * @return the used TxnConfig.
      */
-    TxnConfiguration getConfiguration();
+    TxnConfig getConfiguration();
 
     /**
      * Sets if the {@link org.multiverse.api.exceptions.ControlFlowError} is reused. Normally you don't want to reuse them
@@ -33,7 +33,7 @@ public interface TxnFactoryBuilder {
      *
      * @param reused true if ControlFlowErrors should be reused.
      * @return the updated TxnFactoryBuilder.
-     * @see TxnConfiguration#isControlFlowErrorsReused()
+     * @see TxnConfig#isControlFlowErrorsReused()
      */
     TxnFactoryBuilder setControlFlowErrorsReused(boolean reused);
 
@@ -46,7 +46,7 @@ public interface TxnFactoryBuilder {
      * @param familyName the familyName of the transaction.
      * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if familyName is null.
-     * @see TxnConfiguration#getFamilyName()
+     * @see TxnConfig#getFamilyName()
      */
     TxnFactoryBuilder setFamilyName(String familyName);
 
@@ -58,7 +58,7 @@ public interface TxnFactoryBuilder {
      * @param propagationLevel the new PropagationLevel
      * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if propagationLevel is null.
-     * @see TxnConfiguration#getPropagationLevel()
+     * @see TxnConfig#getPropagationLevel()
      * @see PropagationLevel
      */
     TxnFactoryBuilder setPropagationLevel(PropagationLevel propagationLevel);
@@ -71,7 +71,7 @@ public interface TxnFactoryBuilder {
      * @param lockMode the LockMode to set.
      * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if lockMode is null.
-     * @see TxnConfiguration#getReadLockMode()
+     * @see TxnConfig#getReadLockMode()
      * @see LockMode
      */
     TxnFactoryBuilder setReadLockMode(LockMode lockMode);
@@ -82,7 +82,7 @@ public interface TxnFactoryBuilder {
      * <p>Freshly constructed objects that are not committed, automatically are locked with {@link LockMode#Exclusive}.
      *
      * <p>If the write LockMode is set after the read LockMode and the write LockMode is lower than the read LockMode,
-     * an {@code IllegalTransactionFactoryException} will be thrown when a {@link TxnFactory} is created.
+     * an {@code IllegalTxnFactoryException} will be thrown when a {@link TxnFactory} is created.
      *
      * <p>If the write LockMode is set before the read LockMode and the write LockMode is lower than the read LockMode,
      * the write LockMode automatically is upgraded to that of the read LockMode. This makes setting the readLock
@@ -91,25 +91,25 @@ public interface TxnFactoryBuilder {
      * @param lockMode the LockMode to set.
      * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if lockMode is null.
-     * @see TxnConfiguration#getWriteLockMode()
+     * @see TxnConfig#getWriteLockMode()
      * @see LockMode
      */
     TxnFactoryBuilder setWriteLockMode(LockMode lockMode);
 
     /**
-     * Adds a permanent {@link Txn} {@link TransactionListener}. All permanent listeners are always executed after all normal
+     * Adds a permanent {@link Txn} {@link org.multiverse.api.lifecycle.TxnListener}. All permanent listeners are always executed after all normal
      * listeners are executed. If the same listener is added multiple times, it will be executed multiple times.
      *
      * <p>This method is very useful for integrating Multiverse in other JVM based environments because with this
      * approach you have a callback when transaction aborts/commit and can add your own logic. See the
-     * {@link TransactionListener} for more information about normal vs permanent listeners.
+     * {@link org.multiverse.api.lifecycle.TxnListener} for more information about normal vs permanent listeners.
      *
      * @param listener the permanent listener to add.
      * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if listener is null.
-     * @see TxnConfiguration#getPermanentListeners()
+     * @see TxnConfig#getPermanentListeners()
      */
-    TxnFactoryBuilder addPermanentListener(TransactionListener listener);
+    TxnFactoryBuilder addPermanentListener(TxnListener listener);
 
     /**
      * Sets the {@link Txn} {@link TraceLevel}. With tracing it is possible to see what is happening inside a transaction.
@@ -117,7 +117,7 @@ public interface TxnFactoryBuilder {
      * @param traceLevel the new traceLevel.
      * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if traceLevel is null.
-     * @see TxnConfiguration#getTraceLevel()
+     * @see TxnConfig#getTraceLevel()
      * @see TraceLevel
      */
     TxnFactoryBuilder setTraceLevel(TraceLevel traceLevel);
@@ -128,7 +128,7 @@ public interface TxnFactoryBuilder {
      *
      * @param timeoutNs the timeout specified in nano seconds
      * @return the updated TxnFactoryBuilder
-     * @see TxnConfiguration#getTimeoutNs()
+     * @see TxnConfig#getTimeoutNs()
      * @see Txn#getRemainingTimeoutNs()
      */
     TxnFactoryBuilder setTimeoutNs(long timeoutNs);
@@ -138,7 +138,7 @@ public interface TxnFactoryBuilder {
      *
      * @param interruptible if the transaction can be interrupted while doing blocking operations.
      * @return the updated TxnFactoryBuilder
-     * @see TxnConfiguration#isInterruptible()
+     * @see TxnConfig#isInterruptible()
      */
     TxnFactoryBuilder setInterruptible(boolean interruptible);
 
@@ -149,7 +149,7 @@ public interface TxnFactoryBuilder {
      * @param backoffPolicy the backoff policy to use.
      * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if backoffPolicy is null.
-     * @see TxnConfiguration#getBackoffPolicy()
+     * @see TxnConfig#getBackoffPolicy()
      */
     TxnFactoryBuilder setBackoffPolicy(BackoffPolicy backoffPolicy);
 
@@ -161,7 +161,7 @@ public interface TxnFactoryBuilder {
      *
      * @param dirtyCheckEnabled true if dirty check should be executed, false otherwise.
      * @return the updated TxnFactoryBuilder.
-     * @see TxnConfiguration#isDirtyCheckEnabled()
+     * @see TxnConfig#isDirtyCheckEnabled()
      */
     TxnFactoryBuilder setDirtyCheckEnabled(boolean dirtyCheckEnabled);
 
@@ -174,7 +174,7 @@ public interface TxnFactoryBuilder {
      * @param spinCount the maximum number of spins
      * @return the updated TxnFactoryBuilder.
      * @throws IllegalArgumentException if spinCount smaller than 0.
-     * @see TxnConfiguration#getSpinCount()
+     * @see TxnConfig#getSpinCount()
      */
     TxnFactoryBuilder setSpinCount(int spinCount);
 
@@ -184,7 +184,7 @@ public interface TxnFactoryBuilder {
      *
      * @param readonly true if the transaction should be readonly, false otherwise.
      * @return the updated TxnFactoryBuilder
-     * @see TxnConfiguration#isReadonly()
+     * @see TxnConfig#isReadonly()
      */
     TxnFactoryBuilder setReadonly(boolean readonly);
 
@@ -199,7 +199,7 @@ public interface TxnFactoryBuilder {
      *
      * @param enabled true if read tracking enabled, false otherwise.
      * @return the updated TxnFactoryBuilder
-     * @see TxnConfiguration#isReadTrackingEnabled()
+     * @see TxnConfig#isReadTrackingEnabled()
      */
     TxnFactoryBuilder setReadTrackingEnabled(boolean enabled);
 
@@ -217,7 +217,7 @@ public interface TxnFactoryBuilder {
      *
      * @param speculative indicates if speculative configuration should be enabled.
      * @return the updated TxnFactoryBuilder
-     * @see TxnConfiguration#isSpeculative()
+     * @see TxnConfig#isSpeculative()
      */
     TxnFactoryBuilder setSpeculative(boolean speculative);
 
@@ -231,7 +231,7 @@ public interface TxnFactoryBuilder {
      * @param maxRetries the maximum number of times a transaction can be tried.
      * @return the updated TxnFactoryBuilder
      * @throws IllegalArgumentException if maxRetries smaller than 0.
-     * @see TxnConfiguration#getMaxRetries()
+     * @see TxnConfig#getMaxRetries()
      */
     TxnFactoryBuilder setMaxRetries(int maxRetries);
 
@@ -245,7 +245,7 @@ public interface TxnFactoryBuilder {
      * @param isolationLevel the new IsolationLevel
      * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if isolationLevel is null.
-     * @see TxnConfiguration#getIsolationLevel()
+     * @see TxnConfig#getIsolationLevel()
      * @see IsolationLevel
      */
     TxnFactoryBuilder setIsolationLevel(IsolationLevel isolationLevel);
@@ -264,7 +264,7 @@ public interface TxnFactoryBuilder {
      * Builds a new {@link TxnFactory}.
      *
      * @return the build TxnFactory.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionFactoryException
+     * @throws org.multiverse.api.exceptions.IllegalTxnFactoryException
      *          if the TxnFactory could not be build
      *          because the configuration was not correct.
      */
@@ -274,7 +274,7 @@ public interface TxnFactoryBuilder {
      * Builds a new {@link TxnExecutor} optimized for executing transactions created by this TxnFactoryBuilder.
      *
      * @return the created TxnExecutor.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionFactoryException
+     * @throws org.multiverse.api.exceptions.IllegalTxnFactoryException
      *          if the TxnFactory could not be build
      *          because the configuration was not correct.
      */

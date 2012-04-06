@@ -18,9 +18,9 @@ import org.multiverse.api.closures.*;
  *
  * <p>The AtomicClosure is the functionality that needs to be executed isolated, consistent and atomically. There
  * are different tasted of Closures but essentially the only difference is the return type. There are primitive closures
- * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.closures.AtomicVoidClosure} that prevents
+ * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.closures.TxnVoidClosure} that prevents
  * returning a value if none is needed. And last but not least there also is the general purpose
- * {@link org.multiverse.api.closures.AtomicClosure} that returns an Object reference.
+ * {@link org.multiverse.api.closures.TxnClosure} that returns an Object reference.
  *
  * <h3>Automatic retries</h3>
  *
@@ -84,7 +84,7 @@ import org.multiverse.api.closures.*;
  * is done before the outer most TxnExecutor completes, that commit is leading.
  *
  * <p>If the Transaction is committed (or aborted) manually, operations on the Transaction will fail with a
- * {@link org.multiverse.api.exceptions.IllegalTransactionStateException} exception. So in most cases you want to let the TxnExecutor
+ * {@link org.multiverse.api.exceptions.IllegalTxnStateException} exception. So in most cases you want to let the TxnExecutor
  * be in charge of committing/aborting. If also allows for a correct flattening of nested transactions.  If a transaction should
  * not commit, but you don't want to disrupt the code, the {@link Transaction#setAbortOnly} can be called, to make sure that the
  * transaction is not going to commit (or prepare) successfully.

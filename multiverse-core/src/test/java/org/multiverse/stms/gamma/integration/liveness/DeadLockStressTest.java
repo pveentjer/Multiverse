@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -77,14 +77,14 @@ public class DeadLockStressTest {
 
     public class ChangeThread extends TestThread {
 
-        private final TxnExecutor normalBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor normalBlock = stm.newTxnFactoryBuilder()
                 .newTxnExecutor();
 
-        private final TxnExecutor pessimisticReadLevelBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pessimisticReadLevelBlock = stm.newTxnFactoryBuilder()
                 .setReadLockMode(LockMode.Exclusive)
                 .newTxnExecutor();
 
-        private final TxnExecutor pessimisticWriteLevelBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pessimisticWriteLevelBlock = stm.newTxnFactoryBuilder()
                 .setWriteLockMode(LockMode.Exclusive)
                 .newTxnExecutor();
 
@@ -133,7 +133,7 @@ public class DeadLockStressTest {
         }
 
         public void normal() {
-            normalBlock.atomic(new AtomicVoidClosure() {
+            normalBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -142,7 +142,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeReadLevel() {
-            pessimisticReadLevelBlock.atomic(new AtomicVoidClosure() {
+            pessimisticReadLevelBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -151,7 +151,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeWriteLevel() {
-            pessimisticWriteLevelBlock.atomic(new AtomicVoidClosure() {
+            pessimisticWriteLevelBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);

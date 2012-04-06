@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.transactionalobjects.gammaref;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -51,17 +51,17 @@ public class GammaRef_getTest {
     }
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.prepare();
         try {
             ref.get(tx);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -70,17 +70,17 @@ public class GammaRef_getTest {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.commit();
         try {
             ref.get(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -89,17 +89,17 @@ public class GammaRef_getTest {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
         try {
             ref.get(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);

@@ -16,11 +16,11 @@ package org.multiverse.api;
 public interface TxnFactory {
 
     /**
-     * Gets the {@link TxnConfiguration} used by this TxnFactory.
+     * Gets the {@link TxnConfig} used by this TxnFactory.
      *
-     * @return the TxnConfiguration.
+     * @return the TxnConfig.
      */
-    TxnConfiguration getConfiguration();
+    TxnConfig getConfiguration();
 
     TxnFactoryBuilder getTransactionFactoryBuilder();
 

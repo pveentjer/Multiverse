@@ -33,7 +33,7 @@ public class GammaLongRef_setAndLock3Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         long newValue = 20;
         long result = ref.setAndLock(tx, newValue, lockMode);
 

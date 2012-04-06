@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.transactions;
 
 import org.multiverse.api.*;
 import org.multiverse.api.TxnFactoryBuilder;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
 
 /**
@@ -13,7 +13,7 @@ import org.multiverse.stms.gamma.GammaTxnExecutor;
 public interface GammaTxnFactoryBuilder extends TxnFactoryBuilder {
 
     @Override
-    GammaTxnConfiguration getConfiguration();
+    GammaTxnConfig getConfiguration();
 
     GammaTxnFactoryBuilder setFat();
 
@@ -33,7 +33,7 @@ public interface GammaTxnFactoryBuilder extends TxnFactoryBuilder {
     GammaTxnFactoryBuilder setPropagationLevel(PropagationLevel propagationLevel);
 
     @Override
-    GammaTxnFactoryBuilder addPermanentListener(TransactionListener listener);
+    GammaTxnFactoryBuilder addPermanentListener(TxnListener listener);
 
     @Override
     GammaTxnFactoryBuilder setTraceLevel(TraceLevel traceLevel);

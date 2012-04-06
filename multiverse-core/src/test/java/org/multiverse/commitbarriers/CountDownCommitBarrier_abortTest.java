@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.assertTrue;
@@ -65,7 +65,7 @@ public class CountDownCommitBarrier_abortTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     CommitThread.this.tx = tx;

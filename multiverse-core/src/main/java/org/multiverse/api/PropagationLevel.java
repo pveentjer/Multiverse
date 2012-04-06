@@ -6,7 +6,7 @@ package org.multiverse.api;
  *
  * @author Peter Veentjer.
  * @see TxnFactoryBuilder#setPropagationLevel(PropagationLevel)
- * @see TxnConfiguration#getPropagationLevel()
+ * @see TxnConfig#getPropagationLevel()
  */
 public enum PropagationLevel {
 
@@ -25,7 +25,7 @@ public enum PropagationLevel {
 
     /**
      * Indicates that a transaction should always be available. If not, a
-     * {@link org.multiverse.api.exceptions.TransactionMandatoryException} is thrown.
+     * {@link org.multiverse.api.exceptions.TxnMandatoryException} is thrown.
      */
     Mandatory,
 
@@ -36,7 +36,7 @@ public enum PropagationLevel {
 
     /**
      * Indicates that no active transaction should be available. If a transaction is found,
-     * a {@link org.multiverse.api.exceptions.TransactionNotAllowedException} is thrown.
+     * a {@link org.multiverse.api.exceptions.TxnNotAllowedException} is thrown.
      */
     Never
 }

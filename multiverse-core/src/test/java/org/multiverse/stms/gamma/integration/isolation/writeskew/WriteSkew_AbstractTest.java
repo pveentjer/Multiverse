@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -25,7 +25,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         stm = (GammaStm) getGlobalStmInstance();
     }
 
-    public abstract T newTransaction(GammaTxnConfiguration config);
+    public abstract T newTransaction(GammaTxnConfig config);
 
     @After
     public void tearDown() {
@@ -38,7 +38,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -65,7 +65,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .setWriteLockMode(writeLockMode);
@@ -92,7 +92,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .setControlFlowErrorsReused(false);
@@ -102,7 +102,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         ref1.incrementAndGet(tx, 1);
         ref2.get(tx);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref2.incrementAndGet(otherTx, 1);
 
         ref2.getLock().acquire(tx, readLockMode);
@@ -127,7 +127,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -135,7 +135,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
 
         ref1.incrementAndGet(tx, 1);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref2.incrementAndGet(otherTx, 1);
 
         ref2.getLock().acquire(tx, lockMode);
@@ -155,7 +155,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -178,7 +178,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable);
 

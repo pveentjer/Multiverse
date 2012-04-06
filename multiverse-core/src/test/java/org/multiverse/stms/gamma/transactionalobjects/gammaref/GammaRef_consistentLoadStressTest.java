@@ -59,7 +59,7 @@ public class GammaRef_consistentLoadStressTest implements GammaConstants {
         @Override
         public void doRun() throws Exception {
             int k = 0;
-            GammaTxn tx = stm.newDefaultTransaction();
+            GammaTxn tx = stm.newDefaultTxn();
             GammaRefTranlocal tranlocal = new GammaRefTranlocal();
             while (!stop) {
                 boolean success = ref.load(tx, tranlocal, LOCKMODE_NONE, 100, true);

@@ -4,7 +4,7 @@ import org.multiverse.api.Lock;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.PanicError;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -144,7 +144,7 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
         final GammaTxn tx = (GammaTxn) getThreadLocalTxn();
 
         if (tx == null) {
-            throw new TransactionMandatoryException();
+            throw new TxnMandatoryException();
         }
 
         return getLockMode(tx);

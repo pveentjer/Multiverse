@@ -2,9 +2,9 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
@@ -42,7 +42,7 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
     @Test
     public void whenSuccess() {
         T tx = newTransaction();
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         tx.register(listener);
 
         assertIsActive(tx);
@@ -54,9 +54,9 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
     @Test
     public void whenMultpleListeners() {
         T tx = newTransaction();
-        TransactionListener listener1 = mock(TransactionListener.class);
-        TransactionListener listener2 = mock(TransactionListener.class);
-        TransactionListener listener3 = mock(TransactionListener.class);
+        TxnListener listener1 = mock(TxnListener.class);
+        TxnListener listener2 = mock(TxnListener.class);
+        TxnListener listener3 = mock(TxnListener.class);
         tx.register(listener1);
         tx.register(listener2);
         tx.register(listener3);
@@ -72,7 +72,7 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
     @Test
     public void whenSameListenerAddedMultipleTimes() {
         T tx = newTransaction();
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
 
         tx.register(listener);
         tx.register(listener);
@@ -88,11 +88,11 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.prepare();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -104,11 +104,11 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.abort();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -120,11 +120,11 @@ public abstract class FatGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.commit();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -14,7 +14,7 @@ import static org.multiverse.stms.gamma.GammaTestUtils.*;
 public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_openForWriteTest<FatVariableLengthGammaTxn> {
 
     @Override
-    protected FatVariableLengthGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatVariableLengthGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatVariableLengthGammaTxn(config);
     }
 
@@ -32,7 +32,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
         public void richmansConflict_multipleReadsOnSameRef() {
             GammaLongRef ref = new GammaLongRef(stm);
 
-            GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+            GammaTxnConfig config = new GammaTxnConfig(stm)
                     .setMaximumPoorMansConflictScanLength(0);
 
             FatFixedLengthGammaTxn tx1 = new FatFixedLengthGammaTxn(config);
@@ -50,7 +50,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
     
     @Test
     public void richmansConflictScan_whenFirstRead() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         causeLotsOfConflicts(stm);
@@ -81,7 +81,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
 
     @Test
     public void richmansConflictScan_whenUnrealConflict() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         causeLotsOfConflicts(stm);
@@ -119,7 +119,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
 
     @Test
     public void richmansConflictScan_whenConflict() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         causeLotsOfConflicts(stm);

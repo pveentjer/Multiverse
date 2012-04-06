@@ -6,10 +6,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.exceptions.ReadWriteConflict;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.exceptions.*;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
@@ -54,7 +53,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
     }
 
     @Test
-    public void whenPreparedTransactionAvailable_thenPreparedTransactionException() {
+    public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
@@ -65,7 +64,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         try {
             ref.getAndIncrement(30);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
 
         }
 
@@ -161,7 +160,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         try {
             ref.getAndIncrement(1);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
 
         }
 
@@ -172,7 +171,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
     }
 
     @Test
-    public void whenCommittedTransactionAvailable_thenDeadTransactionException() {
+    public void whenCommittedTransactionAvailable_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -184,7 +183,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         try {
             ref.getAndIncrement(2);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
 
@@ -196,7 +195,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
     }
 
     @Test
-    public void whenAbortedTransactionAvailable_thenDeadTransactionException() {
+    public void whenAbortedTransactionAvailable_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -208,7 +207,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         try {
             ref.getAndIncrement(1);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertSurplus(ref, 0);

@@ -37,7 +37,7 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, 0);
 
         LongFunction function = mock(LongFunction.class);
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.commute(tx, function);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -55,10 +55,10 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
     public void whenInterestingWriteAlreadyHappened_thenLatchOpenedAndNoRegistration() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         GammaRefTranlocal write = ref.openForWrite(otherTx, LOCKMODE_NONE);
         write.long_value++;
         otherTx.commit();
@@ -77,10 +77,10 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -100,10 +100,10 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -122,13 +122,13 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
     public void whenExclusiveLockAndInterestingChangeAlreadyHappened() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         ref.atomicIncrementAndGet(1);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -148,13 +148,13 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
     public void wheWriteLockAndInterestingChangeAlreadyHappened() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         ref.atomicIncrementAndGet(1);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -172,7 +172,7 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
 
     @Test
     public void whenConstructed_thenNoRegistration() {
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaLongRef ref = new GammaLongRef(tx);
         GammaRefTranlocal read = tx.locate(ref);
 
@@ -190,7 +190,7 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
     public void whenFirstOne_thenRegistrationSuccessful() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         RetryLatch latch = new DefaultRetryLatch();
@@ -210,14 +210,14 @@ public class BaseGammaRef_registerChangeListenerTest implements GammaConstants {
     public void whenSecondOne_thenListenerAddedToChain() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx1 = stm.newDefaultTransaction();
+        GammaTxn tx1 = stm.newDefaultTxn();
         GammaRefTranlocal read1 = ref.openForRead(tx1, LOCKMODE_NONE);
 
         RetryLatch latch1 = new DefaultRetryLatch();
         long listenerEra1 = latch1.getEra();
         ref.registerChangeListener(latch1, read1, pool, listenerEra1);
 
-        GammaTxn tx2 = stm.newDefaultTransaction();
+        GammaTxn tx2 = stm.newDefaultTxn();
         GammaRefTranlocal read2 = ref.openForRead(tx2, LOCKMODE_NONE);
 
         RetryLatch latch2 = new DefaultRetryLatch();

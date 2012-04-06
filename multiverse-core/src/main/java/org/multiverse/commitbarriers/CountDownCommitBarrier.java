@@ -2,10 +2,10 @@ package org.multiverse.commitbarriers;
 
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnStatus;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.lifecycle.TransactionEvent;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
+import org.multiverse.api.lifecycle.TxnEvent;
+import org.multiverse.api.lifecycle.TxnListener;
 
 import java.util.List;
 
@@ -182,7 +182,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
      * @param extra the number of extra parties
      * @throws NullPointerException     if tx is null.
      * @throws IllegalArgumentException is extra smaller than zero.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *                                  if the transaction is not in the correct
      *                                  state for this operation (so not active).
      */
@@ -194,11 +194,11 @@ public final class CountDownCommitBarrier extends CommitBarrier {
         if (tx.getStatus() != TxnStatus.Active) {
             if (tx.getStatus() == TxnStatus.Prepared) {
                 tx.abort();
-                throw new PreparedTransactionException(
+                throw new PreparedTxnException(
                         format("[%s] Can't call incParties on non active transaction because it is %s",
                                 tx.getConfiguration().getFamilyName(), tx.getStatus()));
             } else {
-                throw new DeadTransactionException(
+                throw new DeadTxnException(
                         format("[%s] Can't call incParties on non active transaction because it is %s",
                                 tx.getConfiguration().getFamilyName(), tx.getStatus()));
             }
@@ -240,7 +240,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
      * A TransactionLifecycleListener that is responsible for restoring the the number of
      * parties after the transaction that increased them, was aborted.
      */
-    private class RestorePartiesCompensatingTask implements TransactionListener {
+    private class RestorePartiesCompensatingTask implements TxnListener {
         private final int extra;
 
         RestorePartiesCompensatingTask(int extra) {
@@ -248,10 +248,10 @@ public final class CountDownCommitBarrier extends CommitBarrier {
         }
 
         @Override
-        public void notify(Txn tx, TransactionEvent event) {
+        public void notify(Txn tx, TxnEvent event) {
             //todo: in the 0.6 release of multiverse this was pre-abort.. but since the pre-abort doesn't
             //exist anymore..
-            if (event != TransactionEvent.PostAbort) {
+            if (event != TxnEvent.PostAbort) {
                 return;
             }
 

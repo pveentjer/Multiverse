@@ -1,9 +1,9 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.*;
-import org.multiverse.api.collections.TransactionalCollectionsFactory;
-import org.multiverse.api.lifecycle.TransactionListener;
-import org.multiverse.collections.NaiveTransactionalCollectionFactory;
+import org.multiverse.api.collections.TxnCollectionsFactory;
+import org.multiverse.api.lifecycle.TxnListener;
+import org.multiverse.collections.NaiveTxnCollectionFactory;
 import org.multiverse.stms.gamma.transactionalobjects.*;
 import org.multiverse.stms.gamma.transactions.*;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
@@ -36,32 +36,32 @@ public final class GammaStm implements Stm {
     public final GammaRefFactoryImpl defaultRefFactory = new GammaRefFactoryImpl();
     public final GammaRefFactoryBuilder refFactoryBuilder = new GammaRefFactoryBuilderImpl();
     public final GammaTxnExecutor defaultxnExecutor;
-    public final GammaTxnConfiguration defaultConfig;
-    public final NaiveTransactionalCollectionFactory defaultTransactionalCollectionFactory
-            = new NaiveTransactionalCollectionFactory(this);
+    public final GammaTxnConfig defaultConfig;
+    public final NaiveTxnCollectionFactory defaultTransactionalCollectionFactory
+            = new NaiveTxnCollectionFactory(this);
     public final int readBiasedThreshold;
     public final GammaOrElseBlock defaultOrElseBlock = new GammaOrElseBlock();
 
     public GammaStm() {
-        this(new GammaStmConfiguration());
+        this(new GammaStmConfig());
     }
 
-    public GammaStm(GammaStmConfiguration configuration) {
-        configuration.validate();
+    public GammaStm(GammaStmConfig config) {
+        config.validate();
 
-        this.defaultMaxRetries = configuration.maxRetries;
-        this.spinCount = configuration.spinCount;
-        this.defaultBackoffPolicy = configuration.backoffPolicy;
-        this.defaultConfig = new GammaTxnConfiguration(this, configuration)
+        this.defaultMaxRetries = config.maxRetries;
+        this.spinCount = config.spinCount;
+        this.defaultBackoffPolicy = config.backoffPolicy;
+        this.defaultConfig = new GammaTxnConfig(this, config)
                 .setSpinCount(spinCount);
-        this.defaultxnExecutor = newTransactionFactoryBuilder()
+        this.defaultxnExecutor = newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .newTxnExecutor();
-        this.readBiasedThreshold = configuration.readBiasedThreshold;
+        this.readBiasedThreshold = config.readBiasedThreshold;
     }
 
     @Override
-    public final GammaTxn newDefaultTransaction() {
+    public final GammaTxn newDefaultTxn() {
         return new FatVariableLengthGammaTxn(this);
     }
 
@@ -81,9 +81,9 @@ public final class GammaStm implements Stm {
 
     private final class GammaTxnFactoryBuilderImpl implements GammaTxnFactoryBuilder {
 
-        private final GammaTxnConfiguration config;
+        private final GammaTxnConfig config;
 
-        GammaTxnFactoryBuilderImpl(final GammaTxnConfiguration config) {
+        GammaTxnFactoryBuilderImpl(final GammaTxnConfig config) {
             this.config = config;
         }
 
@@ -97,12 +97,12 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfiguration getConfiguration() {
+        public final GammaTxnConfig getConfiguration() {
             return config;
         }
 
         @Override
-        public GammaTxnFactoryBuilder addPermanentListener(final TransactionListener listener) {
+        public GammaTxnFactoryBuilder addPermanentListener(final TxnListener listener) {
             return new GammaTxnFactoryBuilderImpl(config.addPermanentListener(listener));
         }
 
@@ -321,13 +321,13 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaTxnFactoryBuilder newTransactionFactoryBuilder() {
-        final GammaTxnConfiguration config = new GammaTxnConfiguration(this);
+    public final GammaTxnFactoryBuilder newTxnFactoryBuilder() {
+        final GammaTxnConfig config = new GammaTxnConfig(this);
         return new GammaTxnFactoryBuilderImpl(config);
     }
 
     @Override
-    public final TransactionalCollectionsFactory getDefaultTransactionalCollectionFactory() {
+    public final TxnCollectionsFactory getDefaultTxnCollectionFactory() {
         return defaultTransactionalCollectionFactory;
     }
 
@@ -345,10 +345,10 @@ public final class GammaStm implements Stm {
 
     private static final class NonSpeculativeGammaTxnFactory implements GammaTxnFactory {
 
-        private final GammaTxnConfiguration config;
+        private final GammaTxnConfig config;
         private final GammaTxnFactoryBuilder builder;
 
-        NonSpeculativeGammaTxnFactory(final GammaTxnConfiguration config, GammaTxnFactoryBuilder builder) {
+        NonSpeculativeGammaTxnFactory(final GammaTxnConfig config, GammaTxnFactoryBuilder builder) {
             this.config = config.init();
             this.builder = builder;
         }
@@ -359,7 +359,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfiguration getConfiguration() {
+        public final GammaTxnConfig getConfiguration() {
             return config;
         }
 
@@ -389,10 +389,10 @@ public final class GammaStm implements Stm {
 
     private static final class SpeculativeGammaTxnFactory implements GammaTxnFactory {
 
-        private final GammaTxnConfiguration config;
+        private final GammaTxnConfig config;
         private final GammaTxnFactoryBuilder builder;
 
-        SpeculativeGammaTxnFactory(final GammaTxnConfiguration config, GammaTxnFactoryBuilder builder) {
+        SpeculativeGammaTxnFactory(final GammaTxnConfig config, GammaTxnFactoryBuilder builder) {
             this.config = config.init();
             this.builder = builder;
         }
@@ -403,7 +403,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfiguration getConfiguration() {
+        public final GammaTxnConfig getConfiguration() {
             return config;
         }
 

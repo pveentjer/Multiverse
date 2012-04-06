@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.GammaStmConfiguration;
+import org.multiverse.stms.gamma.GammaStmConfig;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
@@ -20,7 +20,7 @@ public class GammaRef_atomicGetAndSetTest {
 
     @Before
     public void setUp() {
-        GammaStmConfiguration config = new GammaStmConfiguration();
+        GammaStmConfig config = new GammaStmConfig();
         config.maxRetries = 10;
         stm = new GammaStm(config);
         clearThreadLocalTxn();
@@ -49,7 +49,7 @@ public class GammaRef_atomicGetAndSetTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
 
         String newValue = "newValue";
@@ -77,7 +77,7 @@ public class GammaRef_atomicGetAndSetTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
         long orecValue = ref.orec;

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
@@ -39,7 +39,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
 
         final LeanGammaTxnExecutor block = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));
 
-        final AtomicVoidClosure closure = new AtomicVoidClosure() {
+        final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref.openForWrite((LeanMonoGammaTxn) tx, LOCKMODE_NONE).ref_value = "foo";

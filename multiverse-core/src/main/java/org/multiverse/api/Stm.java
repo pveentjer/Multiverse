@@ -1,6 +1,6 @@
 package org.multiverse.api;
 
-import org.multiverse.api.collections.TransactionalCollectionsFactory;
+import org.multiverse.api.collections.TxnCollectionsFactory;
 import org.multiverse.api.references.RefFactory;
 import org.multiverse.api.references.RefFactoryBuilder;
 
@@ -14,7 +14,7 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
  * </li>
  * <li>{@link TxnExecutor}: responsible for starting/committing/aborting/retrying transactions. The TxnExecutor executes an
- * {@link org.multiverse.api.closures.AtomicClosure} (there are different tastes for return values). The AtomicClosure contains
+ * {@link org.multiverse.api.closures.TxnClosure} (there are different tastes for return values). The TxnClosure contains
  * the logic that needs to be executed atomicChecked, isolated and consistent.
  * </li>
  * </ol>
@@ -31,7 +31,7 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * <ol>
  * <li>{@link RefFactoryBuilder} a builder for creating {@link RefFactory}</li>
  * <li>{@link TxnFactoryBuilder} a builder for creating an {@link TxnExecutor}/{@link Txn}.
- * <li>{@link TransactionalCollectionsFactory} a factory for creating transactional collections</li>
+ * <li>{@link org.multiverse.api.collections.TxnCollectionsFactory} a factory for creating transactional collections</li>
  * </ol>
  *
  * <h3>Multiple Stm instances</h3>
@@ -55,23 +55,23 @@ public interface Stm {
      *
      * @return the TxnFactoryBuilder that is used to atomicChecked transactions on this Stm.
      */
-    TxnFactoryBuilder newTransactionFactoryBuilder();
+    TxnFactoryBuilder newTxnFactoryBuilder();
 
     /**
      * Starts a default Txn that is useful for testing/experimentation purposes. This method is purely for easy to use access,
-     * but doesn't provide any configuration options. See the {@link #newTransactionFactoryBuilder()} for something more configurable.
+     * but doesn't provide any configuration options. See the {@link #newTxnFactoryBuilder()} for something more configurable.
      * In mose cases this is not the method you want to use to manage transactions.
      *
      * <p>Transactions returned by this method are not speculative.
      *
      * @return the new default Txn.
      */
-    Txn newDefaultTransaction();
+    Txn newDefaultTxn();
 
     /**
      * Returns the default {@link TxnExecutor} block that is useful for testing/experimentation purposes.
      * This method is purely for easy to use access, but it doesn't provide any configuration options.
-     * See the {@link #newTransactionFactoryBuilder()} for something more configurable.
+     * See the {@link #newTxnFactoryBuilder()} for something more configurable.
      *
      * <p>Transactions used in this Block are not speculative.
      *
@@ -102,9 +102,9 @@ public interface Stm {
     RefFactoryBuilder getRefFactoryBuilder();
 
     /**
-     * Gets the default {@link TransactionalCollectionsFactory}.
+     * Gets the default {@link org.multiverse.api.collections.TxnCollectionsFactory}.
      *
-     * @return the default {@link TransactionalCollectionsFactory}.
+     * @return the default {@link org.multiverse.api.collections.TxnCollectionsFactory}.
      */
-    TransactionalCollectionsFactory getDefaultTransactionalCollectionFactory();
+    TxnCollectionsFactory getDefaultTxnCollectionFactory();
 }

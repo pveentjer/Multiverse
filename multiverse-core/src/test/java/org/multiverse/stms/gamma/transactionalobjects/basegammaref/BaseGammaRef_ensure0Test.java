@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
@@ -233,7 +233,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
     }
 
     @Test
-    public void state_whenAlreadyPrepared_thenPreparedTransactionException() {
+    public void state_whenAlreadyPrepared_thenPreparedTxnException() {
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
         tx.prepare();
@@ -245,7 +245,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
         try {
             ref.ensure();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -255,7 +255,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
     }
 
     @Test
-    public void state_whenAlreadyAborted_thenDeadTransactionException() {
+    public void state_whenAlreadyAborted_thenDeadTxnException() {
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
         tx.abort();
@@ -267,7 +267,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
         try {
             ref.ensure();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -277,7 +277,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
     }
 
     @Test
-    public void state_whenAlreadyCommitted_thenDeadTransactionException() {
+    public void state_whenAlreadyCommitted_thenDeadTxnException() {
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
         tx.commit();
@@ -289,7 +289,7 @@ public class BaseGammaRef_ensure0Test implements GammaConstants {
         try {
             ref.ensure();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -25,7 +25,7 @@ public class IsolationLevelSnapshotTest {
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
         clearThreadLocalTxn();
-        transactionFactory = stm.newTransactionFactoryBuilder()
+        transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .newTransactionFactory();
@@ -46,7 +46,7 @@ public class IsolationLevelSnapshotTest {
 
         ref1.get(tx);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref1.incrementAndGet(1);

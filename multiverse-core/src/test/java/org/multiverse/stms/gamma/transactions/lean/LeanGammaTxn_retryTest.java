@@ -2,13 +2,13 @@ package org.multiverse.stms.gamma.transactions.lean;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.api.exceptions.RetryNotPossibleException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -25,7 +25,7 @@ public abstract class LeanGammaTxn_retryTest<T extends GammaTxn> {
 
     public abstract T newTransaction();
 
-    public abstract T newTransaction(GammaTxnConfiguration config);
+    public abstract T newTransaction(GammaTxnConfig config);
 
      @Test
     public void whenUnused() {
@@ -42,7 +42,7 @@ public abstract class LeanGammaTxn_retryTest<T extends GammaTxn> {
 
     @Test
     public void whenNoRetryAllowed() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         config.blockingAllowed = false;
 
         T tx = newTransaction(config);
@@ -63,7 +63,7 @@ public abstract class LeanGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -77,7 +77,7 @@ public abstract class LeanGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -91,7 +91,7 @@ public abstract class LeanGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

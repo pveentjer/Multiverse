@@ -29,7 +29,7 @@ package org.multiverse.api.exceptions;
  * but with the {@link org.multiverse.api.TxnFactoryBuilder#setControlFlowErrorsReused(boolean)} this behavior
  * can be changed. It also can be configured on the Stm level, depending on the Stm implementation. For the
  * {@link org.multiverse.stms.gamma.GammaStm} you need to look at the
- * {@link org.multiverse.stms.gamma.GammaStmConfiguration#controlFlowErrorsReused}.
+ * {@link org.multiverse.stms.gamma.GammaStmConfig#controlFlowErrorsReused}.
  *
  * <p>The constructors also expose configuration options to have the StackTrace filled. Especially for an Error that is
  * reused, not filling the stacktrace is very important because else the developer is looking at code where the exception

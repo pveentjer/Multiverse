@@ -1,13 +1,13 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.api.lifecycle.TransactionEvent;
+import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.SpeculativeGammaConfiguration;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
@@ -21,10 +21,10 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     public long localConflictCount;
 
     public FatVariableLengthGammaTxn(GammaStm stm) {
-        this(new GammaTxnConfiguration(stm));
+        this(new GammaTxnConfig(stm));
     }
 
-    public FatVariableLengthGammaTxn(GammaTxnConfiguration config) {
+    public FatVariableLengthGammaTxn(GammaTxnConfig config) {
         super(config, TRANSACTIONTYPE_FAT_VARIABLE_LENGTH);
         this.array = new GammaRefTranlocal[config.minimalArrayTreeSize];
     }
@@ -44,7 +44,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         }
 
         if (status == TX_ACTIVE) {
-            notifyListeners(TransactionEvent.PrePrepare);
+            notifyListeners(TxnEvent.PrePrepare);
         }
 
         if (size > 0) {
@@ -72,7 +72,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         }
 
         status = TX_COMMITTED;
-        notifyListeners(TransactionEvent.PostCommit);
+        notifyListeners(TxnEvent.PostCommit);
     }
 
     private Listeners[] commitArray() {
@@ -140,7 +140,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
             throw abortPrepareOnAbortOnly();
         }
 
-        notifyListeners(TransactionEvent.PrePrepare);
+        notifyListeners(TxnEvent.PrePrepare);
 
         if (hasWrites) {
             final GammaObject conflictingObject = doPrepare();
@@ -193,7 +193,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
 
         status = TX_ABORTED;
 
-        notifyListeners(TransactionEvent.PostAbort);
+        notifyListeners(TxnEvent.PostAbort);
     }
 
     @Override

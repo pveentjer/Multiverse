@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 /**
@@ -40,14 +40,14 @@ public class Semaphore_FatVariableLengthGammaTxn_StressTest extends Semaphore_Ab
 
     @Override
     protected TxnExecutor newDownBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TxnExecutor newUpBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
     }

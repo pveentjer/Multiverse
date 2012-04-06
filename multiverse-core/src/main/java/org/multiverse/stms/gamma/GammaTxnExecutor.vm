@@ -26,7 +26,7 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
     public ${txnExecutor.name}(final GammaTxnFactory txnFactory) {
         super(txnFactory);
 #if(!${txnExecutor.lean})
-        this.propagationLevel = txnConfiguration.propagationLevel;
+        this.propagationLevel = txnConfig.propagationLevel;
 #end
     }
 
@@ -111,10 +111,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no txn found, starting a new txn",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -128,10 +128,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 #end
                     } else {
                         if (TRACING_ENABLED) {
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -145,22 +145,22 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no txn is found",
-                                        txnConfiguration.familyName));
+                                        txnConfig.familyName));
                                 }
                             }
-                            throw new TransactionMandatoryException(
+                            throw new TxnMandatoryException(
                                 format("No txn is found for TxnExecutor '%s' with 'Mandatory' propagation level",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
 #if($closure.type eq 'void')
@@ -172,25 +172,25 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
-                        throw new TransactionNotAllowedException(
+                        throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no txn is found",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                         }
                     }
 #if($closure.type eq 'void')
@@ -202,10 +202,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no txn is found, starting new txn",
-                                        txnConfiguration.familyName));
+                                        txnConfig.familyName));
                             }
                         }
 
@@ -219,10 +219,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 #end
                     } else {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
@@ -243,16 +243,16 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -303,17 +303,17 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 #end
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -325,9 +325,9 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -349,14 +349,14 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
 #end ##end of macro
 }

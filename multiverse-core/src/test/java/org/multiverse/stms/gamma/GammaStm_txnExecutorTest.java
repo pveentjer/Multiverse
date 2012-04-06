@@ -24,14 +24,14 @@ public class GammaStm_txnExecutorTest {
 
     @Test
     public void testDefault() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .newTxnExecutor();
         assertTrue(executor instanceof LeanGammaTxnExecutor);
     }
 
     @Test
     public void whenMandatory() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
         assertTrue(executor instanceof FatGammaTxnExecutor);
@@ -39,7 +39,7 @@ public class GammaStm_txnExecutorTest {
 
     @Test
     public void whenRequires() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTxnExecutor();
         assertTrue(executor instanceof LeanGammaTxnExecutor);
@@ -47,7 +47,7 @@ public class GammaStm_txnExecutorTest {
 
     @Test
     public void whenRequiresNew() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
         assertTrue(executor instanceof FatGammaTxnExecutor);
@@ -55,7 +55,7 @@ public class GammaStm_txnExecutorTest {
 
     @Test
     public void whenNever() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
         assertTrue(executor instanceof FatGammaTxnExecutor);
@@ -63,7 +63,7 @@ public class GammaStm_txnExecutorTest {
 
     @Test
     public void whenSupports() {
-        TxnExecutor executor = stm.newTransactionFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
         assertTrue(executor instanceof FatGammaTxnExecutor);

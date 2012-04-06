@@ -10,7 +10,7 @@ import org.multiverse.api.TxnFactory;
 public interface GammaTxnFactory extends TxnFactory {
 
     @Override
-    GammaTxnConfiguration getConfiguration();
+    GammaTxnConfig getConfiguration();
 
     @Override
     GammaTxn newTransaction();

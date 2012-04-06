@@ -3,13 +3,13 @@ package org.multiverse.stms.gamma.transactions.lean;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
 
@@ -42,7 +42,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         String newValue = "bar";
         ref.set(tx, newValue);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTxn otherTx = new FatVariableLengthGammaTxn(config);
@@ -67,7 +67,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.openForRead(tx, LOCKMODE_NONE);
         tx.prepare();
 
@@ -220,7 +220,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
     }
 
     @Test
-    public void whenAlreadyAborted_thenDeadTransactionException() {
+    public void whenAlreadyAborted_thenDeadTxnException() {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         T tx = newTransaction();
@@ -229,7 +229,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         try {
             tx.prepare();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -237,7 +237,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
     }
 
     @Test
-    public void whenAlreadyCommitted_thenDeadTransactionException() {
+    public void whenAlreadyCommitted_thenDeadTxnException() {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         T tx = newTransaction();
@@ -246,7 +246,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         try {
             tx.prepare();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

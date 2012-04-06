@@ -8,7 +8,7 @@ package org.multiverse.api;
  *
  * @author Peter Veentjer
  * @see TxnFactoryBuilder#setTraceLevel(TraceLevel)
- * @see TxnConfiguration#getTraceLevel()
+ * @see TxnConfig#getTraceLevel()
  */
 public enum TraceLevel {
 

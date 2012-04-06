@@ -7,7 +7,7 @@ import org.multiverse.api.closures.*;
  * The OrElse is responsible for executing the either block, or in case of a retry, the orelse block is executed.
  * <p/>
  * Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
- * It also provides an atomicChecked for a AtomicVoidClosure which doesn't force a developer to return something when
+ * It also provides an atomicChecked for a TxnVoidClosure which doesn't force a developer to return something when
  * nothing needs to be returned.
  *
  * @author Peter Veentjer.
@@ -26,12 +26,12 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException if either or orelse is null.
-     * @throws org.multiverse.api.exceptions.TransactionMandatoryException
+     * @throws org.multiverse.api.exceptions.TxnMandatoryException
      *                              if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                              if a checked exception is thrown by the closure.
      */
-    <E> E execute(AtomicClosure<E> either, AtomicClosure<E> orelse);
+    <E> E execute(TxnClosure<E> either, TxnClosure<E> orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -41,10 +41,10 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws org.multiverse.api.exceptions.TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    <E> E executeChecked(AtomicClosure<E> either, AtomicClosure<E> orelse) throws Exception;
+    <E> E executeChecked(TxnClosure<E> either, TxnClosure<E> orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -58,11 +58,11 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws org.multiverse.api.exceptions.TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    int execute(AtomicIntClosure either, AtomicIntClosure orelse);
+    int execute(TxnIntClosure either, TxnIntClosure orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -72,10 +72,10 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    int executeChecked(AtomicIntClosure either, AtomicIntClosure orelse) throws Exception;
+    int executeChecked(TxnIntClosure either, TxnIntClosure orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -89,11 +89,11 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    long execute(AtomicLongClosure either, AtomicLongClosure orelse);
+    long execute(TxnLongClosure either, TxnLongClosure orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -103,10 +103,10 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    long executeChecked(AtomicLongClosure either, AtomicLongClosure orelse) throws Exception;
+    long executeChecked(TxnLongClosure either, TxnLongClosure orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -120,11 +120,11 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    double execute(AtomicDoubleClosure either, AtomicDoubleClosure orelse);
+    double execute(TxnDoubleClosure either, TxnDoubleClosure orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -134,10 +134,10 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    double executeChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse) throws Exception;
+    double executeChecked(TxnDoubleClosure either, TxnDoubleClosure orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -151,11 +151,11 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    boolean execute(AtomicBooleanClosure either, AtomicBooleanClosure orelse);
+    boolean execute(TxnBooleanClosure either, TxnBooleanClosure orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -165,10 +165,10 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param orelse
      * @return the result of the execution.
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    boolean executeChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse) throws Exception;
+    boolean executeChecked(TxnBooleanClosure either, TxnBooleanClosure orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -181,11 +181,11 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param either
      * @param orelse
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    void execute(AtomicVoidClosure either, AtomicVoidClosure orelse);
+    void execute(TxnVoidClosure either, TxnVoidClosure orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -194,9 +194,9 @@ public interface OrElseBlock extends MultiverseConstants {
      * @param either
      * @param orelse
      * @throws NullPointerException         if either or orelse is null.
-     * @throws TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
+     * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    void executeChecked(AtomicVoidClosure either, AtomicVoidClosure orelse) throws Exception;
+    void executeChecked(TxnVoidClosure either, TxnVoidClosure orelse) throws Exception;
 
 }

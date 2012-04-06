@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
@@ -24,9 +24,9 @@ public class LeanGammaTxnExecutor_integrationTest {
 
     @Test
     public void whenExecutedThenTxnThreadLocalSet() {
-        GammaTxnFactory transactionFactory = stm.newTransactionFactoryBuilder().newTransactionFactory();
+        GammaTxnFactory transactionFactory = stm.newTxnFactoryBuilder().newTransactionFactory();
         TxnExecutor block = new LeanGammaTxnExecutor(transactionFactory);
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 assertNotNull(tx);

@@ -72,7 +72,7 @@ public class GammaLongRef_decrement0Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .setSpeculative(false)
                 .newTransactionFactory()
@@ -153,7 +153,7 @@ public class GammaLongRef_decrement0Test {
         try {
             ref.decrement();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -162,7 +162,7 @@ public class GammaLongRef_decrement0Test {
     }
 
     @Test
-    public void whenAbortedTransactionFound_thenDeadTransactionException() {
+    public void whenAbortedTransactionFound_thenDeadTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -174,7 +174,7 @@ public class GammaLongRef_decrement0Test {
         try {
             ref.decrement();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -183,7 +183,7 @@ public class GammaLongRef_decrement0Test {
     }
 
     @Test
-    public void whenPreparedTransactionFound_thenPreparedTransactionException() {
+    public void whenPreparedTransactionFound_thenPreparedTxnException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -195,7 +195,7 @@ public class GammaLongRef_decrement0Test {
         try {
             ref.decrement();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertRefHasNoLocks(ref);
@@ -204,7 +204,7 @@ public class GammaLongRef_decrement0Test {
     }
 
     @Test
-    public void whenNoTransaction_thenTransactionMandatoryException() {
+    public void whenNoTransaction_thenTxnMandatoryException() {
         long initialValue = 10;
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -212,7 +212,7 @@ public class GammaLongRef_decrement0Test {
         try {
             ref.decrement();
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         assertRefHasNoLocks(ref);

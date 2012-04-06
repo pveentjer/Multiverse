@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public class FatFixedLengthGammaTxn_commuteTest extends FatGammaTxn_commuteTest<FatFixedLengthGammaTxn> {
 
@@ -10,12 +10,12 @@ public class FatFixedLengthGammaTxn_commuteTest extends FatGammaTxn_commuteTest<
     }
 
     @Override
-    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatFixedLengthGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatFixedLengthGammaTxn(config);
     }
 
     @Override
     protected int getMaxCapacity() {
-        return new GammaTxnConfiguration(stm).maxFixedLengthTransactionSize;
+        return new GammaTxnConfig(stm).maxFixedLengthTransactionSize;
     }
 }

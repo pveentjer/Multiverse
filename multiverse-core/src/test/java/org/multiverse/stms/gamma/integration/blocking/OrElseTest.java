@@ -4,9 +4,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicClosure;
-import org.multiverse.api.closures.AtomicLongClosure;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.closures.TxnClosure;
+import org.multiverse.api.closures.TxnLongClosure;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.references.LongRef;
 
 import static org.junit.Assert.assertEquals;
@@ -19,9 +19,9 @@ import static org.multiverse.api.StmUtils.retry;
  */
 public class OrElseTest {
 
-    @Test(expected = TransactionMandatoryException.class)
-    public void whenCalledWithoutTransaction_thenTransactionMandatoryException() {
-        AtomicClosure closure = mock(AtomicClosure.class);
+    @Test(expected = TxnMandatoryException.class)
+    public void whenCalledWithoutTransaction_thenTxnMandatoryException() {
+        TxnClosure closure = mock(TxnClosure.class);
 
         StmUtils.atomic(closure, closure);
     }
@@ -31,7 +31,7 @@ public class OrElseTest {
         final LongRef ref1 = newLongRef(1);
         final LongRef ref2 = newLongRef(0);
 
-        long value = StmUtils.atomic(new AtomicLongClosure() {
+        long value = StmUtils.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
@@ -41,7 +41,7 @@ public class OrElseTest {
         assertEquals(1, value);
     }
 
-    class GetClosure implements AtomicLongClosure {
+    class GetClosure implements TxnLongClosure {
         private final LongRef ref;
 
         GetClosure(LongRef ref) {
@@ -64,7 +64,7 @@ public class OrElseTest {
         final LongRef ref1 = newLongRef(0);
         final LongRef ref2 = newLongRef(2);
 
-        long value = StmUtils.atomic(new AtomicLongClosure() {
+        long value = StmUtils.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));

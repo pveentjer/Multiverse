@@ -1,12 +1,12 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TransactionExecutionException} thrown when an atomicChecked operation has failed (e.g. because the ref
+ * A {@link TxnExecutionException} thrown when an atomicChecked operation has failed (e.g. because the ref
  * was locked).
  *
  * @author Peter Veentjer.
  */
-public class AtomicOperationException extends TransactionExecutionException {
+public class AtomicOperationException extends TxnExecutionException {
 
     private static final long serialVersionUID = 0;
 

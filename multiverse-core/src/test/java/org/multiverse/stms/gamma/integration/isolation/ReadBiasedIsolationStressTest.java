@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.AtomicBooleanClosure;
+import org.multiverse.api.closures.TxnBooleanClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 
@@ -130,11 +130,11 @@ public class ReadBiasedIsolationStressTest {
 
         @Override
         public void doRun() {
-            TxnExecutor block = stm.newTransactionFactoryBuilder()
+            TxnExecutor block = stm.newTxnFactoryBuilder()
                     .setDirtyCheckEnabled(dirtyCheckEnabled)
                     .newTxnExecutor();
 
-            AtomicBooleanClosure closure = new AtomicBooleanClosure() {
+            TxnBooleanClosure closure = new TxnBooleanClosure() {
                 @Override
                 public boolean execute(Txn tx) throws Exception {
                     ref.getLock().acquire(tx, lockMode);

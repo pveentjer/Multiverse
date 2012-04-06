@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -34,7 +34,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenTimeout() throws InterruptedException {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
                 .newTxnExecutor();
 
@@ -49,7 +49,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenSuccess() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
                 .newTxnExecutor();
 
@@ -60,7 +60,7 @@ public class GammaTxnExecutor_timeoutTest {
         sleepMs(500);
         assertAlive(t);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -75,7 +75,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenNoWaitingNeededAndZeroTimeout() {
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -83,7 +83,7 @@ public class GammaTxnExecutor_timeoutTest {
             }
         });
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(0)
                 .newTxnExecutor();
 
@@ -106,7 +106,7 @@ public class GammaTxnExecutor_timeoutTest {
 
         @Override
         public void doRun() throws Exception {
-            block.atomic(new AtomicVoidClosure() {
+            block.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

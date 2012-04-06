@@ -7,7 +7,7 @@
         <para>
             It can happen that AtomicBlocks are called within the execution of other AtomicBlock and this leads to
             txn nesting. In a lot of cases you want to allow this, but in some cases you want to control it.
-            This can be done by configuration the txn propagation.
+            This can be done by config the txn propagation.
         </para>
     </sect1>
 
@@ -36,12 +36,12 @@
                 </listitem>
                 <listitem>
                     <para>PropagationLevel.Never: Indicates that no active txn should be available. If a
-                        txn is found, a org.multiverse.api.exceptions.TransactionNotAllowedException is thrown.
+                        txn is found, a org.multiverse.api.exceptions.TxnNotAllowedException is thrown.
                     </para>
                 </listitem>
                 <listitem>
                     <para>PropagationLevel.Mandatory: Indicates that a txn should always be available. If not, a
-                        org.multiverse.api.exceptions.TransactionMandatoryException is thrown.
+                        org.multiverse.api.exceptions.TxnMandatoryException is thrown.
                     </para>
                 </listitem>
             </itemizedlist>

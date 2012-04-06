@@ -4,16 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnStatus;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.functions.LongFunction;
-import org.multiverse.api.lifecycle.TransactionEvent;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnEvent;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -32,28 +32,28 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTxnConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfig config);
 
     protected abstract void assertCleaned(T tx);
 
     @Test
     public void listener_whenNormalListenerAvailable() {
         T tx = newTransaction();
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         tx.register(listener);
 
         tx.abort();
 
         assertIsAborted(tx);
-        //verify(listener).notify(tx, TransactionEvent.PrePrepare);
-        verify(listener).notify(tx, TransactionEvent.PostAbort);
+        //verify(listener).notify(tx, TxnEvent.PrePrepare);
+        verify(listener).notify(tx, TxnEvent.PostAbort);
     }
 
     @Test
     public void listener_whenPermanentListenerAvailable() {
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .addPermanentListener(listener);
 
         T tx = newTransaction(config);
@@ -61,8 +61,8 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
         tx.abort();
 
         assertIsAborted(tx);
-        //verify(listener).notify(tx, TransactionEvent.PrePrepare);
-        verify(listener).notify(tx, TransactionEvent.PostAbort);
+        //verify(listener).notify(tx, TxnEvent.PrePrepare);
+        verify(listener).notify(tx, TxnEvent.PostAbort);
     }
 
     @Test
@@ -171,14 +171,14 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
     }
 
     @Test
-    public void whenCommitted_thenDeadTransactionException() {
+    public void whenCommitted_thenDeadTxnException() {
         T tx = newTransaction();
         tx.commit();
 
         try {
             tx.abort();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
 

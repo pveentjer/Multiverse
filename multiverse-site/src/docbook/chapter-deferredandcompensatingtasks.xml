@@ -70,7 +70,7 @@
         ...
     }
         </programlisting>
-        The StmUtils.scheduleDeferredTask forwards to the Transaction.register(TransactionListener) method and uses the Transaction
+        The StmUtils.scheduleDeferredTask forwards to the Transaction.register(TxnListener) method and uses the Transaction
         stored on the ThreadLocalTransaction. Normal compensating tasks are always executed in the order they were registered.
         </para>
     </sect1>
@@ -107,7 +107,7 @@
         ...
     }
         </programlisting>
-        The StmUtils.scheduleCompensatingTask forwards to the Transaction.register(TransactionListener) method and uses the Transaction
+        The StmUtils.scheduleCompensatingTask forwards to the Transaction.register(TxnListener) method and uses the Transaction
         stored on the ThreadLocalTransaction. Normal compensating tasks are always executed in the order they are registered.
         </para>
     </sect1>
@@ -135,7 +135,7 @@
     </sect1>
 
     <sect1>
-        <title>org.multiverse.api.lifecycle.TransactionListener</title>
+        <title>org.multiverse.api.lifecycle.TxnListener</title>
         <para>
 
         </para>

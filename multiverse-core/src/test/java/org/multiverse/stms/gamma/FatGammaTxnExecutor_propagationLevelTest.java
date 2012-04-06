@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.PropagationLevel;
-import org.multiverse.api.closures.AtomicIntClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
-import org.multiverse.api.exceptions.TransactionNotAllowedException;
+import org.multiverse.api.closures.TxnIntClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.TxnMandatoryException;
+import org.multiverse.api.exceptions.TxnNotAllowedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
@@ -31,19 +31,19 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenNeverAndTransactionAvailable_thenNoTransactionAllowedException() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         setThreadLocalTxn(otherTx);
 
-        AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
+        TxnVoidClosure closure = mock(TxnVoidClosure.class);
 
         try {
             block.atomic(closure);
             fail();
-        } catch (TransactionNotAllowedException expected) {
+        } catch (TxnNotAllowedException expected) {
         }
 
         verifyZeroInteractions(closure);
@@ -53,11 +53,11 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenNeverAndNoTransactionAvailable() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertNull(tx);
@@ -73,16 +73,16 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenMandatoryAndNoTransactionAvailable_thenNoTransactionFoundException() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
 
-        AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
+        TxnVoidClosure closure = mock(TxnVoidClosure.class);
 
         try {
             block.atomic(closure);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         verifyZeroInteractions(closure);
@@ -91,14 +91,14 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenMandatoryAndTransactionAvailable_thenExistingTransactionUsed() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
 
-        final GammaTxn otherTx = stm.newDefaultTransaction();
+        final GammaTxn otherTx = stm.newDefaultTxn();
         setThreadLocalTxn(otherTx);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
@@ -115,13 +115,13 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresAndNoTransactionAvailable_thenNewTransactionUsed() {
-        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
@@ -140,16 +140,16 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresAndTransactionAvailable_thenExistingTransactionUsed() {
-        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 
-        final GammaTxn existingTx = stm.newDefaultTransaction();
+        final GammaTxn existingTx = stm.newDefaultTxn();
         setThreadLocalTxn(existingTx);
 
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertSame(existingTx, tx);
@@ -170,13 +170,13 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresNewAndNoTransactionAvailable_thenNewTransactionCreated() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
         final GammaLongRef ref = new GammaLongRef(stm, 0);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
@@ -195,16 +195,16 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresNewAndTransactionAvailable_thenExistingTransactionSuspended() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
-        final GammaTxn otherTx = stm.newDefaultTransaction();
+        final GammaTxn otherTx = stm.newDefaultTxn();
         setThreadLocalTxn(otherTx);
 
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
@@ -225,14 +225,14 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenSupportsAndTransactionAvailable() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
 
-        final GammaTxn otherTx = stm.newDefaultTransaction();
+        final GammaTxn otherTx = stm.newDefaultTxn();
         setThreadLocalTxn(otherTx);
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
@@ -249,11 +249,11 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenSupportsAndNoTransactionAvailable() {
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
 
-        AtomicIntClosure closure = new AtomicIntClosure() {
+        TxnIntClosure closure = new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 assertNull(tx);

@@ -29,7 +29,7 @@ public class EnsureTest {
     public void whenOnlyReadsThenIgnored() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
         ref.ensure(tx);
 
@@ -47,7 +47,7 @@ public class EnsureTest {
         GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
         GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref1.get(tx);
         ref1.ensure(tx);
         ref2.increment(tx);
@@ -64,7 +64,7 @@ public class EnsureTest {
         GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
         GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref1.get(tx);
         ref1.ensure(tx);
         ref2.increment(tx);

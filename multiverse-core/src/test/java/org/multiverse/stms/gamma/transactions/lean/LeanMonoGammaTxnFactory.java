@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.lean;
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
@@ -11,18 +11,18 @@ import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.get
 
 public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
 
-    private final GammaTxnConfiguration config;
+    private final GammaTxnConfig config;
 
     public LeanMonoGammaTxnFactory(GammaStm stm) {
-        this(new GammaTxnConfiguration(stm).setControlFlowErrorsReused(false));
+        this(new GammaTxnConfig(stm).setControlFlowErrorsReused(false));
     }
 
-    public LeanMonoGammaTxnFactory(GammaTxnConfiguration config) {
+    public LeanMonoGammaTxnFactory(GammaTxnConfig config) {
         this.config = config.setControlFlowErrorsReused(false).init();
     }
 
     @Override
-    public GammaTxnConfiguration getConfiguration() {
+    public GammaTxnConfig getConfiguration() {
         return config;
     }
 

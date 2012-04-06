@@ -6,12 +6,12 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
@@ -44,7 +44,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
     @Test
     public void withArrayTransactionAnd2Threads() throws InterruptedException {
         int refCount = 10;
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
+        GammaTxnConfig config = new GammaTxnConfig(stm, refCount + 1);
         FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
         test(new LeanGammaTxnExecutor(txFactory), refCount, 2);
     }
@@ -58,7 +58,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
     @Test
     public void withArrayTransactionAnd5Threads() throws InterruptedException {
         int refCount = 10;
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
+        GammaTxnConfig config = new GammaTxnConfig(stm, refCount + 1);
         FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
         test(new LeanGammaTxnExecutor(txFactory), refCount, 5);
     }
@@ -120,7 +120,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
         @Override
         public void doRun() {
-            AtomicVoidClosure closure = new AtomicVoidClosure() {
+            TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) {
                     if (stopRef.get() < 0) {

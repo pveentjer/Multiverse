@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -110,7 +110,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         int take() {
-            return takeBlock.atomic(new AtomicClosure<Integer>() {
+            return takeBlock.atomic(new TxnClosure<Integer>() {
                 @Override
                 public Integer execute(Txn tx) throws Exception {
                     if (size.get() == 0) {
@@ -124,7 +124,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         void put(final int item) {
-            putBlock.atomic(new AtomicVoidClosure() {
+            putBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     if (size.get() >= MAX_CAPACITY) {

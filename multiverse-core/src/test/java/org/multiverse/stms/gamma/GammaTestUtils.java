@@ -7,7 +7,7 @@ import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.transactionalobjects.*;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
 
 import java.util.*;
@@ -21,7 +21,7 @@ import static org.multiverse.TestUtils.getField;
 public class GammaTestUtils implements GammaConstants {
 
     public static GammaTxn newArrivingTransaction(GammaStm stm){
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0)
                 .setSpeculative(false);
         return new FatVariableLengthGammaTxn(config);

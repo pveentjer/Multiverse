@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.transactionalobjects.gammalongref;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -41,45 +41,45 @@ public class GammaLongRef_await2WithValueTest {
     }
 
     @Test
-    public void whenPreparedTransaction_thenPreparedTransactionException() {
+    public void whenPreparedTransaction_thenPreparedTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.prepare();
 
         try {
             ref.await(tx, 10);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
     }
 
     @Test
-    public void whenAbortedTransaction_thenDeadTransactionException() {
+    public void whenAbortedTransaction_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
 
         try {
             ref.await(tx, 10);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
     }
 
     @Test
-    public void whenCommittedTransaction_thenDeadTransactionException() {
+    public void whenCommittedTransaction_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
 
         try {
             ref.await(tx, 10);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -88,7 +88,7 @@ public class GammaLongRef_await2WithValueTest {
     @Test
     public void whenBlockingNotAllowed_thenRetryNotAllowedException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setBlockingAllowed(false)
                 .setSpeculative(false)
                 .newTransactionFactory()

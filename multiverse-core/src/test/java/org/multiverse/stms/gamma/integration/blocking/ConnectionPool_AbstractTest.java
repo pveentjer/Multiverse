@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicClosure;
-import org.multiverse.api.closures.AtomicIntClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnClosure;
+import org.multiverse.api.closures.TxnIntClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
@@ -78,13 +78,13 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
 
         final TxnExecutor returnConnectionBlock = newReturnBlock();
 
-        final TxnExecutor sizeBlock = stm.newTransactionFactoryBuilder().newTxnExecutor();
+        final TxnExecutor sizeBlock = stm.newTxnFactoryBuilder().newTxnExecutor();
 
         final GammaIntRef size = new GammaIntRef(stm);
         final GammaRef<Node<Connection>> head = new GammaRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) {
                     size.set(poolsize);
@@ -99,7 +99,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         Connection takeConnection() {
-            return takeConnectionBlock.atomic(new AtomicClosure<Connection>() {
+            return takeConnectionBlock.atomic(new TxnClosure<Connection>() {
                 @Override
                 public Connection execute(Txn tx) {
                     if (size.get() == 0) {
@@ -115,7 +115,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         void returnConnection(final Connection c) {
-            returnConnectionBlock.atomic(new AtomicVoidClosure() {
+            returnConnectionBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     size.incrementAndGet(1);
@@ -127,7 +127,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         int size() {
-            return sizeBlock.atomic(new AtomicIntClosure() {
+            return sizeBlock.atomic(new TxnIntClosure() {
                 @Override
                 public int execute(Txn tx) throws Exception {
                     return size.get();

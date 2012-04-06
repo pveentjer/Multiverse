@@ -25,94 +25,94 @@ public final class StmUtils {
         = getGlobalStmInstance().getDefaultTxnExecutor();
     private final static OrElseBlock orelseBlock
         = getGlobalStmInstance().newOrElseBlock();
-    private final static TransactionalCollectionsFactory transactionalCollectionsFactory
-        = getGlobalStmInstance().getDefaultTransactionalCollectionFactory();
+    private final static TxnCollectionsFactory txnCollectionsFactory
+        = getGlobalStmInstance().getDefaultTxnCollectionFactory();
 
     /**
-     * Creates a new committed TransactionList based on linked nodes.
+     * Creates a new committed TxnList based on a double linked list.
      *
-     * @return the created TransactionalList.
+     * @return the created TxnList.
      */
-    public static <E> TransactionalList<E> newLinkedList(){
-        return transactionalCollectionsFactory.newLinkedList();
+    public static <E> TxnList<E> newLinkedList(){
+        return txnCollectionsFactory.newLinkedList();
     }
 
     /**
-     * Creates a new committed unbound TransactionalStack.
+     * Creates a new committed unbound TxnStack.
      *
-     * @return the created TransactionalStack.
+     * @return the created TxnStack.
      */
-    public static <E> TransactionalStack<E> newStack(){
-        return transactionalCollectionsFactory.newStack();
+    public static <E> TxnStack<E> newStack(){
+        return txnCollectionsFactory.newStack();
     }
 
     /**
-     * Creates a new committed bound TransactionalStack.
+     * Creates a new committed bound TxnStack.
      *
      * @param capacity the maximum capacity of the stack. Integer.MAX_VALUE indicates that there is no bound.
-     * @return the create TransactionalStack
+     * @return the create TxnStack
      * @throws IllegalArgumentException if capacity smaller than 0.
      */
-    public static <E> TransactionalStack<E> newStack(int capacity){
-        return transactionalCollectionsFactory.newStack(capacity);
+    public static <E> TxnStack<E> newStack(int capacity){
+        return txnCollectionsFactory.newStack(capacity);
     }
 
     /**
-     * Creates a new committed unbound TransactionalQueue.
+     * Creates a new committed unbound TxnQueue.
      *
-     * @return the created TransactionalQueue.
+     * @return the created TxnQueue.
      */
-    public static <E> TransactionalQueue<E> newQueue(){
-        return transactionalCollectionsFactory.newQueue();
+    public static <E> TxnQueue<E> newQueue(){
+        return txnCollectionsFactory.newQueue();
     }
 
     /**
-     * Creates a new committed bound TransactionalQueue.
+     * Creates a new committed bound TxnQueue.
      *
      * @param capacity the maximum capacity of the queue. Integer.MAX_VALUE indicates that there is no bound.
-     * @return the created TransactionalQueue
+     * @return the created TxnQueue
      * @throws IllegalArgumentException if capacity smaller than 0.
      */
-    public static <E> TransactionalQueue<E> newQueue(int capacity){
-        return transactionalCollectionsFactory.newQueue(capacity);
+    public static <E> TxnQueue<E> newQueue(int capacity){
+        return txnCollectionsFactory.newQueue(capacity);
     }
 
     /**
-     * Creates a new committed unbound TransactionalDeque.
+     * Creates a new committed unbound TxnDeque.
      *
-     * @return the created TransactionalDeque
+     * @return the created TxnDeque
      */
-    public static <E> TransactionalDeque<E> newDeque(){
-        return transactionalCollectionsFactory.newDeque();
+    public static <E> TxnDeque<E> newDeque(){
+        return txnCollectionsFactory.newDeque();
     }
 
     /**
-     * Creates a new committed bound TransactionalDeque.
+     * Creates a new committed bound TxnDeque.
      *
      * @param capacity the maximum capacity of the deque. Integer.MAX_VALUE indicates that there is no bound.
-     * @return the created TransactionalDeque.
+     * @return the created TxnDeque.
      * @throws IllegalArgumentException if capacity is smaller than 0.
      */
-    public static <E> TransactionalDeque<E> newDeque(int capacity){
-        return transactionalCollectionsFactory.newDeque(capacity);
+    public static <E> TxnDeque<E> newDeque(int capacity){
+        return txnCollectionsFactory.newDeque(capacity);
     }
 
     /**
-     * Creates a new committed TransactionalSet that is based on a 'hashtable'.
+     * Creates a new committed TxnSet that is based on a 'hashtable'.
      *
-     * @return the created TransactionalSet.
+     * @return the created TxnSet.
      */
-    public static <E> TransactionalSet<E> newHashSet(){
-        return transactionalCollectionsFactory.newHashSet();
+    public static <E> TxnSet<E> newHashSet(){
+        return txnCollectionsFactory.newHashSet();
     }
 
     /**
-     * Creates a new committed TransactionalMap.
+     * Creates a new committed TxnMap.
      *
-     * @return the created TransactionalMap
+     * @return the created TxnMap
      */
-    public static <K, V> TransactionalMap<K, V> newHashMap(){
-        return transactionalCollectionsFactory.newHashMap();
+    public static <K, V> TxnMap<K, V> newHashMap(){
+        return txnCollectionsFactory.newHashMap();
     }
 
     /**
@@ -126,13 +126,13 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicClosure} to execute.
+     * @param closure The closure {@link TxnClosure} to execute.
      * @return the result of the execution
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static <E> E atomic(AtomicClosure<E> closure){
+    public static <E> E atomic(TxnClosure<E> closure){
         return defaultTxnExecutor.atomic(closure);
     }
 
@@ -144,12 +144,12 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicClosure} to execute.
+    * @param closure The {@link TxnClosure} to execute.
     * @return the result of the execution
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static <E> E atomicChecked(AtomicClosure<E> closure) throws Exception{
+   public static <E> E atomicChecked(TxnClosure<E> closure) throws Exception{
        return defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -166,7 +166,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static <E> E atomic(AtomicClosure<E> either, AtomicClosure<E> orelse){
+    public static <E> E atomic(TxnClosure<E> either, TxnClosure<E> orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -179,7 +179,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static <E> E atomicChecked(AtomicClosure<E> either, AtomicClosure<E> orelse)throws Exception{
+    public static <E> E atomicChecked(TxnClosure<E> either, TxnClosure<E> orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -194,13 +194,13 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicIntClosure} to execute.
+     * @param closure The closure {@link TxnIntClosure} to execute.
      * @return the result of the execution
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  int atomic(AtomicIntClosure closure){
+    public static  int atomic(TxnIntClosure closure){
         return defaultTxnExecutor.atomic(closure);
     }
 
@@ -212,12 +212,12 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicIntClosure} to execute.
+    * @param closure The {@link TxnIntClosure} to execute.
     * @return the result of the execution
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  int atomicChecked(AtomicIntClosure closure) throws Exception{
+   public static  int atomicChecked(TxnIntClosure closure) throws Exception{
        return defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -234,7 +234,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  int atomic(AtomicIntClosure either, AtomicIntClosure orelse){
+    public static  int atomic(TxnIntClosure either, TxnIntClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -247,7 +247,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  int atomicChecked(AtomicIntClosure either, AtomicIntClosure orelse)throws Exception{
+    public static  int atomicChecked(TxnIntClosure either, TxnIntClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -262,13 +262,13 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicLongClosure} to execute.
+     * @param closure The closure {@link TxnLongClosure} to execute.
      * @return the result of the execution
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  long atomic(AtomicLongClosure closure){
+    public static  long atomic(TxnLongClosure closure){
         return defaultTxnExecutor.atomic(closure);
     }
 
@@ -280,12 +280,12 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicLongClosure} to execute.
+    * @param closure The {@link TxnLongClosure} to execute.
     * @return the result of the execution
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  long atomicChecked(AtomicLongClosure closure) throws Exception{
+   public static  long atomicChecked(TxnLongClosure closure) throws Exception{
        return defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -302,7 +302,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  long atomic(AtomicLongClosure either, AtomicLongClosure orelse){
+    public static  long atomic(TxnLongClosure either, TxnLongClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -315,7 +315,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  long atomicChecked(AtomicLongClosure either, AtomicLongClosure orelse)throws Exception{
+    public static  long atomicChecked(TxnLongClosure either, TxnLongClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -330,13 +330,13 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicDoubleClosure} to execute.
+     * @param closure The closure {@link TxnDoubleClosure} to execute.
      * @return the result of the execution
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  double atomic(AtomicDoubleClosure closure){
+    public static  double atomic(TxnDoubleClosure closure){
         return defaultTxnExecutor.atomic(closure);
     }
 
@@ -348,12 +348,12 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicDoubleClosure} to execute.
+    * @param closure The {@link TxnDoubleClosure} to execute.
     * @return the result of the execution
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  double atomicChecked(AtomicDoubleClosure closure) throws Exception{
+   public static  double atomicChecked(TxnDoubleClosure closure) throws Exception{
        return defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -370,7 +370,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  double atomic(AtomicDoubleClosure either, AtomicDoubleClosure orelse){
+    public static  double atomic(TxnDoubleClosure either, TxnDoubleClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -383,7 +383,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  double atomicChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse)throws Exception{
+    public static  double atomicChecked(TxnDoubleClosure either, TxnDoubleClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -398,13 +398,13 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicBooleanClosure} to execute.
+     * @param closure The closure {@link TxnBooleanClosure} to execute.
      * @return the result of the execution
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  boolean atomic(AtomicBooleanClosure closure){
+    public static  boolean atomic(TxnBooleanClosure closure){
         return defaultTxnExecutor.atomic(closure);
     }
 
@@ -416,12 +416,12 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicBooleanClosure} to execute.
+    * @param closure The {@link TxnBooleanClosure} to execute.
     * @return the result of the execution
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  boolean atomicChecked(AtomicBooleanClosure closure) throws Exception{
+   public static  boolean atomicChecked(TxnBooleanClosure closure) throws Exception{
        return defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -438,7 +438,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  boolean atomic(AtomicBooleanClosure either, AtomicBooleanClosure orelse){
+    public static  boolean atomic(TxnBooleanClosure either, TxnBooleanClosure orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -451,7 +451,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  boolean atomicChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse)throws Exception{
+    public static  boolean atomicChecked(TxnBooleanClosure either, TxnBooleanClosure orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
@@ -466,12 +466,12 @@ public final class StmUtils {
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link AtomicVoidClosure} to execute.
+     * @param closure The closure {@link TxnVoidClosure} to execute.
      * @throws NullPointerException if closure is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                  if the closure throws a checked exception.
      */
-    public static  void atomic(AtomicVoidClosure closure){
+    public static  void atomic(TxnVoidClosure closure){
         defaultTxnExecutor.atomic(closure);
     }
 
@@ -483,11 +483,11 @@ public final class StmUtils {
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link AtomicVoidClosure} to execute.
+    * @param closure The {@link TxnVoidClosure} to execute.
     * @throws NullPointerException if closure is null.
     * @throws Exception is the closure throws an Exception
     */
-   public static  void atomicChecked(AtomicVoidClosure closure) throws Exception{
+   public static  void atomicChecked(TxnVoidClosure closure) throws Exception{
        defaultTxnExecutor.atomicChecked(closure);
    }
 
@@ -503,7 +503,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    public static  void atomic(AtomicVoidClosure either, AtomicVoidClosure orelse){
+    public static  void atomic(TxnVoidClosure either, TxnVoidClosure orelse){
         orelseBlock.execute(either,orelse);
     }
 
@@ -515,7 +515,7 @@ public final class StmUtils {
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    public static  void atomicChecked(AtomicVoidClosure either, AtomicVoidClosure orelse)throws Exception{
+    public static  void atomicChecked(TxnVoidClosure either, TxnVoidClosure orelse)throws Exception{
         orelseBlock.executeChecked(either,orelse);
     }
 
@@ -633,7 +633,7 @@ public final class StmUtils {
      *
      * <p>For more information see {@link Txn#prepare()}.
      *
-     * @throws TransactionMandatoryException if no active transaction is found.
+     * @throws TxnMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
      *                                           state for this operation.
      * @throws ControlFlowError
@@ -648,7 +648,7 @@ public final class StmUtils {
      *
      * <p>For more information see {@link Txn#abort()}.
      *
-     * @throws TransactionMandatoryException if no active transaction is found.
+     * @throws TxnMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
      *                                           state for this operation.
      * @throws ControlFlowError
@@ -663,7 +663,7 @@ public final class StmUtils {
      *
      * <p>For more information see {@link Txn#commit()}.
      *
-     * @throws TransactionMandatoryException if no active transaction is found.
+     * @throws TxnMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
      * state for this operation.
      * @throws ControlFlowError
@@ -679,9 +679,9 @@ public final class StmUtils {
       *
       * @param task the deferred task to execute.
       * @throws NullPointerException if task is null.
-      * @throws org.multiverse.api.exceptions.TransactionMandatoryException
+      * @throws org.multiverse.api.exceptions.TxnMandatoryException
                         if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
-      * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+      * @throws org.multiverse.api.exceptions.IllegalTxnStateException
       *                 if the transaction is not in the correct state to accept a compensating or deferred task.
       */
       public static void scheduleCompensatingOrDeferredTask(final Runnable task) {
@@ -690,10 +690,10 @@ public final class StmUtils {
             }
 
             Txn txn = getRequiredThreadLocalTxn();
-            txn.register(new TransactionListener() {
+            txn.register(new TxnListener() {
                 @Override
-                public void notify(Txn txn, TransactionEvent event) {
-                    if (event == TransactionEvent.PostCommit || event == TransactionEvent.PostAbort) {
+                public void notify(Txn txn, TxnEvent event) {
+                    if (event == TxnEvent.PostCommit || event == TxnEvent.PostAbort) {
                         task.run();
                     }
                 }
@@ -706,9 +706,9 @@ public final class StmUtils {
         *
         * @param task the deferred task to execute.
         * @throws NullPointerException if task is null.
-        * @throws org.multiverse.api.exceptions.TransactionMandatoryException
+        * @throws org.multiverse.api.exceptions.TxnMandatoryException
         *                   if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
-        * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+        * @throws org.multiverse.api.exceptions.IllegalTxnStateException
         *                   if the transaction is not in the correct state to accept a deferred task.
         */
        public static void scheduleDeferredTask(final Runnable task) {
@@ -717,10 +717,10 @@ public final class StmUtils {
             }
 
             Txn txn = getRequiredThreadLocalTxn();
-            txn.register(new TransactionListener() {
+            txn.register(new TxnListener() {
                 @Override
-                public void notify(Txn txn, TransactionEvent event) {
-                    if (event == TransactionEvent.PostCommit) {
+                public void notify(Txn txn, TxnEvent event) {
+                    if (event == TxnEvent.PostCommit) {
                         task.run();
                     }
                 }
@@ -733,9 +733,9 @@ public final class StmUtils {
         *
         * @param task the deferred task to execute.
         * @throws NullPointerException if task is null.
-        * @throws org.multiverse.api.exceptions.TransactionMandatoryException
+        * @throws org.multiverse.api.exceptions.TxnMandatoryException
         *                       if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
-        * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+        * @throws org.multiverse.api.exceptions.IllegalTxnStateException
         *                       if the transaction is not in the correct state to accept a compensating task.
         */
        public static void scheduleCompensatingTask(final Runnable task) {
@@ -744,10 +744,10 @@ public final class StmUtils {
             }
 
             Txn txn = getRequiredThreadLocalTxn();
-            txn.register(new TransactionListener() {
+            txn.register(new TxnListener() {
                 @Override
-                public void notify(Txn txn, TransactionEvent event) {
-                    if (event == TransactionEvent.PostAbort) {
+                public void notify(Txn txn, TxnEvent event) {
+                    if (event == TxnEvent.PostAbort) {
                         task.run();
                     }
                 }

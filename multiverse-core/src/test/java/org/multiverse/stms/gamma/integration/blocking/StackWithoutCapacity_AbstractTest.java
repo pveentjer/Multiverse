@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
@@ -113,7 +113,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         private final TxnExecutor popExecutor = newPopTxnExecutor();
 
         public void push(final E item) {
-            pushExecutor.atomic(new AtomicVoidClosure() {
+            pushExecutor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     head.set(new Node<E>(item, head.get()));
@@ -122,7 +122,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         }
 
         public E pop() {
-            return popExecutor.atomic(new AtomicClosure<E>() {
+            return popExecutor.atomic(new TxnClosure<E>() {
                 @Override
                 public E execute(Txn tx) throws Exception {
                     Node<E> node = head.awaitNotNullAndGet();

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class ConnectionPool_FatFixedLengthGammaTxn_StressTest extends ConnectionPool_AbstractTest {
@@ -37,14 +37,14 @@ public class ConnectionPool_FatFixedLengthGammaTxn_StressTest extends Connection
 
     @Override
     protected TxnExecutor newTakeBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TxnExecutor newReturnBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }

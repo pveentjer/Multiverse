@@ -9,7 +9,7 @@ import org.multiverse.api.predicates.*;
  * If a method is prefixed with atomic, the call will always run under its own txn, no
  * matter if there already is a txn available (so the propagation level is {@link PropagationLevel#RequiresNew}).
  * For the other methods, always an txn needs to be available, else you will get the
- * {@link org.multiverse.api.exceptions.TransactionMandatoryException}.
+ * {@link org.multiverse.api.exceptions.TxnMandatoryException}.
  *
  * <h3>ControlFlowError</h3>
  *
@@ -18,7 +18,7 @@ import org.multiverse.api.predicates.*;
  * 
  * <h3>TransactionExecutionException</h3>
  *
- * <p>Most of the methods can throw a {@link org.multiverse.api.exceptions.TransactionExecutionException}.
+ * <p>Most of the methods can throw a {@link org.multiverse.api.exceptions.TxnExecutionException}.
  * This exception can be caught, but in most cases you want to figure out what the cause is (e.g. because
  * there are too many retries) and solve that problem.
  *
@@ -34,7 +34,7 @@ public interface BooleanRef extends TransactionalObject {
      * Gets the value using the provided txn.
      *
      * @return the current value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -51,7 +51,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param lockMode the LockMode applied.
      * @return the current value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -66,7 +66,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @return the value stored in the ref.
      * @throws NullPointerException if txn is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -82,7 +82,7 @@ public interface BooleanRef extends TransactionalObject {
      * @return the value stored in the ref.
      * @throws NullPointerException if txn is null or if lockMode is null. If LockMode is null and a running txn is available
      *                              it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -97,7 +97,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param value the new value.
      * @return the new value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -114,7 +114,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param lockMode the used LockMode.
      * @return the new value.
      * @throws NullPointerException if lockMode is null (if the txn is alive, it will also be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -129,7 +129,7 @@ public interface BooleanRef extends TransactionalObject {
     * @param value the new value
     * @return the old value
     * @throws NullPointerException if txn is null.
-    * @throws org.multiverse.api.exceptions.TransactionExecutionException
+    * @throws org.multiverse.api.exceptions.TxnExecutionException
     *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
     * @throws org.multiverse.api.exceptions.ControlFlowError
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -146,7 +146,7 @@ public interface BooleanRef extends TransactionalObject {
     * @return the old value
     * @throws NullPointerException if txn is null or lockMode is null. If the lockMode is null and the txn
     *                              is alive, it will be aborted.
-    * @throws org.multiverse.api.exceptions.TransactionExecutionException
+    * @throws org.multiverse.api.exceptions.TxnExecutionException
     *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
     * @throws org.multiverse.api.exceptions.ControlFlowError
     *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -161,7 +161,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param value the new value.
      * @return the old value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -178,7 +178,7 @@ public interface BooleanRef extends TransactionalObject {
      * @return the old value.
      * @param lockMode the LockMode used.
      * @throws NullPointerException if LockMode is null. If a running txn is available, it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -193,7 +193,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @return the old value.
      * @throws NullPointerException if txn is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -212,7 +212,7 @@ public interface BooleanRef extends TransactionalObject {
      * @return the old value.
      * @throws NullPointerException if txn or LockMode is null. If the txn is running, and the LockMode is null,
      *                              it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -227,7 +227,7 @@ public interface BooleanRef extends TransactionalObject {
      * {@link #atomicWeakGet()}.
      *
      * @return the current value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      */
     boolean atomicGet();
 
@@ -247,7 +247,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param newValue the new value.
      * @return the new value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      */
     boolean atomicSet(boolean newValue);
 
@@ -257,7 +257,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param newValue the new value.
      * @return the old value.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      */
     boolean atomicGetAndSet(boolean newValue);
 
@@ -273,7 +273,7 @@ public interface BooleanRef extends TransactionalObject {
      *
      * @param function the function to apply to this reference.
      * @throws NullPointerException if function is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -294,7 +294,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @param function the function to apply to this reference.
      * @throws NullPointerException  if function is null. If there is an active txn, it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -320,7 +320,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param function the function that alters the value stored in this Ref.
      * @return the new value.
      * @throws NullPointerException if function is null. The Txn will also be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -335,7 +335,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @return the new value.
      * @throws NullPointerException if function or txn is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -350,7 +350,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param function the Function used
      * @return the old value.
      * @throws NullPointerException if function is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      */
     boolean atomicGetAndAlter(BooleanFunction function);
 
@@ -362,7 +362,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param function the function that alters the value stored in this Ref.
      * @return the old value.
      * @throws NullPointerException if function is null. The txn will be aborted as well.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -377,7 +377,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @return the old value
      * @throws NullPointerException if function or txn is null. The txn will be aborted as well.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -391,7 +391,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param expectedValue the expected value.
      * @param newValue the new value.
      * @return true if the compareAndSwap was a success, false otherwise.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      */
     boolean atomicCompareAndSet(boolean expectedValue, boolean newValue);
 
@@ -402,7 +402,7 @@ public interface BooleanRef extends TransactionalObject {
      * <p>This call lifts on the {@link org.multiverse.api.Txn} stored in the {@link org.multiverse.api.TxnThreadLocal}.
      *
      * @param value the value to wait for.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -417,7 +417,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param txn the {@link Txn} used for this operation.
      * @param value the value to wait for.
      * @throws NullPointerException if txn is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -435,7 +435,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param predicate the predicate to evaluate.
      * @throws NullPointerException if predicate is null. When there is a non dead txn,
      *                              it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn
@@ -452,7 +452,7 @@ public interface BooleanRef extends TransactionalObject {
      * @param predicate the predicate to evaluate.
      * @throws NullPointerException if predicate is null or txn is null. When there is a non dead txn,
      *                              it will be aborted.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *                  if something failed while using the txn. The txn is guaranteed to have been aborted.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *                  if the Stm needs to control the flow in a different way than normal returns of exceptions. The txn

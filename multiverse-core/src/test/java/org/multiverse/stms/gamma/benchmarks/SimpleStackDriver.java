@@ -6,8 +6,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.AtomicBooleanClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnBooleanClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.api.references.Ref;
 import org.multiverse.stms.gamma.GammaStm;
@@ -95,7 +95,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
     class PushThread extends TestThread {
         private final Stack<String> stack;
         private long count;
-        private final TxnExecutor pushBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor pushBlock = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .setReadLockMode(readLockMode)
                 .setWriteLockMode(writeLockMode)
@@ -117,7 +117,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         private void runWithoutPooledClosure() {
             while (!shutdown) {
-                pushBlock.atomic(new AtomicVoidClosure() {
+                pushBlock.atomic(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
                         stack.push(tx, "item");
@@ -128,7 +128,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
 
             for (int k = 0; k < popThreadCount; k++) {
-                pushBlock.atomic(new AtomicVoidClosure() {
+                pushBlock.atomic(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
                         stack.push(tx, "end");
@@ -153,7 +153,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             }
         }
 
-        class PushClosure implements AtomicVoidClosure {
+        class PushClosure implements TxnVoidClosure {
             String item;
 
             @Override
@@ -167,7 +167,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         private final Stack<String> stack;
         private long count;
-        private final TxnExecutor popBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor popBlock = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .setReadLockMode(readLockMode)
                 .setWriteLockMode(writeLockMode)
@@ -190,7 +190,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
         private void runWithPooledClosure() {
             boolean end = false;
             while (!end) {
-                end = popBlock.atomic(new AtomicBooleanClosure() {
+                end = popBlock.atomic(new TxnBooleanClosure() {
                     @Override
                     public boolean execute(Txn tx) throws Exception {
                         return !stack.pop(tx).equals("end");
@@ -210,7 +210,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             }
         }
 
-        class PopClosure implements AtomicBooleanClosure {
+        class PopClosure implements TxnBooleanClosure {
             @Override
             public boolean execute(Txn tx) throws Exception {
                 return !stack.pop(tx).endsWith("end");

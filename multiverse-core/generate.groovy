@@ -2,9 +2,9 @@ import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 
-@Grab(group = 'org.apache.velocity', module = 'velocity', version = '1.6.4')
+@Grab(group = 'org.apache.velocity', module = 'velocity', version = '1.7.0')
 
-class AtomicClosure {
+class TxnClosure {
     String type
     String name
     String typeParameter
@@ -33,7 +33,7 @@ VelocityEngine engine = new VelocityEngine();
 engine.init();
 
 def refs = createTransactionalObjects();
-def atomicClosures = createClosures();
+def txnClosures = createClosures();
 def txnExecutors = [new TxnExecutor(name: 'FatGammaTxnExecutor', lean: false),
         new TxnExecutor(name: 'LeanGammaTxnExecutor', lean: true)]
 
@@ -45,49 +45,49 @@ for (def param in refs) {
     generateFunction(engine, param)
 }
 
-for (def closure in atomicClosures) {
-    generateAtomicClosure(engine, closure)
+for (def closure in txnClosures) {
+    generateTxnClosure(engine, closure)
 }
 
-generateTxnExecutor(engine, atomicClosures)
+generateTxnExecutor(engine, txnClosures)
 //generateOrElseBlock(engine, atomicClosures)
-generateGammaOrElseBlock(engine, atomicClosures)
-generateStmUtils(engine, atomicClosures)
+generateGammaOrElseBlock(engine, txnClosures)
+generateStmUtils(engine, txnClosures)
 
 for (def txnExecutor in txnExecutors) {
-    generateGammaTxnExecutor(engine, txnExecutor, atomicClosures)
+    generateGammaTxnExecutor(engine, txnExecutor, txnClosures)
 }
 
 
-List<AtomicClosure> createClosures() {
+List<TxnClosure> createClosures() {
     def result = []
-    result.add new AtomicClosure(
-            name: 'AtomicClosure',
+    result.add new TxnClosure(
+            name: 'TxnClosure',
             type: 'E',
             typeParameter: '<E>'
     )
-    result.add new AtomicClosure(
-            name: 'AtomicIntClosure',
+    result.add new TxnClosure(
+            name: 'TxnIntClosure',
             type: 'int',
             typeParameter: ''
     )
-    result.add new AtomicClosure(
-            name: 'AtomicLongClosure',
+    result.add new TxnClosure(
+            name: 'TxnLongClosure',
             type: 'long',
             typeParameter: ''
     )
-    result.add new AtomicClosure(
-            name: 'AtomicDoubleClosure',
+    result.add new TxnClosure(
+            name: 'TxnDoubleClosure',
             type: 'double',
             typeParameter: ''
     )
-    result.add new AtomicClosure(
-            name: 'AtomicBooleanClosure',
+    result.add new TxnClosure(
+            name: 'TxnBooleanClosure',
             type: 'boolean',
             typeParameter: ''
     )
-    result.add new AtomicClosure(
-            name: 'AtomicVoidClosure',
+    result.add new TxnClosure(
+            name: 'TxnVoidClosure',
             type: 'void',
             typeParameter: ''
     )
@@ -165,8 +165,8 @@ List<TransactionalObject> createTransactionalObjects() {
     result
 }
 
-void generateAtomicClosure(VelocityEngine engine, AtomicClosure closure) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/closures/AtomicClosure.vm')
+void generateTxnClosure(VelocityEngine engine, TxnClosure closure) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/closures/TxnClosure.vm')
 
     VelocityContext context = new VelocityContext()
     context.put('closure', closure)
@@ -179,7 +179,7 @@ void generateAtomicClosure(VelocityEngine engine, AtomicClosure closure) {
     file.text = writer.toString()
 }
 
-void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, List<AtomicClosure> closures) {
+void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, List<TxnClosure> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaTxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
@@ -194,7 +194,7 @@ void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, Li
     file.text = writer.toString()
 }
 
-void generateTxnExecutor(VelocityEngine engine, List<AtomicClosure> closures) {
+void generateTxnExecutor(VelocityEngine engine, List<TxnClosure> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/TxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
@@ -208,7 +208,7 @@ void generateTxnExecutor(VelocityEngine engine, List<AtomicClosure> closures) {
     file.text = writer.toString()
 }
 
-void generateOrElseBlock(VelocityEngine engine, List<AtomicClosure> closures) {
+void generateOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/OrElseBlock.vm')
 
     VelocityContext context = new VelocityContext()
@@ -222,7 +222,7 @@ void generateOrElseBlock(VelocityEngine engine, List<AtomicClosure> closures) {
     file.text = writer.toString()
 }
 
-void generateGammaOrElseBlock(VelocityEngine engine, List<AtomicClosure> closures) {
+void generateGammaOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaOrElseBlock.vm')
 
     VelocityContext context = new VelocityContext()
@@ -236,7 +236,7 @@ void generateGammaOrElseBlock(VelocityEngine engine, List<AtomicClosure> closure
     file.text = writer.toString()
 }
 
-void generateStmUtils(VelocityEngine engine, List<AtomicClosure> closures) {
+void generateStmUtils(VelocityEngine engine, List<TxnClosure> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/StmUtils.vm')
 
     VelocityContext context = new VelocityContext()

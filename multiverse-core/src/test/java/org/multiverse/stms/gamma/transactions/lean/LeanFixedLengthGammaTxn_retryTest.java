@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.lean;
 
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 
 public class LeanFixedLengthGammaTxn_retryTest extends LeanGammaTxn_retryTest<LeanFixedLengthGammaTxn>{
@@ -10,7 +10,7 @@ public class LeanFixedLengthGammaTxn_retryTest extends LeanGammaTxn_retryTest<Le
     }
 
     @Override
-    public LeanFixedLengthGammaTxn newTransaction(GammaTxnConfiguration config) {
+    public LeanFixedLengthGammaTxn newTransaction(GammaTxnConfig config) {
         return new LeanFixedLengthGammaTxn(config);
     }
 }

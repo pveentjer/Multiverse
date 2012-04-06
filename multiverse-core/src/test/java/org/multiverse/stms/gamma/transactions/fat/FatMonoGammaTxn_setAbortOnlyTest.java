@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public class FatMonoGammaTxn_setAbortOnlyTest extends FatGammaTxn_setAbortOnlyTest<FatMonoGammaTxn> {
     @Override
@@ -9,7 +9,7 @@ public class FatMonoGammaTxn_setAbortOnlyTest extends FatGammaTxn_setAbortOnlyTe
     }
 
     @Override
-    protected FatMonoGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatMonoGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatMonoGammaTxn(config);
     }
 }

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 public class ProducerConsumer_FatVariableLengthGammaTxn_StressTest extends ProducerConsumer_AbstractTest {
@@ -37,7 +37,7 @@ public class ProducerConsumer_FatVariableLengthGammaTxn_StressTest extends Produ
 
     @Override
     protected TxnExecutor newPutBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
@@ -45,7 +45,7 @@ public class ProducerConsumer_FatVariableLengthGammaTxn_StressTest extends Produ
 
     @Override
     protected TxnExecutor newTakeBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));

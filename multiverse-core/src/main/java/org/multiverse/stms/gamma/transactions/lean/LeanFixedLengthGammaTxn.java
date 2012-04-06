@@ -6,7 +6,7 @@ import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
 
@@ -22,11 +22,11 @@ public final class LeanFixedLengthGammaTxn extends GammaTxn {
     public final Listeners[] listenersArray;
 
     public LeanFixedLengthGammaTxn(final GammaStm stm) {
-        this(new GammaTxnConfiguration(stm));
+        this(new GammaTxnConfig(stm));
     }
 
     @SuppressWarnings({"ObjectAllocationInLoop"})
-    public LeanFixedLengthGammaTxn(final GammaTxnConfiguration config) {
+    public LeanFixedLengthGammaTxn(final GammaTxnConfig config) {
         super(config, TRANSACTIONTYPE_LEAN_FIXED_LENGTH);
 
         listenersArray = new Listeners[config.maxFixedLengthTransactionSize];

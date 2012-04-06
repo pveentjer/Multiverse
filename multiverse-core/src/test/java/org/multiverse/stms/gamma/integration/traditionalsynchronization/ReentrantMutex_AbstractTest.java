@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.api.references.Ref;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
@@ -82,7 +82,7 @@ public abstract class ReentrantMutex_AbstractTest {
         private final GammaTxnExecutor unlockBlock = newUnlockBlock();
 
         public void lock(final Thread thread) {
-            lockBlock.atomic(new AtomicVoidClosure() {
+            lockBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     if (owner.get() == null) {
@@ -102,7 +102,7 @@ public abstract class ReentrantMutex_AbstractTest {
         }
 
         public void unlock(final Thread thread) {
-            unlockBlock.atomic(new AtomicVoidClosure() {
+            unlockBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     if (owner.get() != thread) {

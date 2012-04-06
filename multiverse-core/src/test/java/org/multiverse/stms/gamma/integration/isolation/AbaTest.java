@@ -24,7 +24,7 @@ public class AbaTest {
     public void test() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);

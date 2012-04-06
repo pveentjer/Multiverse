@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.*;
@@ -48,7 +48,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier = new CountDownCommitBarrier(1);
 
         Thread.currentThread().interrupt();
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
 
         barrier.joinCommitUninterruptibly(tx);
 
@@ -59,7 +59,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionActive() {
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.prepare();
 
         barrier = new CountDownCommitBarrier(1);
@@ -71,7 +71,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionPrepared() {
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.prepare();
 
         barrier = new CountDownCommitBarrier(1);
@@ -93,7 +93,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         assertAlive(t1, t2);
         assertTrue(barrier.isClosed());
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.joinCommitUninterruptibly(tx);
         joinAll(t1, t2);
 
@@ -101,15 +101,15 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     }
 
     @Test
-    public void whenOpenAndTransactionAborted_thenDeadTransactionException() {
-        Txn tx = stm.newDefaultTransaction();
+    public void whenOpenAndTransactionAborted_thenDeadTxnException() {
+        Txn tx = stm.newDefaultTxn();
         tx.abort();
 
         barrier = new CountDownCommitBarrier(1);
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail();
-        } catch (DeadTransactionException ex) {
+        } catch (DeadTxnException ex) {
         }
 
         assertTrue(barrier.isClosed());
@@ -117,15 +117,15 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     }
 
     @Test
-    public void whenOpenAndTransactionCommitted_thenDeadTransactionException() {
-        Txn tx = stm.newDefaultTransaction();
+    public void whenOpenAndTransactionCommitted_thenDeadTxnException() {
+        Txn tx = stm.newDefaultTxn();
         tx.commit();
 
         barrier = new CountDownCommitBarrier(1);
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail();
-        } catch (DeadTransactionException ex) {
+        } catch (DeadTxnException ex) {
         }
 
         assertTrue(barrier.isClosed());
@@ -137,7 +137,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
 
         try {
             barrier.joinCommitUninterruptibly(tx);
@@ -151,9 +151,9 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     @Test
     public void whenCommitted_thenCommitBarrierOpenException() {
         barrier = new CountDownCommitBarrier(1);
-        barrier.joinCommitUninterruptibly(stm.newDefaultTransaction());
+        barrier.joinCommitUninterruptibly(stm.newDefaultTxn());
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail();
@@ -168,7 +168,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     AwaitThread.this.tx = tx;

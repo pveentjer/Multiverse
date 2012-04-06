@@ -18,9 +18,9 @@ import org.multiverse.api.closures.*;
  *
  * <p>The AtomicClosure is the functionality that needs to be executed isolated, consistent and atomically. There
  * are different tasted of Closures but essentially the only difference is the return type. There are primitive closures
- * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.closures.AtomicVoidClosure} that prevents
+ * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.closures.TxnVoidClosure} that prevents
  * returning a value if none is needed. And last but not least there also is the general purpose
- * {@link org.multiverse.api.closures.AtomicClosure} that returns an Object reference.
+ * {@link org.multiverse.api.closures.TxnClosure} that returns an Object reference.
  *
  * <h3>Automatic retries</h3>
  *
@@ -84,7 +84,7 @@ import org.multiverse.api.closures.*;
  * is done before the outer most TxnExecutor completes, that commit is leading.
  *
  * <p>If the Transaction is committed (or aborted) manually, operations on the Transaction will fail with a
- * {@link org.multiverse.api.exceptions.IllegalTransactionStateException} exception. So in most cases you want to let the TxnExecutor
+ * {@link org.multiverse.api.exceptions.IllegalTxnStateException} exception. So in most cases you want to let the TxnExecutor
  * be in charge of committing/aborting. If also allows for a correct flattening of nested transactions.  If a transaction should
  * not commit, but you don't want to disrupt the code, the {@link Transaction#setAbortOnly} can be called, to make sure that the
  * transaction is not going to commit (or prepare) successfully.
@@ -114,7 +114,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-    <E> E atomic(AtomicClosure<E> closure);
+    <E> E atomic(TxnClosure<E> closure);
 
    /**
     * Executes the closure.
@@ -124,7 +124,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-    <E> E atomicChecked(AtomicClosure<E> closure)throws Exception;
+    <E> E atomicChecked(TxnClosure<E> closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -136,7 +136,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     int atomic(AtomicIntClosure closure);
+     int atomic(TxnIntClosure closure);
 
    /**
     * Executes the closure.
@@ -146,7 +146,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     int atomicChecked(AtomicIntClosure closure)throws Exception;
+     int atomicChecked(TxnIntClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -158,7 +158,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     long atomic(AtomicLongClosure closure);
+     long atomic(TxnLongClosure closure);
 
    /**
     * Executes the closure.
@@ -168,7 +168,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     long atomicChecked(AtomicLongClosure closure)throws Exception;
+     long atomicChecked(TxnLongClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -180,7 +180,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     double atomic(AtomicDoubleClosure closure);
+     double atomic(TxnDoubleClosure closure);
 
    /**
     * Executes the closure.
@@ -190,7 +190,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     double atomicChecked(AtomicDoubleClosure closure)throws Exception;
+     double atomicChecked(TxnDoubleClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -202,7 +202,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     boolean atomic(AtomicBooleanClosure closure);
+     boolean atomic(TxnBooleanClosure closure);
 
    /**
     * Executes the closure.
@@ -212,7 +212,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     boolean atomicChecked(AtomicBooleanClosure closure)throws Exception;
+     boolean atomicChecked(TxnBooleanClosure closure)throws Exception;
 
    /**
     * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
@@ -223,7 +223,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
-     void atomic(AtomicVoidClosure closure);
+     void atomic(TxnVoidClosure closure);
 
    /**
     * Executes the closure.
@@ -232,6 +232,6 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if closure is null.
     * @throws Exception if the execute call fails.
     */
-     void atomicChecked(AtomicVoidClosure closure)throws Exception;
+     void atomicChecked(TxnVoidClosure closure)throws Exception;
 
 }

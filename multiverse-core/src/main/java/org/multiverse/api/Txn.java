@@ -1,6 +1,6 @@
 package org.multiverse.api;
 
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnListener;
 
 /**
  * The unit of work for {@link Stm}. The transaction make sure that changes on {@link TransactionalObject} instances are:
@@ -19,18 +19,18 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * thread specific state like the stackframe of a method (this is an issue when instrumentation is used since the stackframe
  * is likely to be enhanced to include the Txn as a local variable.
  *
- * <h3>TransactionListener</h3>
+ * <h3>TxnListener</h3>
  *
  * <p>It is possible to listen to a Txn when it aborts/prepares/commits/starts. There are 2 different flavors of
  * listeners:
  * <ol>
  * <li>normal listeners: are registered during the execution of a transaction using the
- * {@link Txn#register(org.multiverse.api.lifecycle.TransactionListener)} method. If the transactions aborts/commits
+ * {@link Txn#register(org.multiverse.api.lifecycle.TxnListener)} method. If the transactions aborts/commits
  * these listeners are removed. So if the transaction is retried, the listeners need to be registered (this is easy since
  * the logic inside the atomicChecked block that did the register, is executed again.
  * </li>
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
- * TxnExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
+ * TxnExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TxnListener)}
  * or it can be done on the Stm level. Permanent listeners are suited for products that want to integrate with Multiverse and always
  * atomicChecked some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
  * the implementations for more details. Permanent listeners are always executed after the normal listeners.
@@ -48,13 +48,13 @@ import org.multiverse.api.lifecycle.TransactionListener;
 public interface Txn {
 
     /**
-     * Returns the TxnConfiguration used by this Txn.
+     * Returns the TxnConfig used by this Txn.
      *
-     * <p>Because the Txn can be reused, the TxnConfiguration used by this Txn doesn't need to be constant.
+     * <p>Because the Txn can be reused, the TxnConfig used by this Txn doesn't need to be constant.
      *
-     * @return the TxnConfiguration.
+     * @return the TxnConfig.
      */
-    TxnConfiguration getConfiguration();
+    TxnConfig getConfiguration();
 
     /**
      * Returns the status of this Txn.
@@ -66,7 +66,7 @@ public interface Txn {
     /**
      * Gets the current attempt (so the number of tries this transaction already had). Value will
      * always be equal or larger than 1 (the first attempt returns 1). The maximum number of attempts for retrying is determined based
-     * on the  {@link TxnConfiguration#getMaxRetries()}
+     * on the  {@link TxnConfig#getMaxRetries()}
      *
      * @return the current attempt.
      */
@@ -88,7 +88,7 @@ public interface Txn {
      * <li>active: it is prepared for commit and then committed</li>
      * <li>prepared: it is committed. Once it is prepared, the commit is guaranteed to
      * succeed.</li>
-     * <li>aborted: a DeadTransactionException is thrown</li>
+     * <li>aborted: a DeadTxnException is thrown</li>
      * <li>committed: the call is ignored</li>
      * </ol>
      *
@@ -97,13 +97,13 @@ public interface Txn {
      * <p>Commit will not throw a {@link org.multiverse.api.exceptions.ReadWriteConflict} after the transaction is prepared.
      * So if prepared successfully, a commit will always succeed.
      *
-     * <p>If there are TransactionListeners (either normal ones or permanent ones) and they thrown a {@link RuntimeException}
+     * <p>If there are TxnListeners (either normal ones or permanent ones) and they thrown a {@link RuntimeException}
      * or {@link Error}, this will be re-thrown. If a listener fails after the prepare/commit  the transaction still is
      * committed.
      *
      * @throws org.multiverse.api.exceptions.ReadWriteConflict
      *          if the commit failed. Check the class hierarchy of the ReadWriteConflict for more information.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *          if the Txn is not in the correct
      *          state for this operation.
      */
@@ -120,7 +120,7 @@ public interface Txn {
      *
      * @throws org.multiverse.api.exceptions.ReadWriteConflict
      *          if the transaction can't be prepared.
-     * @throws org.multiverse.api.exceptions.DeadTransactionException
+     * @throws org.multiverse.api.exceptions.DeadTxnException
      *          if the transaction already is committed or aborted.
      */
     void prepare();
@@ -133,7 +133,7 @@ public interface Txn {
      *
      * <p>If the Txn already is aborted, the call is ignored.
      *
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *          if the Txn is not in the correct state for this operation.
      */
     void abort();
@@ -142,7 +142,7 @@ public interface Txn {
      * Retries the transaction. This call doesn't block, but if all goes well a {@link org.multiverse.api.exceptions.RetryError}
      * is thrown which is caught by the {@link TxnExecutor}.
      *
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *          if the transaction is not in a legal state for
      *          this operation.
      * @throws org.multiverse.api.exceptions.ControlFlowError
@@ -157,7 +157,7 @@ public interface Txn {
      *
      * <p>This method is not threadsafe, so can only be called by the thread that used the transaction.
      *
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *          if the transaction is not active.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
@@ -170,30 +170,30 @@ public interface Txn {
      * <p>This method is not threadsafe, so can only be called by the thread that used the transaction.
      *
      * @return true if abort only, false otherwise.
-     * @throws org.multiverse.api.exceptions.DeadTransactionException
+     * @throws org.multiverse.api.exceptions.DeadTxnException
      *          if the transaction is committed/aborted.
      */
     boolean isAbortOnly();
 
     /**
-     * Registers a TransactionListener. Every time a transaction is retried, the listener needs to
+     * Registers a TxnListener. Every time a transaction is retried, the listener needs to
      * be registered again if you want the task to be executed again. If you want a permanent listener, have
-     * a look at the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}.
+     * a look at the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TxnListener)}.
      *
-     * <p>If a TransactionListener is added more than once, it is executed more than once. No checks
+     * <p>If a TxnListener is added more than once, it is executed more than once. No checks
      * are made. The permanent listeners are executed in the order they are added.
      *
-     * <p>If a TransactionListener throws an Error/RuntimeException and the transaction still is alive,
+     * <p>If a TxnListener throws an Error/RuntimeException and the transaction still is alive,
      * it is aborted. For compensating and deferred actions this is not an issue, but for the PrePrepare state
      * or the state it could since the transaction is aborted.
      *
      * @param listener the listener to add.
      * @throws NullPointerException if listener is null. If the transaction is still alive, it is aborted.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *                              if the transaction is not in the correct
      *                              state (e.g. aborted or committed).
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
      */
-    void register(TransactionListener listener);
+    void register(TxnListener listener);
 }

@@ -4,15 +4,14 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.exceptions.RetryNotAllowedException;
-import org.multiverse.api.exceptions.RetryNotPossibleException;
+import org.multiverse.api.exceptions.*;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -31,7 +30,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
         stm = new GammaStm();
     }
 
-    protected abstract T newTransaction(GammaTxnConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfig config);
 
     protected abstract T newTransaction();
 
@@ -97,7 +96,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
 
     @Test
     public void whenNoRetryAllowed() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
+        GammaTxnConfig config = new GammaTxnConfig(stm);
         config.blockingAllowed = false;
 
         T tx = newTransaction(config);
@@ -118,7 +117,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -132,7 +131,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -146,7 +145,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
         try {
             tx.retry();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.BooleanRef;
 import org.multiverse.api.references.RefFactory;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.GammaStmConfiguration;
+import org.multiverse.stms.gamma.GammaStmConfig;
 
 import static org.junit.Assert.assertFalse;
 import static org.multiverse.TestUtils.*;
@@ -32,7 +32,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
-        GammaStmConfiguration config = new GammaStmConfiguration();
+        GammaStmConfig config = new GammaStmConfig();
         //config.backoffPolicy = new SpinningBackoffPolicy();
         stm = new GammaStm(config);
         refFactory = stm.getRefFactoryBuilder().build();
@@ -122,7 +122,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void releaseForks() {
-            releaseForksBlock.atomic(new AtomicVoidClosure() {
+            releaseForksBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     leftFork.set(false);
@@ -133,7 +133,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void takeForks() {
-            takeForksBlock.atomic(new AtomicVoidClosure() {
+            takeForksBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     if (leftFork.get() || rightFork.get()) {

@@ -6,7 +6,7 @@ package org.multiverse.api.exceptions;
  *
  * @author Peter Veentjer.
  */
-public class PropagationException extends TransactionExecutionException {
+public class PropagationException extends TxnExecutionException {
 
     private static final long serialVersionUID = 0;
 

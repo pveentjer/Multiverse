@@ -1,12 +1,12 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TransactionExecutionException} thrown when retrying a transaction for another attempt fails.
+ * A {@link TxnExecutionException} thrown when retrying a transaction for another attempt fails.
  * E.g. because an explicit retry is not used, or when there are too many retry attempts.
  *
  * @author Peter Veentjer.
  */
-public abstract class RetryException extends TransactionExecutionException {
+public abstract class RetryException extends TxnExecutionException {
 
     private static final long serialVersionUID = 0;
 

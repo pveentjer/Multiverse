@@ -6,8 +6,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -102,7 +102,7 @@ public class Lock_getLockMode0Test {
     // ====================== states ==================================
 
     @Test
-    public void whenTransactionPrepared_thenPreparedTransactionException() {
+    public void whenTransactionPrepared_thenPreparedTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -111,7 +111,7 @@ public class Lock_getLockMode0Test {
         try {
             ref.getLock().getLockMode(tx);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
 
         }
 
@@ -119,7 +119,7 @@ public class Lock_getLockMode0Test {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -128,14 +128,14 @@ public class Lock_getLockMode0Test {
         try {
             ref.getLock().getLockMode(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         GammaLongRef ref = new GammaLongRef(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -144,7 +144,7 @@ public class Lock_getLockMode0Test {
         try {
             ref.getLock().getLockMode(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

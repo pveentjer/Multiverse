@@ -1,22 +1,22 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.api.lifecycle.TransactionEvent;
+import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public final class FatMonoGammaTxn extends GammaTxn {
 
     public final GammaRefTranlocal tranlocal = new GammaRefTranlocal();
 
     public FatMonoGammaTxn(GammaStm stm) {
-        this(new GammaTxnConfiguration(stm));
+        this(new GammaTxnConfig(stm));
     }
 
-    public FatMonoGammaTxn(GammaTxnConfiguration config) {
+    public FatMonoGammaTxn(GammaTxnConfig config) {
         super(config, TRANSACTIONTYPE_FAT_MONO);
         richmansMansConflictScan = false;
     }
@@ -49,7 +49,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
         }
 
         if (status == TX_ACTIVE) {
-            notifyListeners(TransactionEvent.PrePrepare);
+            notifyListeners(TxnEvent.PrePrepare);
         }
 
         final BaseGammaRef owner = tranlocal.owner;
@@ -79,7 +79,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
 
         tranlocal.owner = null;
         status = TX_COMMITTED;
-        notifyListeners(TransactionEvent.PostCommit);
+        notifyListeners(TxnEvent.PostCommit);
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
             owner.releaseAfterFailure(tranlocal, pool);
         }
 
-        notifyListeners(TransactionEvent.PostAbort);
+        notifyListeners(TxnEvent.PostAbort);
     }
 
     @Override
@@ -115,7 +115,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
             throw abortPrepareOnAbortOnly();
         }
 
-        notifyListeners(TransactionEvent.PrePrepare);
+        notifyListeners(TxnEvent.PrePrepare);
 
         final BaseGammaRef owner = tranlocal.owner;
         if (owner != null) {

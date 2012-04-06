@@ -31,7 +31,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
     @Override
     public final <E> E atomicChecked(
-        final AtomicClosure<E> closure)throws Exception{
+        final TxnClosure<E> closure)throws Exception{
 
         try{
             return atomic(closure);
@@ -41,7 +41,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final <E> E atomic(final AtomicClosure<E> closure){
+    public final <E> E atomic(final TxnClosure<E> closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -78,17 +78,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -100,9 +100,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -124,20 +124,20 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
      @Override
     public final  int atomicChecked(
-        final AtomicIntClosure closure)throws Exception{
+        final TxnIntClosure closure)throws Exception{
 
         try{
             return atomic(closure);
@@ -147,7 +147,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final  int atomic(final AtomicIntClosure closure){
+    public final  int atomic(final TxnIntClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -184,17 +184,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -206,9 +206,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -230,20 +230,20 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
      @Override
     public final  long atomicChecked(
-        final AtomicLongClosure closure)throws Exception{
+        final TxnLongClosure closure)throws Exception{
 
         try{
             return atomic(closure);
@@ -253,7 +253,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final  long atomic(final AtomicLongClosure closure){
+    public final  long atomic(final TxnLongClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -290,17 +290,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -312,9 +312,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -336,20 +336,20 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
      @Override
     public final  double atomicChecked(
-        final AtomicDoubleClosure closure)throws Exception{
+        final TxnDoubleClosure closure)throws Exception{
 
         try{
             return atomic(closure);
@@ -359,7 +359,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final  double atomic(final AtomicDoubleClosure closure){
+    public final  double atomic(final TxnDoubleClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -396,17 +396,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -418,9 +418,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -442,20 +442,20 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
      @Override
     public final  boolean atomicChecked(
-        final AtomicBooleanClosure closure)throws Exception{
+        final TxnBooleanClosure closure)throws Exception{
 
         try{
             return atomic(closure);
@@ -465,7 +465,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final  boolean atomic(final AtomicBooleanClosure closure){
+    public final  boolean atomic(final TxnBooleanClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -502,17 +502,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -524,9 +524,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -548,20 +548,20 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
      @Override
     public final  void atomicChecked(
-        final AtomicVoidClosure closure)throws Exception{
+        final TxnVoidClosure closure)throws Exception{
 
         try{
             atomic(closure);
@@ -571,7 +571,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final  void atomic(final AtomicVoidClosure closure){
+    public final  void atomic(final TxnVoidClosure closure){
 
         if(closure == null){
             throw new NullPointerException();
@@ -609,17 +609,17 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         return;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -631,9 +631,9 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    txnConfiguration.familyName));
+                                    txnConfig.familyName));
                             }
                         }
 
@@ -655,15 +655,15 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
         if(TRACING_ENABLED){
-            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
+                    txnConfig.familyName, txnConfig.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
+                txnConfig.getFamilyName(), txnConfig.getMaxRetries()), cause);
         }
 
    }

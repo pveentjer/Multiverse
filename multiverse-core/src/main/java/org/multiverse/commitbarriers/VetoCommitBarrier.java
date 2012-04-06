@@ -89,7 +89,7 @@ public final class VetoCommitBarrier extends CommitBarrier {
      *
      * @param tx the Txn to commit.
      * @throws NullPointerException       if tx is null.
-     * @throws org.multiverse.api.exceptions.DeadTransactionException
+     * @throws org.multiverse.api.exceptions.DeadTxnException
      *                                    if the Txn already is aborted or committed.
      * @throws org.multiverse.api.exceptions.ReadWriteConflict
      *                                    if the commit was not executed successfully.

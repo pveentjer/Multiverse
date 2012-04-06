@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public class FatMonoGammaTxn_openForConstructionTest
         extends FatGammaTxn_openForConstructionTest<FatMonoGammaTxn> {
@@ -11,7 +11,7 @@ public class FatMonoGammaTxn_openForConstructionTest
     }
 
     @Override
-    protected FatMonoGammaTxn newTransaction(GammaTxnConfiguration config) {
+    protected FatMonoGammaTxn newTransaction(GammaTxnConfig config) {
         return new FatMonoGammaTxn(config);
     }
 }

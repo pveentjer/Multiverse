@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -61,7 +61,7 @@ public class FailureAtomicityStressTest {
     public class ModifyThread extends TestThread {
 
         long writeCount;
-        final TxnExecutor txnExecutor = stm.newTransactionFactoryBuilder()
+        final TxnExecutor txnExecutor = stm.newTxnFactoryBuilder()
                 .newTxnExecutor();
 
         public ModifyThread(int id) {
@@ -80,7 +80,7 @@ public class FailureAtomicityStressTest {
                     try {
                         modifyButAbort();
                         fail();
-                    } catch (DeadTransactionException ignore) {
+                    } catch (DeadTxnException ignore) {
                     }
                 } else {
                     writeCount++;
@@ -90,7 +90,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modify() {
-            txnExecutor.atomic(new AtomicVoidClosure() {
+            txnExecutor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -101,7 +101,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modifyButAbort() {
-            txnExecutor.atomic(new AtomicVoidClosure() {
+            txnExecutor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

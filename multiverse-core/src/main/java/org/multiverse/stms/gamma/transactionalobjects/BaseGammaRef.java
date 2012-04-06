@@ -5,14 +5,14 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.exceptions.LockedException;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.functions.*;
 import org.multiverse.stms.gamma.GammaObjectPool;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmUtils;
 import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
@@ -43,7 +43,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     public final boolean flattenCommute(final GammaTxn tx, final GammaRefTranlocal tranlocal, final int lockMode) {
         assert tranlocal.mode == TRANLOCAL_COMMUTING;
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         tx.initLocalConflictCounter();
 
@@ -396,7 +396,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -437,7 +437,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -480,7 +480,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -576,7 +576,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOnTransactionTooSmall(2);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         if (config.stm != stm) {
             throw tx.abortOpenForReadOnBadStm(this);
@@ -672,7 +672,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOnTransactionTooSmall(tx.config.maxFixedLengthTransactionSize + 1);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         if (config.stm != stm) {
             throw tx.abortOpenForReadOnBadStm(this);
@@ -758,7 +758,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return newNode;
     }
 
-    private static void initTranlocalForRead(final GammaTxnConfiguration config, final GammaRefTranlocal tranlocal) {
+    private static void initTranlocalForRead(final GammaTxnConfig config, final GammaRefTranlocal tranlocal) {
         tranlocal.isDirty = false;
         tranlocal.mode = TRANLOCAL_READ;
         tranlocal.writeSkewCheck = config.isolationLevel == IsolationLevel.Serializable;
@@ -770,7 +770,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -829,7 +829,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -915,7 +915,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -1032,7 +1032,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     public final GammaRefTranlocal openForWrite(final FatMonoGammaTxn tx, final int desiredLockMode) {
-        GammaTxnConfiguration config = tx.config;
+        GammaTxnConfig config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(desiredLockMode, config.writeLockModeAsInt));
 
@@ -1054,7 +1054,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     public final GammaRefTranlocal openForWrite(final FatFixedLengthGammaTxn tx, final int lockMode) {
-        GammaTxnConfiguration config = tx.config;
+        GammaTxnConfig config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(lockMode, config.writeLockModeAsInt));
 
@@ -1076,7 +1076,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     public final GammaRefTranlocal openForWrite(final FatVariableLengthGammaTxn tx, final int lockMode) {
-        GammaTxnConfiguration config = tx.config;
+        GammaTxnConfig config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(lockMode, config.writeLockModeAsInt));
 
@@ -1119,7 +1119,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         }
     }
 
-    private void initTranlocalForCommute(final GammaTxnConfiguration config, final GammaRefTranlocal tranlocal) {
+    private void initTranlocalForCommute(final GammaTxnConfig config, final GammaRefTranlocal tranlocal) {
         tranlocal.owner = this;
         tranlocal.mode = TRANLOCAL_COMMUTING;
         tranlocal.isDirty = !config.dirtyCheck;
@@ -1143,7 +1143,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOnOpenForCommuteWhileEvaluatingCommute(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -1215,7 +1215,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOnOpenForCommuteWhileEvaluatingCommute(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -1304,7 +1304,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
             throw tx.abortOnOpenForCommuteWhileEvaluatingCommute(this);
         }
 
-        final GammaTxnConfiguration config = tx.config;
+        final GammaTxnConfig config = tx.config;
 
         //noinspection ObjectEquality
         if (config.stm != stm) {
@@ -1629,7 +1629,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         final GammaTxn tx = (GammaTxn) getThreadLocalTxn();
 
         if (tx == null) {
-            throw new TransactionMandatoryException();
+            throw new TxnMandatoryException();
         }
 
         acquire(tx, desiredLockMode);

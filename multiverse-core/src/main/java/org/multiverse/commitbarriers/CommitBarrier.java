@@ -1,7 +1,7 @@
 package org.multiverse.commitbarriers;
 
 import org.multiverse.api.Txn;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.TodoException;
 import org.multiverse.utils.StandardThreadFactory;
 
@@ -487,7 +487,7 @@ public abstract class CommitBarrier {
      * @param tx        the transaction to check.
      * @param operation the name of the operation to checks if this transaction is not dead. Needed to provide
      *                  a useful message.
-     * @throws DeadTransactionException if tx is dead.
+     * @throws org.multiverse.api.exceptions.DeadTxnException if tx is dead.
      * @throws NullPointerException     if tx is null.
      */
     protected static void ensureNotDead(final Txn tx, final String operation) {
@@ -496,7 +496,7 @@ public abstract class CommitBarrier {
         }
 
         if (!tx.getStatus().isAlive()) {
-            throw new DeadTransactionException(
+            throw new DeadTxnException(
                     format("[%s] Txn can't be used for %s since it isn't alive",
                             tx.getConfiguration().getFamilyName(), operation)
             );
@@ -515,7 +515,7 @@ public abstract class CommitBarrier {
      * @param tx the Txn to commit.
      * @throws InterruptedException       if the thread is interrupted while waiting.
      * @throws NullPointerException       if tx is null.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *                                    if the tx is no in the correct
      *                                    state for this operation.
      * @throws CommitBarrierOpenException if this VetoCommitBarrier is committed or aborted.
@@ -574,7 +574,7 @@ public abstract class CommitBarrier {
      *
      * @param tx the Txn to join in the commit.
      * @throws NullPointerException       if tx is null.
-     * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
+     * @throws org.multiverse.api.exceptions.IllegalTxnStateException
      *                                    if the tx is not in the correct
      *                                    state for the operation.
      * @throws CommitBarrierOpenException if this VetoCommitBarrier is committed or aborted.

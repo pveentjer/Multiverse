@@ -18,7 +18,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenBlockingEnabled_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTxnFactoryBuilder()
                 .setReadTrackingEnabled(false)
                 .setBlockingAllowed(true);
 
@@ -31,7 +31,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenWriteSkewAllowed_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .setReadTrackingEnabled(false)
                 .setIsolationLevel(IsolationLevel.Serializable);
@@ -50,7 +50,7 @@ public class GammaStm_transactionFactoryValidationTest {
     }
 
     private void whenWriteSkewAllowedAndReadonly(boolean readTrackingEnabled) {
-        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTxnFactoryBuilder()
                 .setBlockingAllowed(false)
                 .setReadonly(true)
                 .setReadTrackingEnabled(readTrackingEnabled)
@@ -61,7 +61,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenLockLevelIsRead_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTxnFactoryBuilder()
                 .setReadTrackingEnabled(false)
                 .setReadLockMode(LockMode.Read);
 

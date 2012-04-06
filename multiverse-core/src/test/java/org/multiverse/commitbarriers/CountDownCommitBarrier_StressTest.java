@@ -3,7 +3,7 @@ package org.multiverse.commitbarriers;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 
@@ -137,7 +137,7 @@ public class CountDownCommitBarrier_StressTest {
         }
 
         public void doRun() {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     sleepRandomMs(10);

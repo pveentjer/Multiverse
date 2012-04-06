@@ -2,9 +2,9 @@ package org.multiverse.stms.gamma.transactionalobjects.gammaref;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -32,7 +32,7 @@ public class GammaRef_isNullTest {
         try {
             ref.isNull();
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         assertVersionAndValue(ref, initialVersion, null);
@@ -47,7 +47,7 @@ public class GammaRef_isNullTest {
         try {
             ref.isNull();
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
 
         }
 
@@ -60,7 +60,7 @@ public class GammaRef_isNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         assertFalse(ref.isNull());
         ref.set(tx, null);
@@ -71,19 +71,19 @@ public class GammaRef_isNullTest {
     }
 
     @Test
-    public void whenPreparedTransactionAvailable_thenPreparedTransactionException() {
+    public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         tx.prepare();
 
         try {
             ref.isNull();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -93,19 +93,19 @@ public class GammaRef_isNullTest {
     }
 
     @Test
-    public void whenCommittedTransactionAvailable_thenDeadTransactionException() {
+    public void whenCommittedTransactionAvailable_thenDeadTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.commit();
         setThreadLocalTxn(tx);
 
         try {
             ref.isNull();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
 
@@ -115,19 +115,19 @@ public class GammaRef_isNullTest {
     }
 
     @Test
-    public void whenAbortedTransactionAvailable_thenDeadTransactionException() {
+    public void whenAbortedTransactionAvailable_thenDeadTxnException() {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
         setThreadLocalTxn(tx);
 
         try {
             ref.isNull();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
 

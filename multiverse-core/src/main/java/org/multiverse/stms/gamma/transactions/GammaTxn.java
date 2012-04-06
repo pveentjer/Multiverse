@@ -6,8 +6,8 @@ import org.multiverse.api.blocking.DefaultRetryLatch;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.functions.Function;
-import org.multiverse.api.lifecycle.TransactionEvent;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnEvent;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaObjectPool;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
@@ -29,7 +29,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     public final GammaObjectPool pool = new GammaObjectPool();
     public int status = TX_ACTIVE;
-    public GammaTxnConfiguration config;
+    public GammaTxnConfig config;
     public int attempt;
     public long remainingTimeoutNs;
     public boolean hasWrites;
@@ -37,17 +37,17 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public boolean richmansMansConflictScan;
     public boolean abortOnly = false;
     public final RetryLatch retryListener = new DefaultRetryLatch();
-    public ArrayList<TransactionListener> listeners;
+    public ArrayList<TxnListener> listeners;
     public boolean commitConflict;
     public boolean evaluatingCommute = false;
 
-    public GammaTxn(GammaTxnConfiguration config, int transactionType) {
+    public GammaTxn(GammaTxnConfig config, int transactionType) {
         config.init();
         init(config);
         this.transactionType = transactionType;
     }
 
-    protected void notifyListeners(TransactionEvent event) {
+    protected void notifyListeners(TxnEvent event) {
         if (listeners != null) {
             boolean abort = true;
             try {
@@ -62,7 +62,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             }
         }
 
-        final ArrayList<TransactionListener> permanentListeners = config.permanentListeners;
+        final ArrayList<TxnListener> permanentListeners = config.permanentListeners;
         if (permanentListeners != null) {
             boolean abort = true;
             try {
@@ -120,8 +120,8 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         }
     }
 
-    public DeadTransactionException failAbortOnAlreadyCommitted() {
-        return new DeadTransactionException(
+    public DeadTxnException failAbortOnAlreadyCommitted() {
+        return new DeadTxnException(
                 format("[%s] Failed to execute transaction.abort, reason: the transaction is already committed",
                         config.familyName));
 
@@ -165,19 +165,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     }
 
 
-    public IllegalTransactionStateException abortOpenForReadOnNullLockMode(BaseGammaRef object) {
+    public IllegalTxnStateException abortOpenForReadOnNullLockMode(BaseGammaRef object) {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the LockMode is null",
                                 config.familyName, toDebugString(object)));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the Lockmode is null",
                                 config.familyName, toDebugString(object)));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the LockMode is null",
                                 config.familyName, toDebugString(object)));
             default:
@@ -185,19 +185,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         }
     }
 
-    public final IllegalTransactionStateException abortOpenForReadOnBadStatus(GammaObject object) {
+    public final IllegalTxnStateException abortOpenForReadOnBadStatus(GammaObject object) {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object)));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(object)));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(object)));
             default:
@@ -216,7 +216,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     // ============================= retry ==============================
 
-    public final IllegalTransactionStateException abortRetryOnNoRetryPossible() {
+    public final IllegalTxnStateException abortRetryOnNoRetryPossible() {
         abortIfAlive();
         throw new RetryNotPossibleException(
                 format("[%s] Failed to execute Ref.retry, reason: there are no tracked reads",
@@ -231,19 +231,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     }
 
-    public final IllegalTransactionStateException abortRetryOnBadStatus() {
+    public final IllegalTxnStateException abortRetryOnBadStatus() {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Txn.retry, reason: the transaction is prepared",
                                 config.familyName));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.retry, reason: the transaction is aborted",
                                 config.familyName));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.retry, reason: the transaction is committed",
                                 config.familyName));
             default:
@@ -265,19 +265,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     }
 
 
-    public final IllegalTransactionStateException abortOpenForConstructionOnBadStatus(GammaObject o) {
+    public final IllegalTxnStateException abortOpenForConstructionOnBadStatus(GammaObject o) {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(o)));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(o)));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(o)));
             default:
@@ -327,19 +327,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
                         config.familyName, toDebugString(ref)));
     }
 
-    public IllegalTransactionStateException abortCommuteOnBadStatus(final GammaObject object, final Function function) {
+    public IllegalTxnStateException abortCommuteOnBadStatus(final GammaObject object, final Function function) {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object), function));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(object), function));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object), function));
             default:
@@ -371,19 +371,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     // ==========================================
 
-    public final IllegalTransactionStateException abortLocateOnBadStatus(GammaObject object) {
+    public final IllegalTxnStateException abortLocateOnBadStatus(GammaObject object) {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Txn.locate '%s' , reason: the transaction is prepared",
                                 toDebugString(object), config.familyName));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.locate, '%s' reason: the transaction is aborted",
                                 toDebugString(object), config.familyName));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.locate, '%s' reason: the transaction is committed",
                                 toDebugString(object), config.familyName));
             default:
@@ -408,19 +408,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
                         config.familyName));
     }
 
-    private IllegalTransactionStateException abortRegisterOnBadStatus() {
+    private IllegalTxnStateException abortRegisterOnBadStatus() {
         switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Txn.register, reason: the transaction is prepared",
                                 config.familyName));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.register, reason: the transaction is aborted",
                                 config.familyName));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.register, reason: the transaction is prepared",
                                 config.familyName));
             default:
@@ -440,14 +440,14 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     }
 
 
-    public final IllegalTransactionStateException abortPrepareOnBadStatus() {
+    public final IllegalTxnStateException abortPrepareOnBadStatus() {
         switch (status) {
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.prepare, reason: the transaction already is aborted",
                                 config.familyName));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Txn.prepare, reason: the transaction already is committed",
                                 config.familyName));
             default:
@@ -455,14 +455,14 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         }
     }
 
-    public final IllegalTransactionStateException abortCommitOnBadStatus() {
+    public final IllegalTxnStateException abortCommitOnBadStatus() {
         abortIfAlive();
-        return new DeadTransactionException(
+        return new DeadTxnException(
                 format("[%s] Failed to execute Txn.commit, reason: the transaction already is aborted",
                         config.familyName));
     }
 
-    public TransactionExecutionException abortOnOpenForConstructionWhileEvaluatingCommute(GammaObject o) {
+    public TxnExecutionException abortOnOpenForConstructionWhileEvaluatingCommute(GammaObject o) {
         abort();
         return new IllegalCommuteException(
                 format("[%s] Failed to execute Ref.openForConstruction '%s', " +
@@ -470,7 +470,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
                         config.familyName, toDebugString(o)));
     }
 
-    public TransactionExecutionException abortOnOpenForReadWhileEvaluatingCommute(GammaObject o) {
+    public TxnExecutionException abortOnOpenForReadWhileEvaluatingCommute(GammaObject o) {
         abortIfAlive();
         return new IllegalCommuteException(
                 format("[%s] Failed to execute Ref.openForRead '%s', " +
@@ -479,7 +479,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     }
 
-    public TransactionExecutionException abortOnOpenForCommuteWhileEvaluatingCommute(GammaObject o) {
+    public TxnExecutionException abortOnOpenForCommuteWhileEvaluatingCommute(GammaObject o) {
         abortIfAlive();
         return new IllegalCommuteException(
                 format("[%s] Failed to execute Ref.openForCommute '%s', " +
@@ -487,19 +487,19 @@ public abstract class GammaTxn implements GammaConstants, Txn {
                         config.familyName, toDebugString(o)));
     }
 
-    public IllegalTransactionStateException abortEnsureOnBadStatus(BaseGammaRef o) {
+    public IllegalTxnStateException abortEnsureOnBadStatus(BaseGammaRef o) {
             switch (status) {
             case TX_PREPARED:
                 abort();
-                return new PreparedTransactionException(
+                return new PreparedTxnException(
                         format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(o)));
             case TX_ABORTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(o)));
             case TX_COMMITTED:
-                return new DeadTransactionException(
+                return new DeadTxnException(
                         format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(o)));
             default:
@@ -572,7 +572,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public abstract GammaRefTranlocal locate(BaseGammaRef o);
 
     @Override
-    public final GammaTxnConfiguration getConfiguration() {
+    public final GammaTxnConfig getConfiguration() {
         return config;
     }
 
@@ -594,11 +594,11 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             case TX_PREPARED:
                 return abortOnly;
             case TX_COMMITTED:
-                throw new DeadTransactionException(
+                throw new DeadTxnException(
                         format("[%s] Failed to execute Txn.isAbortOnly, reason: the transaction is committed",
                                 config.familyName));
             case TX_ABORTED:
-                throw new DeadTransactionException(
+                throw new DeadTxnException(
                         format("[%s] Failed to execute Txn.isAbortOnly, reason: the transaction is aborted",
                                 config.familyName));
             default:
@@ -628,15 +628,15 @@ public abstract class GammaTxn implements GammaConstants, Txn {
                 break;
             case TX_PREPARED:
                 abort();
-                throw new PreparedTransactionException(
+                throw new PreparedTxnException(
                         format("[%s] Failed to execute Txn.setAbortOnly, reason: the transaction is prepared",
                                 config.familyName));
             case TX_COMMITTED:
-                throw new DeadTransactionException(
+                throw new DeadTxnException(
                         format("[%s] Failed to execute Txn.setAbortOnly, reason: the transaction is committed",
                                 config.familyName));
             case TX_ABORTED:
-                throw new DeadTransactionException(
+                throw new DeadTxnException(
                         format("[%s] Failed to execute Txn.setAbortOnly, reason: the transaction is aborted",
                                 config.familyName));
             default:
@@ -645,7 +645,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     }
 
     @Override
-    public void register(TransactionListener listener) {
+    public void register(TxnListener listener) {
         if (listener == null) {
             throw abortRegisterOnNullListener();
         }
@@ -721,7 +721,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         attempt = failingTx.attempt;
     }
 
-    public final void init(GammaTxnConfiguration config) {
+    public final void init(GammaTxnConfig config) {
         if (config == null) {
             throw new NullPointerException();
         }

@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -60,9 +60,9 @@ public class ReadonlyRepeatableReadStressTest {
 
         @Override
         public void doRun() {
-            TxnExecutor block = stm.newTransactionFactoryBuilder()
+            TxnExecutor block = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
-            AtomicVoidClosure closure = new AtomicVoidClosure() {
+            TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -80,17 +80,17 @@ public class ReadonlyRepeatableReadStressTest {
 
     class ReadThread extends TestThread {
 
-        private final TxnExecutor readTrackingReadonlyBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor readTrackingReadonlyBlock = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .setReadTrackingEnabled(true)
                 .newTxnExecutor();
 
-        private final TxnExecutor readTrackingUpdateBlock = stm.newTransactionFactoryBuilder()
+        private final TxnExecutor readTrackingUpdateBlock = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .setReadTrackingEnabled(true)
                 .newTxnExecutor();
 
-        private final AtomicVoidClosure closure = new AtomicVoidClosure() {
+        private final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;

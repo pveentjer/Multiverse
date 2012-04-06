@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnStatus;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -170,7 +170,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         T tx = newTransaction();
@@ -200,7 +200,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
         T tx = newTransaction();
@@ -321,7 +321,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         GammaTxn tx = newTransaction();
         ref1.openForRead(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref1.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -372,7 +372,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         try {
             ref.openForRead(tx, LOCKMODE_NONE);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -393,7 +393,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         try {
             ref.openForRead(tx, LOCKMODE_NONE);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);
@@ -413,7 +413,7 @@ public abstract class LeanGammaTxn_openForReadTest<T extends GammaTxn> implement
         try {
             ref.openForRead(tx, LOCKMODE_NONE);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);

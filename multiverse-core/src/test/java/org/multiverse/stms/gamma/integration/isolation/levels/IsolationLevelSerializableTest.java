@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -27,7 +27,7 @@ public class IsolationLevelSerializableTest {
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
         clearThreadLocalTxn();
-        transactionFactory = stm.newTransactionFactoryBuilder()
+        transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
@@ -37,7 +37,7 @@ public class IsolationLevelSerializableTest {
     public void repeatableRead_whenTracked_thenNoInconsistentRead() {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        transactionFactory = stm.newTransactionFactoryBuilder()
+        transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setReadTrackingEnabled(true)
                 .setIsolationLevel(IsolationLevel.Serializable)
@@ -57,7 +57,7 @@ public class IsolationLevelSerializableTest {
     public void repeatableRead_whenNotTrackedAndConflictingUpdate_thenReadConflict() {
         final GammaLongRef ref = makeReadBiased(new GammaLongRef(stm));
 
-        transactionFactory = stm.newTransactionFactoryBuilder()
+        transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setReadTrackingEnabled(false)
                 .setBlockingAllowed(false)
@@ -86,7 +86,7 @@ public class IsolationLevelSerializableTest {
 
         ref1.get(tx);
 
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref1.incrementAndGet(1);

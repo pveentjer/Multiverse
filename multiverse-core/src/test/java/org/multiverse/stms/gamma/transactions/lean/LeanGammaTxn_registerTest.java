@@ -2,10 +2,10 @@ package org.multiverse.stms.gamma.transactions.lean;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
@@ -43,7 +43,7 @@ public abstract class LeanGammaTxn_registerTest<T extends GammaTxn> {
     @Test
     public void whenSuccess() {
         T tx = newTransaction();
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
 
         try {
             tx.register(listener);
@@ -63,11 +63,11 @@ public abstract class LeanGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.prepare();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -80,11 +80,11 @@ public abstract class LeanGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.abort();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -97,11 +97,11 @@ public abstract class LeanGammaTxn_registerTest<T extends GammaTxn> {
         T tx = newTransaction();
         tx.commit();
 
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         try {
             tx.register(listener);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

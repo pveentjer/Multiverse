@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicClosure;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.references.BooleanRef;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.api.references.Ref;
@@ -88,7 +88,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         void push(final String item) {
-            pushBlock.atomic(new AtomicVoidClosure() {
+            pushBlock.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     isNotFull.awaitTrue();
@@ -105,7 +105,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         String pop() {
-            return popBlock.atomic(new AtomicClosure<String>() {
+            return popBlock.atomic(new TxnClosure<String>() {
                 @Override
                 public String execute(Txn tx) throws Exception {
                     isNotEmpty.awaitTrue();

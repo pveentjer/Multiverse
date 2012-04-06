@@ -25,7 +25,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test(expected = LockedException.class)
     public void whenUnconstructed() {
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaLongRef ref = new GammaLongRef(tx);
         ref.atomicGet();
     }
@@ -34,7 +34,7 @@ public class GammaLongRef_atomicGetTest {
     public void whenActiveTransactionAvailable_thenIgnored() {
         GammaLongRef ref = new GammaLongRef(stm, 100);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         ref.set(10);
 
@@ -57,7 +57,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -77,7 +77,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         long result = ref.atomicGet();
@@ -103,7 +103,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         long orecValue = ref.orec;
@@ -123,7 +123,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
         long version = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         long orecValue = ref.orec;

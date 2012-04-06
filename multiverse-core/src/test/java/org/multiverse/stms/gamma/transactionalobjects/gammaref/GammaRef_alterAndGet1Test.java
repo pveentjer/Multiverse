@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Matchers;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
-import org.multiverse.api.exceptions.TransactionMandatoryException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
+import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.functions.Function;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
@@ -132,7 +132,7 @@ public class GammaRef_alterAndGet1Test {
     }
 
     @Test
-    public void whenPreparedTransactionAvailable_thenPreparedTransactionException() {
+    public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
         Long initialValue = 10L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
@@ -145,7 +145,7 @@ public class GammaRef_alterAndGet1Test {
         try {
             ref.alterAndGet(function);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
 
         }
 
@@ -164,7 +164,7 @@ public class GammaRef_alterAndGet1Test {
         try {
             ref.alterAndGet(function);
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
 
         }
 
@@ -175,7 +175,7 @@ public class GammaRef_alterAndGet1Test {
     }
 
     @Test
-    public void whenCommittedTransactionAvailable_thenDeadTransactionException() {
+    public void whenCommittedTransactionAvailable_thenDeadTxnException() {
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
         tx.commit();
@@ -188,7 +188,7 @@ public class GammaRef_alterAndGet1Test {
         try {
             ref.alterAndGet(function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
 
@@ -200,7 +200,7 @@ public class GammaRef_alterAndGet1Test {
     }
 
     @Test
-    public void whenAbortedTransactionAvailable_thenDeadTransactionException() {
+    public void whenAbortedTransactionAvailable_thenDeadTxnException() {
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
         tx.abort();
@@ -213,7 +213,7 @@ public class GammaRef_alterAndGet1Test {
         try {
             ref.alterAndGet(function);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -234,7 +234,7 @@ public class GammaRef_alterAndGet1Test {
 
         sleepMs(500);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         ref.alterAndGet(Functions.incLongFunction());
         tx.commit();

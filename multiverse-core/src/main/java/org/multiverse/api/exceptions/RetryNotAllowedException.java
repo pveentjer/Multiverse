@@ -5,7 +5,7 @@ package org.multiverse.api.exceptions;
  * is done while the {@link org.multiverse.api.Txn} doesn't allow blocking transactions.
  * <p/>
  * For more information see {@link org.multiverse.api.TxnFactoryBuilder#setBlockingAllowed(boolean)}
- * and {@link org.multiverse.api.TxnConfiguration#isBlockingAllowed()}.
+ * and {@link org.multiverse.api.TxnConfig#isBlockingAllowed()}.
  *
  * @author Peter Veentjer.
  * @see org.multiverse.api.TxnFactoryBuilder#setBlockingAllowed(boolean)

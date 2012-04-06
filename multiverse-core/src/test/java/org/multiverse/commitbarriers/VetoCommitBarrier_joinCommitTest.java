@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnFactory;
-import org.multiverse.api.closures.AtomicVoidClosure;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
@@ -24,7 +24,7 @@ public class VetoCommitBarrier_joinCommitTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        txFactory = stm.newTransactionFactoryBuilder()
+        txFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .newTransactionFactory();
         clearThreadLocalTxn();
@@ -89,7 +89,7 @@ public class VetoCommitBarrier_joinCommitTest {
         thread.start();
 
         sleepMs(1000);
-        stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
@@ -114,11 +114,11 @@ public class VetoCommitBarrier_joinCommitTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.newTransactionFactoryBuilder()
+            stm.newTxnFactoryBuilder()
                     .setSpeculative(false)
                     .setMaxRetries(0)
                     .newTxnExecutor()
-                    .atomic(new AtomicVoidClosure() {
+                    .atomic(new TxnVoidClosure() {
                         @Override
                         public void execute(Txn tx) throws Exception {
                             //we need to load it to cause a conflict
@@ -132,7 +132,7 @@ public class VetoCommitBarrier_joinCommitTest {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() throws InterruptedException {
+    public void whenTransactionAborted_thenDeadTxnException() throws InterruptedException {
         Txn tx = txFactory.newTransaction();
         tx.abort();
 
@@ -140,7 +140,7 @@ public class VetoCommitBarrier_joinCommitTest {
         try {
             group.joinCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertTrue(group.isClosed());
@@ -149,7 +149,7 @@ public class VetoCommitBarrier_joinCommitTest {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() throws InterruptedException {
+    public void whenTransactionCommitted_thenDeadTxnException() throws InterruptedException {
         Txn tx = txFactory.newTransaction();
         tx.commit();
 
@@ -157,7 +157,7 @@ public class VetoCommitBarrier_joinCommitTest {
         try {
             group.joinCommit(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertTrue(group.isClosed());
@@ -219,7 +219,7 @@ public class VetoCommitBarrier_joinCommitTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     ref.incrementAndGet(tx, 1);

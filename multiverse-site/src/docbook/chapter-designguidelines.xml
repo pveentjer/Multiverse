@@ -52,7 +52,7 @@
             It is best, if there are more than 1 method that needs to have its own txn, that each of these
             methods gets it own AtomicBlock. It is useful for debugging purposes because you can see which txn
             is causing problems. It also is more useful for the speculative mechanism, so that the system is able to
-            learn from each AtomicBlock independently, and is able to infer the optimal configuration for each
+            learn from each AtomicBlock independently, and is able to infer the optimal config for each
             individual method.
         </para>
     </sect1>

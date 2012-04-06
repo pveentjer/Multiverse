@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.lean;
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
@@ -11,17 +11,17 @@ import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.get
 
 public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
 
-    private final GammaTxnConfiguration config;
+    private final GammaTxnConfig config;
 
     public LeanFixedLengthGammaTxnFactory(GammaStm stm) {
-        this(new GammaTxnConfiguration(stm));
+        this(new GammaTxnConfig(stm));
     }
 
     public LeanFixedLengthGammaTxnFactory(GammaStm stm, int fixedLengthSize) {
-        this(new GammaTxnConfiguration(stm, fixedLengthSize));
+        this(new GammaTxnConfig(stm, fixedLengthSize));
     }
 
-    public LeanFixedLengthGammaTxnFactory(GammaTxnConfiguration config) {
+    public LeanFixedLengthGammaTxnFactory(GammaTxnConfig config) {
         this.config = config.init();
     }
 
@@ -31,7 +31,7 @@ public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxnConfiguration getConfiguration() {
+    public GammaTxnConfig getConfiguration() {
         return config;
     }
 

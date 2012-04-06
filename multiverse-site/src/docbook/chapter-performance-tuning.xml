@@ -83,7 +83,7 @@
     <para>
         The transferBlock can be placed in a static field and can safely be shared between threads (it is completely threadsafe and designed
         to be used in this way). The advantage of this approach, is that the Stm is able to learn based on previous txn executions and
-        select the best performing settings. It relies on a speculative configuration mechanism where the system starts with the cheapest
+        select the best performing settings. It relies on a speculative config mechanism where the system starts with the cheapest
         settings, but upgrades to more expensive one if the bet failed. If the AtomicBlock is discarded after usage, the STM will never be able to
         learn. Another problem is that it also causes a lot of GC overhead. So reuse your AtomicBlocks!
     </para>

@@ -1,13 +1,13 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.api.lifecycle.TransactionEvent;
+import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
 
@@ -25,11 +25,11 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
     public final Listeners[] listenersArray;
 
     public FatFixedLengthGammaTxn(final GammaStm stm) {
-        this(new GammaTxnConfiguration(stm));
+        this(new GammaTxnConfig(stm));
     }
 
     @SuppressWarnings({"ObjectAllocationInLoop"})
-    public FatFixedLengthGammaTxn(final GammaTxnConfiguration config) {
+    public FatFixedLengthGammaTxn(final GammaTxnConfig config) {
         super(config, TRANSACTIONTYPE_FAT_FIXED_LENGTH);
 
         listenersArray = new Listeners[config.maxFixedLengthTransactionSize];
@@ -62,7 +62,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
         }
 
         if (status == TX_ACTIVE) {
-            notifyListeners(TransactionEvent.PrePrepare);
+            notifyListeners(TxnEvent.PrePrepare);
         }
 
         if (size > 0) {
@@ -88,7 +88,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
         }
 
         status = TX_COMMITTED;
-        notifyListeners(TransactionEvent.PostCommit);
+        notifyListeners(TxnEvent.PostCommit);
     }
 
     private Listeners[] commitChain() {
@@ -128,7 +128,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
             throw abortPrepareOnAbortOnly();
         }
 
-        notifyListeners(TransactionEvent.PrePrepare);
+        notifyListeners(TxnEvent.PrePrepare);
 
         GammaObject o = prepareChainForCommit();
         if (o != null) {
@@ -176,7 +176,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
 
         releaseChain(false);
         status = TX_ABORTED;
-        notifyListeners(TransactionEvent.PostAbort);
+        notifyListeners(TxnEvent.PostAbort);
     }
 
     private void releaseChain(final boolean success) {

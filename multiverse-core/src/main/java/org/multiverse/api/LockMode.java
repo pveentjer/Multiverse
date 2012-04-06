@@ -12,8 +12,8 @@ import org.multiverse.MultiverseConstants;
  * @author Peter Veentjer.
  * @see TxnFactoryBuilder#setReadLockMode(LockMode)
  * @see TxnFactoryBuilder#setWriteLockMode(LockMode)
- * @see TxnConfiguration#getReadLockMode()
- * @see TxnConfiguration#getWriteLockMode()
+ * @see TxnConfig#getReadLockMode()
+ * @see TxnConfig#getWriteLockMode()
  * @see org.multiverse.api.TransactionalObject#getLock()
  * @see Lock
  */

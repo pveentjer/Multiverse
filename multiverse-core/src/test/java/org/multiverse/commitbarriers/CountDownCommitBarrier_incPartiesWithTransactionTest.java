@@ -3,8 +3,8 @@ package org.multiverse.commitbarriers;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.exceptions.DeadTransactionException;
-import org.multiverse.api.exceptions.PreparedTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
+import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.*;
@@ -53,13 +53,13 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     @Test
     public void whenTransactionPrepared_thenPreparedTransactionFailure() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(10);
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.prepare();
 
         try {
             barrier.incParties(tx, 5);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -69,16 +69,16 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     }
 
     @Test
-    public void whenTransactionAborted_thenDeadTransactionException() {
+    public void whenTransactionAborted_thenDeadTxnException() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(10);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.abort();
 
         try {
             barrier.incParties(tx, 1);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertEquals(0, barrier.getNumberWaiting());
@@ -87,16 +87,16 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     }
 
     @Test
-    public void whenTransactionCommitted_thenDeadTransactionException() {
+    public void whenTransactionCommitted_thenDeadTxnException() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(10);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         tx.commit();
 
         try {
             barrier.incParties(tx, 1);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertEquals(0, barrier.getNumberWaiting());
@@ -108,7 +108,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     @Test
     public void whenZeroExtraParties() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(5);
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.incParties(tx, 0);
 
         assertEquals(5, barrier.getParties());
@@ -119,7 +119,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     @Test
     public void whenPositiveNumber() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(10);
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.incParties(tx, 5);
 
         assertIsActive(tx);
@@ -132,7 +132,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     public void whenPartiesAdded_thenAdditionalJoinsNeedToBeExecuted() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(2);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.incParties(tx, 1);
 
         barrier.countDown();
@@ -148,7 +148,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
     public void whenTransactionAborted_thenPartiesRestored() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(2);
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         barrier.incParties(tx, 10);
 
         tx.abort();
@@ -182,7 +182,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
         try {
             barrier.incParties(tx, 10);
             fail("Should have got CommitBarrierOpenException");
@@ -199,7 +199,7 @@ public class CountDownCommitBarrier_incPartiesWithTransactionTest {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(0);
         barrier.countDown();
 
-        Txn tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTxn();
 
         try {
             barrier.incParties(tx, 1);

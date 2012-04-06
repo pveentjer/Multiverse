@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.transactions.lean;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
@@ -103,7 +103,7 @@ public abstract class LeanGammaTxn_abortTest<T extends GammaTxn> {
         try {
             tx.abort();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
 
         }
         assertIsCommitted(tx);

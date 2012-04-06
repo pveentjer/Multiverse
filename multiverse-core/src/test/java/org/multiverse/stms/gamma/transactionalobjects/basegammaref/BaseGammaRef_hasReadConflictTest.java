@@ -29,7 +29,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenReadAndNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
 
@@ -44,7 +44,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenWriteAndNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
 
         boolean hasReadConflict = ref.hasReadConflict(write);
@@ -58,7 +58,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenPrivatizedBySelf_thenNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_EXCLUSIVE);
 
         boolean hasConflict = ref.hasReadConflict(read);
@@ -72,7 +72,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenEnsuredBySelf_thenNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_WRITE);
 
         boolean hasConflict = ref.hasReadConflict(read);
@@ -86,7 +86,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenUpdatedByOther_thenConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         //conflicting update
@@ -100,7 +100,7 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
 
     @Test
     public void whenFresh() {
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaLongRef ref = new GammaLongRef(tx);
         GammaRefTranlocal tranlocal = tx.locate(ref);
 
@@ -115,14 +115,14 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenValueChangedByOtherAndLockedForCommitByOther() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         //do the conflicting update
         ref.atomicIncrementAndGet(1);
 
         //privatize it
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         boolean hasConflict = ref.hasReadConflict(read);
@@ -136,14 +136,14 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenValueChangedByOtherAndEnsuredAgain() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
 
         //do the conflicting update
         ref.atomicIncrementAndGet(1);
 
         //ensure it.
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         boolean hasConflict = ref.hasReadConflict(read);
@@ -157,10 +157,10 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenUpdateInProgressBecauseLockedByOther() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         GammaRefTranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.openForRead(otherTx, LOCKMODE_EXCLUSIVE);
 
         boolean hasReadConflict = ref.hasReadConflict(tranlocal);
@@ -172,10 +172,10 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenAlsoReadByOther_thenNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(otherTx, LOCKMODE_NONE);
 
         boolean hasConflict = ref.hasReadConflict(read);
@@ -189,10 +189,10 @@ public class BaseGammaRef_hasReadConflictTest implements GammaConstants {
     public void whenPendingUpdateByOther_thenNoConflict() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.set(tx, 200);
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         GammaRefTranlocal read = ref.openForRead(otherTx, LOCKMODE_NONE);
 
         boolean hasConflict = ref.hasReadConflict(read);

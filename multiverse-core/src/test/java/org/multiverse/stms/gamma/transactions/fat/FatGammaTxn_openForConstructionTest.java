@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -24,13 +24,13 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTxnConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfig config);
 
     @Test
     public void whenReadonlyTransaction() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadonly(true);
 
         GammaTxn tx = newTransaction(config);
@@ -118,7 +118,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         try {
             new GammaLongRef(tx);
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -134,7 +134,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         try {
             ref.openForConstruction(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -150,7 +150,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         try {
             ref.openForConstruction(tx);
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

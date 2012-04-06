@@ -60,7 +60,7 @@ public interface TransactionalObject {
      *
      * <p>This call lifts on the {@link Txn} stored in the {@link TxnThreadLocal}.
      *
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
@@ -84,7 +84,7 @@ public interface TransactionalObject {
      *
      * @param self the Txn this call lifts on.
      * @throws NullPointerException if self is null.
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
@@ -104,7 +104,7 @@ public interface TransactionalObject {
      * Returns a String representation of the Object using the {@link Txn} on the {@link TxnThreadLocal}.
      *
      * @return the toString representation
-     * @throws org.multiverse.api.exceptions.TransactionExecutionException
+     * @throws org.multiverse.api.exceptions.TxnExecutionException
      *
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *

@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.AtomicVoidClosure;
+import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.functions.Function;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -47,13 +47,13 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final AtomicInteger attempt = new AtomicInteger(1);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
                 .setControlFlowErrorsReused(false)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 System.out.println(tx.getClass());
@@ -87,12 +87,12 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final GammaRef<String> ref = new GammaRef<String>(stm);
         final Function<String> function = mock(Function.class);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -111,12 +111,12 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaRef<String> ref = new GammaRef<String>(stm);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -136,12 +136,12 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     public void whenConstructing() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -161,12 +161,12 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -185,12 +185,12 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaRef ref = new GammaRef(stm);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -208,14 +208,14 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     public void whenNormalListenerAdded() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final AtomicBoolean added = new AtomicBoolean();
-        final TransactionListener listener = mock(TransactionListener.class);
+        final TxnListener listener = mock(TxnListener.class);
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
@@ -241,13 +241,13 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
 
-        TxnExecutor block = stm.newTransactionFactoryBuilder()
+        TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(1000)
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        block.atomic(new AtomicVoidClosure() {
+        block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());

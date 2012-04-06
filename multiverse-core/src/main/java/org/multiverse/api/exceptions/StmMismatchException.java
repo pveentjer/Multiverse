@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TransactionExecutionException} thrown when a transaction encounters encounters a transactional object
+ * A {@link TxnExecutionException} thrown when a transaction encounters encounters a transactional object
  * that belongs to a different Stm instance.
  *
  * <p>Normally this exception is not thrown because only a single Stm instance, stored in the {@link org.multiverse.api.GlobalStmInstance}
@@ -10,7 +10,7 @@ package org.multiverse.api.exceptions;
  * @author Peter Veentjer.
  * @see org.multiverse.api.GlobalStmInstance
  */
-public class StmMismatchException extends TransactionExecutionException {
+public class StmMismatchException extends TxnExecutionException {
 
     private static final long serialVersionUID = 0;
         

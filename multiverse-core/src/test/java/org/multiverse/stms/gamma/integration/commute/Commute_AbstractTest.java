@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.AtomicLongClosure;
+import org.multiverse.api.closures.TxnLongClosure;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
@@ -80,7 +80,7 @@ public abstract class Commute_AbstractTest {
         public void doRun() throws Exception {
             TxnExecutor block = newBlock();
 
-            AtomicLongClosure commutingClosure = new AtomicLongClosure() {
+            TxnLongClosure commutingClosure = new TxnLongClosure() {
                 @Override
                 public long execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -91,7 +91,7 @@ public abstract class Commute_AbstractTest {
                 }
             };
 
-            AtomicLongClosure nonCommutingClosure = new AtomicLongClosure() {
+            TxnLongClosure nonCommutingClosure = new TxnLongClosure() {
                 @Override
                 public long execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -104,7 +104,7 @@ public abstract class Commute_AbstractTest {
 
             int k = 0;
             while (!stop) {
-                AtomicLongClosure closure = randomOneOf(10) ? nonCommutingClosure : commutingClosure;
+                TxnLongClosure closure = randomOneOf(10) ? nonCommutingClosure : commutingClosure;
                 count += block.atomic(closure);
                 k++;
 

@@ -33,7 +33,7 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         String result = ref.awaitNotNullAndGet();
 
@@ -55,10 +55,10 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         try {
             ref.awaitNotNullAndGet();
@@ -78,10 +78,10 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         String result = ref.awaitNotNullAndGet();
 
@@ -104,7 +104,7 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTxnFactoryBuilder()
                 .newTransactionFactory()
                 .newTransaction();
 
@@ -122,32 +122,32 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
     }
 
     @Test
-    public void whenNoTransactionAvailable_thenTransactionMandatoryException() {
+    public void whenNoTransactionAvailable_thenTxnMandatoryException() {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
         try {
             ref.awaitNotNullAndGet();
             fail();
-        } catch (TransactionMandatoryException expected) {
+        } catch (TxnMandatoryException expected) {
         }
 
         assertVersionAndValue(ref, initialVersion, null);
     }
 
     @Test
-    public void whenPreparedTransaction_thenPreparedTransactionException() {
+    public void whenPreparedTransaction_thenPreparedTxnException() {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.prepare();
         setThreadLocalTxn(tx);
 
         try {
             ref.awaitNotNullAndGet();
             fail();
-        } catch (PreparedTransactionException expected) {
+        } catch (PreparedTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -155,18 +155,18 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
     }
 
     @Test
-    public void whenAbortedTransaction_thenDeadTransactionException() {
+    public void whenAbortedTransaction_thenDeadTxnException() {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
         setThreadLocalTxn(tx);
 
         try {
             ref.awaitNotNullAndGet();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -174,18 +174,18 @@ public class GammaRef_awaitNotNullAndGet0Test implements GammaConstants {
     }
 
     @Test
-    public void whenCommittedTransaction_thenDeadTransactionException() {
+    public void whenCommittedTransaction_thenDeadTxnException() {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         tx.commit();
         setThreadLocalTxn(tx);
 
         try {
             ref.awaitNotNullAndGet();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

@@ -6,18 +6,18 @@ import org.junit.Test;
 import org.multiverse.SomeUncheckedException;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.AbortOnlyException;
-import org.multiverse.api.exceptions.DeadTransactionException;
+import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
-import org.multiverse.api.lifecycle.TransactionEvent;
-import org.multiverse.api.lifecycle.TransactionListener;
+import org.multiverse.api.lifecycle.TxnEvent;
+import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyLong;
@@ -36,26 +36,26 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTxnConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfig config);
 
     @Test
     public void listener_whenNormalListenerAvailable() {
         T tx = newTransaction();
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
         tx.register(listener);
 
         tx.prepare();
 
         assertIsPrepared(tx);
-        //verify(listener).notify(tx, TransactionEvent.PrePrepare);
-        verify(listener).notify(tx, TransactionEvent.PrePrepare);
+        //verify(listener).notify(tx, TxnEvent.PrePrepare);
+        verify(listener).notify(tx, TxnEvent.PrePrepare);
     }
 
     @Test
     public void listener_whenPermanentListenerAvailable() {
-        TransactionListener listener = mock(TransactionListener.class);
+        TxnListener listener = mock(TxnListener.class);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .addPermanentListener(listener);
 
         T tx = newTransaction(config);
@@ -63,8 +63,8 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         tx.prepare();
 
         assertIsPrepared(tx);
-        //verify(listener).notify(tx, TransactionEvent.PrePrepare);
-        verify(listener).notify(tx, TransactionEvent.PrePrepare);
+        //verify(listener).notify(tx, TxnEvent.PrePrepare);
+        verify(listener).notify(tx, TxnEvent.PrePrepare);
     }
 
     @Test
@@ -77,7 +77,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long newValue = 1;
         ref.set(tx, newValue);
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTxn otherTx = new FatVariableLengthGammaTxn(config);
@@ -126,7 +126,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.openForRead(tx, readLockMode.asInt());
         tx.prepare();
 
@@ -296,7 +296,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTxn tx = newTransaction(config);
@@ -327,7 +327,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTxn tx = newTransaction(config);
@@ -359,7 +359,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTxn tx = newTransaction(config);
@@ -390,7 +390,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTxn tx = newTransaction(config);
@@ -508,7 +508,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     }
 
     @Test
-    public void whenAlreadyAborted_thenDeadTransactionException() {
+    public void whenAlreadyAborted_thenDeadTxnException() {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         T tx = newTransaction();
@@ -517,7 +517,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         try {
             tx.prepare();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsAborted(tx);
@@ -525,7 +525,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     }
 
     @Test
-    public void whenAlreadyCommitted_thenDeadTransactionException() {
+    public void whenAlreadyCommitted_thenDeadTxnException() {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         T tx = newTransaction();
@@ -534,7 +534,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         try {
             tx.prepare();
             fail();
-        } catch (DeadTransactionException expected) {
+        } catch (DeadTxnException expected) {
         }
 
         assertIsCommitted(tx);

@@ -9,7 +9,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
 
     @Override
-    public <E> E execute(AtomicClosure<E> either, AtomicClosure<E> orelse){
+    public <E> E execute(TxnClosure<E> either, TxnClosure<E> orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -20,7 +20,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public <E> E executeChecked(AtomicClosure<E> either, AtomicClosure<E> orelse)throws Exception{
+    public <E> E executeChecked(TxnClosure<E> either, TxnClosure<E> orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -31,7 +31,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
@@ -42,7 +42,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  int execute(AtomicIntClosure either, AtomicIntClosure orelse){
+    public  int execute(TxnIntClosure either, TxnIntClosure orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -53,7 +53,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  int executeChecked(AtomicIntClosure either, AtomicIntClosure orelse)throws Exception{
+    public  int executeChecked(TxnIntClosure either, TxnIntClosure orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -64,7 +64,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
@@ -75,7 +75,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  long execute(AtomicLongClosure either, AtomicLongClosure orelse){
+    public  long execute(TxnLongClosure either, TxnLongClosure orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -86,7 +86,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  long executeChecked(AtomicLongClosure either, AtomicLongClosure orelse)throws Exception{
+    public  long executeChecked(TxnLongClosure either, TxnLongClosure orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -97,7 +97,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
@@ -108,7 +108,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  double execute(AtomicDoubleClosure either, AtomicDoubleClosure orelse){
+    public  double execute(TxnDoubleClosure either, TxnDoubleClosure orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -119,7 +119,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  double executeChecked(AtomicDoubleClosure either, AtomicDoubleClosure orelse)throws Exception{
+    public  double executeChecked(TxnDoubleClosure either, TxnDoubleClosure orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -130,7 +130,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
@@ -141,7 +141,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  boolean execute(AtomicBooleanClosure either, AtomicBooleanClosure orelse){
+    public  boolean execute(TxnBooleanClosure either, TxnBooleanClosure orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -152,7 +152,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  boolean executeChecked(AtomicBooleanClosure either, AtomicBooleanClosure orelse)throws Exception{
+    public  boolean executeChecked(TxnBooleanClosure either, TxnBooleanClosure orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -163,7 +163,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
@@ -174,7 +174,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  void execute(AtomicVoidClosure either, AtomicVoidClosure orelse){
+    public  void execute(TxnVoidClosure either, TxnVoidClosure orelse){
         try{
             executeChecked(either,orelse);
             return;
@@ -186,7 +186,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  void executeChecked(AtomicVoidClosure either, AtomicVoidClosure orelse)throws Exception{
+    public  void executeChecked(TxnVoidClosure either, TxnVoidClosure orelse)throws Exception{
         if(either == null){
             throw new NullPointerException("either closure can't be null");
         }
@@ -197,7 +197,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         Txn txn = getThreadLocalTxn();
         if(txn == null){
-            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
+            throw new TxnMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{

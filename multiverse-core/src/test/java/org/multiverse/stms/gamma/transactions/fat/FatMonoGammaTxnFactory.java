@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
@@ -11,13 +11,13 @@ import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.get
 
 public class FatMonoGammaTxnFactory implements GammaTxnFactory {
 
-    private final GammaTxnConfiguration config;
+    private final GammaTxnConfig config;
 
     public FatMonoGammaTxnFactory(GammaStm stm) {
-        this(new GammaTxnConfiguration(stm).setControlFlowErrorsReused(false));
+        this(new GammaTxnConfig(stm).setControlFlowErrorsReused(false));
     }
 
-    public FatMonoGammaTxnFactory(GammaTxnConfiguration config) {
+    public FatMonoGammaTxnFactory(GammaTxnConfig config) {
         this.config = config.setControlFlowErrorsReused(false).init();
     }
 
@@ -27,7 +27,7 @@ public class FatMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxnConfiguration getConfiguration() {
+    public GammaTxnConfig getConfiguration() {
         return config;
     }
 

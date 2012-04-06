@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class DiningPhilosophers_FatFixedLengthGammaTxn_StressTest extends DiningPhilosophers_AbstractTest {
@@ -37,7 +37,7 @@ public class DiningPhilosophers_FatFixedLengthGammaTxn_StressTest extends Dining
 
     @Override
     protected TxnExecutor newTakeForksBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
@@ -45,7 +45,7 @@ public class DiningPhilosophers_FatFixedLengthGammaTxn_StressTest extends Dining
 
     @Override
     protected TxnExecutor newReleaseForksBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));

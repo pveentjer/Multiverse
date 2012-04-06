@@ -1,7 +1,7 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.BackoffPolicy;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 /**
@@ -11,7 +11,7 @@ import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
  */
 public abstract class AbstractGammaTxnExecutor implements GammaTxnExecutor {
     protected final GammaTxnFactory txnFactory;
-    protected final GammaTxnConfiguration txnConfiguration;
+    protected final GammaTxnConfig txnConfig;
     protected final BackoffPolicy backoffPolicy;
 
     public AbstractGammaTxnExecutor(final GammaTxnFactory txnFactory) {
@@ -19,7 +19,7 @@ public abstract class AbstractGammaTxnExecutor implements GammaTxnExecutor {
             throw new NullPointerException();
         }
         this.txnFactory = txnFactory;
-        this.txnConfiguration = txnFactory.getConfiguration();
-        this.backoffPolicy = txnConfiguration.backoffPolicy;
+        this.txnConfig = txnFactory.getConfiguration();
+        this.backoffPolicy = txnConfig.backoffPolicy;
     }
 }

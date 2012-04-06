@@ -7,7 +7,7 @@ import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.GammaStmConfiguration;
+import org.multiverse.stms.gamma.GammaStmConfig;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
@@ -28,7 +28,7 @@ public class GammaLongRef_atomicGetAndAlterTest {
 
     @Before
     public void setUp() {
-        GammaStmConfiguration config = new GammaStmConfiguration();
+        GammaStmConfig config = new GammaStmConfig();
         config.maxRetries = 10;
         stm = new GammaStm(config);
         clearThreadLocalTxn();
@@ -74,7 +74,7 @@ public class GammaLongRef_atomicGetAndAlterTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         ref.set(10);
 
@@ -96,7 +96,7 @@ public class GammaLongRef_atomicGetAndAlterTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         LongFunction function = mock(LongFunction.class);
@@ -119,7 +119,7 @@ public class GammaLongRef_atomicGetAndAlterTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         try {
@@ -141,7 +141,7 @@ public class GammaLongRef_atomicGetAndAlterTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         LongFunction function = mock(LongFunction.class);

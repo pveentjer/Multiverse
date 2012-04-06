@@ -34,7 +34,7 @@ public class GammaRef_atomicIsNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -52,7 +52,7 @@ public class GammaRef_atomicIsNullTest {
         String initialValue = null;
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Write);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -69,7 +69,7 @@ public class GammaRef_atomicIsNullTest {
     public void writeBiased_whenExclusiveLocked_thenLockedException() {
         GammaRef<String> ref = new GammaRef<String>(stm, null);
         long initialVersion = ref.version;
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -105,7 +105,7 @@ public class GammaRef_atomicIsNullTest {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         ref.set(tx, null);
         long orecValue = ref.orec;
@@ -143,7 +143,7 @@ public class GammaRef_atomicIsNullTest {
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -161,7 +161,7 @@ public class GammaRef_atomicIsNullTest {
         String initialValue = null;
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
         long initialVersion = ref.getVersion();
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Write);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -179,7 +179,7 @@ public class GammaRef_atomicIsNullTest {
         String initialValue = null;
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
         long initialVersion = ref.version;
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
         long orecValue = ref.orec;
         long conflictCount = stm.globalConflictCounter.count();
@@ -216,7 +216,7 @@ public class GammaRef_atomicIsNullTest {
         String initialValue = "foo";
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
         long initialVersion = ref.getVersion();
-        GammaTxn tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
         ref.set(tx, null);
         long orecValue = ref.orec;

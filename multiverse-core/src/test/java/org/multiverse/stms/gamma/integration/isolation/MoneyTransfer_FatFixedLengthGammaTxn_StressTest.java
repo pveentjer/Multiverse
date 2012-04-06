@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class MoneyTransfer_FatFixedLengthGammaTxn_StressTest extends MoneyTransfer_AbstractTest {
@@ -50,7 +50,7 @@ public class MoneyTransfer_FatFixedLengthGammaTxn_StressTest extends MoneyTransf
 
     @Override
     protected TxnExecutor newTxnExecutor() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, accountCount)
+        GammaTxnConfig config = new GammaTxnConfig(stm, accountCount)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatFixedLengthGammaTxnFactory(config));
     }

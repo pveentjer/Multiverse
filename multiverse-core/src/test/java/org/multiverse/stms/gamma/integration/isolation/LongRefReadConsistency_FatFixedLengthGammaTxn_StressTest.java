@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class LongRefReadConsistency_FatFixedLengthGammaTxn_StressTest extends LongRefReadConsistency_AbstractTest {
@@ -97,7 +97,7 @@ public class LongRefReadConsistency_FatFixedLengthGammaTxn_StressTest extends Lo
 
     @Override
     protected TxnExecutor createReadBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
+        GammaTxnConfig config = new GammaTxnConfig(stm, refCount)
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
@@ -107,7 +107,7 @@ public class LongRefReadConsistency_FatFixedLengthGammaTxn_StressTest extends Lo
 
     @Override
     protected TxnExecutor createWriteBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
+        GammaTxnConfig config = new GammaTxnConfig(stm, refCount)
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(false)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);

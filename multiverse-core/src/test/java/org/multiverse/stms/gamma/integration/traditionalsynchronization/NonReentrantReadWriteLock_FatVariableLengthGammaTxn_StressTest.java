@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 public class NonReentrantReadWriteLock_FatVariableLengthGammaTxn_StressTest extends NonReentrantReadWriteLock_AbstractTest {
@@ -36,7 +36,7 @@ public class NonReentrantReadWriteLock_FatVariableLengthGammaTxn_StressTest exte
     }
 
     protected TxnExecutor newReleaseWriteLockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
@@ -44,7 +44,7 @@ public class NonReentrantReadWriteLock_FatVariableLengthGammaTxn_StressTest exte
     }
 
     protected TxnExecutor newAcquireWriteLockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
@@ -52,7 +52,7 @@ public class NonReentrantReadWriteLock_FatVariableLengthGammaTxn_StressTest exte
     }
 
     protected TxnExecutor newReleaseReadLockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
@@ -60,7 +60,7 @@ public class NonReentrantReadWriteLock_FatVariableLengthGammaTxn_StressTest exte
     }
 
     protected TxnExecutor newAcquireReadLockBlock() {
-        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
+        GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
         return new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));

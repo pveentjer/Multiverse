@@ -5,7 +5,7 @@
     <sect1>
         <title>Introduction</title>
         <para>
-              This chapter contains many of the txn configuration options.
+              This chapter contains many of the txn config options.
         </para>
     </sect1>
 
@@ -44,9 +44,9 @@
         </para>
 
         <para>
-            It is important to realize that a TransactionFactoryBuilder is immutable, so if a configuration
+            It is important to realize that a TransactionFactoryBuilder is immutable, so if a config
             method is called, a new instance is returned. This instance should be used to do the following
-            configuration step or by used for creating the AtomicBlock.
+            config step or by used for creating the AtomicBlock.
         </para>
     </sect1>
 
@@ -169,7 +169,7 @@
     }
     </programlisting>
             In this example the maximum number of retries is configured to be 200. Setting the value very low, could lead to txns
-            not being able to complete. If the speculative configuration mechanism is enabled for an AtomicBlock (defaults to true), it
+            not being able to complete. If the speculative config mechanism is enabled for an AtomicBlock (defaults to true), it
             can happen that the first few times an AtomicBlock is used, some ControlFlowErrors (org.multiverse.api.exceptions.SpeculativeConfigurationError)
             are thrown even though there is no contention. If the value is set to a very high value, the system could suffer more from
             livelock problems. The consequence of a livelock is that the system is doing work (so consuming cpu and memory), but isn't making
