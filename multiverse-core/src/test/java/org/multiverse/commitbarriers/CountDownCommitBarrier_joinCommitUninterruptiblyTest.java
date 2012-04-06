@@ -170,7 +170,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn txn) throws Exception {
+                public void call(Txn txn) throws Exception {
                     AwaitThread.this.txn = txn;
                     barrier.joinCommitUninterruptibly(txn);
                 }

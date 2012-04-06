@@ -42,17 +42,17 @@ public class GammaOrElseBlock implements OrElseBlock{
 
         try{
 #if(${closure.type} eq 'void')
-            either.execute(txn);
+            either.call(txn);
             return;
 #else
-            return either.execute(txn);
+            return either.call(txn);
 #end
         }catch(RetryError retry){
 #if(${closure.type} eq 'void')
-            orelse.execute(txn);
+            orelse.call(txn);
             return;
 #else
-            return orelse.execute(txn);
+            return orelse.call(txn);
 #end
         }
     }

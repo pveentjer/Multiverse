@@ -32,7 +32,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         long result = executor.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
                 return ref.get(tx);
             }
@@ -49,7 +49,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
             }
         });
@@ -71,7 +71,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.get(tx);
                 }
             });
@@ -91,7 +91,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
                 .newTxnExecutor();
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 for (int k = 0; k < 10; k++) {
                     long l = ref.get();
                     ref.set(l + 1);

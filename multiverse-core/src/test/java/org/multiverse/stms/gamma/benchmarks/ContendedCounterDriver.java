@@ -80,7 +80,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.increment();
                 }
             };

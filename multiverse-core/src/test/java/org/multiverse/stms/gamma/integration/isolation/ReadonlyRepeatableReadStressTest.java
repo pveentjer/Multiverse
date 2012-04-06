@@ -64,7 +64,7 @@ public class ReadonlyRepeatableReadStressTest {
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.getAndSet(btx, ref.get(btx));
                 }
@@ -92,7 +92,7 @@ public class ReadonlyRepeatableReadStressTest {
 
         private final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
 
                 long firstTime = ref.get(btx);

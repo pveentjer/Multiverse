@@ -82,7 +82,7 @@ public abstract class Commute_AbstractTest {
 
             TxnLongClosure commutingClosure = new TxnLongClosure() {
                 @Override
-                public long execute(Txn tx) throws Exception {
+                public long call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].commute(btx, Functions.incLongFunction(1));
@@ -93,7 +93,7 @@ public abstract class Commute_AbstractTest {
 
             TxnLongClosure nonCommutingClosure = new TxnLongClosure() {
                 @Override
-                public long execute(Txn tx) throws Exception {
+                public long call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].openForWrite(btx, LOCKMODE_NONE).long_value++;

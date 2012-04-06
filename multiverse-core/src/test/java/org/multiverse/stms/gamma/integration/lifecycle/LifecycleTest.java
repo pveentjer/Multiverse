@@ -28,7 +28,7 @@ public class LifecycleTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);
                 tx.commit();
             }
@@ -44,7 +44,7 @@ public class LifecycleTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
                     tx.abort();
                 }
@@ -63,7 +63,7 @@ public class LifecycleTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleDeferredTask(task);
                 tx.commit();
             }
@@ -78,7 +78,7 @@ public class LifecycleTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleCompensatingTask(task);
                 tx.commit();
             }
@@ -94,7 +94,7 @@ public class LifecycleTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleDeferredTask(task);
                     tx.abort();
                 }
@@ -114,7 +114,7 @@ public class LifecycleTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleCompensatingTask(task);
                     tx.abort();
                 }

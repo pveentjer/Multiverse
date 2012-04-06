@@ -28,7 +28,7 @@ public class NaiveTxnHashMap_getTest {
     public void whenNotFound() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -47,7 +47,7 @@ public class NaiveTxnHashMap_getTest {
     public void whenFound() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -66,7 +66,7 @@ public class NaiveTxnHashMap_getTest {
     public void whenNullKey_thenReturnNull(){
            StmUtils.atomic(new TxnVoidClosure() {
                @Override
-               public void execute(Txn tx) throws Exception {
+               public void call(Txn tx) throws Exception {
                    map.put("1", "a");
                    map.put("2", "b");
                    map.put("3", "c");
@@ -85,7 +85,7 @@ public class NaiveTxnHashMap_getTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String result = map.get("1");
 
                 assertNull(result);

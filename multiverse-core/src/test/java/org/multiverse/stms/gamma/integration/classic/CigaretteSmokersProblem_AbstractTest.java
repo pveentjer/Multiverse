@@ -84,7 +84,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 0:
                         executor.atomic(new TxnVoidClosure() {
                             @Override
-                            public void execute(Txn tx) {
+                            public void call(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -98,7 +98,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 1:
                         executor.atomic(new TxnVoidClosure() {
                             @Override
-                            public void execute(Txn tx) {
+                            public void call(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -112,7 +112,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 2:
                         executor.atomic(new TxnVoidClosure() {
                             @Override
-                            public void execute(Txn tx) {
+                            public void call(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -129,7 +129,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
             }
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     notifier.awaitNull();
                     notifier.set(arbiterThread);
                 }
@@ -165,7 +165,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         private boolean makeCigarette() {
             return executor.atomic(new TxnBooleanClosure() {
                 @Override
-                public boolean execute(Txn tx) throws Exception {
+                public boolean call(Txn tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {
                         if (notifier.get() == arbiterThread) {
                             return false;

@@ -29,7 +29,7 @@ public class GammaTxnExecutorTest {
     public void whenAtomicIntClosureUsed() {
         int result = executor.atomic(new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 return 10;
             }
         });
@@ -41,7 +41,7 @@ public class GammaTxnExecutorTest {
     public void whenAtomicLongClosureUsed() {
         long result = executor.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 return 10;
             }
         });
@@ -53,7 +53,7 @@ public class GammaTxnExecutorTest {
     public void whenAtomicVoidClosureUsed() {
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
             }
         });
     }
@@ -62,7 +62,7 @@ public class GammaTxnExecutorTest {
     public void whenAtomicClosureUsed() {
         String result = executor.atomic(new TxnClosure<String>() {
             @Override
-            public String execute(Txn tx) throws Exception {
+            public String call(Txn tx) throws Exception {
                 return "foo";
             }
         });

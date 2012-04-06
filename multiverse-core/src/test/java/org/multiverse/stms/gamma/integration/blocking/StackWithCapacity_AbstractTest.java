@@ -112,7 +112,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         public void push(final E item) {
             pushBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (size.get() >= maxCapacity) {
                         retry();
                     }
@@ -126,7 +126,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         public E pop() {
             return popBlock.atomic(new TxnClosure<E>() {
                 @Override
-                public E execute(Txn tx) throws Exception {
+                public E call(Txn tx) throws Exception {
                     if (head.isNull()) {
                         retry();
                     }

@@ -165,7 +165,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         public void acquireReadLock() {
             acquireReadLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (readerCount.get() == -1) {
                         retry();
                     }
@@ -178,7 +178,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         public void acquireWriteLock() {
             acquireWriteLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (readerCount.get() != 0) {
                         retry();
                     }

@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_peekFirstTest {
     public void whenEmpty() {
        atomic(new TxnVoidClosure() {
            @Override
-           public void execute(Txn tx) throws Exception {
+           public void call(Txn tx) throws Exception {
                String result = list.peekFirst();
 
                assertNull(result);
@@ -41,7 +41,7 @@ public class NaiveTxnLinkedList_peekFirstTest {
     public void whenMultipleItems() {
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.offerLast("1");
                 list.offerLast("2");
                 list.offerLast("3");
@@ -59,7 +59,7 @@ public class NaiveTxnLinkedList_peekFirstTest {
     public void whenSingleItem() {
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String item = "1";
                 list.put(item);
 

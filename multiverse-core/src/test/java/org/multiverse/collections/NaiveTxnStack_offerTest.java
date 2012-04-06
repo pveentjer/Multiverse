@@ -28,7 +28,7 @@ public class NaiveTxnStack_offerTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     stack.offer(null);
                     fail();
@@ -48,7 +48,7 @@ public class NaiveTxnStack_offerTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = stack.offer("1");
 
                 assertTrue(result);
@@ -64,7 +64,7 @@ public class NaiveTxnStack_offerTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.offer("1");
                 boolean result = stack.offer("2");
 
@@ -81,7 +81,7 @@ public class NaiveTxnStack_offerTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.offer("1");
                 stack.offer("2");
                 boolean result = stack.offer("3");

@@ -84,7 +84,7 @@ public abstract class ReentrantMutex_AbstractTest {
         public void lock(final Thread thread) {
             lockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (owner.get() == null) {
                         owner.set(thread);
                         count.increment();
@@ -104,7 +104,7 @@ public abstract class ReentrantMutex_AbstractTest {
         public void unlock(final Thread thread) {
             unlockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (owner.get() != thread) {
                         throw new IllegalMonitorStateException();
                     }

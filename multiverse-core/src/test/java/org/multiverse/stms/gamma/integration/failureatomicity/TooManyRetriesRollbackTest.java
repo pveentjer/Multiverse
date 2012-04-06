@@ -56,7 +56,7 @@ public class TooManyRetriesRollbackTest {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
 
                 modifyRef.getAndSet(btx, value);
@@ -80,7 +80,7 @@ public class TooManyRetriesRollbackTest {
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
                     long value = retryRef.get(btx);

@@ -27,7 +27,7 @@ public class NaiveTxnHashMap_putTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String result = map.put("key", "value");
 
                 assertNull(result);
@@ -41,7 +41,7 @@ public class NaiveTxnHashMap_putTest {
     public void whenReplacingExistingKey() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -60,7 +60,7 @@ public class NaiveTxnHashMap_putTest {
     public void whenNullKey_thenNullPointerException() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     map.put(null, "foo");
                     fail();
@@ -82,7 +82,7 @@ public class NaiveTxnHashMap_putTest {
             final int key = k;
             StmUtils.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     map.put("" + key, "" + key);
                 }
             });
@@ -92,7 +92,7 @@ public class NaiveTxnHashMap_putTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertEquals(itemCount, map.size());
             }
         });
@@ -103,7 +103,7 @@ public class NaiveTxnHashMap_putTest {
             final int key = k;
             StmUtils.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     assertEquals("" + key, map.get("" + key));
                 }
             });

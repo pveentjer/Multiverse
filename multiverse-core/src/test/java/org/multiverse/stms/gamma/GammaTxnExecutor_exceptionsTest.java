@@ -31,7 +31,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
@@ -55,7 +55,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
@@ -80,7 +80,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
@@ -104,7 +104,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
@@ -128,7 +128,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
@@ -153,7 +153,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;

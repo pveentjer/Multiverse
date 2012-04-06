@@ -28,7 +28,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     list.offerFirst(null);
                     fail();
@@ -47,7 +47,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = list.offerFirst("1");
 
                 assertTrue(result);
@@ -63,7 +63,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.offerFirst("1");
                 boolean result = list.offerFirst("2");
 

@@ -29,7 +29,7 @@ public class NaiveTxnStack_pushTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     stack.push(null);
                     fail();
@@ -49,7 +49,7 @@ public class NaiveTxnStack_pushTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
 
                 assertEquals("[1]", stack.toString());
@@ -64,7 +64,7 @@ public class NaiveTxnStack_pushTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
 
@@ -81,7 +81,7 @@ public class NaiveTxnStack_pushTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 stack.push("3");

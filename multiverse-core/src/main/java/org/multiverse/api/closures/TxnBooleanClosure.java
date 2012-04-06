@@ -22,5 +22,5 @@ public interface TxnBooleanClosure{
      *           be null.
      * @return the result of the execution.
      */
-     boolean execute(Txn txn)throws Exception;
+     boolean call(Txn txn)throws Exception;
 }

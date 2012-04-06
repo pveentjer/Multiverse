@@ -30,7 +30,7 @@ public class NoBlockingTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     retry();
                 }
             });
@@ -46,7 +46,7 @@ public class NoBlockingTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.commute(Functions.incLongFunction());
                     retry();
                 }
@@ -61,7 +61,7 @@ public class NoBlockingTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     GammaTxnLong ref = new GammaTxnLong(btx);
                     retry();
@@ -84,7 +84,7 @@ public class NoBlockingTest {
         try {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.set(1);
                     retry();
                 }

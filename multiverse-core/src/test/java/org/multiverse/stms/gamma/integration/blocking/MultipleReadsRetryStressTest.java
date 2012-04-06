@@ -122,7 +122,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         public void doRun() {
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) {
+                public void call(Txn tx) {
                     if (stopRef.get() < 0) {
                         throw new StopException();
                     }

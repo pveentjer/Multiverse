@@ -33,7 +33,7 @@ public class OrElseTest {
 
         long value = StmUtils.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });
@@ -49,7 +49,7 @@ public class OrElseTest {
         }
 
         @Override
-        public long execute(Txn tx) throws Exception {
+        public long call(Txn tx) throws Exception {
             if (ref.get() == 0) {
                 retry();
             }
@@ -66,7 +66,7 @@ public class OrElseTest {
 
         long value = StmUtils.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });

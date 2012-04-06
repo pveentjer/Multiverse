@@ -41,7 +41,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
 
         final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.openForWrite((LeanMonoGammaTxn) tx, LOCKMODE_NONE).ref_value = "foo";
             }
         };

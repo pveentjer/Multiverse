@@ -62,7 +62,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.execute(tx);
+                return closure.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -72,7 +72,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        E result = closure.execute(tx);
+                        E result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -168,7 +168,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.execute(tx);
+                return closure.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -178,7 +178,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        int result = closure.execute(tx);
+                        int result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -274,7 +274,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.execute(tx);
+                return closure.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -284,7 +284,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        long result = closure.execute(tx);
+                        long result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -380,7 +380,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.execute(tx);
+                return closure.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -390,7 +390,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        double result = closure.execute(tx);
+                        double result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -486,7 +486,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.execute(tx);
+                return closure.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -496,7 +496,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        boolean result = closure.execute(tx);
+                        boolean result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -592,7 +592,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                closure.execute(tx);
+                closure.call(tx);
                 return;
             }
 
@@ -603,7 +603,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        closure.execute(tx);
+                        closure.call(tx);
                         tx.commit();
                         abort = false;
                         return;

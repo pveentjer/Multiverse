@@ -35,9 +35,9 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            return either.execute(txn);
+            return either.call(txn);
         }catch(RetryError retry){
-            return orelse.execute(txn);
+            return orelse.call(txn);
         }
     }
 
@@ -68,9 +68,9 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            return either.execute(txn);
+            return either.call(txn);
         }catch(RetryError retry){
-            return orelse.execute(txn);
+            return orelse.call(txn);
         }
     }
 
@@ -101,9 +101,9 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            return either.execute(txn);
+            return either.call(txn);
         }catch(RetryError retry){
-            return orelse.execute(txn);
+            return orelse.call(txn);
         }
     }
 
@@ -134,9 +134,9 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            return either.execute(txn);
+            return either.call(txn);
         }catch(RetryError retry){
-            return orelse.execute(txn);
+            return orelse.call(txn);
         }
     }
 
@@ -167,9 +167,9 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            return either.execute(txn);
+            return either.call(txn);
         }catch(RetryError retry){
-            return orelse.execute(txn);
+            return orelse.call(txn);
         }
     }
 
@@ -201,10 +201,10 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-            either.execute(txn);
+            either.call(txn);
             return;
         }catch(RetryError retry){
-            orelse.execute(txn);
+            orelse.call(txn);
             return;
         }
     }

@@ -44,7 +44,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleDeferredTask(task);
             }
         });
@@ -59,7 +59,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleDeferredTask(task);
                     throw new NonsenseException();
                 }
@@ -100,7 +100,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleCompensatingTask(task);
                     throw new NonsenseException();
                 }
@@ -119,7 +119,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleCompensatingTask(task);
             }
         });
@@ -152,7 +152,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
                     throw new NonsenseException();
                 }
@@ -171,7 +171,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);
             }
         });

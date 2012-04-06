@@ -28,7 +28,7 @@ public class NaiveTxnStack_clearTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.clear();
                 assertTrue(stack.isEmpty());
                 assertEquals("[]", stack.toString());
@@ -40,7 +40,7 @@ public class NaiveTxnStack_clearTest {
     public void whenNotEmpty(){
          StmUtils.atomic(new TxnVoidClosure() {
              @Override
-             public void execute(Txn tx) throws Exception {
+             public void call(Txn tx) throws Exception {
                  stack.push("1");
                  stack.push("2");
                  stack.clear();

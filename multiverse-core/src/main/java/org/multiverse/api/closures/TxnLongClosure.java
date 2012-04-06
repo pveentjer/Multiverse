@@ -22,5 +22,5 @@ public interface TxnLongClosure{
      *           be null.
      * @return the result of the execution.
      */
-     long execute(Txn txn)throws Exception;
+     long call(Txn txn)throws Exception;
 }

@@ -84,7 +84,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        return closure.execute(tx);
+                        return closure.call(tx);
                     }
                 case Mandatory:
                     if (tx == null) {
@@ -107,7 +107,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
@@ -132,7 +132,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    return closure.execute(null);
+                    return closure.call(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
@@ -181,7 +181,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 default:
                     throw new IllegalStateException();
             }
@@ -202,7 +202,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        E result = closure.execute(tx);
+                        E result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -318,7 +318,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        return closure.execute(tx);
+                        return closure.call(tx);
                     }
                 case Mandatory:
                     if (tx == null) {
@@ -341,7 +341,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
@@ -366,7 +366,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    return closure.execute(null);
+                    return closure.call(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
@@ -415,7 +415,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 default:
                     throw new IllegalStateException();
             }
@@ -436,7 +436,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        int result = closure.execute(tx);
+                        int result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -552,7 +552,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        return closure.execute(tx);
+                        return closure.call(tx);
                     }
                 case Mandatory:
                     if (tx == null) {
@@ -575,7 +575,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
@@ -600,7 +600,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    return closure.execute(null);
+                    return closure.call(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
@@ -649,7 +649,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 default:
                     throw new IllegalStateException();
             }
@@ -670,7 +670,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        long result = closure.execute(tx);
+                        long result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -786,7 +786,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        return closure.execute(tx);
+                        return closure.call(tx);
                     }
                 case Mandatory:
                     if (tx == null) {
@@ -809,7 +809,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
@@ -834,7 +834,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    return closure.execute(null);
+                    return closure.call(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
@@ -883,7 +883,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 default:
                     throw new IllegalStateException();
             }
@@ -904,7 +904,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        double result = closure.execute(tx);
+                        double result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -1020,7 +1020,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        return closure.execute(tx);
+                        return closure.call(tx);
                     }
                 case Mandatory:
                     if (tx == null) {
@@ -1043,7 +1043,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
@@ -1068,7 +1068,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    return closure.execute(null);
+                    return closure.call(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
@@ -1117,7 +1117,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    return closure.execute(tx);
+                    return closure.call(tx);
                 default:
                     throw new IllegalStateException();
             }
@@ -1138,7 +1138,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        boolean result = closure.execute(tx);
+                        boolean result = closure.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -1255,7 +1255,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-                        closure.execute(tx);
+                        closure.call(tx);
                         return;
                     }
                 case Mandatory:
@@ -1279,7 +1279,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-                    closure.execute(tx);
+                    closure.call(tx);
                     return;
                 case Never:
                     if (tx != null) {
@@ -1305,7 +1305,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-                    closure.execute(null);
+                    closure.call(null);
                     return;
                 case RequiresNew:
                     if (tx == null) {
@@ -1357,7 +1357,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
                     }
 
-                    closure.execute(tx);
+                    closure.call(tx);
                     return;
                 default:
                     throw new IllegalStateException();
@@ -1379,7 +1379,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        closure.execute(tx);
+                        closure.call(tx);
                         tx.commit();
                         abort = false;
                         return;

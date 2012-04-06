@@ -124,7 +124,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         public void releaseForks() {
             releaseForksBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     leftFork.set(false);
                     rightFork.set(false);
 
@@ -135,7 +135,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         public void takeForks() {
             takeForksBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (leftFork.get() || rightFork.get()) {
                         retry();
                     }

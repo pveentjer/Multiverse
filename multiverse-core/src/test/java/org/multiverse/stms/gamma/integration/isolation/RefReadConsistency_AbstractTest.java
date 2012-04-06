@@ -97,7 +97,7 @@ public abstract class RefReadConsistency_AbstractTest {
             TxnExecutor executor = createWriteBlock();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     //String initial = refs[0].get(btx);
 
@@ -137,7 +137,7 @@ public abstract class RefReadConsistency_AbstractTest {
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
                     String initial = (String) refs[0].openForRead(btx, LOCKMODE_NONE).ref_value;

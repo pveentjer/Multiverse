@@ -76,7 +76,7 @@ public class CountDownCommitBarrier_IntegrationTest {
 
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn txn) throws Exception {
+                public void call(Txn txn) throws Exception {
                     AwaitThread.this.txn = txn;
                     ref.set(txn, 10);
                     barrier.joinCommitUninterruptibly(txn);

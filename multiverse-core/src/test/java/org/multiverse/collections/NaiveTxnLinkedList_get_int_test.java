@@ -28,7 +28,7 @@ public class NaiveTxnLinkedList_get_int_test {
     public void whenIndexTooSmall() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 try {
@@ -48,7 +48,7 @@ public class NaiveTxnLinkedList_get_int_test {
     public void whenIndexTooBig() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 try {
@@ -68,7 +68,7 @@ public class NaiveTxnLinkedList_get_int_test {
     public void whenListContainsSingleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 String item = list.get(0);
 
@@ -83,7 +83,7 @@ public class NaiveTxnLinkedList_get_int_test {
     public void whenMultipleItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");

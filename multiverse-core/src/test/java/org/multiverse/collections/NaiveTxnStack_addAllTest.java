@@ -32,7 +32,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     stack.addAll(null);
                     fail();
@@ -51,7 +51,7 @@ public class NaiveTxnStack_addAllTest {
         try {
             StmUtils.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     List<String> list = new LinkedList<String>();
                     list.add("a");
                     list.add("b");
@@ -75,7 +75,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertEquals("[]", stack.toString());
                 assertEquals(0, stack.size());
             }
@@ -88,7 +88,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 stack.addAll(new LinkedList<String>());
@@ -105,7 +105,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.addAll(new LinkedList<String>());
 
                 assertEquals("[]", stack.toString());
@@ -120,7 +120,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 List<String> list = Arrays.asList("1", "2");
 
                 stack.addAll(list);
@@ -137,7 +137,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 List<String> list = Arrays.asList("2", "1");
 
                 stack.add("4");
@@ -156,7 +156,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.add("1");
             }
         });
@@ -164,7 +164,7 @@ public class NaiveTxnStack_addAllTest {
         try {
             StmUtils.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     List<String> c = Arrays.asList("2", "3");
 
                     try {
@@ -186,7 +186,7 @@ public class NaiveTxnStack_addAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertEquals(1, stack.size());
                 assertEquals("[1]", stack.toString());
             }

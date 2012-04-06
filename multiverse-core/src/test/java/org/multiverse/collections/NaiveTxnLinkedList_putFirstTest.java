@@ -29,7 +29,7 @@ public class NaiveTxnLinkedList_putFirstTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     list.putFirst(null);
                     fail();
@@ -48,7 +48,7 @@ public class NaiveTxnLinkedList_putFirstTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.putFirst("1");
 
                 assertEquals("[1]", list.toString());
@@ -63,7 +63,7 @@ public class NaiveTxnLinkedList_putFirstTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.putFirst("1");
                 list.putFirst("2");
 

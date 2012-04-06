@@ -20,5 +20,5 @@ public interface TxnVoidClosure{
      *           be null.
      * @throws Exception if unable to compute a result
      */
-     void execute(Txn txn)throws Exception;
+     void call(Txn txn)throws Exception;
 }

@@ -27,7 +27,7 @@ public class NaiveTxnHashMap_containsKeyTest {
     public void whenNotFound() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -46,7 +46,7 @@ public class NaiveTxnHashMap_containsKeyTest {
     public void whenFound() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -65,7 +65,7 @@ public class NaiveTxnHashMap_containsKeyTest {
     public void whenNullKey_thenReturnFalse() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -84,7 +84,7 @@ public class NaiveTxnHashMap_containsKeyTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = map.containsKey("1");
 
                 assertFalse(result);

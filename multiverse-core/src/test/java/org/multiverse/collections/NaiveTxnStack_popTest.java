@@ -29,7 +29,7 @@ public class NaiveTxnStack_popTest {
     public void whenSingleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String item = "1";
                 stack.push(item);
 
@@ -45,7 +45,7 @@ public class NaiveTxnStack_popTest {
     public void whenMultipleItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String item1 = "1";
                 String item2 = "2";
                 stack.push(item1);
@@ -64,7 +64,7 @@ public class NaiveTxnStack_popTest {
     public void whenEmpty_thenRetryError() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     stack.pop();
                     fail();

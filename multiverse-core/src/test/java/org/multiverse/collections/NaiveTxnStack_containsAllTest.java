@@ -31,7 +31,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     stack.containsAll(null);
                     fail();
@@ -51,7 +51,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = stack.containsAll(new LinkedList());
 
                 assertTrue(result);
@@ -67,7 +67,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = stack.containsAll(Arrays.asList("1", "2"));
 
                 assertFalse(result);
@@ -83,7 +83,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
 
@@ -102,7 +102,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 boolean result = stack.containsAll(Arrays.asList("1", "2"));
@@ -120,7 +120,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 stack.add("1");
@@ -139,7 +139,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 stack.add("3");
@@ -158,7 +158,7 @@ public class NaiveTxnStack_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 stack.add("3");
@@ -177,7 +177,7 @@ public class NaiveTxnStack_containsAllTest {
 
           StmUtils.atomic(new TxnVoidClosure() {
               @Override
-              public void execute(Txn tx) throws Exception {
+              public void call(Txn tx) throws Exception {
                   stack.add("1");
                   stack.add("2");
                   stack.add("3");

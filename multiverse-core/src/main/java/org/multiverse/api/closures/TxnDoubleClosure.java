@@ -22,5 +22,5 @@ public interface TxnDoubleClosure{
      *           be null.
      * @return the result of the execution.
      */
-     double execute(Txn txn)throws Exception;
+     double call(Txn txn)throws Exception;
 }

@@ -67,7 +67,7 @@ public class CountDownCommitBarrier_abortTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn txn) throws Exception {
+                public void call(Txn txn) throws Exception {
                     CommitThread.this.txn = txn;
                     barrier.joinCommitUninterruptibly(txn);
                 }

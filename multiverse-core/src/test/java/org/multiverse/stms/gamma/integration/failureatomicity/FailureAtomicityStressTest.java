@@ -92,7 +92,7 @@ public class FailureAtomicityStressTest {
         private void modify() {
             txnExecutor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     long value = ref.get(btx);
                     ref.getAndSet(btx, value + 1);
@@ -103,7 +103,7 @@ public class FailureAtomicityStressTest {
         private void modifyButAbort() {
             txnExecutor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     long value = ref.get(btx);
                     ref.getAndSet(btx, value + 1);

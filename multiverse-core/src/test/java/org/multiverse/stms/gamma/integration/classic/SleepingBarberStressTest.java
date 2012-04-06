@@ -65,7 +65,7 @@ public class SleepingBarberStressTest {
         public void doRun() {
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     //todo
                 }
             };
@@ -87,7 +87,7 @@ public class SleepingBarberStressTest {
         public void doRun() throws Exception {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (barberShop.closed.get()) {
                         return;
                     }

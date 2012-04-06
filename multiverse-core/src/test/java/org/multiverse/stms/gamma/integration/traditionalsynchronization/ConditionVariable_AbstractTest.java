@@ -90,7 +90,7 @@ public abstract class ConditionVariable_AbstractTest {
         void push(final String item) {
             pushBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     isNotFull.awaitTrue();
 
                     head.set(new Node(item, head.get()));
@@ -107,7 +107,7 @@ public abstract class ConditionVariable_AbstractTest {
         String pop() {
             return popBlock.atomic(new TxnClosure<String>() {
                 @Override
-                public String execute(Txn tx) throws Exception {
+                public String call(Txn tx) throws Exception {
                     isNotEmpty.awaitTrue();
 
                     Node node = head.get();

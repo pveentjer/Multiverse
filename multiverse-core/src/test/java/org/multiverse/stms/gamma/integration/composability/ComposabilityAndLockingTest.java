@@ -31,12 +31,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
                 StmUtils.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
                         assertEquals(LockMode.Write, ref.getLock().getLockMode());
                     }
@@ -55,12 +55,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
                 StmUtils.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }
@@ -79,12 +79,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
                 StmUtils.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }
@@ -103,12 +103,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
                 StmUtils.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }

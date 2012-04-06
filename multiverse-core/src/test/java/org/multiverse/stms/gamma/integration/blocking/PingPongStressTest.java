@@ -78,7 +78,7 @@ public class PingPongStressTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.set(-abs(ref.get()));
             }
         });
@@ -123,7 +123,7 @@ public class PingPongStressTest {
         public void doRun() {
             TxnBooleanClosure closure = new TxnBooleanClosure() {
                 @Override
-                public boolean execute(Txn tx) throws Exception {
+                public boolean call(Txn tx) throws Exception {
                     if (ref.get() < 0) {
                         return false;
                     }

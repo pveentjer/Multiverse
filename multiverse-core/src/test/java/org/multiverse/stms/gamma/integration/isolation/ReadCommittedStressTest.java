@@ -69,7 +69,7 @@ public class ReadCommittedStressTest {
             TxnExecutor executor = stm.getDefaultTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     ref.getAndSet(btx, ref.get(btx));
                     btx.abort();
@@ -99,7 +99,7 @@ public class ReadCommittedStressTest {
         public void doRun() {
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
                     if (ref.get(btx) % 2 != 0) {

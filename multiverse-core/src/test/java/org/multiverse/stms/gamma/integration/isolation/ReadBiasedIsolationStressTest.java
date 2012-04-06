@@ -136,7 +136,7 @@ public class ReadBiasedIsolationStressTest {
 
             TxnBooleanClosure closure = new TxnBooleanClosure() {
                 @Override
-                public boolean execute(Txn tx) throws Exception {
+                public boolean call(Txn tx) throws Exception {
                     ref.getLock().acquire(tx, lockMode);
 
                     if (randomOneOf(chanceOfUpdate)) {

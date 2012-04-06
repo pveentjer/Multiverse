@@ -32,5 +32,5 @@ public interface ${closure.name}${closure.typeParameter}{
      * @throws Exception if unable to compute a result
 #end
      */
-     ${closure.type} execute(Txn txn)throws Exception;
+     ${closure.type} call(Txn txn)throws Exception;
 }

@@ -91,7 +91,7 @@ public class VetoCommitBarrier_joinCommitTest {
         sleepMs(1000);
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
             }
         });
@@ -120,7 +120,7 @@ public class VetoCommitBarrier_joinCommitTest {
                     .newTxnExecutor()
                     .atomic(new TxnVoidClosure() {
                         @Override
-                        public void execute(Txn tx) throws Exception {
+                        public void call(Txn tx) throws Exception {
                             //we need to load it to cause a conflict
                             ref.get(tx);
                             sleepMs(2000);
@@ -221,7 +221,7 @@ public class VetoCommitBarrier_joinCommitTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(tx, 1);
                     if (prepare) {
                         tx.prepare();

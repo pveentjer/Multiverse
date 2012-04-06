@@ -28,15 +28,15 @@ import org.multiverse.api.closures.*;
  * { @link org.multiverse.api.exceptions.SpeculativeConfigurationError} it will automatically retry the
  * the AtomicClosure until either the next execution completes or the maximum number of retries has been reached.
  * To prevent contention, also a {@link BackoffPolicy} is used, to prevent transactions from causing more contention
- * if there already is contention. For configuring the maximum number of retries, see the {@link TransactionFactoryBuilder#setMaxRetries}
- * and for configuring the BackoffPolicy, see {@link TransactionFactoryBuilder#setBackoffPolicy}.
+ * if there already is contention. For configuring the maximum number of retries, see the {@link TxnFactoryBuilder#setMaxRetries}
+ * and for configuring the BackoffPolicy, see {@link TxnFactoryBuilder#setBackoffPolicy}.
  *
  * <p>It is very important to realize that automatically retrying a transaction on a conflict is something else than the
- * {@link Transaction#retry}. The latter is really a blocking operation that only retries when there is a reason to retry.
+ * {@link Txn#retry}. The latter is really a blocking operation that only retries when there is a reason to retry.
  *
  * <h3>Configuration</h3>
  *
- * <p>The {@link TxnExecutor} can be configured through the {@link TransactionFactoryBuilder}. So that for more detail since
+ * <p>The {@link TxnExecutor} can be configured through the {@link TxnFactoryBuilder}. So that for more detail since
  * there are tons of settings to choose from.
  *
  * <h3>Thread-safety</h3>
@@ -65,7 +65,7 @@ import org.multiverse.api.closures.*;
  * <li>execute checked: it will not do anything with thrown checked of unchecked exceptions and lets them through
  * </li>
  * </ol>
- * If an exception happens inside an AtomicClosure, the Transaction will be always aborted (unless it is caught by the logic
+ * If an exception happens inside an AtomicClosure, the Txn will be always aborted (unless it is caught by the logic
  * inside the AtomicClosure). Catching the exceptions inside the closure should be done with care since an exception could
  * indicate that the system has entered an invalid state.
  *
@@ -78,15 +78,15 @@ import org.multiverse.api.closures.*;
  * <p>Using traditional concurrency control, composing locking operations is extremely hard because it is very likely that
  * it is impossible without knowing implementation details of the structure, or because of deadlocks. With Stm transactional
  * operations can be composed and controlling how the system should react on existing or missing transactions can be controlled
- * through the {@link TransactionFactoryBuilder#setPropagationLevel} where the {@link PropagationLevel#Requires} is the default.
+ * through the {@link TxnFactoryBuilder#setPropagationLevel} where the {@link PropagationLevel#Requires} is the default.
  *
  * <p>Normally the system uses a flat-nesting approach, so only the outermost commit is going to lead to a commit. But if a commit
  * is done before the outer most TxnExecutor completes, that commit is leading.
  *
- * <p>If the Transaction is committed (or aborted) manually, operations on the Transaction will fail with a
+ * <p>If the transaction is committed (or aborted) manually, operations on the transaction will fail with a
  * {@link org.multiverse.api.exceptions.IllegalTxnStateException} exception. So in most cases you want to let the TxnExecutor
  * be in charge of committing/aborting. If also allows for a correct flattening of nested transactions.  If a transaction should
- * not commit, but you don't want to disrupt the code, the {@link Transaction#setAbortOnly} can be called, to make sure that the
+ * not commit, but you don't want to disrupt the code, the {@link Txn#setAbortOnly} can be called, to make sure that the
  * transaction is not going to commit (or prepare) successfully.
  *
  * <p>The configuration of the outer most TxnExecutor is leading. So if the outer TxnExecutor is not readonly and the inner is,
@@ -101,7 +101,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * Returns the {@link TxnFactory} that is used by this TxnExecutor to create transactions used to execute
     * transactional closures.
     *
-    * @return the TransactionFactory used by this TxnExecutor.
+    * @return the TxnFactory used by this TxnExecutor.
     */
     TxnFactory getTxnFactory();
 

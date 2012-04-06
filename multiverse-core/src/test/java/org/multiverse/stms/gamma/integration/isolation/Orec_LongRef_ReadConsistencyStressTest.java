@@ -101,7 +101,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     for (GammaTxnLong ref : refs) {
                         ref.incrementAndGet(1);
                     }
@@ -458,7 +458,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         private void singleRun() {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);
                     assertReadConsistent((GammaTxn) tx);
                 }

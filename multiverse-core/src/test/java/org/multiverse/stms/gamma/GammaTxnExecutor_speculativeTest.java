@@ -55,7 +55,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 System.out.println(tx.getClass());
                 assertSame(tx, getThreadLocalTxn());
                 GammaTxn btx = (GammaTxn) tx;
@@ -94,7 +94,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.commute(btx, function);
@@ -118,7 +118,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.get(btx);
@@ -143,7 +143,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
 
@@ -168,7 +168,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.get(tx);
@@ -192,7 +192,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.getLock().acquire(LockMode.Read);
@@ -217,7 +217,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
@@ -249,7 +249,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);

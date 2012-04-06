@@ -75,10 +75,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         try{
             if(tx != null && tx.isAlive()){
 #if(${closure.type} eq 'void')
-                closure.execute(tx);
+                closure.call(tx);
                 return;
 #else
-                return closure.execute(tx);
+                return closure.call(tx);
 #end
             }
 
@@ -136,10 +136,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                             }
 
 #if($closure.type eq 'void')
-                        closure.execute(tx);
+                        closure.call(tx);
                         return;
 #else
-                        return closure.execute(tx);
+                        return closure.call(tx);
 #end
                     }
                 case Mandatory:
@@ -164,10 +164,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         }
                     }
 #if($closure.type eq 'void')
-                    closure.execute(tx);
+                    closure.call(tx);
                     return;
 #else
-                    return closure.execute(tx);
+                    return closure.call(tx);
 #end
                 case Never:
                     if (tx != null) {
@@ -194,10 +194,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         }
                     }
 #if($closure.type eq 'void')
-                    closure.execute(null);
+                    closure.call(null);
                     return;
 #else
-                    return closure.execute(null);
+                    return closure.call(null);
 #end
                 case RequiresNew:
                     if (tx == null) {
@@ -258,10 +258,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                     }
 
 #if($closure.type eq 'void')
-                    closure.execute(tx);
+                    closure.call(tx);
                     return;
 #else
-                    return closure.execute(tx);
+                    return closure.call(tx);
 #end
                 default:
                     throw new IllegalStateException();
@@ -290,9 +290,9 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                     try {
                         cause = null;
 #if(${closure.type} eq 'void')
-                        closure.execute(tx);
+                        closure.call(tx);
 #else
-                        ${closure.type} result = closure.execute(tx);
+                        ${closure.type} result = closure.call(tx);
 #end
                         tx.commit();
                         abort = false;

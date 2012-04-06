@@ -88,7 +88,7 @@ public class VetoCommitBarrier_integrationTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.getAndIncrement(tx, 1);
                     barrier.joinCommit(getThreadLocalTxn());
                 }

@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_clearTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.clear();
 
                 assertEquals(0, list.size());
@@ -40,7 +40,7 @@ public class NaiveTxnLinkedList_clearTest {
     public void whenSingleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.put("foo");
                 list.clear();
 
@@ -54,7 +54,7 @@ public class NaiveTxnLinkedList_clearTest {
     public void whenMultipleItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.put("foo");
                 list.put("bar");
                 list.clear();

@@ -95,7 +95,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         public void acquireReadLock() {
             acquireReadLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (lock.get() < 0) {
                         retry();
                     }
@@ -115,7 +115,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
             releaseReadLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (lock.get() <= 0) {
                         throw new IllegalMonitorStateException();
                     }
@@ -128,7 +128,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         public void acquireWriteLock() {
             acquireWriteLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (lock.get() != 0) {
                         retry();
                     }
@@ -147,7 +147,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
             releaseWriteLockBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (lock.get() != -1) {
                         throw new IllegalMonitorStateException();
                     }

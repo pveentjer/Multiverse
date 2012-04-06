@@ -97,7 +97,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.getAndIncrement(tx, 1);
                         boolean result = barrier.tryJoinCommit(tx, 1, TimeUnit.DAYS);
                         assertTrue(result);

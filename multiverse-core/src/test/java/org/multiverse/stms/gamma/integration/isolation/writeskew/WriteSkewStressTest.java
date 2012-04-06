@@ -298,7 +298,7 @@ public class WriteSkewStressTest {
         private void runWithPessimisticReadLevel() {
             pessimisticReadsBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
@@ -308,7 +308,7 @@ public class WriteSkewStressTest {
         private void runWithPessimisticWriteLevel() {
             pessimisticWritesBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
@@ -318,7 +318,7 @@ public class WriteSkewStressTest {
         private void runWithSerializedIsolation() {
             serializedBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
@@ -328,7 +328,7 @@ public class WriteSkewStressTest {
         private void runWithSnapshotIsolation() {
             snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
@@ -338,7 +338,7 @@ public class WriteSkewStressTest {
         private void runWithPessimisticReads() {
             snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.Read, LockMode.None);
                 }
@@ -348,7 +348,7 @@ public class WriteSkewStressTest {
         private void runWithPessimisticWrites() {
             snapshotBlock.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.Read);
                 }

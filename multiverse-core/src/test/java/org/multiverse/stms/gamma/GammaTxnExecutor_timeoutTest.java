@@ -62,7 +62,7 @@ public class GammaTxnExecutor_timeoutTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 ref.openForWrite(btx, LOCKMODE_NONE).long_value = 1;
             }
@@ -77,7 +77,7 @@ public class GammaTxnExecutor_timeoutTest {
     public void whenNoWaitingNeededAndZeroTimeout() {
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 ref.openForWrite(btx, LOCKMODE_NONE).long_value = 1;
             }
@@ -108,7 +108,7 @@ public class GammaTxnExecutor_timeoutTest {
         public void doRun() throws Exception {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
                     Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);

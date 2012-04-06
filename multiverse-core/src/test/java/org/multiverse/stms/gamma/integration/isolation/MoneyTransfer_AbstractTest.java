@@ -93,7 +93,7 @@ public abstract class MoneyTransfer_AbstractTest {
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     GammaTxnLong from = accounts[randomInt(accounts.length)];
                     GammaTxnLong to = accounts[randomInt(accounts.length)];

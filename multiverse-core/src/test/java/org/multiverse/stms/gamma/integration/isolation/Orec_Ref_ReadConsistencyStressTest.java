@@ -71,7 +71,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     for (GammaTxnRef ref : refs) {
                         ref.set(tx, name);
                     }
@@ -547,7 +547,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
         private void singleRun() {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);
                     assertReadConsistent((GammaTxn) tx);
                 }
@@ -594,7 +594,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
         private void singleRun() {
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);
                     assertReadConsistent((GammaTxn) tx);
                 }
@@ -603,7 +603,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
             FatFixedLengthGammaTxn tx = new FatFixedLengthGammaTxn(config);
             while (true) {
                 try {
-                    closure.execute(tx);
+                    closure.call(tx);
                     tx.commit();
                     return;
                 } catch (ReadWriteConflict expected) {

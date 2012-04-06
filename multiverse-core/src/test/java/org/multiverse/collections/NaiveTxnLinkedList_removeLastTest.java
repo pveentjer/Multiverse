@@ -28,7 +28,7 @@ public class NaiveTxnLinkedList_removeLastTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     list.removeLast();
                     fail();
@@ -46,7 +46,7 @@ public class NaiveTxnLinkedList_removeLastTest {
     public void whenMultipleItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.offerLast("1");
                 list.offerLast("2");
                 list.offerLast("3");
@@ -64,7 +64,7 @@ public class NaiveTxnLinkedList_removeLastTest {
     public void whenSingleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String item = "1";
                 list.put(item);
 

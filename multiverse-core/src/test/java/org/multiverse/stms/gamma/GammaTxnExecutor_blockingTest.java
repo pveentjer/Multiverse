@@ -36,7 +36,7 @@ public class GammaTxnExecutor_blockingTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                 write.long_value = 1;
@@ -58,7 +58,7 @@ public class GammaTxnExecutor_blockingTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                     if (write.long_value == 0) {

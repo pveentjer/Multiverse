@@ -22,5 +22,5 @@ public interface TxnIntClosure{
      *           be null.
      * @return the result of the execution.
      */
-     int execute(Txn txn)throws Exception;
+     int call(Txn txn)throws Exception;
 }

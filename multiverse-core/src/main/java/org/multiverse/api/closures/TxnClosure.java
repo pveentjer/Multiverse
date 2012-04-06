@@ -20,5 +20,5 @@ public interface TxnClosure<E>{
      *           be null.
      * @return the result of the execution.
      */
-     E execute(Txn txn)throws Exception;
+     E call(Txn txn)throws Exception;
 }

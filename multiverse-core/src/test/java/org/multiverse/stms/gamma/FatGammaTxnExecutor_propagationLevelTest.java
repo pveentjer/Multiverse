@@ -59,7 +59,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertNull(tx);
                 return 10;
             }
@@ -100,7 +100,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
                 return 10;
             }
@@ -123,7 +123,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertNotNull(tx);
                 GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(1);
@@ -151,7 +151,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertSame(existingTx, tx);
                 GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(btx, 1);
@@ -178,7 +178,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertNotNull(tx);
                 GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(btx, 1);
@@ -206,7 +206,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertNotNull(tx);
                 assertNotSame(otherTx, tx);
                 GammaTxn btx = (GammaTxn) tx;
@@ -234,7 +234,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
                 return 10;
             }
@@ -255,7 +255,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
-            public int execute(Txn tx) throws Exception {
+            public int call(Txn tx) throws Exception {
                 assertNull(tx);
                 return 10;
             }

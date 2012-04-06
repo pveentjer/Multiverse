@@ -81,7 +81,7 @@ public class TimeoutTestLongTest {
 
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.await(1);
                 }
             });

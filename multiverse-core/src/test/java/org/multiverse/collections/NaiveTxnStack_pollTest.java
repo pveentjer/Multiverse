@@ -27,7 +27,7 @@ public class NaiveTxnStack_pollTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String item = stack.poll();
                 assertNull(item);
                 assertEquals("[]", stack.toString());
@@ -39,7 +39,7 @@ public class NaiveTxnStack_pollTest {
     public void whenSingleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
 
                 String found = stack.poll();
@@ -54,7 +54,7 @@ public class NaiveTxnStack_pollTest {
     public void whenMultipleItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
 

@@ -63,7 +63,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
 
         final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.openForWrite((FatMonoGammaTxn) tx, LOCKMODE_NONE).long_value++;
             }
         };

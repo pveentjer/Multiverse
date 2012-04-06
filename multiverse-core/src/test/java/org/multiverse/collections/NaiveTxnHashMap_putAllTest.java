@@ -31,7 +31,7 @@ public class NaiveTxnHashMap_putAllTest {
     public void whenNullMap_thenNullPointerException() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     map.putAll(null);
                     fail();
@@ -47,7 +47,7 @@ public class NaiveTxnHashMap_putAllTest {
     public void whenEmptyMapAdded() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.putAll(new HashMap<String, String>());
 
                 assertEquals(0, map.size());
@@ -64,7 +64,7 @@ public class NaiveTxnHashMap_putAllTest {
     public void whenAllDifferentItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -91,7 +91,7 @@ public class NaiveTxnHashMap_putAllTest {
     public void whenSomeItemsReplaced() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");

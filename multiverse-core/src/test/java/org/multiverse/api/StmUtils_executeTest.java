@@ -28,7 +28,7 @@ public class StmUtils_executeTest {
 
         atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
             }
         });
@@ -44,7 +44,7 @@ public class StmUtils_executeTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -66,7 +66,7 @@ public class StmUtils_executeTest {
         try {
             atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -85,7 +85,7 @@ public class StmUtils_executeTest {
 
         atomicChecked(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
             }
         });
@@ -101,7 +101,7 @@ public class StmUtils_executeTest {
         try {
             atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -123,7 +123,7 @@ public class StmUtils_executeTest {
         try {
             atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }

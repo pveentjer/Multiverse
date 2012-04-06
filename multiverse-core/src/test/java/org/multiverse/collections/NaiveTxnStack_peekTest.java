@@ -27,7 +27,7 @@ public class NaiveTxnStack_peekTest {
     public void whenEmpty(){
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 String s = stack.peek();
                 assertNull(s);
                 assertEquals("[]", stack.toString());
@@ -39,7 +39,7 @@ public class NaiveTxnStack_peekTest {
     public void whenNotEmpty(){
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 String s = stack.peek();

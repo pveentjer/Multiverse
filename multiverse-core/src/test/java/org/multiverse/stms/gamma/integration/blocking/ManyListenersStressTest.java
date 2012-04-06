@@ -64,7 +64,7 @@ public class ManyListenersStressTest {
             while (!stop) {
                 atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         for (TxnLong ref : refs) {
                             final long value = ref.get();
 

@@ -117,7 +117,7 @@ public abstract class NonReentrantMutex_AbstractTest {
 
         final TxnVoidClosure lockClosure = new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 locked.awaitNull(tx);
                 locked.set(tx, this);
             }
@@ -125,7 +125,7 @@ public abstract class NonReentrantMutex_AbstractTest {
 
         final TxnVoidClosure unlockClosure = new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 if (locked.isNull(tx)) {
                     throw new IllegalStateException();
                 }

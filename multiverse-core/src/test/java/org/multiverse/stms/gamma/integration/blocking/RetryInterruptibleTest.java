@@ -63,7 +63,7 @@ public class RetryInterruptibleTest {
 
             executor.atomicChecked(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     if (ref.get(btx) != 1) {
                         retry();

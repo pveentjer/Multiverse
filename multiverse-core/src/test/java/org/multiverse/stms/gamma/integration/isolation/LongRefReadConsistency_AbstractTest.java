@@ -97,7 +97,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
             TxnExecutor executor = createWriteBlock();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].set(btx, id);
@@ -133,7 +133,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
                     long initial = refs[0].get(btx);

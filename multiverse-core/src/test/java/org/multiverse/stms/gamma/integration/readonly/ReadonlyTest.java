@@ -45,7 +45,7 @@ public class ReadonlyTest {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 ref.getAndSet(btx, newValue);
             }
@@ -68,7 +68,7 @@ public class ReadonlyTest {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 GammaTxnLong ref = new GammaTxnLong(btx);
                 ref.openForConstruction(btx).long_value = value;
@@ -90,7 +90,7 @@ public class ReadonlyTest {
 
         return executor.atomic(new TxnClosure<Integer>() {
             @Override
-            public Integer execute(Txn tx) throws Exception {
+            public Integer call(Txn tx) throws Exception {
                 return new Integer(value);
             }
         });
@@ -111,7 +111,7 @@ public class ReadonlyTest {
 
         return executor.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 return ref.get(btx);
             }
@@ -132,7 +132,7 @@ public class ReadonlyTest {
 
         return executor.atomic(new TxnClosure<GammaTxnLong>() {
             @Override
-            public GammaTxnLong execute(Txn tx) throws Exception {
+            public GammaTxnLong call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 GammaTxnLong ref = new GammaTxnLong(btx);
                 ref.openForConstruction(btx).long_value = value;
@@ -155,7 +155,7 @@ public class ReadonlyTest {
 
         return executor.atomic(new TxnClosure<Integer>() {
             @Override
-            public Integer execute(Txn tx) throws Exception {
+            public Integer call(Txn tx) throws Exception {
                 return new Integer(value);
             }
         });
@@ -177,7 +177,7 @@ public class ReadonlyTest {
 
         return executor.atomic(new TxnLongClosure() {
             @Override
-            public long execute(Txn tx) throws Exception {
+            public long call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
                 return ref.get(btx);
             }
@@ -198,7 +198,7 @@ public class ReadonlyTest {
 
         executor.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertFalse(tx.getConfig().isReadonly());
                 GammaTxn btx = (GammaTxn) tx;
                 ref.getAndSet(btx, newValue);
@@ -218,7 +218,7 @@ public class ReadonlyTest {
     public void defaultTransactionalMethod(final GammaTxnLong ref) {
         stm.newTxnFactoryBuilder().newTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 assertFalse(tx.getConfig().isReadonly());
                 GammaTxn btx = (GammaTxn) tx;
                 ref.getAndSet(btx, ref.get(btx) + 1);

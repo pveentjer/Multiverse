@@ -88,7 +88,7 @@ public class IsolationLevelSerializableTest {
 
         stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 ref1.incrementAndGet(1);
                 ref2.incrementAndGet(1);
             }

@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_indexOfTest {
     public void whenNullItem_thenMinusOne() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 int result = list.indexOf(null);
                 assertEquals(result, -1);
                 assertEquals("[]", list.toString());
@@ -39,7 +39,7 @@ public class NaiveTxnLinkedList_indexOfTest {
     public void whenEmptyList() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 int result = list.indexOf("a");
                 assertEquals(result, -1);
                 assertEquals("[]", list.toString());
@@ -51,7 +51,7 @@ public class NaiveTxnLinkedList_indexOfTest {
     public void whenNotFound_thenMinusOne() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
@@ -68,7 +68,7 @@ public class NaiveTxnLinkedList_indexOfTest {
     public void whenOnlyOnceInCollection() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
@@ -85,7 +85,7 @@ public class NaiveTxnLinkedList_indexOfTest {
     public void whenMultipleTimesInCollection() {
           StmUtils.atomic(new TxnVoidClosure() {
               @Override
-              public void execute(Txn tx) throws Exception {
+              public void call(Txn tx) throws Exception {
                   list.add("1");
                   list.add("2");
                   list.add("3");

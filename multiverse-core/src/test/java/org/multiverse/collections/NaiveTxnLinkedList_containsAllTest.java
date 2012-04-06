@@ -29,7 +29,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     list.containsAll(null);
                     fail();
@@ -49,7 +49,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = list.containsAll(new LinkedList());
 
                 assertTrue(result);
@@ -65,7 +65,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = list.containsAll(Arrays.asList("1", "2"));
 
                 assertFalse(result);
@@ -81,7 +81,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
 
@@ -100,7 +100,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 boolean result = list.containsAll(Arrays.asList("1", "2"));
@@ -118,7 +118,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("1");
@@ -137,7 +137,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
@@ -156,7 +156,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");
@@ -175,7 +175,7 @@ public class NaiveTxnLinkedList_containsAllTest {
 
           StmUtils.atomic(new TxnVoidClosure() {
               @Override
-              public void execute(Txn tx) throws Exception {
+              public void call(Txn tx) throws Exception {
                   list.add("1");
                   list.add("2");
                   list.add("3");

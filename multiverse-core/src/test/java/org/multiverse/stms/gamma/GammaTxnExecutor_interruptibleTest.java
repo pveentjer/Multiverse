@@ -90,7 +90,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
         public void doRun() throws Exception {
             executor.atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
                     Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                     if (write.long_value == 0) {

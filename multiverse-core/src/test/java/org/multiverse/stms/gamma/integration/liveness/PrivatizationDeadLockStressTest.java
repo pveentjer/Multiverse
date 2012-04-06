@@ -64,7 +64,7 @@ public class PrivatizationDeadLockStressTest {
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     if (leftToRight) {
                         for (int k = 0; k < refCount; k++) {
                             refs[k].getLock().acquire(tx, LockMode.Exclusive);

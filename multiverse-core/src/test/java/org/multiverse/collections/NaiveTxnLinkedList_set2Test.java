@@ -28,7 +28,7 @@ public class NaiveTxnLinkedList_set2Test {
     public void whenIndexTooSmall() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 try {
                     list.set(-1, "foo");
                     fail();
@@ -45,7 +45,7 @@ public class NaiveTxnLinkedList_set2Test {
     public void whenIndexTooBig() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 try {
@@ -64,7 +64,7 @@ public class NaiveTxnLinkedList_set2Test {
     public void whenSuccess() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
                 list.add("3");

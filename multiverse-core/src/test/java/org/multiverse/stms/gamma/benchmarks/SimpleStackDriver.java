@@ -119,7 +119,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             while (!shutdown) {
                 pushBlock.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         stack.push(tx, "item");
                     }
                 });
@@ -130,7 +130,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             for (int k = 0; k < popThreadCount; k++) {
                 pushBlock.atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         stack.push(tx, "end");
 
                     }
@@ -157,7 +157,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             String item;
 
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push(tx, item);
             }
         }
@@ -192,7 +192,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             while (!end) {
                 end = popBlock.atomic(new TxnBooleanClosure() {
                     @Override
-                    public boolean execute(Txn tx) throws Exception {
+                    public boolean call(Txn tx) throws Exception {
                         return !stack.pop(tx).equals("end");
                     }
                 });
@@ -212,7 +212,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         class PopClosure implements TxnBooleanClosure {
             @Override
-            public boolean execute(Txn tx) throws Exception {
+            public boolean call(Txn tx) throws Exception {
                 return !stack.pop(tx).endsWith("end");
             }
         }

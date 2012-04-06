@@ -139,7 +139,7 @@ public class CountDownCommitBarrier_StressTest {
         public void doRun() {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
+                public void call(Txn tx) throws Exception {
                     sleepRandomMs(10);
                     refs[randomInt(refs.length)].getAndIncrement(tx, 1);
                     sleepRandomMs(10);

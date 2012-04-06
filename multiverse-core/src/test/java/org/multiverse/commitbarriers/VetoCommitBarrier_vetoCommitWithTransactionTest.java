@@ -69,7 +69,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                     @Override
-                    public void execute(Txn tx) throws Exception {
+                    public void call(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
                         barrier.joinCommit(tx);
                     }

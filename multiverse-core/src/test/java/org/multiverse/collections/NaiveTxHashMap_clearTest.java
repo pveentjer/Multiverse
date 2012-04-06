@@ -27,7 +27,7 @@ public class NaiveTxHashMap_clearTest {
     public void whenNotEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -44,7 +44,7 @@ public class NaiveTxHashMap_clearTest {
     public void whenManyItems() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 for (int k = 0; k < 1000; k++) {
                     map.put("" + k, "" + k);
                 }
@@ -60,7 +60,7 @@ public class NaiveTxHashMap_clearTest {
     public void whenEmpty() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 map.clear();
                 assertEquals(0, map.size());
                 assertEquals("[]", map.toString());

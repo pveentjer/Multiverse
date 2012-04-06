@@ -29,7 +29,7 @@ public class NaiveTxnStack_containsTest {
     public void whenNullItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 boolean result = stack.contains(null);
@@ -43,7 +43,7 @@ public class NaiveTxnStack_containsTest {
     public void whenEmptyStack() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 boolean result = stack.contains("foo");
 
                 assertFalse(result);
@@ -56,7 +56,7 @@ public class NaiveTxnStack_containsTest {
     public void whenStackDoesntContainItem() {
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
-            public void execute(Txn tx) throws Exception {
+            public void call(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 stack.push("3");
@@ -74,7 +74,7 @@ public class NaiveTxnStack_containsTest {
     public void whenContainsItem() {
          StmUtils.atomic(new TxnVoidClosure() {
              @Override
-             public void execute(Txn tx) throws Exception {
+             public void call(Txn tx) throws Exception {
                  stack.push("1");
                  stack.push("2");
                  stack.push("3");
