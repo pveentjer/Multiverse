@@ -6,6 +6,7 @@ import org.multiverse.api.exceptions.*;
 import org.multiverse.api.lifecycle.*;
 import org.multiverse.api.references.*;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.TxnThreadLocal.getRequiredThreadLocalTxn;
@@ -113,6 +114,32 @@ public final class StmUtils {
      */
     public static <K, V> TxnMap<K, V> newTxnHashMap(){
         return txnCollectionsFactory.newHashMap();
+    }
+
+    public static void atomic(final Runnable runnable){
+        if(runnable == null){
+            throw new NullPointerException("runnable can't be null");
+        }
+
+        atomic(new TxnVoidCallable(){
+            @Override
+            public void call(Txn txn) throws Exception {
+                runnable.run();
+            }
+        });
+    }
+
+    public static <E> E atomic(final Callable<E> callable){
+        if(callable == null){
+            throw new NullPointerException("callable can't be null");
+        }
+
+        return atomic(new TxnCallable<E>() {
+            @Override
+            public E call(Txn txn) throws Exception {
+               return callable.call();
+            }
+        });
     }
 
 #foreach($callable in $callables)

@@ -2,6 +2,7 @@ package org.multiverse.api;
 
 import org.multiverse.*;
 import org.multiverse.api.callables.*;
+import java.util.concurrent.Callable;
 
 /**
  * An TxnExecutor is responsible for executing an atomic callable. It is created by the {@link TxnFactoryBuilder}
@@ -36,7 +37,7 @@ import org.multiverse.api.callables.*;
  *
  * <h3>Configuration</h3>
  *
- * <p>The {@link TxnExecutor} can be configured through the {@link TxnFactoryBuilder}. So that for more detail since
+ * <p>The {@link TxnExecutor} can be configured through the {@link TxnFactoryBuilder}. So see that for more details since
  * there are tons of settings to choose from.
  *
  * <h3>Thread-safety</h3>

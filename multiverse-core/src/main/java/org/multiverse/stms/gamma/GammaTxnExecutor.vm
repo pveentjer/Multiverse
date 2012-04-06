@@ -4,18 +4,19 @@ import org.multiverse.api.*;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.callables.*;
 import org.multiverse.stms.gamma.transactions.*;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
 import static org.multiverse.api.TxnThreadLocal.*;
 
 /**
-* An GammaTxnExecutor made for the GammaStm.
-*
-* This code is generated.
-*
-* @author Peter Veentjer
-*/
+ * The {@link TxnExecutor} made for the GammaStm.
+ *
+ * This code is generated.
+ *
+ * @author Peter Veentjer
+ */
 public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
     private static final Logger logger = Logger.getLogger(${txnExecutor.name}.class.getName());
 

@@ -8,17 +8,16 @@ under A (atomicity), C (consistency), I (isolation) semantics.
 Example
 -------------------------
 
-    import org.multiverse.api.*;
-    import org.multiverse.closures.*;
     import org.multiverse.api.references.*;
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final TxnRef<Date> lastModified = newTxnRef(new Date());
+        private final TxnRef<Date> lastModified = newTxnRef();
         private final TxnLong amount = newTxnLong();
 
         public Account(long amount){
            this.amount.set(amount);
+           this.lastModified.set(new Date());
         }
 
         public Date getLastModifiedDate(){
@@ -30,8 +29,8 @@ Example
         }
 
         public static void transfer(final Account from, final Account to, final long amount){
-            atomic(new TxnVoidClosure()){
-                public void execute(Txn txn){
+            atomic(new Runnable()){
+                public void run(){
                     Date date = new Date();
 
                     from.lastModified.set(date);

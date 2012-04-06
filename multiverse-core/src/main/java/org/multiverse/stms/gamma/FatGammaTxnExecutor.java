@@ -4,20 +4,33 @@ import org.multiverse.api.*;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.callables.*;
 import org.multiverse.stms.gamma.transactions.*;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
 import static org.multiverse.api.TxnThreadLocal.*;
 
 /**
-* An GammaTxnExecutor made for the GammaStm.
-*
-* This code is generated.
-*
-* @author Peter Veentjer
-*/
+ * The {@link TxnExecutor} made for the GammaStm.
+ *
+ * This code is generated.
+ *
+ * @author Peter Veentjer
+ */
 public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
     private static final Logger logger = Logger.getLogger(FatGammaTxnExecutor.class.getName());
+
+    public void execute(Runnable runnable){
+        throw new UnsupportedOperationException();
+    }
+
+    public <E> E execute(Callable<E> callable){
+        throw new UnsupportedOperationException();
+    }
+
+    public <E> E executeChecked(Callable<E> callable)throws Exception{
+        throw new UnsupportedOperationException();
+    }
 
     private final PropagationLevel propagationLevel;
 
