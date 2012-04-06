@@ -211,8 +211,8 @@ public class GammaTxnLong_await1WithPredicateTest {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        LongRefAwaitThread thread1 = new LongRefAwaitThread(ref, 10);
-        LongRefAwaitThread thread2 = new LongRefAwaitThread(ref, 20);
+        TxnLongAwaitThread thread1 = new TxnLongAwaitThread(ref, 10);
+        TxnLongAwaitThread thread2 = new TxnLongAwaitThread(ref, 20);
         thread1.start();
         thread2.start();
 

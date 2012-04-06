@@ -34,7 +34,7 @@ public class GammaTxnRef<E> extends BaseGammaTxnRef implements TxnRef<E> {
     }
 
     public GammaTxnRef(final GammaTxn tx, final E value) {
-        super(tx.getConfiguration().stm, TYPE_REF);
+        super(tx.getConfig().stm, TYPE_REF);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         Tranlocal tranlocal = openForConstruction(tx);

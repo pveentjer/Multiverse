@@ -27,7 +27,7 @@ public class GammaTxnDouble extends BaseGammaTxnRef implements TxnDouble {
     }
 
     public GammaTxnDouble(final GammaTxn tx, final double value) {
-        super(tx.getConfiguration().stm, TYPE_DOUBLE);
+        super(tx.getConfig().stm, TYPE_DOUBLE);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         Tranlocal tranlocal = openForConstruction(tx);

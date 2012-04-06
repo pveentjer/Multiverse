@@ -310,7 +310,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
         }
 
         assertEquals(TxnStatus.Aborted, tx.getStatus());
-        assertEquals(maxCapacity + 1, tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
+        assertEquals(maxCapacity + 1, tx.getConfig().getSpeculativeConfiguration().minimalLength);
     }
 
     @Test

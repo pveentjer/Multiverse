@@ -97,7 +97,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfig getConfiguration() {
+        public final GammaTxnConfig getConfig() {
             return config;
         }
 
@@ -359,7 +359,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfig getConfiguration() {
+        public final GammaTxnConfig getConfig() {
             return config;
         }
 
@@ -403,7 +403,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxnConfig getConfiguration() {
+        public final GammaTxnConfig getConfig() {
             return config;
         }
 

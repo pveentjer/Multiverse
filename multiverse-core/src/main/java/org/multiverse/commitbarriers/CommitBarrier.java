@@ -475,7 +475,7 @@ public abstract class CommitBarrier {
             tx.abort();
             throw new IllegalStateException(
                     format("[%s] Didn't expect to encounter an aborted CommitBarrier",
-                            tx.getConfiguration().getFamilyName()));
+                            tx.getConfig().getFamilyName()));
         }
     }
 
@@ -498,7 +498,7 @@ public abstract class CommitBarrier {
         if (!tx.getStatus().isAlive()) {
             throw new DeadTxnException(
                     format("[%s] Txn can't be used for %s since it isn't alive",
-                            tx.getConfiguration().getFamilyName(), operation)
+                            tx.getConfig().getFamilyName(), operation)
             );
         }
     }
@@ -547,11 +547,11 @@ public abstract class CommitBarrier {
                     break;
                 case Committed:
                     String committedMsg = format("Can't await commit on already committed VetoCommitBarrier " +
-                            "with transaction %s", tx.getConfiguration().getFamilyName());
+                            "with transaction %s", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(committedMsg);
                 case Aborted:
                     String abortMsg = format("Can't await commit on already aborted VetoCommitBarrier " +
-                            "with transaction %s", tx.getConfiguration().getFamilyName());
+                            "with transaction %s", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(abortMsg);
                 default:
                     throw new IllegalStateException();
@@ -602,13 +602,13 @@ public abstract class CommitBarrier {
                     tx.abort();
 
                     String abortedMsg = format("Can't call joinCommitUninterruptible on already aborted " +
-                            "CountDownCommitBarrier with transaction %s ", tx.getConfiguration().getFamilyName());
+                            "CountDownCommitBarrier with transaction %s ", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(abortedMsg);
                 case Committed:
                     tx.abort();
 
                     String commitMsg = format("Can't call joinCommitUninterruptible on already committed " +
-                            "CountDownCommitBarrier with transaction %s ", tx.getConfiguration().getFamilyName());
+                            "CountDownCommitBarrier with transaction %s ", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(commitMsg);
                 default:
                     throw new IllegalStateException();
@@ -653,11 +653,11 @@ public abstract class CommitBarrier {
                     break;
                 case Aborted:
                     String abortMsg = format("[%s] Can't call tryJoinCommit on already aborted " +
-                            "CountDownCommitBarrier", tx.getConfiguration().getFamilyName());
+                            "CountDownCommitBarrier", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(abortMsg);
                 case Committed:
                     String commitMsg = format("[%s] Can't call tryJoinCommit on already committed " +
-                            "CountDownCommitBarrier", tx.getConfiguration().getFamilyName());
+                            "CountDownCommitBarrier", tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(commitMsg);
                 default:
                     throw new IllegalStateException();

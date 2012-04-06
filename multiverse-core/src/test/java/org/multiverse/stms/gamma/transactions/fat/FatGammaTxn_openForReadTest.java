@@ -209,7 +209,7 @@ public abstract class FatGammaTxn_openForReadTest<T extends GammaTxn> implements
         }
 
         assertEquals(TxnStatus.Aborted, tx.getStatus());
-        assertEquals(maxCapacity + 1, tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
+        assertEquals(maxCapacity + 1, tx.getConfig().getSpeculativeConfiguration().minimalLength);
     }
 
     @Test

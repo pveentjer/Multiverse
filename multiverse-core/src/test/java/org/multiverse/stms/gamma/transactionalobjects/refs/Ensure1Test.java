@@ -39,7 +39,7 @@ public class Ensure1Test {
 
     public Ensure1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

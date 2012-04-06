@@ -20,7 +20,7 @@ public interface TxnFactory {
      *
      * @return the TxnConfig.
      */
-    TxnConfig getConfiguration();
+    TxnConfig getConfig();
 
     TxnFactoryBuilder getTransactionFactoryBuilder();
 

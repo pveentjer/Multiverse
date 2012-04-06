@@ -37,7 +37,7 @@ public class GammaTxnLong_commute1Test {
 
     public GammaTxnLong_commute1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

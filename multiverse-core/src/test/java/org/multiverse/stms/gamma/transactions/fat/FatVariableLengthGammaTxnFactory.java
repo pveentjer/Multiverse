@@ -26,7 +26,7 @@ public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxnConfig getConfiguration() {
+    public GammaTxnConfig getConfig() {
         return config;
     }
 

@@ -37,7 +37,7 @@ public class GammaTxnRef_commute1Test {
 
     public GammaTxnRef_commute1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

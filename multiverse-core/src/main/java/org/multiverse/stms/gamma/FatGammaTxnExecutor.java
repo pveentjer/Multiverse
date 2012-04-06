@@ -80,7 +80,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -104,7 +104,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
@@ -114,14 +114,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -151,7 +151,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -170,13 +170,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }
@@ -314,7 +314,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -338,7 +338,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
@@ -348,14 +348,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -385,7 +385,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -404,13 +404,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }
@@ -548,7 +548,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -572,7 +572,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
@@ -582,14 +582,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -619,7 +619,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -638,13 +638,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }
@@ -782,7 +782,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -806,7 +806,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
@@ -816,14 +816,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -853,7 +853,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -872,13 +872,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }
@@ -1016,7 +1016,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -1040,7 +1040,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
@@ -1050,14 +1050,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -1087,7 +1087,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -1106,13 +1106,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }
@@ -1251,7 +1251,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing txn [%s] found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                                 }
                             }
 
@@ -1276,7 +1276,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and txn [%s] found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
                     closure.execute(tx);
@@ -1287,14 +1287,14 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but txn [%s] is found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
                         throw new TxnNotAllowedException(
                             format("No txn is allowed for TxnExecutor '%s' with propagation level 'Never'"+
                                 ", but txn '%s' was found",
-                                    txnConfig.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfig.familyName, tx.getConfig().getFamilyName())
                             );
                     }
 
@@ -1326,7 +1326,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
 
@@ -1346,13 +1346,13 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }else{
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing txn [%s] was found",
-                                        txnConfig.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfig.familyName, tx.getConfig().getFamilyName()));
                             }
                         }
                     }

@@ -39,7 +39,7 @@ public class GammaTxnRef_alterAndGet2Test {
 
     public GammaTxnRef_alterAndGet2Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -242,7 +242,7 @@ public class GammaTxnRef_alterAndGet2Test {
 
         final Long newValue = 11L;
 
-        RefAwaitThread<Long> thread = new RefAwaitThread<Long>(ref, newValue);
+        TxnRefAwaitThread<Long> thread = new TxnRefAwaitThread<Long>(ref, newValue);
         thread.start();
 
         sleepMs(500);

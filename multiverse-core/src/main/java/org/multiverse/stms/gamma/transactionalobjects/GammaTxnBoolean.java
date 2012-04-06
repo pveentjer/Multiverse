@@ -30,7 +30,7 @@ public class GammaTxnBoolean extends BaseGammaTxnRef implements TxnBoolean {
     }
 
     public GammaTxnBoolean(final GammaTxn tx, final boolean value) {
-        super(tx.getConfiguration().stm, TYPE_BOOLEAN);
+        super(tx.getConfig().stm, TYPE_BOOLEAN);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         Tranlocal tranlocal = openForConstruction(tx);

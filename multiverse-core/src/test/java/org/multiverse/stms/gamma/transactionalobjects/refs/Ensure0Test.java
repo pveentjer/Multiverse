@@ -35,7 +35,7 @@ public class Ensure0Test implements GammaConstants {
 
     public Ensure0Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

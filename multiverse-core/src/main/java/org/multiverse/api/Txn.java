@@ -54,7 +54,7 @@ public interface Txn {
      *
      * @return the TxnConfig.
      */
-    TxnConfig getConfiguration();
+    TxnConfig getConfig();
 
     /**
      * Returns the status of this Txn.

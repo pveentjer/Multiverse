@@ -196,7 +196,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         assumeTrue(maxCapacity < Integer.MAX_VALUE);
 
         T tx = newTransaction();
-        System.out.println(tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
+        System.out.println(tx.getConfig().getSpeculativeConfiguration().minimalLength);
 
         for (int k = 0; k < maxCapacity; k++) {
             GammaTxnLong ref = new GammaTxnLong(stm, 0);
@@ -211,7 +211,7 @@ public abstract class FatGammaTxn_openForWriteTest<T extends GammaTxn> implement
         }
 
         assertEquals(TxnStatus.Aborted, tx.getStatus());
-        assertEquals(maxCapacity + 1, tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
+        assertEquals(maxCapacity + 1, tx.getConfig().getSpeculativeConfiguration().minimalLength);
     }
 
     @Test

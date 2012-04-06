@@ -19,7 +19,7 @@ public abstract class AbstractGammaTxnExecutor implements GammaTxnExecutor {
             throw new NullPointerException();
         }
         this.txnFactory = txnFactory;
-        this.txnConfig = txnFactory.getConfiguration();
+        this.txnConfig = txnFactory.getConfig();
         this.backoffPolicy = txnConfig.backoffPolicy;
     }
 }

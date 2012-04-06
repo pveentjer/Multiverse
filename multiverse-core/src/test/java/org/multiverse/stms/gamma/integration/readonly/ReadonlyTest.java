@@ -199,7 +199,7 @@ public class ReadonlyTest {
         block.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
-                assertFalse(tx.getConfiguration().isReadonly());
+                assertFalse(tx.getConfig().isReadonly());
                 GammaTxn btx = (GammaTxn) tx;
                 ref.getAndSet(btx, newValue);
             }
@@ -219,7 +219,7 @@ public class ReadonlyTest {
         stm.newTxnFactoryBuilder().newTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
-                assertFalse(tx.getConfiguration().isReadonly());
+                assertFalse(tx.getConfig().isReadonly());
                 GammaTxn btx = (GammaTxn) tx;
                 ref.getAndSet(btx, ref.get(btx) + 1);
             }

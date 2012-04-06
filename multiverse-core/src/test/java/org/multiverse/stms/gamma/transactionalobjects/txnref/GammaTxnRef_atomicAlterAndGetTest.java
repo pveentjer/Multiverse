@@ -162,7 +162,7 @@ public class GammaTxnRef_atomicAlterAndGetTest {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        RefAwaitThread thread = new RefAwaitThread(ref, initialValue + 1);
+        TxnRefAwaitThread thread = new TxnRefAwaitThread(ref, initialValue + 1);
         thread.start();
 
         sleepMs(500);

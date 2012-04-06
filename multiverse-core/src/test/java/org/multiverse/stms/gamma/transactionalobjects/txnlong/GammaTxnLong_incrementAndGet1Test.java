@@ -34,7 +34,7 @@ public class GammaTxnLong_incrementAndGet1Test {
 
     public GammaTxnLong_incrementAndGet1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -285,7 +285,7 @@ public class GammaTxnLong_incrementAndGet1Test {
         long initialVersion = ref.getVersion();
 
         long amount = 4;
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + amount);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue + amount);
         thread.start();
 
         sleepMs(500);

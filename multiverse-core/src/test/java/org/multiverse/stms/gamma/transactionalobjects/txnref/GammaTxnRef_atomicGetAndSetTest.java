@@ -114,7 +114,7 @@ public class GammaTxnRef_atomicGetAndSetTest {
         long initialVersion = ref.getVersion();
 
         String newValue = "newValue";
-        RefAwaitThread thread = new RefAwaitThread(ref, newValue);
+        TxnRefAwaitThread thread = new TxnRefAwaitThread(ref, newValue);
         thread.start();
 
         sleepMs(500);

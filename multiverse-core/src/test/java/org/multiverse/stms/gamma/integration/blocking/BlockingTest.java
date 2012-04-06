@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
-import org.multiverse.stms.gamma.transactionalobjects.txnlong.LongRefAwaitThread;
+import org.multiverse.stms.gamma.transactionalobjects.txnlong.TxnLongAwaitThread;
 
 import static org.multiverse.TestUtils.assertAlive;
 import static org.multiverse.TestUtils.sleepMs;
@@ -25,7 +25,7 @@ public class BlockingTest {
     public void whenDesiredValueNotAvailable_thenThreadBlocks() {
         GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
-        LongRefAwaitThread t = new LongRefAwaitThread(ref, 1);
+        TxnLongAwaitThread t = new TxnLongAwaitThread(ref, 1);
         t.start();
 
         sleepMs(1000);
@@ -36,7 +36,7 @@ public class BlockingTest {
     public void whenDesiredValueStillNotAvailable_thenThreadBlocks() {
         GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
-        LongRefAwaitThread t = new LongRefAwaitThread(ref, 2);
+        TxnLongAwaitThread t = new TxnLongAwaitThread(ref, 2);
         t.start();
 
         sleepMs(2000);

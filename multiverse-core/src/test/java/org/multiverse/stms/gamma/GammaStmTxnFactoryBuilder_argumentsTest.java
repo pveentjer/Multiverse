@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GammaStmTransactionFactoryBuilder_argumentsTest {
+public class GammaStmTxnFactoryBuilder_argumentsTest {
     private GammaStm stm;
 
     @Before

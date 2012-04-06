@@ -33,7 +33,7 @@ public class GammaTxnLong_set2Test {
 
     public GammaTxnLong_set2Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

@@ -30,7 +30,7 @@ public class GammaTxnInteger extends BaseGammaTxnRef implements TxnInteger {
     }
 
     public GammaTxnInteger(final GammaTxn tx, final int value) {
-        super(tx.getConfiguration().stm, TYPE_INT);
+        super(tx.getConfig().stm, TYPE_INT);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         Tranlocal tranlocal = openForConstruction(tx);

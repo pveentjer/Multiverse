@@ -43,7 +43,7 @@ public class GammaTxnRef_commute2Test {
 
     public GammaTxnRef_commute2Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -373,7 +373,7 @@ public class GammaTxnRef_commute2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        RefAwaitThread thread = new RefAwaitThread(ref, initialValue + 1);
+        TxnRefAwaitThread thread = new TxnRefAwaitThread(ref, initialValue + 1);
         thread.start();
 
         sleepMs(500);

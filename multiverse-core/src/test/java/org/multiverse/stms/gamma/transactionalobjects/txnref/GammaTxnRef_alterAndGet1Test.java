@@ -14,6 +14,7 @@ import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.txnref.TxnRefAwaitThread;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -39,7 +40,7 @@ public class GammaTxnRef_alterAndGet1Test {
 
     public GammaTxnRef_alterAndGet1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -229,7 +230,7 @@ public class GammaTxnRef_alterAndGet1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        RefAwaitThread thread = new RefAwaitThread<Long>(ref, initialValue + 1L);
+        TxnRefAwaitThread thread = new TxnRefAwaitThread<Long>(ref, initialValue + 1L);
         thread.start();
 
         sleepMs(500);

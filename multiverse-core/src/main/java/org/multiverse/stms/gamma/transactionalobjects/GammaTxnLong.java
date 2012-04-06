@@ -44,7 +44,7 @@ public class GammaTxnLong extends BaseGammaTxnRef implements TxnLong {
     }
 
     public GammaTxnLong(final GammaTxn tx, final long value) {
-        super(tx.getConfiguration().stm, TYPE_LONG);
+        super(tx.getConfig().stm, TYPE_LONG);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         Tranlocal tranlocal = openForConstruction(tx);

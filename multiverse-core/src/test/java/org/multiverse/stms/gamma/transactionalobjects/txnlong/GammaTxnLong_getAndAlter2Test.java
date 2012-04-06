@@ -37,7 +37,7 @@ public class GammaTxnLong_getAndAlter2Test {
 
     public GammaTxnLong_getAndAlter2Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -174,7 +174,7 @@ public class GammaTxnLong_getAndAlter2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + 1);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue + 1);
         thread.start();
 
         sleepMs(500);

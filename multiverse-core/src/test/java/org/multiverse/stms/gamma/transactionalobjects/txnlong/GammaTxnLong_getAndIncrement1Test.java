@@ -35,7 +35,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
 
     public GammaTxnLong_getAndIncrement1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -111,7 +111,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         long initialVersion = ref.getVersion();
 
         long amount = 2;
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + amount);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue + amount);
         thread.start();
 
         sleepMs(500);

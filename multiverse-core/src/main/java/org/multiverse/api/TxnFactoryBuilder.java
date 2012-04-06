@@ -24,7 +24,7 @@ public interface TxnFactoryBuilder {
      *
      * @return the used TxnConfig.
      */
-    TxnConfig getConfiguration();
+    TxnConfig getConfig();
 
     /**
      * Sets if the {@link org.multiverse.api.exceptions.ControlFlowError} is reused. Normally you don't want to reuse them

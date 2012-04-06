@@ -8,7 +8,7 @@ import org.multiverse.stms.gamma.transactions.GammaTxnFactoryBuilder;
 
 import static org.junit.Assert.fail;
 
-public class GammaStm_transactionFactoryValidationTest {
+public class GammaStm_txnFactoryValidationTest {
     private GammaStm stm;
 
     @Before

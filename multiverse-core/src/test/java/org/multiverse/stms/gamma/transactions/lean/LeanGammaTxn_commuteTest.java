@@ -47,6 +47,6 @@ public abstract class LeanGammaTxn_commuteTest<T extends GammaTxn> {
         assertWriteBiased(ref);
         assertIsAborted(tx);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertTrue(tx.getConfiguration().speculativeConfiguration.get().commuteDetected);
+        assertTrue(tx.getConfig().speculativeConfiguration.get().commuteDetected);
     }
 }

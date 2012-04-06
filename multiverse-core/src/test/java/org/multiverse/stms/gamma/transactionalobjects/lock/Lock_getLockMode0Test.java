@@ -35,7 +35,7 @@ public class Lock_getLockMode0Test {
 
     public Lock_getLockMode0Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

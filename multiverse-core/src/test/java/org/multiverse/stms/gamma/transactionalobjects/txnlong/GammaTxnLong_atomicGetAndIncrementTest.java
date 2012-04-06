@@ -121,7 +121,7 @@ public class GammaTxnLong_atomicGetAndIncrementTest {
         long initialVersion = ref.getVersion();
 
         int amount = 1;
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + amount);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue + amount);
         thread.start();
 
         sleepMs(500);

@@ -31,7 +31,7 @@ public class GammaTxnLong_decrement0Test {
 
     public GammaTxnLong_decrement0Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before
@@ -225,7 +225,7 @@ public class GammaTxnLong_decrement0Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue - 1);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue - 1);
         thread.start();
 
         sleepMs(500);

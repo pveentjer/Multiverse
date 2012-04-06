@@ -9,7 +9,7 @@ import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
-import org.multiverse.stms.gamma.transactionalobjects.txnlong.LongRefAwaitThread;
+import org.multiverse.stms.gamma.transactionalobjects.txnlong.TxnLongAwaitThread;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -165,7 +165,7 @@ public class GammaTxnRef_atomicGetAndAlterTest {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + 1);
+        TxnLongAwaitThread thread = new TxnLongAwaitThread(ref, initialValue + 1);
         thread.start();
 
         sleepMs(500);

@@ -17,7 +17,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
+public class GammaStm_txnFactoryBuilderTest implements GammaConstants{
     private GammaStm stm;
 
     @Before
@@ -62,8 +62,8 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
         TxnListener listener = mock(TxnListener.class);
         GammaTxnFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener);
 
-        assertEquals(asList(listener), newBuilder.getConfiguration().getPermanentListeners());
-        assertTrue(oldBuilder.getConfiguration().getPermanentListeners().isEmpty());
+        assertEquals(asList(listener), newBuilder.getConfig().getPermanentListeners());
+        assertTrue(oldBuilder.getConfig().getPermanentListeners().isEmpty());
     }
 
     @Test
@@ -73,13 +73,13 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
         GammaTxnFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener)
                 .addPermanentListener(listener);
 
-        assertEquals(asList(listener, listener), newBuilder.getConfiguration().getPermanentListeners());
+        assertEquals(asList(listener, listener), newBuilder.getConfig().getPermanentListeners());
     }
 
     @Test
     public void whenNoPermanentListenersAdded_thenEmptyList() {
         GammaTxnFactoryBuilder builder = stm.newTxnFactoryBuilder();
-        assertTrue(builder.getConfiguration().getPermanentListeners().isEmpty());
+        assertTrue(builder.getConfig().getPermanentListeners().isEmpty());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .addPermanentListener(listener1)
                 .addPermanentListener(listener2);
 
-        List<TxnListener> listeners = builder.getConfiguration().getPermanentListeners();
+        List<TxnListener> listeners = builder.getConfig().getPermanentListeners();
         assertEquals(asList(listener1, listener2), listeners);
     }
 
@@ -100,7 +100,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .addPermanentListener(mock(TxnListener.class))
                 .addPermanentListener(mock(TxnListener.class));
 
-        List<TxnListener> listeners = builder.getConfiguration().getPermanentListeners();
+        List<TxnListener> listeners = builder.getConfig().getPermanentListeners();
 
         try {
             listeners.clear();
@@ -138,15 +138,15 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setReadLockMode(readLockMode)
                 .newTransactionFactory();
 
-        assertEquals(readLockMode, txFactory.getConfiguration().readLockMode);
-        assertEquals(readLockMode.asInt(), txFactory.getConfiguration().readLockModeAsInt);
+        assertEquals(readLockMode, txFactory.getConfig().readLockMode);
+        assertEquals(readLockMode.asInt(), txFactory.getConfig().readLockModeAsInt);
 
         if (readLockMode.asInt() > writeLockMode.asInt()) {
-            assertEquals(readLockMode, txFactory.getConfiguration().getWriteLockMode());
-            assertEquals(readLockMode.asInt(), txFactory.getConfiguration().writeLockModeAsInt);
+            assertEquals(readLockMode, txFactory.getConfig().getWriteLockMode());
+            assertEquals(readLockMode.asInt(), txFactory.getConfig().writeLockModeAsInt);
         } else {
-            assertEquals(writeLockMode, txFactory.getConfiguration().getWriteLockMode());
-            assertEquals(writeLockMode.asInt(), txFactory.getConfiguration().writeLockModeAsInt);
+            assertEquals(writeLockMode, txFactory.getConfig().getWriteLockMode());
+            assertEquals(writeLockMode.asInt(), txFactory.getConfig().writeLockModeAsInt);
         }
     }
 
@@ -180,8 +180,8 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                     .setWriteLockMode(writeLock)
                     .newTransactionFactory();
 
-            assertEquals(readLock, txFactory.getConfiguration().getReadLockMode());
-            assertEquals(writeLock, txFactory.getConfiguration().getWriteLockMode());
+            assertEquals(readLock, txFactory.getConfig().getReadLockMode());
+            assertEquals(writeLock, txFactory.getConfig().getWriteLockMode());
         } else {
             try {
                 stm.newTxnFactoryBuilder()
@@ -201,7 +201,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setBlockingAllowed(false)
                 .newTransactionFactory();
 
-        assertFalse(txFactory.getConfiguration().isReadTrackingEnabled());
+        assertFalse(txFactory.getConfig().isReadTrackingEnabled());
     }
 
     @Test
@@ -211,7 +211,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setSpeculative(true)
                 .newTransactionFactory();
 
-        GammaTxnConfig configuration = txFactory.getConfiguration();
+        GammaTxnConfig configuration = txFactory.getConfig();
         assertFalse(configuration.getSpeculativeConfiguration().fat);
         assertTrue(configuration.isSpeculative());
     }
@@ -224,7 +224,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .newTransactionFactory();
 
 
-        GammaTxnConfig configuration = txFactory.getConfiguration();
+        GammaTxnConfig configuration = txFactory.getConfig();
         assertTrue(configuration.getSpeculativeConfiguration().fat);
         assertTrue(configuration.isSpeculative());
     }

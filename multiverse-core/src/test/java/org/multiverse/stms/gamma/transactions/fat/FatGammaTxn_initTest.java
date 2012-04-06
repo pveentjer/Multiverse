@@ -34,6 +34,6 @@ public abstract class FatGammaTxn_initTest<T extends GammaTxn> {
         config.init();
         tx.init(config);
 
-        assertSame(config, tx.getConfiguration());
+        assertSame(config, tx.getConfig());
     }
 }

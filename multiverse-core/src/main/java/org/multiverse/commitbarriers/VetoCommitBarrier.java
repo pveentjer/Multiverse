@@ -109,12 +109,12 @@ public final class VetoCommitBarrier extends CommitBarrier {
                 case Aborted:
                     String abortMsg = format(
                             "[%s] Can't veto commit on already aborted VetoCommitBarrier",
-                            tx.getConfiguration().getFamilyName());
+                            tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(abortMsg);
                 case Committed:
                     String commitMsg = format(
                             "[%s] Can't veto commit on already committed VetoCommitBarrier",
-                            tx.getConfiguration().getFamilyName());
+                            tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(commitMsg);
                 default:
                     throw new IllegalStateException();

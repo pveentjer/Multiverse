@@ -12,7 +12,7 @@ import static org.junit.Assert.assertSame;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertRefHasLockMode;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
-public class GammaRef_getAndSetAndLock3Test {
+public class GammaTxnRef_getAndSetAndLock3Test {
 
     private GammaStm stm;
 

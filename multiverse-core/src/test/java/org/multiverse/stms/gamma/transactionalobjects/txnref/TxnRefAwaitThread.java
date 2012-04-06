@@ -1,25 +1,25 @@
-package org.multiverse.stms.gamma.transactionalobjects.txnlong;
+package org.multiverse.stms.gamma.transactionalobjects.txnref;
 
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.predicates.LongPredicate;
-import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.api.predicates.Predicate;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
-public class LongRefAwaitThread extends TestThread {
-    private final GammaTxnLong ref;
-    private final LongPredicate predicate;
+public class TxnRefAwaitThread<T> extends TestThread {
+    private final GammaTxnRef<T> ref;
+    private final Predicate<T> predicate;
 
-    public LongRefAwaitThread(GammaTxnLong ref, final long awaitValue) {
-        this(ref, new LongPredicate() {
+    public TxnRefAwaitThread(GammaTxnRef<T> ref, final T awaitValue) {
+        this(ref, new Predicate<T>() {
             @Override
-            public boolean evaluate(long current) {
+            public boolean evaluate(T current) {
                 return current == awaitValue;
             }
         });
     }
 
-    public LongRefAwaitThread(GammaTxnLong ref, LongPredicate predicate) {
+    public TxnRefAwaitThread(GammaTxnRef ref, Predicate<T> predicate) {
         this.ref = ref;
         this.predicate = predicate;
     }

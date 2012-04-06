@@ -572,7 +572,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public abstract Tranlocal locate(BaseGammaTxnRef o);
 
     @Override
-    public final GammaTxnConfig getConfiguration() {
+    public final GammaTxnConfig getConfig() {
         return config;
     }
 

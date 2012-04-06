@@ -22,7 +22,7 @@ public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxnConfig getConfiguration() {
+    public GammaTxnConfig getConfig() {
         return config;
     }
 

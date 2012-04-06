@@ -196,11 +196,11 @@ public final class CountDownCommitBarrier extends CommitBarrier {
                 tx.abort();
                 throw new PreparedTxnException(
                         format("[%s] Can't call incParties on non active transaction because it is %s",
-                                tx.getConfiguration().getFamilyName(), tx.getStatus()));
+                                tx.getConfig().getFamilyName(), tx.getStatus()));
             } else {
                 throw new DeadTxnException(
                         format("[%s] Can't call incParties on non active transaction because it is %s",
-                                tx.getConfiguration().getFamilyName(), tx.getStatus()));
+                                tx.getConfig().getFamilyName(), tx.getStatus()));
             }
 
         }
@@ -222,11 +222,11 @@ public final class CountDownCommitBarrier extends CommitBarrier {
                     break;
                 case Aborted:
                     String abortMsg = format("[%s] Can't call incParties on already aborted CountDownCommitBarrier",
-                            tx.getConfiguration().getFamilyName());
+                            tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(abortMsg);
                 case Committed:
                     String commitMsg = format("[%s] Can't call incParties on already committed CountDownCommitBarrier",
-                            tx.getConfiguration().getFamilyName());
+                            tx.getConfig().getFamilyName());
                     throw new CommitBarrierOpenException(commitMsg);
                 default:
                     throw new IllegalStateException();

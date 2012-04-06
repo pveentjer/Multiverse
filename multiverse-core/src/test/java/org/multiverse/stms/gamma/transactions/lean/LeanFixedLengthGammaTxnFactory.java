@@ -31,7 +31,7 @@ public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxnConfig getConfiguration() {
+    public GammaTxnConfig getConfig() {
         return config;
     }
 

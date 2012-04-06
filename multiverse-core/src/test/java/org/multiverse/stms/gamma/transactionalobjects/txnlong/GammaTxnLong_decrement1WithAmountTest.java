@@ -33,7 +33,7 @@ public class GammaTxnLong_decrement1WithAmountTest {
 
     public GammaTxnLong_decrement1WithAmountTest(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
-        this.stm = transactionFactory.getConfiguration().getStm();
+        this.stm = transactionFactory.getConfig().getStm();
     }
 
     @Before

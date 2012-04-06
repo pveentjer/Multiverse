@@ -13,7 +13,7 @@ import org.multiverse.stms.gamma.GammaTxnExecutor;
 public interface GammaTxnFactoryBuilder extends TxnFactoryBuilder {
 
     @Override
-    GammaTxnConfig getConfiguration();
+    GammaTxnConfig getConfig();
 
     GammaTxnFactoryBuilder setFat();
 
