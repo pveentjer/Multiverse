@@ -14,8 +14,8 @@ Example
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final Ref<Date> lastModified = newRef(new Date());
-        private final LongRef amount = newLongRef();
+        private final TxnRef<Date> lastModified = newTxnRef(new Date());
+        private final TxnLong amount = newTxnLong();
 
         public Account(long amount){
            this.amount.set(amount);
@@ -30,8 +30,8 @@ Example
         }
 
         public static void transfer(final Account from, final Account to, final long amount){
-            atomic(new AtomicVoidClosure()){
-                public void execute(Transaction t){
+            atomic(new TxnVoidClosure()){
+                public void execute(Txn txn){
                     Date date = new Date();
 
                     from.lastModified.set(date);
