@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.BackoffPolicy;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 /**
  * An abstract {@link GammaTransactionExecutor} implementation.
@@ -10,16 +10,16 @@ import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
  * @author Peter Veentjer.
  */
 public abstract class AbstractGammaTransactionExecutor implements GammaTransactionExecutor {
-    protected final GammaTransactionFactory transactionFactory;
-    protected final GammaTransactionConfiguration transactionConfiguration;
+    protected final GammaTxnFactory txnFactory;
+    protected final GammaTxnConfiguration txnConfiguration;
     protected final BackoffPolicy backoffPolicy;
 
-    public AbstractGammaTransactionExecutor(final GammaTransactionFactory transactionFactory) {
-        if (transactionFactory == null) {
+    public AbstractGammaTransactionExecutor(final GammaTxnFactory txnFactory) {
+        if (txnFactory == null) {
             throw new NullPointerException();
         }
-        this.transactionFactory = transactionFactory;
-        this.transactionConfiguration = transactionFactory.getConfiguration();
-        this.backoffPolicy = transactionConfiguration.backoffPolicy;
+        this.txnFactory = txnFactory;
+        this.txnConfiguration = txnFactory.getConfiguration();
+        this.backoffPolicy = txnConfiguration.backoffPolicy;
     }
 }

@@ -10,12 +10,12 @@ import java.util.List;
  * complicating its usage. So all the configurational properties of the transaction are contained in
  * this structure.
  * <p/>
- * The same TransactionConfiguration is used for multiple transactions. Each TransactionFactory has just a
- * single configuration and all Transactions created by that TransactionFactory, share that configuration.
+ * The same TxnConfiguration is used for multiple transactions. Each TxnFactory has just a
+ * single configuration and all Transactions created by that TxnFactory, share that configuration.
  *
  * @author Peter Veentjer.
  */
-public interface TransactionConfiguration {
+public interface TxnConfiguration {
 
     /**
      * Returns the Stm that creates transactions based on this configuration.
@@ -31,7 +31,7 @@ public interface TransactionConfiguration {
      * be problematic when debugging.
      *
      * @return true if the ControlFlowError is reused.
-     * @see TransactionFactoryBuilder#setControlFlowErrorsReused(boolean)
+     * @see TxnFactoryBuilder#setControlFlowErrorsReused(boolean)
      */
     boolean isControlFlowErrorsReused();
 
@@ -40,7 +40,7 @@ public interface TransactionConfiguration {
      * transactions.
      *
      * @return the IsolationLevel.
-     * @see TransactionFactoryBuilder#setIsolationLevel(IsolationLevel)
+     * @see TxnFactoryBuilder#setIsolationLevel(IsolationLevel)
      */
     IsolationLevel getIsolationLevel();
 
@@ -49,7 +49,7 @@ public interface TransactionConfiguration {
      * timeout.
      *
      * @return the total remaining timeout.
-     * @see TransactionFactoryBuilder#setTimeoutNs(long)
+     * @see TxnFactoryBuilder#setTimeoutNs(long)
      */
     long getTimeoutNs();
 
@@ -58,7 +58,7 @@ public interface TransactionConfiguration {
      * is dealing with nesting of transactions.
      *
      * @return the PropagationLevel used.
-     * @see org.multiverse.api.TransactionFactoryBuilder#setPropagationLevel(PropagationLevel)
+     * @see TxnFactoryBuilder#setPropagationLevel(PropagationLevel)
      */
     PropagationLevel getPropagationLevel();
 
@@ -66,7 +66,7 @@ public interface TransactionConfiguration {
      * Returns the TraceLevel. With the TraceLevel you have control on the logging.
      *
      * @return the TraceLevel.
-     * @see org.multiverse.api.TransactionFactoryBuilder#setTraceLevel(TraceLevel)
+     * @see TxnFactoryBuilder#setTraceLevel(TraceLevel)
      */
     TraceLevel getTraceLevel();
 
@@ -74,7 +74,7 @@ public interface TransactionConfiguration {
      * Returns the BackoffPolicy used by the Stm when a transaction conflicts with another transaction.
      *
      * @return the BackoffPolicy used.
-     * @see TransactionFactoryBuilder#setBackoffPolicy(BackoffPolicy)
+     * @see TxnFactoryBuilder#setBackoffPolicy(BackoffPolicy)
      */
     BackoffPolicy getBackoffPolicy();
 
@@ -87,7 +87,7 @@ public interface TransactionConfiguration {
      * of transactions.
      *
      * @return true if speculative configuration is enabled.
-     * @see TransactionFactoryBuilder#setSpeculative(boolean)
+     * @see TxnFactoryBuilder#setSpeculative(boolean)
      */
     boolean isSpeculative();
 
@@ -97,7 +97,7 @@ public interface TransactionConfiguration {
      * about similar types of transactions like profiling.
      *
      * @return the familyName. The returned value can be null.
-     * @see TransactionFactoryBuilder#setFamilyName(String)
+     * @see TxnFactoryBuilder#setFamilyName(String)
      */
     String getFamilyName();
 
@@ -106,7 +106,7 @@ public interface TransactionConfiguration {
      * new objects being created.
      *
      * @return true if readonly, false otherwise.
-     * @see TransactionFactoryBuilder#setReadonly(boolean)
+     * @see TxnFactoryBuilder#setReadonly(boolean)
      */
     boolean isReadonly();
 
@@ -115,7 +115,7 @@ public interface TransactionConfiguration {
      * readable (perhaps it is locked).
      *
      * @return the maximum number of spins
-     * @see org.multiverse.api.TransactionFactoryBuilder#setSpinCount(int)
+     * @see TxnFactoryBuilder#setSpinCount(int)
      */
     int getSpinCount();
 
@@ -123,7 +123,7 @@ public interface TransactionConfiguration {
      * Gets the current LockMode for all reads.
      *
      * @return the current LockMode for all reads.
-     * @see TransactionFactoryBuilder#setReadLockMode(LockMode)
+     * @see TxnFactoryBuilder#setReadLockMode(LockMode)
      */
     LockMode getReadLockMode();
 
@@ -131,7 +131,7 @@ public interface TransactionConfiguration {
      * Gets the current LockMode for all writes.
      *
      * @return the current LockMode for all writes.
-     * @see TransactionFactoryBuilder#setWriteLockMode(LockMode)
+     * @see TxnFactoryBuilder#setWriteLockMode(LockMode)
      */
     LockMode getWriteLockMode();
 
@@ -140,7 +140,7 @@ public interface TransactionConfiguration {
      * but forces writes that cause no change.
      *
      * @return true of dirty check is enabled.
-     * @see org.multiverse.api.TransactionFactoryBuilder#setDirtyCheckEnabled(boolean)
+     * @see TxnFactoryBuilder#setDirtyCheckEnabled(boolean)
      */
     boolean isDirtyCheckEnabled();
 
@@ -150,7 +150,7 @@ public interface TransactionConfiguration {
      * the reads not to be registered on some datastructure so that they are tracked.
      *
      * @return true if the transaction does automatic read tracking, false otherwise.
-     * @see TransactionFactoryBuilder#setReadTrackingEnabled(boolean)
+     * @see TxnFactoryBuilder#setReadTrackingEnabled(boolean)
      */
     boolean isReadTrackingEnabled();
 
@@ -159,7 +159,7 @@ public interface TransactionConfiguration {
      * that a Transaction is able to block waiting for some change.
      *
      * @return true if explicit retry is allowed, false otherwise.
-     * @see TransactionFactoryBuilder#setBlockingAllowed(boolean)
+     * @see TxnFactoryBuilder#setBlockingAllowed(boolean)
      */
     boolean isBlockingAllowed();
 
@@ -167,7 +167,7 @@ public interface TransactionConfiguration {
      * Checks if the Transaction can be interrupted if it is blocking.
      *
      * @return true if the Transaction can be interrupted if it is blocking, false otherwise.
-     * @see TransactionFactoryBuilder#setInterruptible(boolean)
+     * @see TxnFactoryBuilder#setInterruptible(boolean)
      */
     boolean isInterruptible();
 
@@ -175,7 +175,7 @@ public interface TransactionConfiguration {
      * Returns an unmodifiable list containing all permanent TransactionListener.
      *
      * @return unmodifiable List containing all permanent TransactionListeners.
-     * @see TransactionFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)
+     * @see TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)
      */
     List<TransactionListener> getPermanentListeners();
 
@@ -185,7 +185,7 @@ public interface TransactionConfiguration {
      * TooManyRetryExceptions it could be that the objects are just not concurrent enough.
      *
      * @return the maxRetries.
-     * @see TransactionFactoryBuilder#setMaxRetries(int)
+     * @see TxnFactoryBuilder#setMaxRetries(int)
      */
     int getMaxRetries();
 }

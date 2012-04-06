@@ -9,7 +9,7 @@ import org.multiverse.stms.gamma.GammaObjectPool;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
 
 public class RawUpdateDriver implements GammaConstants {
@@ -51,7 +51,7 @@ public class RawUpdateDriver implements GammaConstants {
         final long txCount = 1000 * 1000 * 1000;
 
         final FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
-                new GammaTransactionConfiguration(stm).setWriteLockMode(writeLockMode));
+                new GammaTxnConfiguration(stm).setWriteLockMode(writeLockMode));
         final GammaObjectPool pool = tx.pool;
 
         final GammaLongRef ref = new GammaLongRef(stm, 0);

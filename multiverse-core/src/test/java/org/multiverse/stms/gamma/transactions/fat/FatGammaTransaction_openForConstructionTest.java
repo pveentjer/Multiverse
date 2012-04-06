@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -24,13 +24,13 @@ public abstract class FatGammaTransaction_openForConstructionTest<T extends Gamm
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     @Test
     public void whenReadonlyTransaction() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadonly(true);
 
         GammaTransaction tx = newTransaction(config);

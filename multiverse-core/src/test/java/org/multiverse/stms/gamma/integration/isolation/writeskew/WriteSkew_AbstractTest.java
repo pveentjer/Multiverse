@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -25,7 +25,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         stm = (GammaStm) getGlobalStmInstance();
     }
 
-    public abstract T newTransaction(GammaTransactionConfiguration config);
+    public abstract T newTransaction(GammaTxnConfiguration config);
 
     @After
     public void tearDown() {
@@ -38,7 +38,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -65,7 +65,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .setWriteLockMode(writeLockMode);
@@ -92,7 +92,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .setControlFlowErrorsReused(false);
@@ -127,7 +127,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -155,7 +155,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Snapshot);
 
@@ -178,7 +178,7 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTransaction> {
         GammaLongRef ref1 = new GammaLongRef(stm);
         GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable);
 

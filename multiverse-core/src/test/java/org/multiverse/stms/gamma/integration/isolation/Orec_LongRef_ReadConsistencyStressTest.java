@@ -16,10 +16,10 @@ import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -297,7 +297,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
     class FixedReadingThread extends TestThread {
 
         private FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(
-                new GammaTransactionConfiguration(stm, refs.length)
+                new GammaTxnConfiguration(stm, refs.length)
                         .setMaximumPoorMansConflictScanLength(0)
                         .setDirtyCheckEnabled(false)
         );
@@ -365,7 +365,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
     class VariableReadingThread extends TestThread {
 
         private FatVariableLengthGammaTransaction tx = new FatVariableLengthGammaTransaction(
-                new GammaTransactionConfiguration(stm, refs.length)
+                new GammaTxnConfiguration(stm, refs.length)
                         .setMaximumPoorMansConflictScanLength(0)
                         .setDirtyCheckEnabled(false)
         );
@@ -439,13 +439,13 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refs.length)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refs.length)
                     .setMaximumPoorMansConflictScanLength(0)
                     .setMaxRetries(100000)
                     .setSpeculative(false)
                     .setDirtyCheckEnabled(false);
 
-            block = new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+            block = new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
 
             long iteration = 0;
             while (!stop) {

@@ -21,14 +21,14 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
 
     private final PropagationLevel propagationLevel;
 
-    public FatGammaTransactionExecutor(final GammaTransactionFactory transactionFactory) {
-        super(transactionFactory);
-        this.propagationLevel = transactionConfiguration.propagationLevel;
+    public FatGammaTransactionExecutor(final GammaTxnFactory txnFactory) {
+        super(txnFactory);
+        this.propagationLevel = txnConfiguration.propagationLevel;
     }
 
     @Override
-    public GammaTransactionFactory getTransactionFactory(){
-        return transactionFactory;
+    public GammaTxnFactory getTransactionFactory(){
+        return txnFactory;
     }
 
     @Override
@@ -65,22 +65,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -89,74 +89,74 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     return closure.execute(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
@@ -167,16 +167,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -208,31 +208,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -254,15 +254,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
          @Override
@@ -299,22 +299,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -323,74 +323,74 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     return closure.execute(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
@@ -401,16 +401,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -442,31 +442,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -488,15 +488,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
          @Override
@@ -533,22 +533,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -557,74 +557,74 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     return closure.execute(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
@@ -635,16 +635,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -676,31 +676,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -722,15 +722,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
          @Override
@@ -767,22 +767,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -791,74 +791,74 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     return closure.execute(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
@@ -869,16 +869,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -910,31 +910,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -956,15 +956,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
          @Override
@@ -1001,22 +1001,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -1025,74 +1025,74 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     return closure.execute(tx);
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     return closure.execute(null);
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
@@ -1103,16 +1103,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -1144,31 +1144,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return result;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -1190,15 +1190,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
          @Override
@@ -1235,23 +1235,23 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Requires:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level and no transaction found, starting a new transaction",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         atomic(tx, transactionContainer,pool, closure);
                         return;
                     } else {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Requires' propagation level, and existing transaction [%s] found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                                 }
                             }
 
@@ -1261,22 +1261,22 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Mandatory:
                     if (tx == null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Mandatory' propagation level, and no transaction is found",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                                 }
                             }
                             throw new TransactionMandatoryException(
                                 format("No transaction is found for TransactionExecutor '%s' with 'Mandatory' propagation level",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Mandatory' propagation level and transaction [%s] found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                         }
                     }
                     closure.execute(tx);
@@ -1284,25 +1284,25 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Never:
                     if (tx != null) {
                         if (TRACING_ENABLED) {
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'Never' propagation level, but transaction [%s] is found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         throw new TransactionNotAllowedException(
                             format("No transaction is allowed for TransactionExecutor '%s' with propagation level 'Never'"+
                                 ", but transaction '%s' was found",
-                                    transactionConfiguration.familyName, tx.getConfiguration().getFamilyName())
+                                    txnConfiguration.familyName, tx.getConfiguration().getFamilyName())
                             );
                     }
 
                     if (TRACING_ENABLED) {
-                        if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                        if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                             logger.info(
                                 format("[%s] Has 'Never' propagation level and no transaction is found",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                         }
                     }
                     closure.execute(null);
@@ -1310,28 +1310,28 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case RequiresNew:
                     if (tx == null) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagation level and no transaction is found, starting new transaction",
-                                        transactionConfiguration.familyName));
+                                        txnConfiguration.familyName));
                             }
                         }
 
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         atomic(tx, transactionContainer, pool, closure);
                         return;
                     } else {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
 
                         GammaTransaction suspendedTransaction = tx;
-                        tx = transactionFactory.newTransaction(pool);
+                        tx = txnFactory.newTransaction(pool);
                         transactionContainer.tx = tx;
                         try {
                             atomic(tx, transactionContainer, pool, closure);
@@ -1343,16 +1343,16 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                 case Supports:
                     if(TRACING_ENABLED){
                         if(tx!=null){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }else{
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(
                                     format("[%s] Has 'RequiresNew' propagationLevel and existing transaction [%s] was found",
-                                        transactionConfiguration.familyName, tx.getConfiguration().getFamilyName()));
+                                        txnConfiguration.familyName, tx.getConfiguration().getFamilyName()));
                             }
                         }
                     }
@@ -1385,31 +1385,31 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
                         return;
                     } catch (RetryError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a retry",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
                         tx.awaitUpdate();
                     } catch (SpeculativeConfigurationError e) {
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a speculative configuration error",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
                         abort = false;
                         GammaTransaction old = tx;
-                        tx = transactionFactory.upgradeAfterSpeculativeFailure(tx,pool);
+                        tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
-                            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+                            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                                 logger.info(format("[%s] Encountered a read or write conflict",
-                                    transactionConfiguration.familyName));
+                                    txnConfiguration.familyName));
                             }
                         }
 
@@ -1431,15 +1431,15 @@ public final class FatGammaTransactionExecutor extends AbstractGammaTransactionE
         }
 
         if(TRACING_ENABLED){
-            if (transactionConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
+            if (txnConfiguration.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
                 logger.info(format("[%s] Maximum number of %s retries has been reached",
-                    transactionConfiguration.familyName, transactionConfiguration.getMaxRetries()));
+                    txnConfiguration.familyName, txnConfiguration.getMaxRetries()));
             }
         }
 
         throw new TooManyRetriesException(
             format("[%s] Maximum number of %s retries has been reached",
-                transactionConfiguration.getFamilyName(), transactionConfiguration.getMaxRetries()), cause);
+                txnConfiguration.getFamilyName(), txnConfiguration.getMaxRetries()), cause);
         }
 
        }

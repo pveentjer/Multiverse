@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 public class FatMonoGammaTransaction_retryTest extends FatGammaTransaction_retryTest<FatMonoGammaTransaction> {
 
@@ -10,7 +10,7 @@ public class FatMonoGammaTransaction_retryTest extends FatGammaTransaction_retry
     }
 
     @Override
-    protected FatMonoGammaTransaction newTransaction(GammaTransactionConfiguration config) {
+    protected FatMonoGammaTransaction newTransaction(GammaTxnConfiguration config) {
         return new FatMonoGammaTransaction(config);
     }
 }

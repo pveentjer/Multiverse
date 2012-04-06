@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.api.exceptions.TransactionNotAllowedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
@@ -115,7 +115,7 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenRequiresAndNoTransactionAvailable_thenNewTransactionUsed() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 
@@ -140,7 +140,7 @@ public class FatGammaTransactionExecutor_propagationLevelTest implements GammaCo
 
     @Test
     public void whenRequiresAndTransactionAvailable_thenExistingTransactionUsed() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
@@ -29,7 +29,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
         stm = new GammaStm();
     }
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     protected abstract T newTransaction();
 
@@ -42,7 +42,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
 
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         T tx = newTransaction(config);
@@ -210,7 +210,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
         } catch (SpeculativeConfigurationError expected) {
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertEquals(maxCapacity + 1, tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
     }
 
@@ -220,7 +220,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.readonly = true;
         T tx = newTransaction(config);
 
@@ -231,7 +231,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
 
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertEquals(initialValue, ref.long_value);
         assertEquals(initialVersion, ref.version);
     }
@@ -390,7 +390,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.writeLockModeAsInt = transactionWriteLockMode;
         GammaTransaction tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode);
@@ -757,7 +757,7 @@ public abstract class FatGammaTransaction_openForWriteTest<T extends GammaTransa
         GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
         GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setIsolationLevel(IsolationLevel.RepeatableRead);
         T tx = newTransaction(config);
 

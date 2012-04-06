@@ -5,7 +5,7 @@ import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.PropagationLevel;
 import org.multiverse.api.TraceLevel;
-import org.multiverse.api.TransactionConfiguration;
+import org.multiverse.api.TxnConfiguration;
 import org.multiverse.api.exceptions.IllegalTransactionFactoryException;
 import org.multiverse.api.lifecycle.TransactionListener;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -25,13 +25,13 @@ import static java.util.Collections.unmodifiableList;
 /**
  * A configuration object that contains the configuration for a GammaTransaction.
  * <p/>
- * GammaTransactionConfiguration object is considered to be immutable. The only mutable part if the speculative
+ * GammaTxnConfiguration object is considered to be immutable. The only mutable part if the speculative
  * configuration that can get upgraded if enabled and speculations failed.
  *
  * @author Peter Veentjer.
  */
 @SuppressWarnings({"OverlyComplexClass", "ClassWithTooManyFields"})
-public final class GammaTransactionConfiguration implements TransactionConfiguration, GammaConstants {
+public final class GammaTxnConfiguration implements TxnConfiguration, GammaConstants {
 
     public final static AtomicLong idGenerator = new AtomicLong();
     public final AtomicReference<SpeculativeGammaConfiguration> speculativeConfiguration
@@ -68,11 +68,11 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
     public ArrayList<TransactionListener> permanentListeners;
     public boolean unrepeatableReadAllowed;
 
-    public GammaTransactionConfiguration(GammaStm stm) {
+    public GammaTxnConfiguration(GammaStm stm) {
         this(stm, new GammaStmConfiguration());
     }
 
-    public GammaTransactionConfiguration(GammaStm stm, GammaStmConfiguration config) {
+    public GammaTxnConfiguration(GammaStm stm, GammaStmConfiguration config) {
         this.stm = stm;
         this.globalConflictCounter = stm.getGlobalConflictCounter();
         this.interruptible = config.interruptible;
@@ -110,11 +110,11 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
     }
 
     /**
-     * Makes a clone of the given GammaTransactionConfiguration.
+     * Makes a clone of the given GammaTxnConfiguration.
      *
-     * @param config the GammaTransactionConfiguration to clone.
+     * @param config the GammaTxnConfiguration to clone.
      */
-    private GammaTransactionConfiguration(GammaTransactionConfiguration config) {
+    private GammaTxnConfiguration(GammaTxnConfiguration config) {
         this.stm = config.stm;
         this.globalConflictCounter = config.globalConflictCounter;
         this.propagationLevel = config.propagationLevel;
@@ -146,7 +146,7 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
         this.permanentListeners = config.permanentListeners;
     }
 
-    public GammaTransactionConfiguration(GammaStm stm, int maxFixedLengthTransactionSize) {
+    public GammaTxnConfiguration(GammaStm stm, int maxFixedLengthTransactionSize) {
         this(stm);
         this.maxFixedLengthTransactionSize = maxFixedLengthTransactionSize;
     }
@@ -352,7 +352,7 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
         }
     }
 
-    public GammaTransactionConfiguration init() {
+    public GammaTxnConfiguration init() {
         if (!writeSkewAllowed && !trackReads && !readonly) {
             String msg = format("'[%s] If no writeskew is allowed, read tracking should be enabled", familyName);
             throw new IllegalTransactionFactoryException(msg);
@@ -428,136 +428,136 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
         return false;
     }
 
-    public GammaTransactionConfiguration setTimeoutNs(long timeoutNs) {
+    public GammaTxnConfiguration setTimeoutNs(long timeoutNs) {
         if (timeoutNs < 0) {
             throw new IllegalArgumentException("timeoutNs can't be smaller than 0");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.timeoutNs = timeoutNs;
         return config;
     }
 
-    public GammaTransactionConfiguration setFamilyName(String familyName) {
+    public GammaTxnConfiguration setFamilyName(String familyName) {
         if (familyName == null) {
             throw new NullPointerException("familyName can't be null");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.isAnonymous = false;
         config.familyName = familyName;
         return config;
     }
 
-    public GammaTransactionConfiguration setMaxRetries(int maxRetries) {
+    public GammaTxnConfiguration setMaxRetries(int maxRetries) {
         if (maxRetries < 0) {
             throw new IllegalArgumentException("maxRetries can't be smaller than 0");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.maxRetries = maxRetries;
         return config;
     }
 
-    public GammaTransactionConfiguration setMaximumPoorMansConflictScanLength(int maximumPoorMansConflictScanLength) {
+    public GammaTxnConfiguration setMaximumPoorMansConflictScanLength(int maximumPoorMansConflictScanLength) {
         if (maximumPoorMansConflictScanLength < 0) {
             throw new IllegalStateException();
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.maximumPoorMansConflictScanLength = maximumPoorMansConflictScanLength;
         return config;
     }
 
-    public GammaTransactionConfiguration setReadTrackingEnabled(boolean trackReads) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setReadTrackingEnabled(boolean trackReads) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.trackReads = trackReads;
         return config;
     }
 
-    public GammaTransactionConfiguration setSpeculative(boolean speculativeConfigEnabled) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setSpeculative(boolean speculativeConfigEnabled) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.speculative = speculativeConfigEnabled;
         return config;
     }
 
-    public GammaTransactionConfiguration setReadonly(boolean readonly) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setReadonly(boolean readonly) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.readonly = readonly;
         return config;
     }
 
-    public GammaTransactionConfiguration setDirtyCheckEnabled(boolean dirtyCheck) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setDirtyCheckEnabled(boolean dirtyCheck) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.dirtyCheck = dirtyCheck;
         return config;
     }
 
-    public GammaTransactionConfiguration setBlockingAllowed(boolean blockingAllowed) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setBlockingAllowed(boolean blockingAllowed) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.blockingAllowed = blockingAllowed;
         return config;
     }
 
-    public GammaTransactionConfiguration setInterruptible(boolean interruptible) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setInterruptible(boolean interruptible) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.interruptible = interruptible;
         return config;
     }
 
-    public GammaTransactionConfiguration setControlFlowErrorsReused(boolean controlFlowErrorsReused) {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setControlFlowErrorsReused(boolean controlFlowErrorsReused) {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.controlFlowErrorsReused = controlFlowErrorsReused;
         return config;
     }
 
-    public GammaTransactionConfiguration setSpinCount(int spinCount) {
+    public GammaTxnConfiguration setSpinCount(int spinCount) {
         if (spinCount < 0) {
             throw new IllegalArgumentException("spinCount can't be smaller than 0");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.spinCount = spinCount;
         return config;
     }
 
-    public GammaTransactionConfiguration setBackoffPolicy(BackoffPolicy backoffPolicy) {
+    public GammaTxnConfiguration setBackoffPolicy(BackoffPolicy backoffPolicy) {
         if (backoffPolicy == null) {
             throw new NullPointerException("backoffPolicy can't be null");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.backoffPolicy = backoffPolicy;
         return config;
     }
 
-    public GammaTransactionConfiguration setTraceLevel(TraceLevel traceLevel) {
+    public GammaTxnConfiguration setTraceLevel(TraceLevel traceLevel) {
         if (traceLevel == null) {
             throw new NullPointerException("traceLevel can't be null");
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.traceLevel = traceLevel;
         return config;
     }
 
-    public GammaTransactionConfiguration setPropagationLevel(PropagationLevel propagationLevel) {
+    public GammaTxnConfiguration setPropagationLevel(PropagationLevel propagationLevel) {
         if (propagationLevel == null) {
             throw new NullPointerException();
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.propagationLevel = propagationLevel;
         return config;
     }
 
 
-    public GammaTransactionConfiguration setIsolationLevel(IsolationLevel isolationLevel) {
+    public GammaTxnConfiguration setIsolationLevel(IsolationLevel isolationLevel) {
         if (isolationLevel == null) {
             throw new NullPointerException();
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.isolationLevel = isolationLevel;
         config.writeSkewAllowed = isolationLevel.doesAllowWriteSkew();
         config.inconsistentReadAllowed = isolationLevel.doesAllowInconsistentRead();
@@ -565,23 +565,23 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
         return config;
     }
 
-    public GammaTransactionConfiguration setWriteLockMode(LockMode writeLockMode) {
+    public GammaTxnConfiguration setWriteLockMode(LockMode writeLockMode) {
         if (writeLockMode == null) {
             throw new NullPointerException();
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.writeLockMode = writeLockMode;
         config.writeLockModeAsInt = writeLockMode.asInt();
         return config;
     }
 
-    public GammaTransactionConfiguration setReadLockMode(LockMode readLockMode) {
+    public GammaTxnConfiguration setReadLockMode(LockMode readLockMode) {
         if (readLockMode == null) {
             throw new NullPointerException();
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.readLockMode = readLockMode;
         config.readLockModeAsInt = readLockMode.asInt();
         if (config.readLockModeAsInt > config.writeLockModeAsInt) {
@@ -592,32 +592,32 @@ public final class GammaTransactionConfiguration implements TransactionConfigura
     }
 
 
-    public GammaTransactionConfiguration setFat() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+    public GammaTxnConfiguration setFat() {
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.isFat = true;
         return config;
     }
 
-    public GammaTransactionConfiguration addPermanentListener(TransactionListener listener) {
+    public GammaTxnConfiguration addPermanentListener(TransactionListener listener) {
         if (listener == null) {
             throw new NullPointerException();
         }
 
-        //we need to clone the list since the GammaTransactionConfiguration is considered to be immutable
+        //we need to clone the list since the GammaTxnConfiguration is considered to be immutable
         ArrayList<TransactionListener> newPermanentListeners = new ArrayList<TransactionListener>();
         if (permanentListeners != null) {
             newPermanentListeners.addAll(permanentListeners);
         }
         newPermanentListeners.add(listener);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(this);
         config.permanentListeners = newPermanentListeners;
         return config;
     }
 
     @Override
     public String toString() {
-        return "GammaTransactionConfiguration{" +
+        return "GammaTxnConfiguration{" +
                 "speculativeConfiguration=" + speculativeConfiguration +
                 ", globalConflictCounter=" + globalConflictCounter +
                 ", propagationLevel=" + propagationLevel +

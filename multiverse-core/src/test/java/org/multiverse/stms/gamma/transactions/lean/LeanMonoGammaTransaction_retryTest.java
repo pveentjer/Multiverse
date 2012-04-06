@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.lean;
 
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 public class LeanMonoGammaTransaction_retryTest extends LeanGammaTransaction_retryTest<LeanMonoGammaTransaction> {
 
@@ -10,7 +10,7 @@ public class LeanMonoGammaTransaction_retryTest extends LeanGammaTransaction_ret
     }
 
     @Override
-    public LeanMonoGammaTransaction newTransaction(GammaTransactionConfiguration config) {
+    public LeanMonoGammaTransaction newTransaction(GammaTxnConfiguration config) {
         return new LeanMonoGammaTransaction(config);
     }
 }

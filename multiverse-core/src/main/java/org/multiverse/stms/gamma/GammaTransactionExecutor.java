@@ -1,7 +1,7 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.TransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 /**
  * An {@link org.multiverse.api.TransactionExecutor} tailored for the GammaStm.
@@ -11,5 +11,5 @@ import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
 public interface GammaTransactionExecutor extends TransactionExecutor {
 
     @Override
-    GammaTransactionFactory getTransactionFactory();
+    GammaTxnFactory getTransactionFactory();
 }

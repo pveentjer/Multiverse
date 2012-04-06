@@ -17,7 +17,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyLong;
@@ -36,7 +36,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     @Test
     public void listener_whenNormalListenerAvailable() {
@@ -55,7 +55,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
     public void listener_whenPermanentListenerAvailable() {
         TransactionListener listener = mock(TransactionListener.class);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .addPermanentListener(listener);
 
         T tx = newTransaction(config);
@@ -77,7 +77,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
         long newValue = 1;
         ref.set(tx, newValue);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTransaction otherTx = new FatVariableLengthGammaTransaction(config);
@@ -296,7 +296,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTransaction tx = newTransaction(config);
@@ -327,7 +327,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTransaction tx = newTransaction(config);
@@ -359,7 +359,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTransaction tx = newTransaction(config);
@@ -390,7 +390,7 @@ public abstract class FatGammaTransaction_prepareTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTransaction tx = newTransaction(config);

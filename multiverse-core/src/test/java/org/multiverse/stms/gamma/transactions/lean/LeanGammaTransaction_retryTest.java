@@ -8,7 +8,7 @@ import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.api.exceptions.RetryNotPossibleException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -25,7 +25,7 @@ public abstract class LeanGammaTransaction_retryTest<T extends GammaTransaction>
 
     public abstract T newTransaction();
 
-    public abstract T newTransaction(GammaTransactionConfiguration config);
+    public abstract T newTransaction(GammaTxnConfiguration config);
 
      @Test
     public void whenUnused() {
@@ -42,7 +42,7 @@ public abstract class LeanGammaTransaction_retryTest<T extends GammaTransaction>
 
     @Test
     public void whenNoRetryAllowed() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.blockingAllowed = false;
 
         T tx = newTransaction(config);

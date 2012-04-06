@@ -5,8 +5,8 @@ package org.multiverse.api;
  * of a {@link Transaction}.
  *
  * @author Peter Veentjer.
- * @see TransactionFactoryBuilder#setPropagationLevel(PropagationLevel)
- * @see TransactionConfiguration#getPropagationLevel()
+ * @see TxnFactoryBuilder#setPropagationLevel(PropagationLevel)
+ * @see TxnConfiguration#getPropagationLevel()
  */
 public enum PropagationLevel {
 

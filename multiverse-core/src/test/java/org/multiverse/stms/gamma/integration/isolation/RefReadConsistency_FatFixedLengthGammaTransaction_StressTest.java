@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class RefReadConsistency_FatFixedLengthGammaTransaction_StressTest extends RefReadConsistency_AbstractTest {
 
@@ -97,19 +97,19 @@ public class RefReadConsistency_FatFixedLengthGammaTransaction_StressTest extend
 
     @Override
     protected TransactionExecutor createReadBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setDirtyCheckEnabled(false)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
 
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor createWriteBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setDirtyCheckEnabled(false)
                 .setMaximumPoorMansConflictScanLength(poorMansReadConsistency ? Integer.MAX_VALUE : 0);
 
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 }

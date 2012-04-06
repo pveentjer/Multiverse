@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 public class FatMonoGammaTransaction_commuteTest extends FatGammaTransaction_commuteTest<FatMonoGammaTransaction> {
 
@@ -10,7 +10,7 @@ public class FatMonoGammaTransaction_commuteTest extends FatGammaTransaction_com
     }
 
     @Override
-    protected FatMonoGammaTransaction newTransaction(GammaTransactionConfiguration config) {
+    protected FatMonoGammaTransaction newTransaction(GammaTxnConfiguration config) {
         return new FatMonoGammaTransaction(config);
     }
 

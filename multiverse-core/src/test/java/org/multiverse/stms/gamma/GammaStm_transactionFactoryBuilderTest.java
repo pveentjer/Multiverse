@@ -6,9 +6,9 @@ import org.multiverse.api.*;
 import org.multiverse.api.exceptions.IllegalTransactionFactoryException;
 import org.multiverse.api.lifecycle.TransactionListener;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactoryBuilder;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactoryBuilder;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenDefaultTransactionFactory() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.init();
 
         assertEquals(IsolationLevel.Snapshot, config.isolationLevel);
@@ -58,9 +58,9 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenPermanentListenerAdded() {
-        GammaTransactionFactoryBuilder oldBuilder = stm.newTransactionFactoryBuilder();
+        GammaTxnFactoryBuilder oldBuilder = stm.newTransactionFactoryBuilder();
         TransactionListener listener = mock(TransactionListener.class);
-        GammaTransactionFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener);
+        GammaTxnFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener);
 
         assertEquals(asList(listener), newBuilder.getConfiguration().getPermanentListeners());
         assertTrue(oldBuilder.getConfiguration().getPermanentListeners().isEmpty());
@@ -68,9 +68,9 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenPermanentListenerAdded_thenNoCheckForDuplicates() {
-        GammaTransactionFactoryBuilder oldBuilder = stm.newTransactionFactoryBuilder();
+        GammaTxnFactoryBuilder oldBuilder = stm.newTransactionFactoryBuilder();
         TransactionListener listener = mock(TransactionListener.class);
-        GammaTransactionFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener)
+        GammaTxnFactoryBuilder newBuilder = oldBuilder.addPermanentListener(listener)
                 .addPermanentListener(listener);
 
         assertEquals(asList(listener, listener), newBuilder.getConfiguration().getPermanentListeners());
@@ -78,7 +78,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenNoPermanentListenersAdded_thenEmptyList() {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder();
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder();
         assertTrue(builder.getConfiguration().getPermanentListeners().isEmpty());
     }
 
@@ -86,7 +86,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
     public void whenMultipleListenersAdded_thenTheyAreAddedInOrder() {
         TransactionListener listener1 = mock(TransactionListener.class);
         TransactionListener listener2 = mock(TransactionListener.class);
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .addPermanentListener(listener1)
                 .addPermanentListener(listener2);
 
@@ -96,7 +96,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenGetPermanentListenersCalled_immutableListReturned() {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .addPermanentListener(mock(TransactionListener.class))
                 .addPermanentListener(mock(TransactionListener.class));
 
@@ -133,7 +133,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
     }
 
     public void whenReadLockModeOverridesWriteLockMode(LockMode readLockMode, LockMode writeLockMode) {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setWriteLockMode(writeLockMode)
                 .setReadLockMode(readLockMode)
                 .newTransactionFactory();
@@ -175,7 +175,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     public void whenWriteLockModeOverridesReadLockMode(LockMode readLock, LockMode writeLock, boolean success) {
         if (success) {
-            GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+            GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                     .setReadLockMode(readLock)
                     .setWriteLockMode(writeLock)
                     .newTransactionFactory();
@@ -196,7 +196,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenReadtrackingDisabled() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setReadTrackingEnabled(false)
                 .setBlockingAllowed(false)
                 .newTransactionFactory();
@@ -206,32 +206,32 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenSpeculativeConfigEnabled() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .setSpeculative(true)
                 .newTransactionFactory();
 
-        GammaTransactionConfiguration configuration = txFactory.getConfiguration();
+        GammaTxnConfiguration configuration = txFactory.getConfiguration();
         assertFalse(configuration.getSpeculativeConfiguration().fat);
         assertTrue(configuration.isSpeculative());
     }
 
     @Test
     public void whenWriteSkewNotAllowed() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
 
-        GammaTransactionConfiguration configuration = txFactory.getConfiguration();
+        GammaTxnConfiguration configuration = txFactory.getConfiguration();
         assertTrue(configuration.getSpeculativeConfiguration().fat);
         assertTrue(configuration.isSpeculative());
     }
 
     @Test
     public void whenSerializedThenFatTransaction() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .setIsolationLevel(IsolationLevel.Serializable)
@@ -243,7 +243,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
     @Test
     public void whenSnapshotIsolationLevelThenLeanTransaction() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setDirtyCheckEnabled(false)
                 .setIsolationLevel(IsolationLevel.Snapshot)
@@ -255,7 +255,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
 
      @Test
     public void whenReadonlyThenFatTransaction() {
-        GammaTransactionFactory txFactory = stm.newTransactionFactoryBuilder()
+        GammaTxnFactory txFactory = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
                 .setReadonly(true)
                 .setDirtyCheckEnabled(false)

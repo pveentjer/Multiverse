@@ -12,7 +12,7 @@ import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -31,7 +31,7 @@ public abstract class FatGammaTransaction_retryTest<T extends GammaTransaction> 
         stm = new GammaStm();
     }
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     protected abstract T newTransaction();
 
@@ -97,7 +97,7 @@ public abstract class FatGammaTransaction_retryTest<T extends GammaTransaction> 
 
     @Test
     public void whenNoRetryAllowed() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.blockingAllowed = false;
 
         T tx = newTransaction(config);

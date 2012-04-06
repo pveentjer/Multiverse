@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxnFactory;
 
 /**
  * The refCount in some cases is set to an unrealistic high value because
@@ -66,17 +66,17 @@ public class RefReadConsistency_LeanFixedLengthGammaTransaction_StressTest exten
 
     @Override
     protected TransactionExecutor createReadBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setMaximumPoorMansConflictScanLength(refCount)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor createWriteBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount)
                 .setMaximumPoorMansConflictScanLength(refCount)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(config));
     }
 }

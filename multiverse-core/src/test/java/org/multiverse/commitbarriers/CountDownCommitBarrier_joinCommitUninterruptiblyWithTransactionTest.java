@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Transaction;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.references.IntRef;
@@ -53,7 +53,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         barrier = new CountDownCommitBarrier(1);
         Transaction tx = mock(Transaction.class);
 
-        when(tx.getStatus()).thenReturn(TransactionStatus.Active);
+        when(tx.getStatus()).thenReturn(TxnStatus.Active);
         doThrow(new RuntimeException()).when(tx).prepare();
         try {
             barrier.joinCommitUninterruptibly(tx);

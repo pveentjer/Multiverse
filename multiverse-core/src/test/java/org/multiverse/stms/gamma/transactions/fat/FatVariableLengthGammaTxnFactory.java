@@ -1,32 +1,32 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.api.TransactionFactoryBuilder;
+import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
 
 import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
 
-public final class FatVariableLengthGammaTransactionFactory implements GammaTransactionFactory {
-    private final GammaTransactionConfiguration config;
+public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
+    private final GammaTxnConfiguration config;
 
-    public FatVariableLengthGammaTransactionFactory(GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm));
+    public FatVariableLengthGammaTxnFactory(GammaStm stm) {
+        this(new GammaTxnConfiguration(stm));
     }
 
-    public FatVariableLengthGammaTransactionFactory(GammaTransactionConfiguration config) {
+    public FatVariableLengthGammaTxnFactory(GammaTxnConfiguration config) {
         this.config = config.init();
     }
 
     @Override
-    public TransactionFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTransactionFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public GammaTransactionConfiguration getConfiguration() {
+    public GammaTxnConfiguration getConfiguration() {
         return config;
     }
 

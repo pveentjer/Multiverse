@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactoryBuilder;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactoryBuilder;
 
 import static org.junit.Assert.fail;
 
@@ -18,7 +18,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenBlockingEnabled_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .setReadTrackingEnabled(false)
                 .setBlockingAllowed(true);
 
@@ -31,7 +31,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenWriteSkewAllowed_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .setReadonly(false)
                 .setReadTrackingEnabled(false)
                 .setIsolationLevel(IsolationLevel.Serializable);
@@ -50,7 +50,7 @@ public class GammaStm_transactionFactoryValidationTest {
     }
 
     private void whenWriteSkewAllowedAndReadonly(boolean readTrackingEnabled) {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .setBlockingAllowed(false)
                 .setReadonly(true)
                 .setReadTrackingEnabled(readTrackingEnabled)
@@ -61,7 +61,7 @@ public class GammaStm_transactionFactoryValidationTest {
 
     @Test
     public void whenLockLevelIsRead_thenAutomaticReadTrackingShouldBeEnabled() {
-        GammaTransactionFactoryBuilder builder = stm.newTransactionFactoryBuilder()
+        GammaTxnFactoryBuilder builder = stm.newTransactionFactoryBuilder()
                 .setReadTrackingEnabled(false)
                 .setReadLockMode(LockMode.Read);
 

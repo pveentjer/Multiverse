@@ -10,7 +10,7 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -21,7 +21,7 @@ import static org.multiverse.stms.gamma.GammaTestUtils.makeReadBiased;
 public class IsolationLevelSerializableTest {
 
     private GammaStm stm;
-    private GammaTransactionFactory transactionFactory;
+    private GammaTxnFactory transactionFactory;
 
     @Before
     public void setUp() {

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.lean;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
@@ -440,7 +440,7 @@ public abstract class LeanGammaTransaction_openForReadTest<T extends GammaTransa
         } catch (SpeculativeConfigurationError expected) {
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertEquals(maxCapacity + 1, tx.getConfiguration().getSpeculativeConfiguration().minimalLength);
     }
 }

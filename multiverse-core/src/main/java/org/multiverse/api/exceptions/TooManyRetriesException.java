@@ -5,7 +5,7 @@ package org.multiverse.api.exceptions;
  * retrying could lead to liveness problems like livelocks and starvation.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setMaxRetries(int)
+ * @see org.multiverse.api.TxnFactoryBuilder#setMaxRetries(int)
  */
 public class TooManyRetriesException extends RetryException {
 

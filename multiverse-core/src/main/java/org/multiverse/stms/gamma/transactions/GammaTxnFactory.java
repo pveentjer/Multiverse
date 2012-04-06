@@ -1,16 +1,16 @@
 package org.multiverse.stms.gamma.transactions;
 
-import org.multiverse.api.TransactionFactory;
+import org.multiverse.api.TxnFactory;
 
 /**
- * A {@link TransactionFactory} tailored for the {@link org.multiverse.stms.gamma.GammaStm}.
+ * A {@link org.multiverse.api.TxnFactory} tailored for the {@link org.multiverse.stms.gamma.GammaStm}.
  *
  * @author Peter Veentjer.
  */
-public interface GammaTransactionFactory extends TransactionFactory {
+public interface GammaTxnFactory extends TxnFactory {
 
     @Override
-    GammaTransactionConfiguration getConfiguration();
+    GammaTxnConfiguration getConfiguration();
 
     @Override
     GammaTransaction newTransaction();

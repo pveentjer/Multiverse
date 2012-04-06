@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import java.util.Random;
 
@@ -53,7 +53,7 @@ public class FatVariableLengthGammaTransaction_stressTest implements GammaConsta
         Random random = new Random();
         int transactionCount = 100000;
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refs.length)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refs.length)
                 .setMaximumPoorMansConflictScanLength(refs.length);
         config.dirtyCheck = dirtyCheck;
 

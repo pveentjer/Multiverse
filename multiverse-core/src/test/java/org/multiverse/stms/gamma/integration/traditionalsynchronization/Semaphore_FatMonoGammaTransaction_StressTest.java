@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
 
 /**
  * @author Peter Veentjer
@@ -40,16 +40,16 @@ public class Semaphore_FatMonoGammaTransaction_StressTest extends Semaphore_Abst
 
     @Override
     protected TransactionExecutor newDownBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newUpBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
     }
 }
 

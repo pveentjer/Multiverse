@@ -1,7 +1,7 @@
 package org.multiverse.commitbarriers;
 
 import org.multiverse.api.Transaction;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.api.lifecycle.TransactionEvent;
@@ -191,8 +191,8 @@ public final class CountDownCommitBarrier extends CommitBarrier {
             throw new NullPointerException();
         }
 
-        if (tx.getStatus() != TransactionStatus.Active) {
-            if (tx.getStatus() == TransactionStatus.Prepared) {
+        if (tx.getStatus() != TxnStatus.Active) {
+            if (tx.getStatus() == TxnStatus.Prepared) {
                 tx.abort();
                 throw new PreparedTransactionException(
                         format("[%s] Can't call incParties on non active transaction because it is %s",

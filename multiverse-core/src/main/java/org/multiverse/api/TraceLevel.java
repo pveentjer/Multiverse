@@ -7,8 +7,8 @@ package org.multiverse.api;
  * the JIT will remove dead code because we don't want any overhead.
  *
  * @author Peter Veentjer
- * @see TransactionFactoryBuilder#setTraceLevel(TraceLevel)
- * @see TransactionConfiguration#getTraceLevel()
+ * @see TxnFactoryBuilder#setTraceLevel(TraceLevel)
+ * @see TxnConfiguration#getTraceLevel()
  */
 public enum TraceLevel {
 

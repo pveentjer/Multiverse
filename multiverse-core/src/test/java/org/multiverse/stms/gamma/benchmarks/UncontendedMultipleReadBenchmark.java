@@ -4,7 +4,7 @@ import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
 
 import java.util.Arrays;
@@ -124,7 +124,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         public void run1() {
             GammaLongRef ref1 = newReadBiasedLongRef(stm);
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 1)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 1)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 
@@ -144,7 +144,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
             GammaLongRef ref1 = newReadBiasedLongRef(stm);
             GammaLongRef ref2 = newReadBiasedLongRef(stm);
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 2)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 2)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 
@@ -168,7 +168,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
             GammaLongRef ref3 = newReadBiasedLongRef(stm);
             GammaLongRef ref4 = newReadBiasedLongRef(stm);
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 4)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 4)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 
@@ -197,7 +197,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
             GammaLongRef ref7 = newReadBiasedLongRef(stm);
             GammaLongRef ref8 = newReadBiasedLongRef(stm);
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 8)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 8)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 
@@ -240,7 +240,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
             GammaLongRef ref15 = newReadBiasedLongRef(stm);
             GammaLongRef ref16 = newReadBiasedLongRef(stm);
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 16)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 16)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 
@@ -309,7 +309,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
             GammaLongRef ref32 = newReadBiasedLongRef(stm);
 
 
-            GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, 32)
+            GammaTxnConfiguration config = new GammaTxnConfiguration(stm, 32)
                     .setReadonly(true);
             FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
 

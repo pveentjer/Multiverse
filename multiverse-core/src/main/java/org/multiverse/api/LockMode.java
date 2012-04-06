@@ -10,10 +10,10 @@ import org.multiverse.MultiverseConstants;
  * see {@link Lock}.
  *
  * @author Peter Veentjer.
- * @see TransactionFactoryBuilder#setReadLockMode(LockMode)
- * @see TransactionFactoryBuilder#setWriteLockMode(LockMode)
- * @see TransactionConfiguration#getReadLockMode()
- * @see TransactionConfiguration#getWriteLockMode()
+ * @see TxnFactoryBuilder#setReadLockMode(LockMode)
+ * @see TxnFactoryBuilder#setWriteLockMode(LockMode)
+ * @see TxnConfiguration#getReadLockMode()
+ * @see TxnConfiguration#getWriteLockMode()
  * @see org.multiverse.api.TransactionalObject#getLock()
  * @see Lock
  */

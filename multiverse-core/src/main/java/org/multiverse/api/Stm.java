@@ -30,7 +30,7 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * factory/builder interfaces:
  * <ol>
  * <li>{@link RefFactoryBuilder} a builder for creating {@link RefFactory}</li>
- * <li>{@link TransactionFactoryBuilder} a builder for creating an {@link TransactionExecutor}/{@link Transaction}.
+ * <li>{@link TxnFactoryBuilder} a builder for creating an {@link TransactionExecutor}/{@link Transaction}.
  * <li>{@link TransactionalCollectionsFactory} a factory for creating transactional collections</li>
  * </ol>
  *
@@ -49,13 +49,13 @@ import org.multiverse.api.references.RefFactoryBuilder;
 public interface Stm {
 
     /**
-     * Gets the {@link TransactionFactoryBuilder} that needs to be used to atomicChecked a {@link Transaction} created by this Stm.
-     * See the {@link TransactionFactoryBuilder} for more info. The TransactionFactoryBuilder also is responsible for creating
+     * Gets the {@link TxnFactoryBuilder} that needs to be used to atomicChecked a {@link Transaction} created by this Stm.
+     * See the {@link TxnFactoryBuilder} for more info. The TxnFactoryBuilder also is responsible for creating
      * the TransactionExecutor since the Transaction and TransactionExecutor can be tightly coupled.
      *
-     * @return the TransactionFactoryBuilder that is used to atomicChecked transactions on this Stm.
+     * @return the TxnFactoryBuilder that is used to atomicChecked transactions on this Stm.
      */
-    TransactionFactoryBuilder newTransactionFactoryBuilder();
+    TxnFactoryBuilder newTransactionFactoryBuilder();
 
     /**
      * Starts a default Transaction that is useful for testing/experimentation purposes. This method is purely for easy to use access,

@@ -5,7 +5,7 @@ import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
 
@@ -19,10 +19,10 @@ public final class LeanMonoGammaTransaction extends GammaTransaction {
     public final GammaRefTranlocal tranlocal = new GammaRefTranlocal();
 
     public LeanMonoGammaTransaction(GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm));
+        this(new GammaTxnConfiguration(stm));
     }
 
-    public LeanMonoGammaTransaction(GammaTransactionConfiguration config) {
+    public LeanMonoGammaTransaction(GammaTxnConfiguration config) {
         super(config, TRANSACTIONTYPE_LEAN_MONO);
     }
 

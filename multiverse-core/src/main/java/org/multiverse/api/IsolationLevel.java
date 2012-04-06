@@ -84,7 +84,7 @@ package org.multiverse.api;
  *
  *
  * @author Peter Veentjer.
- * @see TransactionFactoryBuilder#setIsolationLevel(IsolationLevel)
+ * @see TxnFactoryBuilder#setIsolationLevel(IsolationLevel)
  */
 public enum IsolationLevel {
 

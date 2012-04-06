@@ -10,7 +10,7 @@ package org.multiverse.api.exceptions;
  * <p>When this exception is thrown, the interrupted status on the Thread always is restored.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setInterruptible(boolean)
+ * @see org.multiverse.api.TxnFactoryBuilder#setInterruptible(boolean)
  */
 public class RetryInterruptedException extends RetryException {
 

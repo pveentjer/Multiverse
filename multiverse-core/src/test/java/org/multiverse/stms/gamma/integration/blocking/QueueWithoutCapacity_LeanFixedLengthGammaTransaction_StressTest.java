@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxnFactory;
 
 public class QueueWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest extends QueueWithoutCapacity_AbstractTest {
 
@@ -14,11 +14,11 @@ public class QueueWithoutCapacity_LeanFixedLengthGammaTransaction_StressTest ext
 
     @Override
     protected TransactionExecutor newPopBlock() {
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(stm));
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(stm));
     }
 
     @Override
     protected TransactionExecutor newPushBlock() {
-        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTransactionFactory(stm));
+        return new LeanGammaTransactionExecutor(new LeanFixedLengthGammaTxnFactory(stm));
     }
 }

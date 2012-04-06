@@ -34,7 +34,7 @@
             thrown. This Error is caught by the AtomicBlock and it automatically retries the transaction. To prevent
             contention, there also is a org.multiverse.api.BackoffPolicy available, that control if the transaction
             should wait a little (so should back off), or should retry immediately. The maximum number of retries can
-            be configured through the maxRetries property on the org.multiverse.api.TransactionFactoryBuilder.
+            be configured through the maxRetries property on the org.multiverse.api.TxnFactoryBuilder.
         </para>
     </sect1>
 
@@ -58,7 +58,7 @@
             org.multiverse.api.TransactionExecutor and upgrades the transaction/settings. Once the AtomicBlock has learned, it
             will not make the same mistakes again. So in the beginning there can be some unexpected failure, but
             after a few tries, they won't appear again. This mechanism can be disabled by setting the 'setSpeculative'
-            to true on the org.multiverse.api.TransactionFactoryBuilder.
+            to true on the org.multiverse.api.TxnFactoryBuilder.
         </para>
     </sect1>
 
@@ -72,7 +72,7 @@
             are created in the beginning and reused. If you need to have a closer look in the exception to see what is
             happening
             (or where it is happening), the 'setControlFlowErrorsReused' on the
-            org.multiverse.api.TransactionFactoryBuilder
+            org.multiverse.api.TxnFactoryBuilder
             can be called (else you will see an empty stacktrace). You need to make sure that you don't gobble up this
             Error, but
             propagate it since the AtomicBlock is the one that is going to deal with it.

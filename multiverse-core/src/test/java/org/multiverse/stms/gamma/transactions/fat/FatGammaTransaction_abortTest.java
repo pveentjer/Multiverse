@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.api.lifecycle.TransactionEvent;
@@ -13,7 +13,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -32,7 +32,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     protected abstract void assertCleaned(T tx);
 
@@ -53,7 +53,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
     public void listener_whenPermanentListenerAvailable() {
         TransactionListener listener = mock(TransactionListener.class);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .addPermanentListener(listener);
 
         T tx = newTransaction(config);
@@ -71,7 +71,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
 
         tx.abort();
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
     }
 
     @Test
@@ -151,7 +151,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tx.abort();
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
         assertNull(tranlocal.owner);
         assertEquals(initialValue, ref.long_value);
@@ -166,7 +166,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
 
         tx.abort();
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertCleaned(tx);
     }
 
@@ -182,7 +182,7 @@ public abstract class FatGammaTransaction_abortTest<T extends GammaTransaction> 
 
         }
 
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertCleaned(tx);
     }
 }

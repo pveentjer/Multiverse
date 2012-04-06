@@ -14,7 +14,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 /**
- * Contains the default configuration for all transactions created by the GammaStm. With the TransactionFactoryBuilder,
+ * Contains the default configuration for all transactions created by the GammaStm. With the TxnFactoryBuilder,
  * this behavior can be overridden.
  * <p/>
  * Once the GammaStm has been created, changes on this structure are ignored because the content of this configuration

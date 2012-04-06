@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.SomeError;
 import org.multiverse.SomeUncheckedException;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.AbortOnlyException;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
@@ -18,7 +18,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.*;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -36,7 +36,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     protected abstract void assertCleaned(T transaction);
 
@@ -57,7 +57,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
     public void listener_whenPermanentListenerAvailable() {
         TransactionListener listener = mock(TransactionListener.class);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .addPermanentListener(listener);
 
         T tx = newTransaction(config);
@@ -100,7 +100,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         } catch (RetryError expected) {
         }
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(readLockMode)
                 .setWriteLockMode(writeLockMode);
 
@@ -123,7 +123,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         long newValue = 1;
         ref.set(tx, newValue);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTransaction otherTx = new FatVariableLengthGammaTransaction(config);
@@ -473,7 +473,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         tx.commit();
 
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertGlobalConflictCount(stm, globalConflictCount);
     }
 
@@ -501,7 +501,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertEquals(initialValue + 1, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
         assertCleaned(tx);
@@ -526,7 +526,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         assertNull(tranlocal.owner);
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue + 1, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
         assertCleaned(tx);
@@ -591,7 +591,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         tx.commit();
 
         assertNull(tranlocal.owner);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue, ref.long_value);
         assertEquals(initialVersion, ref.version);
         assertCleaned(tx);
@@ -614,7 +614,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         tx.commit();
 
         assertNull(tranlocal.owner);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
         assertEquals(initialValue + 1, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
@@ -674,7 +674,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.dirtyCheck = false;
         T tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
@@ -685,7 +685,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         tx.commit();
 
         assertNull(tranlocal.owner);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
         assertCleaned(tx);
@@ -706,7 +706,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.dirtyCheck = false;
         T tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
@@ -718,7 +718,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         tx.commit();
 
         assertNull(tranlocal.owner);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue + 1, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
@@ -740,7 +740,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.dirtyCheck = true;
         T tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
@@ -751,7 +751,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         assertNull(tranlocal.owner);
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue, ref.long_value);
         assertEquals(initialVersion, ref.version);
         assertCleaned(tx);
@@ -772,7 +772,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.dirtyCheck = true;
         T tx = newTransaction(config);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
@@ -784,7 +784,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         assertNull(tranlocal.owner);
         assertEquals(LOCKMODE_NONE, tranlocal.lockMode);
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertEquals(initialValue + 1, ref.long_value);
         assertEquals(initialVersion + 1, ref.version);
         assertCleaned(tx);
@@ -910,7 +910,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
         } catch (DeadTransactionException expected) {
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
         assertCleaned(tx);
 
         assertGlobalConflictCount(stm, globalConflictCount);
@@ -925,7 +925,7 @@ public abstract class FatGammaTransaction_commitTest<T extends GammaTransaction>
 
         tx.commit();
 
-        assertEquals(TransactionStatus.Committed, tx.getStatus());
+        assertEquals(TxnStatus.Committed, tx.getStatus());
         assertCleaned(tx);
 
         assertGlobalConflictCount(stm, globalConflictCount);

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -19,20 +19,20 @@ public class FatFixedLengthGammaTransaction_openForReadTest extends FatGammaTran
     }
 
     @Override
-    protected FatFixedLengthGammaTransaction newTransaction(GammaTransactionConfiguration config) {
+    protected FatFixedLengthGammaTransaction newTransaction(GammaTxnConfiguration config) {
         return new FatFixedLengthGammaTransaction(config);
     }
 
     @Override
     protected int getMaxCapacity() {
-        return new GammaTransactionConfiguration(stm).maxFixedLengthTransactionSize;
+        return new GammaTxnConfiguration(stm).maxFixedLengthTransactionSize;
     }
 
     @Test
     public void richmansConflict_multipleReadsOnSameRef() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatFixedLengthGammaTransaction tx1 = new FatFixedLengthGammaTransaction(config);
@@ -54,7 +54,7 @@ public class FatFixedLengthGammaTransaction_openForReadTest extends FatGammaTran
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(config);
@@ -79,7 +79,7 @@ public class FatFixedLengthGammaTransaction_openForReadTest extends FatGammaTran
 
     @Test
     public void richmansConflictScan_whenUnrealConflict() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         causeLotsOfConflicts(stm);
@@ -117,7 +117,7 @@ public class FatFixedLengthGammaTransaction_openForReadTest extends FatGammaTran
 
     @Test
     public void richmansConflictScan_whenConflict() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         causeLotsOfConflicts(stm);

@@ -36,7 +36,7 @@ public final class GammaStm implements Stm {
     public final GammaRefFactoryImpl defaultRefFactory = new GammaRefFactoryImpl();
     public final GammaRefFactoryBuilder refFactoryBuilder = new GammaRefFactoryBuilderImpl();
     public final GammaTransactionExecutor defaultTransactionExecutor;
-    public final GammaTransactionConfiguration defaultConfig;
+    public final GammaTxnConfiguration defaultConfig;
     public final NaiveTransactionalCollectionFactory defaultTransactionalCollectionFactory
             = new NaiveTransactionalCollectionFactory(this);
     public final int readBiasedThreshold;
@@ -52,7 +52,7 @@ public final class GammaStm implements Stm {
         this.defaultMaxRetries = configuration.maxRetries;
         this.spinCount = configuration.spinCount;
         this.defaultBackoffPolicy = configuration.backoffPolicy;
-        this.defaultConfig = new GammaTransactionConfiguration(this, configuration)
+        this.defaultConfig = new GammaTxnConfiguration(this, configuration)
                 .setSpinCount(spinCount);
         this.defaultTransactionExecutor = newTransactionFactoryBuilder()
                 .setSpeculative(false)
@@ -79,186 +79,186 @@ public final class GammaStm implements Stm {
         return globalConflictCounter;
     }
 
-    private final class GammaTransactionFactoryBuilderImpl implements GammaTransactionFactoryBuilder {
+    private final class GammaTxnFactoryBuilderImpl implements GammaTxnFactoryBuilder {
 
-        private final GammaTransactionConfiguration config;
+        private final GammaTxnConfiguration config;
 
-        GammaTransactionFactoryBuilderImpl(final GammaTransactionConfiguration config) {
+        GammaTxnFactoryBuilderImpl(final GammaTxnConfiguration config) {
             this.config = config;
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setFat() {
+        public final GammaTxnFactoryBuilder setFat() {
             if (config.isFat) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setFat());
+            return new GammaTxnFactoryBuilderImpl(config.setFat());
         }
 
         @Override
-        public final GammaTransactionConfiguration getConfiguration() {
+        public final GammaTxnConfiguration getConfiguration() {
             return config;
         }
 
         @Override
-        public GammaTransactionFactoryBuilder addPermanentListener(final TransactionListener listener) {
-            return new GammaTransactionFactoryBuilderImpl(config.addPermanentListener(listener));
+        public GammaTxnFactoryBuilder addPermanentListener(final TransactionListener listener) {
+            return new GammaTxnFactoryBuilderImpl(config.addPermanentListener(listener));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setControlFlowErrorsReused(final boolean reused) {
+        public final GammaTxnFactoryBuilder setControlFlowErrorsReused(final boolean reused) {
             if (config.controlFlowErrorsReused = reused) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setControlFlowErrorsReused(reused));
+            return new GammaTxnFactoryBuilderImpl(config.setControlFlowErrorsReused(reused));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setReadLockMode(final LockMode lockMode) {
+        public final GammaTxnFactoryBuilder setReadLockMode(final LockMode lockMode) {
             if (config.readLockMode == lockMode) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setReadLockMode(lockMode));
+            return new GammaTxnFactoryBuilderImpl(config.setReadLockMode(lockMode));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setWriteLockMode(final LockMode lockMode) {
+        public final GammaTxnFactoryBuilder setWriteLockMode(final LockMode lockMode) {
             if (config.writeLockMode == lockMode) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setWriteLockMode(lockMode));
+            return new GammaTxnFactoryBuilderImpl(config.setWriteLockMode(lockMode));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setFamilyName(final String familyName) {
+        public final GammaTxnFactoryBuilder setFamilyName(final String familyName) {
             if (config.familyName.equals(familyName)) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setFamilyName(familyName));
+            return new GammaTxnFactoryBuilderImpl(config.setFamilyName(familyName));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setPropagationLevel(final PropagationLevel level) {
+        public final GammaTxnFactoryBuilder setPropagationLevel(final PropagationLevel level) {
             if (level == config.propagationLevel) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setPropagationLevel(level));
+            return new GammaTxnFactoryBuilderImpl(config.setPropagationLevel(level));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setBlockingAllowed(final boolean blockingAllowed) {
+        public final GammaTxnFactoryBuilder setBlockingAllowed(final boolean blockingAllowed) {
             if (blockingAllowed == config.blockingAllowed) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setBlockingAllowed(blockingAllowed));
+            return new GammaTxnFactoryBuilderImpl(config.setBlockingAllowed(blockingAllowed));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setIsolationLevel(final IsolationLevel isolationLevel) {
+        public final GammaTxnFactoryBuilder setIsolationLevel(final IsolationLevel isolationLevel) {
             if (isolationLevel == config.isolationLevel) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setIsolationLevel(isolationLevel));
+            return new GammaTxnFactoryBuilderImpl(config.setIsolationLevel(isolationLevel));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setTraceLevel(final TraceLevel traceLevel) {
+        public final GammaTxnFactoryBuilder setTraceLevel(final TraceLevel traceLevel) {
             if (traceLevel == config.traceLevel) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setTraceLevel(traceLevel));
+            return new GammaTxnFactoryBuilderImpl(config.setTraceLevel(traceLevel));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setTimeoutNs(final long timeoutNs) {
+        public final GammaTxnFactoryBuilder setTimeoutNs(final long timeoutNs) {
             if (timeoutNs == config.timeoutNs) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setTimeoutNs(timeoutNs));
+            return new GammaTxnFactoryBuilderImpl(config.setTimeoutNs(timeoutNs));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setInterruptible(final boolean interruptible) {
+        public final GammaTxnFactoryBuilder setInterruptible(final boolean interruptible) {
             if (interruptible == config.interruptible) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setInterruptible(interruptible));
+            return new GammaTxnFactoryBuilderImpl(config.setInterruptible(interruptible));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setBackoffPolicy(final BackoffPolicy backoffPolicy) {
+        public final GammaTxnFactoryBuilder setBackoffPolicy(final BackoffPolicy backoffPolicy) {
             //noinspection ObjectEquality
             if (backoffPolicy == config.backoffPolicy) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setBackoffPolicy(backoffPolicy));
+            return new GammaTxnFactoryBuilderImpl(config.setBackoffPolicy(backoffPolicy));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setDirtyCheckEnabled(final boolean dirtyCheckEnabled) {
+        public final GammaTxnFactoryBuilder setDirtyCheckEnabled(final boolean dirtyCheckEnabled) {
             if (dirtyCheckEnabled == config.dirtyCheck) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setDirtyCheckEnabled(dirtyCheckEnabled));
+            return new GammaTxnFactoryBuilderImpl(config.setDirtyCheckEnabled(dirtyCheckEnabled));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setSpinCount(final int spinCount) {
+        public final GammaTxnFactoryBuilder setSpinCount(final int spinCount) {
             if (spinCount == config.spinCount) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setSpinCount(spinCount));
+            return new GammaTxnFactoryBuilderImpl(config.setSpinCount(spinCount));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setSpeculative(final boolean enabled) {
+        public final GammaTxnFactoryBuilder setSpeculative(final boolean enabled) {
             if (enabled == config.speculative) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(
+            return new GammaTxnFactoryBuilderImpl(
                     config.setSpeculative(enabled));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setReadonly(final boolean readonly) {
+        public final GammaTxnFactoryBuilder setReadonly(final boolean readonly) {
             if (readonly == config.readonly) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setReadonly(readonly));
+            return new GammaTxnFactoryBuilderImpl(config.setReadonly(readonly));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setReadTrackingEnabled(final boolean enabled) {
+        public final GammaTxnFactoryBuilder setReadTrackingEnabled(final boolean enabled) {
             if (enabled == config.trackReads) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setReadTrackingEnabled(enabled));
+            return new GammaTxnFactoryBuilderImpl(config.setReadTrackingEnabled(enabled));
         }
 
         @Override
-        public final GammaTransactionFactoryBuilder setMaxRetries(final int maxRetries) {
+        public final GammaTxnFactoryBuilder setMaxRetries(final int maxRetries) {
             if (maxRetries == config.maxRetries) {
                 return this;
             }
 
-            return new GammaTransactionFactoryBuilderImpl(config.setMaxRetries(maxRetries));
+            return new GammaTxnFactoryBuilderImpl(config.setMaxRetries(maxRetries));
         }
 
         @Override
@@ -277,13 +277,13 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public GammaTransactionFactory newTransactionFactory() {
+        public GammaTxnFactory newTransactionFactory() {
             config.init();
 
             if (config.isSpeculative()) {
-                return new SpeculativeGammaTransactionFactory(config, this);
+                return new SpeculativeGammaTxnFactory(config, this);
             } else {
-                return new NonSpeculativeGammaTransactionFactory(config,this);
+                return new NonSpeculativeGammaTxnFactory(config,this);
             }
         }
     }
@@ -321,9 +321,9 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaTransactionFactoryBuilder newTransactionFactoryBuilder() {
-        final GammaTransactionConfiguration config = new GammaTransactionConfiguration(this);
-        return new GammaTransactionFactoryBuilderImpl(config);
+    public final GammaTxnFactoryBuilder newTransactionFactoryBuilder() {
+        final GammaTxnConfiguration config = new GammaTxnConfiguration(this);
+        return new GammaTxnFactoryBuilderImpl(config);
     }
 
     @Override
@@ -343,23 +343,23 @@ public final class GammaStm implements Stm {
         }
     }
 
-    private static final class NonSpeculativeGammaTransactionFactory implements GammaTransactionFactory {
+    private static final class NonSpeculativeGammaTxnFactory implements GammaTxnFactory {
 
-        private final GammaTransactionConfiguration config;
-        private final GammaTransactionFactoryBuilder builder;
+        private final GammaTxnConfiguration config;
+        private final GammaTxnFactoryBuilder builder;
 
-        NonSpeculativeGammaTransactionFactory(final GammaTransactionConfiguration config, GammaTransactionFactoryBuilder builder) {
+        NonSpeculativeGammaTxnFactory(final GammaTxnConfiguration config, GammaTxnFactoryBuilder builder) {
             this.config = config.init();
             this.builder = builder;
         }
 
         @Override
-        public TransactionFactoryBuilder getTransactionFactoryBuilder() {
+        public TxnFactoryBuilder getTransactionFactoryBuilder() {
             return builder;
         }
 
         @Override
-        public final GammaTransactionConfiguration getConfiguration() {
+        public final GammaTxnConfiguration getConfiguration() {
             return config;
         }
 
@@ -387,23 +387,23 @@ public final class GammaStm implements Stm {
         }
     }
 
-    private static final class SpeculativeGammaTransactionFactory implements GammaTransactionFactory {
+    private static final class SpeculativeGammaTxnFactory implements GammaTxnFactory {
 
-        private final GammaTransactionConfiguration config;
-        private final GammaTransactionFactoryBuilder builder;
+        private final GammaTxnConfiguration config;
+        private final GammaTxnFactoryBuilder builder;
 
-        SpeculativeGammaTransactionFactory(final GammaTransactionConfiguration config, GammaTransactionFactoryBuilder builder) {
+        SpeculativeGammaTxnFactory(final GammaTxnConfiguration config, GammaTxnFactoryBuilder builder) {
             this.config = config.init();
             this.builder = builder;
         }
 
         @Override
-        public GammaTransactionFactoryBuilder getTransactionFactoryBuilder() {
+        public GammaTxnFactoryBuilder getTransactionFactoryBuilder() {
             return builder;
         }
 
         @Override
-        public final GammaTransactionConfiguration getConfiguration() {
+        public final GammaTxnConfiguration getConfiguration() {
             return config;
         }
 

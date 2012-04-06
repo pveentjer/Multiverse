@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
 
 import static org.benchy.BenchyUtils.format;
@@ -74,7 +74,7 @@ public class UncontendedMonoUpdateDriver extends BenchmarkDriver {
             final GammaLongRef ref = new GammaLongRef(stm);
 
             FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
-                    new GammaTransactionConfiguration(stm)
+                    new GammaTxnConfiguration(stm)
                             .setReadLockMode(lockMode)
                             .setDirtyCheckEnabled(dirtyCheck));
             long startMs = System.currentTimeMillis();

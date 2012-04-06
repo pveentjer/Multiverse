@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
 
@@ -25,11 +25,11 @@ public final class FatFixedLengthGammaTransaction extends GammaTransaction {
     public final Listeners[] listenersArray;
 
     public FatFixedLengthGammaTransaction(final GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm));
+        this(new GammaTxnConfiguration(stm));
     }
 
     @SuppressWarnings({"ObjectAllocationInLoop"})
-    public FatFixedLengthGammaTransaction(final GammaTransactionConfiguration config) {
+    public FatFixedLengthGammaTransaction(final GammaTxnConfiguration config) {
         super(config, TRANSACTIONTYPE_FAT_FIXED_LENGTH);
 
         listenersArray = new Listeners[config.maxFixedLengthTransactionSize];

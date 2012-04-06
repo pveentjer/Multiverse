@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.SomeUncheckedException;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
@@ -14,7 +14,7 @@ import org.multiverse.stms.gamma.GammaTestUtils;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
@@ -35,7 +35,7 @@ public abstract class FatGammaTransaction_commuteTest<T extends GammaTransaction
 
     protected abstract T newTransaction();
 
-    protected abstract T newTransaction(GammaTransactionConfiguration config);
+    protected abstract T newTransaction(GammaTxnConfiguration config);
 
     protected abstract int getMaxCapacity();
 
@@ -307,7 +307,7 @@ public abstract class FatGammaTransaction_commuteTest<T extends GammaTransaction
         } catch (SpeculativeConfigurationError expected) {
         }
 
-        assertEquals(TransactionStatus.Aborted, tx.getStatus());
+        assertEquals(TxnStatus.Aborted, tx.getStatus());
     }
 
     @Test
@@ -336,7 +336,7 @@ public abstract class FatGammaTransaction_commuteTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadonly(true);
 
         GammaTransaction tx = newTransaction(config);
@@ -359,7 +359,7 @@ public abstract class FatGammaTransaction_commuteTest<T extends GammaTransaction
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadonly(true);
 
         GammaTransaction tx = newTransaction(config);

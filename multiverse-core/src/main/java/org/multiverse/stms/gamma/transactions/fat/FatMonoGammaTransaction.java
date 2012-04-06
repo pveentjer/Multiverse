@@ -6,17 +6,17 @@ import org.multiverse.stms.gamma.Listeners;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 public final class FatMonoGammaTransaction extends GammaTransaction {
 
     public final GammaRefTranlocal tranlocal = new GammaRefTranlocal();
 
     public FatMonoGammaTransaction(GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm));
+        this(new GammaTxnConfiguration(stm));
     }
 
-    public FatMonoGammaTransaction(GammaTransactionConfiguration config) {
+    public FatMonoGammaTransaction(GammaTxnConfiguration config) {
         super(config, TRANSACTIONTYPE_FAT_MONO);
         richmansMansConflictScan = false;
     }

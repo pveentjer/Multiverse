@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class MoneyTransfer_FatFixedLengthGammaTransaction_StressTest extends MoneyTransfer_AbstractTest {
 
@@ -50,8 +50,8 @@ public class MoneyTransfer_FatFixedLengthGammaTransaction_StressTest extends Mon
 
     @Override
     protected TransactionExecutor newTransactionExecutor() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, accountCount)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, accountCount)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 }

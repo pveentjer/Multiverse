@@ -1,7 +1,7 @@
 package org.multiverse;
 
 import org.multiverse.api.Transaction;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject;
@@ -126,25 +126,25 @@ public class TestUtils implements MultiverseConstants {
 
     public static void assertIsPrepared(Transaction... transactions) {
         for (Transaction tx : transactions) {
-            assertEquals(TransactionStatus.Prepared, tx.getStatus());
+            assertEquals(TxnStatus.Prepared, tx.getStatus());
         }
     }
 
     public static void assertIsAborted(Transaction... transactions) {
         for (Transaction tx : transactions) {
-            assertEquals(TransactionStatus.Aborted, tx.getStatus());
+            assertEquals(TxnStatus.Aborted, tx.getStatus());
         }
     }
 
     public static void assertIsCommitted(Transaction... transactions) {
         for (Transaction tx : transactions) {
-            assertEquals(TransactionStatus.Committed, tx.getStatus());
+            assertEquals(TxnStatus.Committed, tx.getStatus());
         }
     }
 
     public static void assertIsActive(Transaction... transactions) {
         for (Transaction tx : transactions) {
-            assertEquals(TransactionStatus.Active, tx.getStatus());
+            assertEquals(TxnStatus.Active, tx.getStatus());
         }
     }
 

@@ -9,7 +9,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
 
 import static org.junit.Assert.*;
@@ -45,7 +45,7 @@ public abstract class LeanGammaTransaction_commitTest<T extends GammaTransaction
         String newValue = "bar";
         ref.set(tx, newValue);
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0);
 
         FatVariableLengthGammaTransaction otherTx = new FatVariableLengthGammaTransaction(config);

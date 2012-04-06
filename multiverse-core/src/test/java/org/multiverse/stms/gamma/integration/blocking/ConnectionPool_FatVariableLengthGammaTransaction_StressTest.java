@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 
 public class ConnectionPool_FatVariableLengthGammaTransaction_StressTest extends ConnectionPool_AbstractTest {
@@ -38,15 +38,15 @@ public class ConnectionPool_FatVariableLengthGammaTransaction_StressTest extends
 
     @Override
     protected TransactionExecutor newTakeBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newReturnBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

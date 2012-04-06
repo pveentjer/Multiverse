@@ -7,7 +7,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
 
 import static org.junit.Assert.assertEquals;
@@ -51,7 +51,7 @@ public class MonoUpdateDriver implements GammaConstants {
         final long txCount = 1000 * 1000 * 1000;
 
         final FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
-                new GammaTransactionConfiguration(stm)
+                new GammaTxnConfiguration(stm)
                         .setDirtyCheckEnabled(false)
                         .setWriteLockMode(writeLockMode));
 

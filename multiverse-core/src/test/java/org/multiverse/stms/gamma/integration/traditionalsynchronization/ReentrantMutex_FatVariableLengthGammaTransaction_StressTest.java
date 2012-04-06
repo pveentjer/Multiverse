@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaTransactionExecutor;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 /**
  * @author Peter Veentjer
@@ -39,17 +39,17 @@ public class ReentrantMutex_FatVariableLengthGammaTransaction_StressTest extends
     }
 
     protected GammaTransactionExecutor newLockBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
 
     }
 
     protected GammaTransactionExecutor newUnlockBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

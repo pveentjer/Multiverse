@@ -7,7 +7,7 @@ import org.multiverse.api.Transaction;
  *
  * @author Peter Veentjer
  * @see TransactionEvent
- * @see org.multiverse.api.TransactionConfiguration#getPermanentListeners()
+ * @see org.multiverse.api.TxnConfiguration#getPermanentListeners()
  * @see Transaction#register(TransactionListener)
  */
 public interface TransactionListener {

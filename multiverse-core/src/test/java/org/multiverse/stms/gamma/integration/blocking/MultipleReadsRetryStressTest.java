@@ -11,9 +11,9 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
@@ -37,29 +37,29 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
     @Test
     public void withMapTransactionAnd2Threads() throws InterruptedException {
-        FatVariableLengthGammaTransactionFactory txFactory = new FatVariableLengthGammaTransactionFactory(stm);
+        FatVariableLengthGammaTxnFactory txFactory = new FatVariableLengthGammaTxnFactory(stm);
         test(new LeanGammaTransactionExecutor(txFactory), 10, 2);
     }
 
     @Test
     public void withArrayTransactionAnd2Threads() throws InterruptedException {
         int refCount = 10;
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount + 1);
-        FatFixedLengthGammaTransactionFactory txFactory = new FatFixedLengthGammaTransactionFactory(config);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
+        FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
         test(new LeanGammaTransactionExecutor(txFactory), refCount, 2);
     }
 
     @Test
     public void withMapTransactionAnd5Threads() throws InterruptedException {
-        FatVariableLengthGammaTransactionFactory txFactory = new FatVariableLengthGammaTransactionFactory(stm);
+        FatVariableLengthGammaTxnFactory txFactory = new FatVariableLengthGammaTxnFactory(stm);
         test(new LeanGammaTransactionExecutor(txFactory), 10, 5);
     }
 
     @Test
     public void withArrayTransactionAnd5Threads() throws InterruptedException {
         int refCount = 10;
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm, refCount + 1);
-        FatFixedLengthGammaTransactionFactory txFactory = new FatFixedLengthGammaTransactionFactory(config);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm, refCount + 1);
+        FatFixedLengthGammaTxnFactory txFactory = new FatFixedLengthGammaTxnFactory(config);
         test(new LeanGammaTransactionExecutor(txFactory), refCount, 5);
     }
 

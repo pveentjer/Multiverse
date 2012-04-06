@@ -4,11 +4,11 @@ package org.multiverse.api.exceptions;
  * A {@link RetryException} thrown when a {@link org.multiverse.api.StmUtils#retry()} or {@link org.multiverse.api.Transaction#retry()}
  * is done while the {@link org.multiverse.api.Transaction} doesn't allow blocking transactions.
  * <p/>
- * For more information see {@link org.multiverse.api.TransactionFactoryBuilder#setBlockingAllowed(boolean)}
- * and {@link org.multiverse.api.TransactionConfiguration#isBlockingAllowed()}.
+ * For more information see {@link org.multiverse.api.TxnFactoryBuilder#setBlockingAllowed(boolean)}
+ * and {@link org.multiverse.api.TxnConfiguration#isBlockingAllowed()}.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setBlockingAllowed(boolean)
+ * @see org.multiverse.api.TxnFactoryBuilder#setBlockingAllowed(boolean)
  */
 public class RetryNotAllowedException extends RetryException {
 

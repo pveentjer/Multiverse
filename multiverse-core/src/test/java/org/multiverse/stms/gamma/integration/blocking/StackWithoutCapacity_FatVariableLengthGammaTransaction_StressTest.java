@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 public class StackWithoutCapacity_FatVariableLengthGammaTransaction_StressTest extends StackWithoutCapacity_AbstractTest {
 
@@ -37,15 +37,15 @@ public class StackWithoutCapacity_FatVariableLengthGammaTransaction_StressTest e
 
     @Override
     protected TransactionExecutor newPopTransactionExecutor() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newPushTransactionExecutor() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatVariableLengthGammaTxnFactory(config));
     }
 }

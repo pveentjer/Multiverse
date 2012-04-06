@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
 
 public class ReadersWriters_FatMonoGammaTransaction_StressTest extends ReadersWritersProblem_AbstractTest {
 
@@ -37,17 +37,17 @@ public class ReadersWriters_FatMonoGammaTransaction_StressTest extends ReadersWr
 
     @Override
     protected TransactionExecutor newAcquiredBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newAcquireBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatMonoGammaTxnFactory(config));
     }
 }

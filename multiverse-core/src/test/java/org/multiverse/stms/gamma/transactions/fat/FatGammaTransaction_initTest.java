@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 import static org.junit.Assert.assertSame;
 
@@ -30,7 +30,7 @@ public abstract class FatGammaTransaction_initTest<T extends GammaTransaction> {
     public void whenSuccess() {
         T tx = newTransaction();
 
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm);
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm);
         config.init();
         tx.init(config);
 

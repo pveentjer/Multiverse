@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Peter Veentjer
  */
-public class GammaTransactionConfigurationTest {
+public class GammaTxnConfigurationTest {
 
     @Test
     public void testIsRichMansConflictScanRequired() {
@@ -18,7 +18,7 @@ public class GammaTransactionConfigurationTest {
         stmConfig.maximumPoorMansConflictScanLength = 0;
         stmConfig.speculativeConfigEnabled = true;
         GammaStm stm = new GammaStm(stmConfig);
-        GammaTransactionConfiguration txConfig = new GammaTransactionConfiguration(stm, stmConfig);
+        GammaTxnConfiguration txConfig = new GammaTxnConfiguration(stm, stmConfig);
         txConfig.init();
 
         assertTrue(txConfig.speculativeConfiguration.get().richMansConflictScanRequired);
@@ -31,7 +31,7 @@ public class GammaTransactionConfigurationTest {
         stmConfig.speculativeConfigEnabled = true;
         stmConfig.dirtyCheck = false;
         GammaStm stm = new GammaStm(stmConfig);
-        GammaTransactionConfiguration txConfig = new GammaTransactionConfiguration(stm, stmConfig);
+        GammaTxnConfiguration txConfig = new GammaTxnConfiguration(stm, stmConfig);
         txConfig.init();
 
         assertFalse(txConfig.speculativeConfiguration.get().richMansConflictScanRequired);

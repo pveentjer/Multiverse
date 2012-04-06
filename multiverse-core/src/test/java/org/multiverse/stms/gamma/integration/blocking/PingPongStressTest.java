@@ -10,10 +10,10 @@ import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 import static java.lang.Math.abs;
 import static org.junit.Assert.assertEquals;
@@ -39,35 +39,35 @@ public class PingPongStressTest {
 
     @Test
     public void withMonoTransactionAnd2Threads() throws InterruptedException {
-        test(new FatMonoGammaTransactionFactory(stm), 2);
+        test(new FatMonoGammaTxnFactory(stm), 2);
     }
 
     @Test
     public void withArrayTransactionAnd2Threads() throws InterruptedException {
-        test(new FatFixedLengthGammaTransactionFactory(stm), 2);
+        test(new FatFixedLengthGammaTxnFactory(stm), 2);
     }
 
     @Test
     public void withMapTransactionAnd2Threads() throws InterruptedException {
-        test(new FatVariableLengthGammaTransactionFactory(stm), 2);
+        test(new FatVariableLengthGammaTxnFactory(stm), 2);
     }
 
     @Test
     public void withMonoTransactionAnd10Threads() throws InterruptedException {
-        test(new FatMonoGammaTransactionFactory(stm), 10);
+        test(new FatMonoGammaTxnFactory(stm), 10);
     }
 
     @Test
     public void withArrayTransactionAnd10Threads() throws InterruptedException {
-        test(new FatFixedLengthGammaTransactionFactory(stm), 10);
+        test(new FatFixedLengthGammaTxnFactory(stm), 10);
     }
 
     @Test
     public void withMapTransactionAnd10Threads() throws InterruptedException {
-        test(new FatVariableLengthGammaTransactionFactory(stm), 10);
+        test(new FatVariableLengthGammaTxnFactory(stm), 10);
     }
 
-    public void test(GammaTransactionFactory transactionFactory, int threadCount) throws InterruptedException {
+    public void test(GammaTxnFactory transactionFactory, int threadCount) throws InterruptedException {
         TransactionExecutor block = new LeanGammaTransactionExecutor(transactionFactory);
         PingPongThread[] threads = createThreads(block, threadCount);
 

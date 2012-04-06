@@ -1,8 +1,8 @@
 package org.multiverse.api.exceptions;
 
 /**
- * An {@link IllegalStateException} thrown when a {@link org.multiverse.api.TransactionFactory} can't be created because
- * the {@link org.multiverse.api.TransactionConfiguration} is not correct.
+ * An {@link IllegalStateException} thrown when a {@link org.multiverse.api.TxnFactory} can't be created because
+ * the {@link org.multiverse.api.TxnConfiguration} is not correct.
  *
  * @author Peter Veentjer.
  */

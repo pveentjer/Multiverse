@@ -180,7 +180,7 @@
     <title>Interruptibility</title>
     <para>
           The default is that a transaction is not interruptible. But in some cases you want a transaction to be interruptible. This can be done using the
-          setInterruptible method on the org.multiverse.api.TransactionFactoryBuilder.
+          setInterruptible method on the org.multiverse.api.TxnFactoryBuilder.
     <programlisting language="java">
 
     import org.multiverse.api.*;

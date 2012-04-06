@@ -5,7 +5,7 @@ package org.multiverse.api.exceptions;
  * a readonly {@link org.multiverse.api.Transaction}.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setReadonly(boolean)
+ * @see org.multiverse.api.TxnFactoryBuilder#setReadonly(boolean)
  */
 public class ReadonlyException extends IllegalTransactionStateException {
 

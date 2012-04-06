@@ -30,7 +30,7 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * the logic inside the atomicChecked block that did the register, is executed again.
  * </li>
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
- * TransactionExecutor level using the {@link TransactionFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
+ * TransactionExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}
  * or it can be done on the Stm level. Permanent listeners are suited for products that want to integrate with Multiverse and always
  * atomicChecked some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
  * the implementations for more details. Permanent listeners are always executed after the normal listeners.
@@ -48,25 +48,25 @@ import org.multiverse.api.lifecycle.TransactionListener;
 public interface Transaction {
 
     /**
-     * Returns the TransactionConfiguration used by this Transaction.
+     * Returns the TxnConfiguration used by this Transaction.
      *
-     * <p>Because the Transaction can be reused, the TransactionConfiguration used by this Transaction doesn't need to be constant.
+     * <p>Because the Transaction can be reused, the TxnConfiguration used by this Transaction doesn't need to be constant.
      *
-     * @return the TransactionConfiguration.
+     * @return the TxnConfiguration.
      */
-    TransactionConfiguration getConfiguration();
+    TxnConfiguration getConfiguration();
 
     /**
      * Returns the status of this Transaction.
      *
      * @return the status of this Transaction.
      */
-    TransactionStatus getStatus();
+    TxnStatus getStatus();
 
     /**
      * Gets the current attempt (so the number of tries this transaction already had). Value will
      * always be equal or larger than 1 (the first attempt returns 1). The maximum number of attempts for retrying is determined based
-     * on the  {@link TransactionConfiguration#getMaxRetries()}
+     * on the  {@link TxnConfiguration#getMaxRetries()}
      *
      * @return the current attempt.
      */
@@ -178,7 +178,7 @@ public interface Transaction {
     /**
      * Registers a TransactionListener. Every time a transaction is retried, the listener needs to
      * be registered again if you want the task to be executed again. If you want a permanent listener, have
-     * a look at the {@link TransactionFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}.
+     * a look at the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TransactionListener)}.
      *
      * <p>If a TransactionListener is added more than once, it is executed more than once. No checks
      * are made. The permanent listeners are executed in the order they are added.

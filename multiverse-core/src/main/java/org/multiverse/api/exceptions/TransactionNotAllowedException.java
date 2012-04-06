@@ -6,7 +6,7 @@ package org.multiverse.api.exceptions;
  * a transaction is available.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setPropagationLevel(org.multiverse.api.PropagationLevel)
+ * @see org.multiverse.api.TxnFactoryBuilder#setPropagationLevel(org.multiverse.api.PropagationLevel)
  */
 public class TransactionNotAllowedException extends PropagationException {
 

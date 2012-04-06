@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 
 public class ProducerConsumer_FatFixedLengthGammaTransaction_StressTest extends ProducerConsumer_AbstractTest {
 
@@ -37,17 +37,17 @@ public class ProducerConsumer_FatFixedLengthGammaTransaction_StressTest extends 
 
     @Override
     protected TransactionExecutor newPutBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newTakeBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000)
                 .setReadLockMode(lockMode);
-        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new FatFixedLengthGammaTxnFactory(config));
     }
 }

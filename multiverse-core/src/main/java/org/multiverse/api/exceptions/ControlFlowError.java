@@ -26,7 +26,7 @@ package org.multiverse.api.exceptions;
  *
  * <p>Normally ControlFlowErrors are cached to be reused because they can be thrown very often to be caught by the TransactionExecutor
  * and discarded. Especially the stacktrace is very expensive to create. By default all ControlFlowErrors are reused
- * but with the {@link org.multiverse.api.TransactionFactoryBuilder#setControlFlowErrorsReused(boolean)} this behavior
+ * but with the {@link org.multiverse.api.TxnFactoryBuilder#setControlFlowErrorsReused(boolean)} this behavior
  * can be changed. It also can be configured on the Stm level, depending on the Stm implementation. For the
  * {@link org.multiverse.stms.gamma.GammaStm} you need to look at the
  * {@link org.multiverse.stms.gamma.GammaStmConfiguration#controlFlowErrorsReused}.

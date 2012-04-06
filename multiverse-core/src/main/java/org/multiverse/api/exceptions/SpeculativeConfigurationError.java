@@ -21,7 +21,7 @@ package org.multiverse.api.exceptions;
  * the speculative behavior to learn, it is important that the {@link org.multiverse.api.TransactionExecutor} is reused.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.TransactionFactoryBuilder#setSpeculative(boolean)
+ * @see org.multiverse.api.TxnFactoryBuilder#setSpeculative(boolean)
  */
 public class SpeculativeConfigurationError extends ControlFlowError {
 

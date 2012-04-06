@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Matchers;
-import org.multiverse.api.TransactionFactory;
+import org.multiverse.api.TxnFactory;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
@@ -15,10 +15,10 @@ import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransactionFactory;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 import java.util.Collection;
 
@@ -34,10 +34,10 @@ import static org.multiverse.stms.gamma.GammaTestUtils.*;
 @RunWith(Parameterized.class)
 public class GammaRef_alterAndGet1Test {
 
-    private final GammaTransactionFactory transactionFactory;
+    private final GammaTxnFactory transactionFactory;
     private final GammaStm stm;
 
-    public GammaRef_alterAndGet1Test(GammaTransactionFactory transactionFactory) {
+    public GammaRef_alterAndGet1Test(GammaTxnFactory transactionFactory) {
         this.transactionFactory = transactionFactory;
         this.stm = transactionFactory.getConfiguration().getStm();
     }
@@ -48,11 +48,11 @@ public class GammaRef_alterAndGet1Test {
     }
 
     @Parameterized.Parameters
-    public static Collection<TransactionFactory[]> configs() {
+    public static Collection<TxnFactory[]> configs() {
         return asList(
-                new TransactionFactory[]{new FatVariableLengthGammaTransactionFactory(new GammaStm())},
-                new TransactionFactory[]{new FatFixedLengthGammaTransactionFactory(new GammaStm())},
-                new TransactionFactory[]{new FatMonoGammaTransactionFactory(new GammaStm())}
+                new TxnFactory[]{new FatVariableLengthGammaTxnFactory(new GammaStm())},
+                new TxnFactory[]{new FatFixedLengthGammaTxnFactory(new GammaStm())},
+                new TxnFactory[]{new FatMonoGammaTxnFactory(new GammaStm())}
         );
     }
 

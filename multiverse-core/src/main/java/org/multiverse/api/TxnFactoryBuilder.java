@@ -3,28 +3,28 @@ package org.multiverse.api;
 import org.multiverse.api.lifecycle.TransactionListener;
 
 /**
- * A Builder for creating a {@link TransactionFactory} and {@link TransactionExecutor}. This builder provides full control
+ * A Builder for creating a {@link TxnFactory} and {@link TransactionExecutor}. This builder provides full control
  * on transaction settings.
  *
  * <p>Since the {@link Transaction} and {@link TransactionExecutor} are very closely integrated, both of them are created
- * by this TransactionFactoryBuilder.
+ * by this TxnFactoryBuilder.
  *
  * <p>Instances of this class are considered immutable, so when you call one of the modifying methods, make sure
- * that you use the resulting TransactionFactoryBuilder. Normally with the builder implementation the same
+ * that you use the resulting TxnFactoryBuilder. Normally with the builder implementation the same
  * instance is returned. In this case this isn't true because a new instance is returned every time.
  *
  * @author Peter Veentjer
- * @see TransactionFactory
- * @see TransactionConfiguration
+ * @see TxnFactory
+ * @see TxnConfiguration
  */
-public interface TransactionFactoryBuilder {
+public interface TxnFactoryBuilder {
 
     /**
-     * Returns the {@link TransactionConfiguration} used by this TransactionFactoryBuilder.
+     * Returns the {@link TxnConfiguration} used by this TxnFactoryBuilder.
      *
-     * @return the used TransactionConfiguration.
+     * @return the used TxnConfiguration.
      */
-    TransactionConfiguration getConfiguration();
+    TxnConfiguration getConfiguration();
 
     /**
      * Sets if the {@link org.multiverse.api.exceptions.ControlFlowError} is reused. Normally you don't want to reuse them
@@ -32,10 +32,10 @@ public interface TransactionFactoryBuilder {
      * debugging purposes it can be quite annoying because you want to see the stacktrace.
      *
      * @param reused true if ControlFlowErrors should be reused.
-     * @return the updated TransactionFactoryBuilder.
-     * @see TransactionConfiguration#isControlFlowErrorsReused()
+     * @return the updated TxnFactoryBuilder.
+     * @see TxnConfiguration#isControlFlowErrorsReused()
      */
-    TransactionFactoryBuilder setControlFlowErrorsReused(boolean reused);
+    TxnFactoryBuilder setControlFlowErrorsReused(boolean reused);
 
     /**
      * Sets the {@link Transaction} familyname. If an {@link TransactionExecutor} is used inside a method, a useful familyname could
@@ -44,11 +44,11 @@ public interface TransactionFactoryBuilder {
      * The transaction familyName is useful debugging purposes, but has not other meaning.
      *
      * @param familyName the familyName of the transaction.
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if familyName is null.
-     * @see TransactionConfiguration#getFamilyName()
+     * @see TxnConfiguration#getFamilyName()
      */
-    TransactionFactoryBuilder setFamilyName(String familyName);
+    TxnFactoryBuilder setFamilyName(String familyName);
 
     /**
      * Sets the {@link org.multiverse.api.PropagationLevel} used. With the PropagationLevel you have control
@@ -56,12 +56,12 @@ public interface TransactionFactoryBuilder {
      * which automatically starts a transaction is one is missing, or lifts on a transaction if available.
      *
      * @param propagationLevel the new PropagationLevel
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if propagationLevel is null.
-     * @see TransactionConfiguration#getPropagationLevel()
+     * @see TxnConfiguration#getPropagationLevel()
      * @see PropagationLevel
      */
-    TransactionFactoryBuilder setPropagationLevel(PropagationLevel propagationLevel);
+    TxnFactoryBuilder setPropagationLevel(PropagationLevel propagationLevel);
 
     /**
      * Sets the {@link Transaction} {@link LockMode} for all reads. If a LockMode is set higher than {@link LockMode#None}, this transaction
@@ -69,12 +69,12 @@ public interface TransactionFactoryBuilder {
      * serialized.
      *
      * @param lockMode the LockMode to set.
-     * @return the updated TransactionFactoryBuilder.
+     * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if lockMode is null.
-     * @see TransactionConfiguration#getReadLockMode()
+     * @see TxnConfiguration#getReadLockMode()
      * @see LockMode
      */
-    TransactionFactoryBuilder setReadLockMode(LockMode lockMode);
+    TxnFactoryBuilder setReadLockMode(LockMode lockMode);
 
     /**
      * Sets the {@link Transaction} {@link LockMode} for all writes. For a write, always a read needs to be done, so if the read LockMode is
@@ -82,19 +82,19 @@ public interface TransactionFactoryBuilder {
      * <p>Freshly constructed objects that are not committed, automatically are locked with {@link LockMode#Exclusive}.
      *
      * <p>If the write LockMode is set after the read LockMode and the write LockMode is lower than the read LockMode,
-     * an {@code IllegalTransactionFactoryException} will be thrown when a {@link TransactionFactory} is created.
+     * an {@code IllegalTransactionFactoryException} will be thrown when a {@link TxnFactory} is created.
      *
      * <p>If the write LockMode is set before the read LockMode and the write LockMode is lower than the read LockMode,
      * the write LockMode automatically is upgraded to that of the read LockMode. This makes setting the readLock
      * mode less of a nuisance.
      *
      * @param lockMode the LockMode to set.
-     * @return the updated TransactionFactoryBuilder.
+     * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if lockMode is null.
-     * @see TransactionConfiguration#getWriteLockMode()
+     * @see TxnConfiguration#getWriteLockMode()
      * @see LockMode
      */
-    TransactionFactoryBuilder setWriteLockMode(LockMode lockMode);
+    TxnFactoryBuilder setWriteLockMode(LockMode lockMode);
 
     /**
      * Adds a permanent {@link Transaction} {@link TransactionListener}. All permanent listeners are always executed after all normal
@@ -105,53 +105,53 @@ public interface TransactionFactoryBuilder {
      * {@link TransactionListener} for more information about normal vs permanent listeners.
      *
      * @param listener the permanent listener to add.
-     * @return the updated TransactionFactoryBuilder.
+     * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if listener is null.
-     * @see TransactionConfiguration#getPermanentListeners()
+     * @see TxnConfiguration#getPermanentListeners()
      */
-    TransactionFactoryBuilder addPermanentListener(TransactionListener listener);
+    TxnFactoryBuilder addPermanentListener(TransactionListener listener);
 
     /**
      * Sets the {@link Transaction} {@link TraceLevel}. With tracing it is possible to see what is happening inside a transaction.
      *
      * @param traceLevel the new traceLevel.
-     * @return the updated TransactionFactoryBuilder.
+     * @return the updated TxnFactoryBuilder.
      * @throws NullPointerException if traceLevel is null.
-     * @see TransactionConfiguration#getTraceLevel()
+     * @see TxnConfiguration#getTraceLevel()
      * @see TraceLevel
      */
-    TransactionFactoryBuilder setTraceLevel(TraceLevel traceLevel);
+    TxnFactoryBuilder setTraceLevel(TraceLevel traceLevel);
 
     /**
      * Sets the timeout (the maximum time a {@link Transaction} is allowed to block. Long.MAX_VALUE indicates that an
      * unbound timeout should be used.
      *
      * @param timeoutNs the timeout specified in nano seconds
-     * @return the updated TransactionFactoryBuilder
-     * @see TransactionConfiguration#getTimeoutNs()
+     * @return the updated TxnFactoryBuilder
+     * @see TxnConfiguration#getTimeoutNs()
      * @see Transaction#getRemainingTimeoutNs()
      */
-    TransactionFactoryBuilder setTimeoutNs(long timeoutNs);
+    TxnFactoryBuilder setTimeoutNs(long timeoutNs);
 
     /**
      * Sets if the {@link Transaction} can be interrupted while doing blocking operations.
      *
      * @param interruptible if the transaction can be interrupted while doing blocking operations.
-     * @return the updated TransactionFactoryBuilder
-     * @see TransactionConfiguration#isInterruptible()
+     * @return the updated TxnFactoryBuilder
+     * @see TxnConfiguration#isInterruptible()
      */
-    TransactionFactoryBuilder setInterruptible(boolean interruptible);
+    TxnFactoryBuilder setInterruptible(boolean interruptible);
 
     /**
      * Sets the {@link Transaction} {@link BackoffPolicy}. Policy is used to backoff when a transaction conflicts with another {@link Transaction}.
      * See the {@link BackoffPolicy} for more information.
      *
      * @param backoffPolicy the backoff policy to use.
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if backoffPolicy is null.
-     * @see TransactionConfiguration#getBackoffPolicy()
+     * @see TxnConfiguration#getBackoffPolicy()
      */
-    TransactionFactoryBuilder setBackoffPolicy(BackoffPolicy backoffPolicy);
+    TxnFactoryBuilder setBackoffPolicy(BackoffPolicy backoffPolicy);
 
     /**
      * Sets if the {@link Transaction} dirty check is enabled. Dirty check is that something only needs to be written,
@@ -160,10 +160,10 @@ public interface TransactionFactoryBuilder {
      * it is the best option.
      *
      * @param dirtyCheckEnabled true if dirty check should be executed, false otherwise.
-     * @return the updated TransactionFactoryBuilder.
-     * @see TransactionConfiguration#isDirtyCheckEnabled()
+     * @return the updated TxnFactoryBuilder.
+     * @see TxnConfiguration#isDirtyCheckEnabled()
      */
-    TransactionFactoryBuilder setDirtyCheckEnabled(boolean dirtyCheckEnabled);
+    TxnFactoryBuilder setDirtyCheckEnabled(boolean dirtyCheckEnabled);
 
     /**
      * Sets the maximum number of spins that are allowed when a {@link Transaction} can't be read/written/locked
@@ -172,21 +172,21 @@ public interface TransactionFactoryBuilder {
      * <p>Setting the value to a very high value, could lead to more an increased chance of a live locking.
      *
      * @param spinCount the maximum number of spins
-     * @return the updated TransactionFactoryBuilder.
+     * @return the updated TxnFactoryBuilder.
      * @throws IllegalArgumentException if spinCount smaller than 0.
-     * @see TransactionConfiguration#getSpinCount()
+     * @see TxnConfiguration#getSpinCount()
      */
-    TransactionFactoryBuilder setSpinCount(int spinCount);
+    TxnFactoryBuilder setSpinCount(int spinCount);
 
     /**
      * Sets the readonly property on a {@link Transaction}. If a transaction is configured as readonly, no write operations
      * (also no construction of new transactional objects making use of that transaction) is allowed
      *
      * @param readonly true if the transaction should be readonly, false otherwise.
-     * @return the updated TransactionFactoryBuilder
-     * @see TransactionConfiguration#isReadonly()
+     * @return the updated TxnFactoryBuilder
+     * @see TxnConfiguration#isReadonly()
      */
-    TransactionFactoryBuilder setReadonly(boolean readonly);
+    TxnFactoryBuilder setReadonly(boolean readonly);
 
     /**
      * Sets if the {@link Transaction} should automatically track all reads that have been done. This is needed for blocking
@@ -198,10 +198,10 @@ public interface TransactionFactoryBuilder {
      * The transaction is free to track reads even though this property is disabled.
      *
      * @param enabled true if read tracking enabled, false otherwise.
-     * @return the updated TransactionFactoryBuilder
-     * @see TransactionConfiguration#isReadTrackingEnabled()
+     * @return the updated TxnFactoryBuilder
+     * @see TxnConfiguration#isReadTrackingEnabled()
      */
-    TransactionFactoryBuilder setReadTrackingEnabled(boolean enabled);
+    TxnFactoryBuilder setReadTrackingEnabled(boolean enabled);
 
     /**
      * With the speculative configuration enabled, the {@link Stm} is allowed to determine optimal settings for
@@ -216,10 +216,10 @@ public interface TransactionFactoryBuilder {
      * <p>Enabling it can cause a few unexpected 'retries' of transactions, but it can seriously improve performance.
      *
      * @param speculative indicates if speculative configuration should be enabled.
-     * @return the updated TransactionFactoryBuilder
-     * @see TransactionConfiguration#isSpeculative()
+     * @return the updated TxnFactoryBuilder
+     * @see TxnConfiguration#isSpeculative()
      */
-    TransactionFactoryBuilder setSpeculative(boolean speculative);
+    TxnFactoryBuilder setSpeculative(boolean speculative);
 
     /**
      * Sets the the maximum count a {@link Transaction} can be retried. The default is 1000. Setting it to a very low value
@@ -229,11 +229,11 @@ public interface TransactionFactoryBuilder {
      * are done in the beginning to figure out the best settings.
      *
      * @param maxRetries the maximum number of times a transaction can be tried.
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      * @throws IllegalArgumentException if maxRetries smaller than 0.
-     * @see TransactionConfiguration#getMaxRetries()
+     * @see TxnConfiguration#getMaxRetries()
      */
-    TransactionFactoryBuilder setMaxRetries(int maxRetries);
+    TxnFactoryBuilder setMaxRetries(int maxRetries);
 
     /**
      * Sets the {@link IsolationLevel} on the {@link Transaction}.
@@ -243,12 +243,12 @@ public interface TransactionFactoryBuilder {
      * read is upgraded to the Oracle version of serialized (so with the writeskew problem still there).
      *
      * @param isolationLevel the new IsolationLevel
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      * @throws NullPointerException if isolationLevel is null.
-     * @see TransactionConfiguration#getIsolationLevel()
+     * @see TxnConfiguration#getIsolationLevel()
      * @see IsolationLevel
      */
-    TransactionFactoryBuilder setIsolationLevel(IsolationLevel isolationLevel);
+    TxnFactoryBuilder setIsolationLevel(IsolationLevel isolationLevel);
 
     /**
      * Sets if the {@link Transaction} is allowed to do an explicit retry (needed for a blocking operation). One use case
@@ -256,26 +256,26 @@ public interface TransactionFactoryBuilder {
      * executed by the agent a blocking operations is done (e.g. taking an item of a blocking queue).
      *
      * @param blockingAllowed true if explicit retry is allowed, false otherwise.
-     * @return the updated TransactionFactoryBuilder
+     * @return the updated TxnFactoryBuilder
      */
-    TransactionFactoryBuilder setBlockingAllowed(boolean blockingAllowed);
+    TxnFactoryBuilder setBlockingAllowed(boolean blockingAllowed);
 
     /**
-     * Builds a new {@link TransactionFactory}.
+     * Builds a new {@link TxnFactory}.
      *
-     * @return the build TransactionFactory.
+     * @return the build TxnFactory.
      * @throws org.multiverse.api.exceptions.IllegalTransactionFactoryException
-     *          if the TransactionFactory could not be build
+     *          if the TxnFactory could not be build
      *          because the configuration was not correct.
      */
-    TransactionFactory newTransactionFactory();
+    TxnFactory newTransactionFactory();
 
     /**
-     * Builds a new {@link TransactionExecutor} optimized for executing transactions created by this TransactionFactoryBuilder.
+     * Builds a new {@link TransactionExecutor} optimized for executing transactions created by this TxnFactoryBuilder.
      *
      * @return the created TransactionExecutor.
      * @throws org.multiverse.api.exceptions.IllegalTransactionFactoryException
-     *          if the TransactionFactory could not be build
+     *          if the TxnFactory could not be build
      *          because the configuration was not correct.
      */
     TransactionExecutor newTransactionExecutor();

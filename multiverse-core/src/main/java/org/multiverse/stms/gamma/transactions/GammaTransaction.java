@@ -1,7 +1,7 @@
 package org.multiverse.stms.gamma.transactions;
 
 import org.multiverse.api.Transaction;
-import org.multiverse.api.TransactionStatus;
+import org.multiverse.api.TxnStatus;
 import org.multiverse.api.blocking.DefaultRetryLatch;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.exceptions.*;
@@ -29,7 +29,7 @@ public abstract class GammaTransaction implements GammaConstants, Transaction {
 
     public final GammaObjectPool pool = new GammaObjectPool();
     public int status = TX_ACTIVE;
-    public GammaTransactionConfiguration config;
+    public GammaTxnConfiguration config;
     public int attempt;
     public long remainingTimeoutNs;
     public boolean hasWrites;
@@ -41,7 +41,7 @@ public abstract class GammaTransaction implements GammaConstants, Transaction {
     public boolean commitConflict;
     public boolean evaluatingCommute = false;
 
-    public GammaTransaction(GammaTransactionConfiguration config, int transactionType) {
+    public GammaTransaction(GammaTxnConfiguration config, int transactionType) {
         config.init();
         init(config);
         this.transactionType = transactionType;
@@ -572,7 +572,7 @@ public abstract class GammaTransaction implements GammaConstants, Transaction {
     public abstract GammaRefTranlocal locate(BaseGammaRef o);
 
     @Override
-    public final GammaTransactionConfiguration getConfiguration() {
+    public final GammaTxnConfiguration getConfiguration() {
         return config;
     }
 
@@ -721,7 +721,7 @@ public abstract class GammaTransaction implements GammaConstants, Transaction {
         attempt = failingTx.attempt;
     }
 
-    public final void init(GammaTransactionConfiguration config) {
+    public final void init(GammaTxnConfiguration config) {
         if (config == null) {
             throw new NullPointerException();
         }
@@ -733,16 +733,16 @@ public abstract class GammaTransaction implements GammaConstants, Transaction {
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
     public abstract boolean isReadConsistent(GammaRefTranlocal justAdded);
 
-    public final TransactionStatus getStatus() {
+    public final TxnStatus getStatus() {
         switch (status) {
             case TX_ACTIVE:
-                return TransactionStatus.Active;
+                return TxnStatus.Active;
             case TX_PREPARED:
-                return TransactionStatus.Prepared;
+                return TxnStatus.Prepared;
             case TX_COMMITTED:
-                return TransactionStatus.Committed;
+                return TxnStatus.Committed;
             case TX_ABORTED:
-                return TransactionStatus.Aborted;
+                return TxnStatus.Aborted;
             default:
                 throw new IllegalStateException();
         }

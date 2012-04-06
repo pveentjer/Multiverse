@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.SpeculativeGammaConfiguration;
 
 import static org.multiverse.utils.Bugshaker.shakeBugs;
@@ -21,10 +21,10 @@ public final class FatVariableLengthGammaTransaction extends GammaTransaction {
     public long localConflictCount;
 
     public FatVariableLengthGammaTransaction(GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm));
+        this(new GammaTxnConfiguration(stm));
     }
 
-    public FatVariableLengthGammaTransaction(GammaTransactionConfiguration config) {
+    public FatVariableLengthGammaTransaction(GammaTxnConfiguration config) {
         super(config, TRANSACTIONTYPE_FAT_VARIABLE_LENGTH);
         this.array = new GammaRefTranlocal[config.minimalArrayTreeSize];
     }

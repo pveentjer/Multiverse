@@ -5,7 +5,7 @@ package org.multiverse.api;
  *
  * @author Peter Veentjer
  */
-public enum TransactionStatus {
+public enum TxnStatus {
 
     /**
      * When a Transaction is running.
@@ -30,14 +30,14 @@ public enum TransactionStatus {
 
     private final boolean alive;
 
-    TransactionStatus(boolean alive) {
+    TxnStatus(boolean alive) {
         this.alive = alive;
     }
 
     /**
      * Checks if the Transaction still is active/prepared.
      *
-     * @return true if the TransactionStatus is active or prepared.
+     * @return true if the TxnStatus is active or prepared.
      */
     public boolean isAlive() {
         return alive;

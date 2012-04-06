@@ -7,7 +7,7 @@ import static java.lang.String.format;
  * cause of this exception is that the {@link org.multiverse.api.PropagationLevel#Mandatory} is used.
  *
  * @author Peter Veentjer
- * @see org.multiverse.api.TransactionFactoryBuilder#setPropagationLevel(org.multiverse.api.PropagationLevel)
+ * @see org.multiverse.api.TxnFactoryBuilder#setPropagationLevel(org.multiverse.api.PropagationLevel)
  */
 public class TransactionMandatoryException extends PropagationException {
 

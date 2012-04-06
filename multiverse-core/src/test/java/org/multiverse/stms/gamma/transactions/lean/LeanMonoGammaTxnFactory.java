@@ -1,28 +1,28 @@
 package org.multiverse.stms.gamma.transactions.lean;
 
-import org.multiverse.api.TransactionFactoryBuilder;
+import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
 
 import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
 
-public class LeanMonoGammaTransactionFactory implements GammaTransactionFactory {
+public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
 
-    private final GammaTransactionConfiguration config;
+    private final GammaTxnConfiguration config;
 
-    public LeanMonoGammaTransactionFactory(GammaStm stm) {
-        this(new GammaTransactionConfiguration(stm).setControlFlowErrorsReused(false));
+    public LeanMonoGammaTxnFactory(GammaStm stm) {
+        this(new GammaTxnConfiguration(stm).setControlFlowErrorsReused(false));
     }
 
-    public LeanMonoGammaTransactionFactory(GammaTransactionConfiguration config) {
+    public LeanMonoGammaTxnFactory(GammaTxnConfiguration config) {
         this.config = config.setControlFlowErrorsReused(false).init();
     }
 
     @Override
-    public GammaTransactionConfiguration getConfiguration() {
+    public GammaTxnConfiguration getConfiguration() {
         return config;
     }
 
@@ -32,7 +32,7 @@ public class LeanMonoGammaTransactionFactory implements GammaTransactionFactory 
     }
 
     @Override
-    public TransactionFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTransactionFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 

@@ -6,7 +6,7 @@ import org.multiverse.api.TransactionExecutor;
 import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.GammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsActive;
@@ -24,7 +24,7 @@ public class LeanGammaTransactionExecutor_integrationTest {
 
     @Test
     public void whenExecutedThenThreadLocalTransactionSet() {
-        GammaTransactionFactory transactionFactory = stm.newTransactionFactoryBuilder().newTransactionFactory();
+        GammaTxnFactory transactionFactory = stm.newTransactionFactoryBuilder().newTransactionFactory();
         TransactionExecutor block = new LeanGammaTransactionExecutor(transactionFactory);
         block.atomic(new AtomicVoidClosure() {
             @Override

@@ -6,7 +6,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Transaction;
-import org.multiverse.api.TransactionFactory;
+import org.multiverse.api.TxnFactory;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.TooManyRetriesException;
@@ -19,7 +19,7 @@ import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransact
 
 public class VetoCommitBarrier_joinCommitTest {
     private GammaStm stm;
-    private TransactionFactory txFactory;
+    private TxnFactory txFactory;
 
     @Before
     public void setUp() {

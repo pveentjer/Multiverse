@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactions.fat;
 
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 
 public class FatVariableLengthGammaTransaction_openForConstructionTest
         extends FatGammaTransaction_openForConstructionTest<FatVariableLengthGammaTransaction> {
@@ -11,7 +11,7 @@ public class FatVariableLengthGammaTransaction_openForConstructionTest
     }
 
     @Override
-    protected FatVariableLengthGammaTransaction newTransaction(GammaTransactionConfiguration config) {
+    protected FatVariableLengthGammaTransaction newTransaction(GammaTxnConfiguration config) {
         return new FatVariableLengthGammaTransaction(config);
     }
 }

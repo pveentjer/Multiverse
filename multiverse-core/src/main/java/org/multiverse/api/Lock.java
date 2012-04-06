@@ -35,9 +35,9 @@ package org.multiverse.api;
  * <h3>Blocking</h3>
  *
  * <p>Atm it isn't possible to block on a lock. What happens is that some spinning is done
- * {@link TransactionFactoryBuilder#setSpinCount(int)} and then some retries
- * {@link TransactionFactoryBuilder#setMaxRetries(int)} in combination with a backoff
- * {@link TransactionFactoryBuilder#setBackoffPolicy(BackoffPolicy)}. In the 0.8 release blocking will
+ * {@link TxnFactoryBuilder#setSpinCount(int)} and then some retries
+ * {@link TxnFactoryBuilder#setMaxRetries(int)} in combination with a backoff
+ * {@link TxnFactoryBuilder#setBackoffPolicy(BackoffPolicy)}. In the 0.8 release blocking will
  * probably be added.
  *
  * <h3>Fairness</h3>
@@ -65,8 +65,8 @@ package org.multiverse.api;
  *
  * <h3>Locking scope</h3>
  *
- * <p>Locking can be done on the Transaction level (see the {@link TransactionFactoryBuilder#setReadLockMode(LockMode)} and
- * {@link TransactionFactoryBuilder#setWriteLockMode(LockMode)} where all reads or all writes (to do a write also a read
+ * <p>Locking can be done on the Transaction level (see the {@link TxnFactoryBuilder#setReadLockMode(LockMode)} and
+ * {@link TxnFactoryBuilder#setWriteLockMode(LockMode)} where all reads or all writes (to do a write also a read
  * is needed) are locked automatically. It can also be done on the reference level using
  * getAndLock/setAndLock/getAndSetAndLock methods or by accessing the {@link TransactionalObject#getLock()}.
  *
@@ -92,8 +92,8 @@ package org.multiverse.api;
  * deadlocks (although it shifts the problem to an increased chance of starvation and livelocks).
  *
  * @author Peter Veentjer.
- * @see TransactionFactoryBuilder#setReadLockMode(LockMode)
- * @see TransactionFactoryBuilder#setWriteLockMode(LockMode)
+ * @see TxnFactoryBuilder#setReadLockMode(LockMode)
+ * @see TxnFactoryBuilder#setWriteLockMode(LockMode)
  */
 public interface Lock {
 

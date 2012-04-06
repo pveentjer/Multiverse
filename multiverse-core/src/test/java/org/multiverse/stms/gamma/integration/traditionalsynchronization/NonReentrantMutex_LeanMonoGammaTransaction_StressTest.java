@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Test;
 import org.multiverse.api.TransactionExecutor;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
-import org.multiverse.stms.gamma.transactions.GammaTransactionConfiguration;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxnFactory;
 
 public class NonReentrantMutex_LeanMonoGammaTransaction_StressTest extends NonReentrantMutex_AbstractTest {
 
@@ -15,15 +15,15 @@ public class NonReentrantMutex_LeanMonoGammaTransaction_StressTest extends NonRe
 
     @Override
     protected TransactionExecutor newLockBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new LeanMonoGammaTxnFactory(config));
     }
 
     @Override
     protected TransactionExecutor newUnlockBlock() {
-        GammaTransactionConfiguration config = new GammaTransactionConfiguration(stm)
+        GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaxRetries(10000);
-        return new LeanGammaTransactionExecutor(new LeanMonoGammaTransactionFactory(config));
+        return new LeanGammaTransactionExecutor(new LeanMonoGammaTxnFactory(config));
     }
 }

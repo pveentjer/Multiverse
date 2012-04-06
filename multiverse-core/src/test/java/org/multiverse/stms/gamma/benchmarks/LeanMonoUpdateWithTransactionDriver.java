@@ -9,7 +9,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTransactionExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransactionFactory;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxnFactory;
 
 import static org.benchy.BenchyUtils.operationsPerSecondPerThreadAsString;
 import static org.junit.Assert.assertEquals;
@@ -37,7 +37,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
         final GammaRef<String> ref = new GammaRef<String>(stm, null);
         long initialVersion = ref.getVersion();
 
-        final LeanGammaTransactionExecutor block = new LeanGammaTransactionExecutor(new LeanMonoGammaTransactionFactory(stm));
+        final LeanGammaTransactionExecutor block = new LeanGammaTransactionExecutor(new LeanMonoGammaTxnFactory(stm));
 
         final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override

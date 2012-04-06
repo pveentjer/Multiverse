@@ -4,9 +4,9 @@ import org.multiverse.*;
 import org.multiverse.api.closures.*;
 
 /**
- * An TransactionExecutor is responsible for executing an atomic closure. It is created by the {@link TransactionFactoryBuilder}
+ * An TransactionExecutor is responsible for executing an atomic closure. It is created by the {@link TxnFactoryBuilder}
  * and this gives the {@link Stm} the opportunity to return different implementations based on the
- * {@link TransactionFactory} configuration. And it also gives the opportunity to provide Stm specific transaction handling
+ * {@link TxnFactory} configuration. And it also gives the opportunity to provide Stm specific transaction handling
  * mechanism. In the Multiverse 0.6 design and before, a single TransactionTemplate implementation was used that should
  * be used by all Stm's, but that design is limiting.
  *
@@ -102,7 +102,7 @@ public interface TransactionExecutor extends MultiverseConstants{
     *
     * @return the TransactionFactory used by this TransactionExecutor.
     */
-    TransactionFactory getTransactionFactory();
+    TxnFactory getTransactionFactory();
 
 #foreach($closure in $closures)
    /**
