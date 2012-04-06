@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnStatus;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.references.TxnInteger;
 import org.multiverse.stms.gamma.GammaStm;
@@ -113,7 +113,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
@@ -145,7 +145,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
@@ -178,7 +178,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.getAndIncrement(tx, 1);

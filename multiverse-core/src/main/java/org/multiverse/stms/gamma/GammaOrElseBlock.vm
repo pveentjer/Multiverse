@@ -1,18 +1,18 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.*;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.api.exceptions.*;
 import static org.multiverse.api.TxnThreadLocal.*;
 
 public class GammaOrElseBlock implements OrElseBlock{
 
-#foreach($closure in $closures)
+#foreach($callable in $callables)
 
     @Override
-    public ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse){
+    public ${callable.typeParameter} ${callable.type} execute(${callable.name}${callable.typeParameter} either, ${callable.name}${callable.typeParameter} orelse){
         try{
-#if(${closure.type} eq 'void')
+#if(${callable.type} eq 'void')
             executeChecked(either,orelse);
             return;
 #else
@@ -26,13 +26,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception{
+    public ${callable.typeParameter} ${callable.type} executeChecked(${callable.name}${callable.typeParameter} either, ${callable.name}${callable.typeParameter} orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -41,14 +41,14 @@ public class GammaOrElseBlock implements OrElseBlock{
         }
 
         try{
-#if(${closure.type} eq 'void')
+#if(${callable.type} eq 'void')
             either.call(txn);
             return;
 #else
             return either.call(txn);
 #end
         }catch(RetryError retry){
-#if(${closure.type} eq 'void')
+#if(${callable.type} eq 'void')
             orelse.call(txn);
             return;
 #else

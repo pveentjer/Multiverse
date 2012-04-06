@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.RetryError;
 
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class NaiveTxnStack_popTest {
 
     @Test
     public void whenSingleItem() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String item = "1";
@@ -43,7 +43,7 @@ public class NaiveTxnStack_popTest {
 
     @Test
     public void whenMultipleItems() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String item1 = "1";
@@ -62,7 +62,7 @@ public class NaiveTxnStack_popTest {
     @Test
     @Ignore
     public void whenEmpty_thenRetryError() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {

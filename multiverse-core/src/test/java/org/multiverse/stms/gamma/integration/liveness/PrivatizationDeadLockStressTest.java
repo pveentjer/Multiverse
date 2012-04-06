@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
@@ -62,7 +62,7 @@ public class PrivatizationDeadLockStressTest {
                     .setMaxRetries(10000)
                     .newTxnExecutor();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (leftToRight) {
@@ -81,7 +81,7 @@ public class PrivatizationDeadLockStressTest {
 
             int k = 0;
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
                 sleepMs(10);
                 k++;
 

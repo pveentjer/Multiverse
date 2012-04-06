@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
@@ -61,7 +61,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
                 .setWriteLockMode(writeLockMode)
                 .newTxnExecutor();
 
-        final TxnVoidClosure closure = new TxnVoidClosure() {
+        final TxnVoidCallable callable = new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.openForWrite((FatMonoGammaTxn) tx, LOCKMODE_NONE).long_value++;
@@ -71,7 +71,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            executor.atomic(closure);
+            executor.atomic(callable);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

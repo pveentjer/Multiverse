@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -34,7 +34,7 @@ public class GammaTxnExecutor_blockingTest {
         sleepMs(1000);
         assertAlive(t);
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -56,7 +56,7 @@ public class GammaTxnExecutor_blockingTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

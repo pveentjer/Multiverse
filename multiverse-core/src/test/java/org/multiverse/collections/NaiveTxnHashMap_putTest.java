@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -25,7 +25,7 @@ public class NaiveTxnHashMap_putTest {
 
     @Test
     public void whenEmpty() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String result = map.put("key", "value");
@@ -39,7 +39,7 @@ public class NaiveTxnHashMap_putTest {
 
     @Test
     public void whenReplacingExistingKey() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.put("1", "a");
@@ -58,7 +58,7 @@ public class NaiveTxnHashMap_putTest {
 
     @Test
     public void whenNullKey_thenNullPointerException() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -80,7 +80,7 @@ public class NaiveTxnHashMap_putTest {
 
         for (int k = 0; k < itemCount; k++) {
             final int key = k;
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     map.put("" + key, "" + key);
@@ -90,7 +90,7 @@ public class NaiveTxnHashMap_putTest {
 
         System.out.println("Finished inserting");
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertEquals(itemCount, map.size());
@@ -101,7 +101,7 @@ public class NaiveTxnHashMap_putTest {
 
         for (int k = 0; k < itemCount; k++) {
             final int key = k;
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     assertEquals("" + key, map.get("" + key));

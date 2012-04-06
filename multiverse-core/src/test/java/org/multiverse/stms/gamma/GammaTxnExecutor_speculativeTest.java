@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.functions.Function;
 import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -53,7 +53,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 System.out.println(tx.getClass());
@@ -92,7 +92,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -116,7 +116,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -141,7 +141,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -166,7 +166,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -190,7 +190,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -215,7 +215,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
@@ -247,7 +247,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());

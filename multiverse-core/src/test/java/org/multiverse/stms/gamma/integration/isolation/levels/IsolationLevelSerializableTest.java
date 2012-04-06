@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -86,7 +86,7 @@ public class IsolationLevelSerializableTest {
 
         ref1.get(tx);
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref1.incrementAndGet(1);

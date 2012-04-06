@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
@@ -78,7 +78,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
                     .setReadLockMode(lockLevel)
                     .setDirtyCheckEnabled(dirtyCheck)
                     .newTxnExecutor();
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.increment();
@@ -86,7 +86,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
             };
 
             for (long k = 0; k < _incCount; k++) {
-                executor.atomic(closure);
+                executor.atomic(callable);
             }
         }
     }

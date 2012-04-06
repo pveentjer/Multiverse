@@ -1,7 +1,7 @@
 package org.multiverse.stms.gamma;
 
 import org.multiverse.api.*;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.api.exceptions.*;
 import static org.multiverse.api.TxnThreadLocal.*;
 
@@ -9,7 +9,7 @@ public class GammaOrElseBlock implements OrElseBlock{
 
 
     @Override
-    public <E> E execute(TxnClosure<E> either, TxnClosure<E> orelse){
+    public <E> E execute(TxnCallable<E> either, TxnCallable<E> orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -20,13 +20,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public <E> E executeChecked(TxnClosure<E> either, TxnClosure<E> orelse)throws Exception{
+    public <E> E executeChecked(TxnCallable<E> either, TxnCallable<E> orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -42,7 +42,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  int execute(TxnIntClosure either, TxnIntClosure orelse){
+    public  int execute(TxnIntCallable either, TxnIntCallable orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -53,13 +53,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  int executeChecked(TxnIntClosure either, TxnIntClosure orelse)throws Exception{
+    public  int executeChecked(TxnIntCallable either, TxnIntCallable orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -75,7 +75,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  long execute(TxnLongClosure either, TxnLongClosure orelse){
+    public  long execute(TxnLongCallable either, TxnLongCallable orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -86,13 +86,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  long executeChecked(TxnLongClosure either, TxnLongClosure orelse)throws Exception{
+    public  long executeChecked(TxnLongCallable either, TxnLongCallable orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -108,7 +108,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  double execute(TxnDoubleClosure either, TxnDoubleClosure orelse){
+    public  double execute(TxnDoubleCallable either, TxnDoubleCallable orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -119,13 +119,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  double executeChecked(TxnDoubleClosure either, TxnDoubleClosure orelse)throws Exception{
+    public  double executeChecked(TxnDoubleCallable either, TxnDoubleCallable orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -141,7 +141,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  boolean execute(TxnBooleanClosure either, TxnBooleanClosure orelse){
+    public  boolean execute(TxnBooleanCallable either, TxnBooleanCallable orelse){
         try{
             return executeChecked(either,orelse);
         }catch(RuntimeException e){
@@ -152,13 +152,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  boolean executeChecked(TxnBooleanClosure either, TxnBooleanClosure orelse)throws Exception{
+    public  boolean executeChecked(TxnBooleanCallable either, TxnBooleanCallable orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();
@@ -174,7 +174,7 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  void execute(TxnVoidClosure either, TxnVoidClosure orelse){
+    public  void execute(TxnVoidCallable either, TxnVoidCallable orelse){
         try{
             executeChecked(either,orelse);
             return;
@@ -186,13 +186,13 @@ public class GammaOrElseBlock implements OrElseBlock{
     }
 
     @Override
-    public  void executeChecked(TxnVoidClosure either, TxnVoidClosure orelse)throws Exception{
+    public  void executeChecked(TxnVoidCallable either, TxnVoidCallable orelse)throws Exception{
         if(either == null){
-            throw new NullPointerException("either closure can't be null");
+            throw new NullPointerException("either callable can't be null");
         }
 
         if(orelse == null){
-            throw new NullPointerException("orelse closure can't be null");
+            throw new NullPointerException("orelse callable can't be null");
         }
 
         Txn txn = getThreadLocalTxn();

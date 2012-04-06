@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.transactionalobjects.txnref;
 
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.predicates.Predicate;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
@@ -26,7 +26,7 @@ public class TxnRefAwaitThread<T> extends TestThread {
 
     @Override
     public void doRun() throws Exception {
-        ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 System.out.println("Starting wait and ref.value found: " + ref.get());

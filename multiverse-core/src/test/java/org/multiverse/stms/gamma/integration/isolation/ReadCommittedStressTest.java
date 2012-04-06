@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -67,7 +67,7 @@ public class ReadCommittedStressTest {
         @Override
         public void doRun() {
             TxnExecutor executor = stm.getDefaultTxnExecutor();
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -78,7 +78,7 @@ public class ReadCommittedStressTest {
 
             while (!stop) {
                 try {
-                    executor.atomic(closure);
+                    executor.atomic(callable);
                     fail();
                 } catch (DeadTxnException ignore) {
                 }
@@ -97,7 +97,7 @@ public class ReadCommittedStressTest {
 
         @Override
         public void doRun() {
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -122,11 +122,11 @@ public class ReadCommittedStressTest {
             while (!stop) {
                 switch (k % 2) {
                     case 0:
-                        readonlyReadtrackingBlock.atomic(closure);
+                        readonlyReadtrackingBlock.atomic(callable);
                         break;
                     case 1:
                     case 3:
-                        updateReadtrackingBlock.atomic(closure);
+                        updateReadtrackingBlock.atomic(callable);
                         break;
                     default:
                         throw new IllegalStateException();

@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -161,7 +161,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
         public void doRun() {
             TxnExecutor executor = newBlock(lockMode, dirtyCheckEnabled);
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -173,7 +173,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
             long startMs = currentTimeMillis();
 
             for (long k = 0; k < transactionsPerThread; k++) {
-                executor.atomic(closure);
+                executor.atomic(callable);
 
                 if (k % 500000 == 0) {
                     System.out.printf("%s is at %s\n", getName(), k);

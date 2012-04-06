@@ -5,8 +5,8 @@ import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnDoubleClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnDoubleCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnDouble;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -164,7 +164,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void addInterest(final float rate) {
-            addInterrestBlock.atomic(new TxnVoidClosure() {
+            addInterrestBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     for (Account a : accounts) {
@@ -177,7 +177,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public double computeTotal() {
-            return computeTotalBlock.atomic(new TxnDoubleClosure() {
+            return computeTotalBlock.atomic(new TxnDoubleCallable() {
                 @Override
                 public double call(Txn tx) throws Exception {
                     double total = 0.0;
@@ -192,7 +192,7 @@ public class AccountDriver extends BenchmarkDriver {
         }
 
         public void transfer(final Account src, final Account dst, final float amount) throws OverdraftException {
-            transferBlock.atomic(new TxnVoidClosure() {
+            transferBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     dst.deposit(amount);

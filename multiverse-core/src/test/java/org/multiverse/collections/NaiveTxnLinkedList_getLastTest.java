@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.NoSuchElementException;
 
@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_getLastTest {
 
     @Test
     public void whenEmpty() {
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -45,7 +45,7 @@ public class NaiveTxnLinkedList_getLastTest {
 
     @Test
     public void whenMultipleItems() {
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.offerLast("1");
@@ -63,7 +63,7 @@ public class NaiveTxnLinkedList_getLastTest {
 
     @Test
     public void whenSingleItem() {
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String item = "1";

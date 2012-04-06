@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
@@ -69,7 +69,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+                stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.set(tx, 10);
@@ -118,7 +118,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomicChecked(new TxnVoidClosure() {
+                stm.getDefaultTxnExecutor().atomicChecked(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.set(tx, 10);

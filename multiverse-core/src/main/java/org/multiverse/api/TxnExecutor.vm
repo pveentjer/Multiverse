@@ -1,32 +1,32 @@
 package org.multiverse.api;
 
 import org.multiverse.*;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 
 /**
- * An TxnExecutor is responsible for executing an atomic closure. It is created by the {@link TxnFactoryBuilder}
+ * An TxnExecutor is responsible for executing an atomic callable. It is created by the {@link TxnFactoryBuilder}
  * and this gives the {@link Stm} the opportunity to return different implementations based on the
  * {@link TxnFactory} configuration. And it also gives the opportunity to provide Stm specific transaction handling
  * mechanism. In the Multiverse 0.6 design and before, a single TransactionTemplate implementation was used that should
  * be used by all Stm's, but that design is limiting.
  *
  * <p>Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
- * It also provides an execute for a AtomicVoidClosure which doesn't force a developer to return something when
+ * It also provides an execute for a transactional Callables which doesn't force a developer to return something when
  * nothing needs to be returned.
  *
- * <h3>AtomicClosure</h3>
+ * <h3>Transactional Callables</h3>
  *
- * <p>The AtomicClosure is the functionality that needs to be executed isolated, consistent and atomically. There
- * are different tasted of Closures but essentially the only difference is the return type. There are primitive closures
- * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.closures.TxnVoidClosure} that prevents
+ * <p>The TxnCallable is the functionality that needs to be executed isolated, consistent and atomically. There
+ * are different tastes of TxnCallables but essentially the only difference is the return type. There are primitive closures
+ * that prevent unwanted autoboxing and there also is a {@link org.multiverse.api.callables.TxnVoidCallable} that prevents
  * returning a value if none is needed. And last but not least there also is the general purpose
- * {@link org.multiverse.api.closures.TxnClosure} that returns an Object reference.
+ * {@link org.multiverse.api.callables.TxnCallable} that returns an Object reference.
  *
  * <h3>Automatic retries</h3>
  *
  * <p>If a transaction encounters a {@link org.multiverse.api.exceptions.ReadWriteConflict} or a
  * { @link org.multiverse.api.exceptions.SpeculativeConfigurationError} it will automatically retry the
- * the AtomicClosure until either the next execution completes or the maximum number of retries has been reached.
+ * the TxnCallable until either the next execution completes or the maximum number of retries has been reached.
  * To prevent contention, also a {@link BackoffPolicy} is used, to prevent transactions from causing more contention
  * if there already is contention. For configuring the maximum number of retries, see the {@link TxnFactoryBuilder#setMaxRetries}
  * and for configuring the BackoffPolicy, see {@link TxnFactoryBuilder#setBackoffPolicy}.
@@ -59,14 +59,14 @@ import org.multiverse.api.closures.*;
  *
  * <p>The TxnExecutor provides two different types of execute methods:
  * <ol>
- * <li>execute: it will automatically wrap the checked exception that can be thrown from an AtomicClosure in a
+ * <li>execute: it will automatically wrap the checked exception that can be thrown from an TxnCallable in a
  * {@link org.multiverse.api.exceptions.InvisibleCheckedException}. Unchecked exceptions are let through as is.
  * </li>
  * <li>execute checked: it will not do anything with thrown checked of unchecked exceptions and lets them through
  * </li>
  * </ol>
- * If an exception happens inside an AtomicClosure, the Txn will be always aborted (unless it is caught by the logic
- * inside the AtomicClosure). Catching the exceptions inside the closure should be done with care since an exception could
+ * If an exception happens inside an TxnCallable, the Txn will be always aborted (unless it is caught by the logic
+ * inside the TxnCallable). Catching the exceptions inside the callable should be done with care since an exception could
  * indicate that the system has entered an invalid state.
  *
  * <p>In the future also a rollback-for functionality will be added to let a transaction commit, even though certain types
@@ -105,32 +105,32 @@ public interface TxnExecutor extends MultiverseConstants{
     */
     TxnFactory getTxnFactory();
 
-#foreach($closure in $closures)
+#foreach($callable in $callables)
    /**
-    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
-    * @param closure the closure to execute.
-#if(${closure.type} ne 'void')
+    * @param callable the callable to execute.
+#if(${callable.type} ne 'void')
     * @return the result of the execution.
 #end
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} closure);
+    ${callable.typeParameter} ${callable.type} atomic(${callable.name}${callable.typeParameter} callable);
 
    /**
-    * Executes the closure.
+    * Executes the callable.
     *
-    * @param closure the closure to execute.
-#if(${closure.type} ne 'void')
+    * @param callable the callable to execute.
+#if(${callable.type} ne 'void')
     * @return the result of the execution.
 #end
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} closure)throws Exception;
+    ${callable.typeParameter} ${callable.type} atomicChecked(${callable.name}${callable.typeParameter} callable)throws Exception;
 
 #end
 }

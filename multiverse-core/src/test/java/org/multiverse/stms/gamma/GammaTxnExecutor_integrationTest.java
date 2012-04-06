@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnLongClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnLongCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
@@ -30,7 +30,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
-        long result = executor.atomic(new TxnLongClosure() {
+        long result = executor.atomic(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
@@ -47,7 +47,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         final GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
@@ -69,7 +69,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
                     .setMaxRetries(100)
                     .newTxnExecutor();
 
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.get(tx);
@@ -89,7 +89,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 for (int k = 0; k < 10; k++) {

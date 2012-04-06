@@ -6,8 +6,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnBooleanClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnBooleanCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnInteger;
 import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaStm;
@@ -21,7 +21,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
     private int pushThreadCount = 1;
     private int popThreadCount = 1;
     private int capacity = Integer.MAX_VALUE;
-    private boolean poolClosures = false;
+    private boolean poolCallables = false;
     private LockMode readLockMode = LockMode.None;
     private LockMode writeLockMode = LockMode.None;
     private boolean dirtyCheck = false;
@@ -40,7 +40,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
         } else {
             System.out.printf("Multiverse > Capacity %s\n", capacity);
         }
-        System.out.printf("Multiverse > Pool Closures %s\n", poolClosures);
+        System.out.printf("Multiverse > Pool Callables %s\n", poolCallables);
         System.out.printf("Multiverse > LockLevel %s\n", readLockMode);
         System.out.printf("Multiverse > DirtyCheck %s\n", dirtyCheck);
 
@@ -108,16 +108,16 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         @Override
         public void doRun() throws Exception {
-            if (poolClosures) {
-                runWithPooledClosure();
+            if (poolCallables) {
+                runWithPooledCallables();
             } else {
-                runWithoutPooledClosure();
+                runWithoutPooledCallables();
             }
         }
 
-        private void runWithoutPooledClosure() {
+        private void runWithoutPooledCallables() {
             while (!shutdown) {
-                pushBlock.atomic(new TxnVoidClosure() {
+                pushBlock.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         stack.push(tx, "item");
@@ -128,7 +128,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
 
             for (int k = 0; k < popThreadCount; k++) {
-                pushBlock.atomic(new TxnVoidClosure() {
+                pushBlock.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         stack.push(tx, "end");
@@ -138,22 +138,22 @@ public class SimpleStackDriver extends BenchmarkDriver {
             }
         }
 
-        private void runWithPooledClosure() {
-            final PushClosure pushClosure = new PushClosure();
+        private void runWithPooledCallables() {
+            final PushCallable pushCallable = new PushCallable();
 
             while (!shutdown) {
-                pushClosure.item = "item";
-                pushBlock.atomic(pushClosure);
+                pushCallable.item = "item";
+                pushBlock.atomic(pushCallable);
                 count++;
             }
 
             for (int k = 0; k < popThreadCount; k++) {
-                pushClosure.item = "end";
-                pushBlock.atomic(pushClosure);
+                pushCallable.item = "end";
+                pushBlock.atomic(pushCallable);
             }
         }
 
-        class PushClosure implements TxnVoidClosure {
+        class PushCallable implements TxnVoidCallable {
             String item;
 
             @Override
@@ -180,17 +180,17 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         @Override
         public void doRun() throws Exception {
-            if (poolClosures) {
-                runWithoutPooledClosure();
+            if (poolCallables) {
+                runWithoutPooledCallable();
             } else {
-                runWithPooledClosure();
+                runWithPooledCallable();
             }
         }
 
-        private void runWithPooledClosure() {
+        private void runWithPooledCallable() {
             boolean end = false;
             while (!end) {
-                end = popBlock.atomic(new TxnBooleanClosure() {
+                end = popBlock.atomic(new TxnBooleanCallable() {
                     @Override
                     public boolean call(Txn tx) throws Exception {
                         return !stack.pop(tx).equals("end");
@@ -201,16 +201,16 @@ public class SimpleStackDriver extends BenchmarkDriver {
             }
         }
 
-        private void runWithoutPooledClosure() {
-            PopClosure popClosure = new PopClosure();
+        private void runWithoutPooledCallable() {
+            PopCallable popCallable = new PopCallable();
             boolean end = false;
             while (!end) {
-                end = popBlock.atomic(popClosure);
+                end = popBlock.atomic(popCallable);
                 count++;
             }
         }
 
-        class PopClosure implements TxnBooleanClosure {
+        class PopCallable implements TxnBooleanCallable {
             @Override
             public boolean call(Txn tx) throws Exception {
                 return !stack.pop(tx).endsWith("end");

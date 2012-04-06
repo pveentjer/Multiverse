@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -54,7 +54,7 @@ public class TooManyRetriesRollbackTest {
                 .setMaxRetries(10)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -78,7 +78,7 @@ public class TooManyRetriesRollbackTest {
         public void doRun() throws Exception {
             TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -89,7 +89,7 @@ public class TooManyRetriesRollbackTest {
             };
 
             while (!finished) {
-                executor.atomic(closure);
+                executor.atomic(callable);
             }
         }
     }

@@ -1,6 +1,6 @@
 package org.multiverse.api;
 
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.api.collections.*;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.lifecycle.*;
@@ -116,57 +116,57 @@ public final class StmUtils {
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnClosure} to execute.
+     * @param callable The callable {@link TxnCallable} to execute.
      * @return the result of the execution
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static <E> E atomic(TxnClosure<E> closure){
-        return defaultTxnExecutor.atomic(closure);
+    public static <E> E atomic(TxnCallable<E> callable){
+        return defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnClosure} to execute.
+    * @param callable The {@link TxnCallable} to execute.
     * @return the result of the execution
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static <E> E atomicChecked(TxnClosure<E> closure) throws Exception{
-       return defaultTxnExecutor.atomicChecked(closure);
+   public static <E> E atomicChecked(TxnCallable<E> callable) throws Exception{
+       return defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static <E> E atomic(TxnClosure<E> either, TxnClosure<E> orelse){
+    public static <E> E atomic(TxnCallable<E> either, TxnCallable<E> orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -176,65 +176,65 @@ public final class StmUtils {
     * @param either the either block
     * @param orelse the orelse block
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static <E> E atomicChecked(TxnClosure<E> either, TxnClosure<E> orelse)throws Exception{
+    public static <E> E atomicChecked(TxnCallable<E> either, TxnCallable<E> orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnIntClosure} to execute.
+     * @param callable The callable {@link TxnIntCallable} to execute.
      * @return the result of the execution
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static  int atomic(TxnIntClosure closure){
-        return defaultTxnExecutor.atomic(closure);
+    public static  int atomic(TxnIntCallable callable){
+        return defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnIntClosure} to execute.
+    * @param callable The {@link TxnIntCallable} to execute.
     * @return the result of the execution
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static  int atomicChecked(TxnIntClosure closure) throws Exception{
-       return defaultTxnExecutor.atomicChecked(closure);
+   public static  int atomicChecked(TxnIntCallable callable) throws Exception{
+       return defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static  int atomic(TxnIntClosure either, TxnIntClosure orelse){
+    public static  int atomic(TxnIntCallable either, TxnIntCallable orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -244,65 +244,65 @@ public final class StmUtils {
     * @param either the either block
     * @param orelse the orelse block
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static  int atomicChecked(TxnIntClosure either, TxnIntClosure orelse)throws Exception{
+    public static  int atomicChecked(TxnIntCallable either, TxnIntCallable orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnLongClosure} to execute.
+     * @param callable The callable {@link TxnLongCallable} to execute.
      * @return the result of the execution
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static  long atomic(TxnLongClosure closure){
-        return defaultTxnExecutor.atomic(closure);
+    public static  long atomic(TxnLongCallable callable){
+        return defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnLongClosure} to execute.
+    * @param callable The {@link TxnLongCallable} to execute.
     * @return the result of the execution
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static  long atomicChecked(TxnLongClosure closure) throws Exception{
-       return defaultTxnExecutor.atomicChecked(closure);
+   public static  long atomicChecked(TxnLongCallable callable) throws Exception{
+       return defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static  long atomic(TxnLongClosure either, TxnLongClosure orelse){
+    public static  long atomic(TxnLongCallable either, TxnLongCallable orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -312,65 +312,65 @@ public final class StmUtils {
     * @param either the either block
     * @param orelse the orelse block
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static  long atomicChecked(TxnLongClosure either, TxnLongClosure orelse)throws Exception{
+    public static  long atomicChecked(TxnLongCallable either, TxnLongCallable orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnDoubleClosure} to execute.
+     * @param callable The callable {@link TxnDoubleCallable} to execute.
      * @return the result of the execution
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static  double atomic(TxnDoubleClosure closure){
-        return defaultTxnExecutor.atomic(closure);
+    public static  double atomic(TxnDoubleCallable callable){
+        return defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnDoubleClosure} to execute.
+    * @param callable The {@link TxnDoubleCallable} to execute.
     * @return the result of the execution
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static  double atomicChecked(TxnDoubleClosure closure) throws Exception{
-       return defaultTxnExecutor.atomicChecked(closure);
+   public static  double atomicChecked(TxnDoubleCallable callable) throws Exception{
+       return defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static  double atomic(TxnDoubleClosure either, TxnDoubleClosure orelse){
+    public static  double atomic(TxnDoubleCallable either, TxnDoubleCallable orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -380,65 +380,65 @@ public final class StmUtils {
     * @param either the either block
     * @param orelse the orelse block
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static  double atomicChecked(TxnDoubleClosure either, TxnDoubleClosure orelse)throws Exception{
+    public static  double atomicChecked(TxnDoubleCallable either, TxnDoubleCallable orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnBooleanClosure} to execute.
+     * @param callable The callable {@link TxnBooleanCallable} to execute.
      * @return the result of the execution
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static  boolean atomic(TxnBooleanClosure closure){
-        return defaultTxnExecutor.atomic(closure);
+    public static  boolean atomic(TxnBooleanCallable callable){
+        return defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnBooleanClosure} to execute.
+    * @param callable The {@link TxnBooleanCallable} to execute.
     * @return the result of the execution
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static  boolean atomicChecked(TxnBooleanClosure closure) throws Exception{
-       return defaultTxnExecutor.atomicChecked(closure);
+   public static  boolean atomicChecked(TxnBooleanCallable callable) throws Exception{
+       return defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static  boolean atomic(TxnBooleanClosure either, TxnBooleanClosure orelse){
+    public static  boolean atomic(TxnBooleanCallable either, TxnBooleanCallable orelse){
         return orelseBlock.execute(either,orelse);
     }
 
@@ -448,62 +448,62 @@ public final class StmUtils {
     * @param either the either block
     * @param orelse the orelse block
     * @return the result of the execution.
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static  boolean atomicChecked(TxnBooleanClosure either, TxnBooleanClosure orelse)throws Exception{
+    public static  boolean atomicChecked(TxnBooleanCallable either, TxnBooleanCallable orelse)throws Exception{
         return orelseBlock.executeChecked(either,orelse);
     }
 
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link TxnVoidClosure} to execute.
-     * @throws NullPointerException if closure is null.
+     * @param callable The callable {@link TxnVoidCallable} to execute.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static  void atomic(TxnVoidClosure closure){
-        defaultTxnExecutor.atomic(closure);
+    public static  void atomic(TxnVoidCallable callable){
+        defaultTxnExecutor.atomic(callable);
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link TxnVoidClosure} to execute.
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @param callable The {@link TxnVoidCallable} to execute.
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static  void atomicChecked(TxnVoidClosure closure) throws Exception{
-       defaultTxnExecutor.atomicChecked(closure);
+   public static  void atomicChecked(TxnVoidCallable callable) throws Exception{
+       defaultTxnExecutor.atomicChecked(callable);
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static  void atomic(TxnVoidClosure either, TxnVoidClosure orelse){
+    public static  void atomic(TxnVoidCallable either, TxnVoidCallable orelse){
         orelseBlock.execute(either,orelse);
     }
 
@@ -512,10 +512,10 @@ public final class StmUtils {
     *
     * @param either the either block
     * @param orelse the orelse block
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static  void atomicChecked(TxnVoidClosure either, TxnVoidClosure orelse)throws Exception{
+    public static  void atomicChecked(TxnVoidCallable either, TxnVoidCallable orelse)throws Exception{
         orelseBlock.executeChecked(either,orelse);
     }
 

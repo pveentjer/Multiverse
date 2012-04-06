@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnBoolean;
 import org.multiverse.api.references.TxnInteger;
 
@@ -63,7 +63,7 @@ public class SleepingBarberStressTest {
 
         @Override
         public void doRun() {
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     //todo
@@ -71,7 +71,7 @@ public class SleepingBarberStressTest {
             };
 
             while (!stop) {
-                atomic(closure);
+                atomic(callable);
             }
 
             barberShop.atomicClose();
@@ -85,7 +85,7 @@ public class SleepingBarberStressTest {
 
         @Override
         public void doRun() throws Exception {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (barberShop.closed.get()) {

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.api.exceptions.RetryNotPossibleException;
 import org.multiverse.api.functions.Functions;
@@ -28,7 +28,7 @@ public class NoBlockingTest {
     @Test
     public void whenNothingRead_thenNoRetryPossibleException() {
         try {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     retry();
@@ -44,7 +44,7 @@ public class NoBlockingTest {
         final TxnLong ref = newTxnLong();
 
         try {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.commute(Functions.incLongFunction());
@@ -59,7 +59,7 @@ public class NoBlockingTest {
     @Test
     public void whenContainsConstructing_thenNoRetryPossibleException() {
         try {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -82,7 +82,7 @@ public class NoBlockingTest {
                 .newTxnExecutor();
 
         try {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.set(1);

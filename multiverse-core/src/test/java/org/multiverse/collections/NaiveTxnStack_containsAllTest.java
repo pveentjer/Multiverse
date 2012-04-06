@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -29,7 +29,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenNullCollection_thenNullPointerException() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -49,7 +49,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenBothEmpty() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = stack.containsAll(new LinkedList());
@@ -65,7 +65,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenStackEmpty_andCollectionNonEmpty() {
        final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = stack.containsAll(Arrays.asList("1", "2"));
@@ -81,7 +81,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenStackNonEmpty_andCollectionEmpty() {
        final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.push("1");
@@ -100,7 +100,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenExactMatch() {
          final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -118,7 +118,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenOrderDifferentThanStillMatch() {
           final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -137,7 +137,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenNoneMatch() {
          final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -156,7 +156,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenSomeMatch() {
              final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -175,7 +175,7 @@ public class NaiveTxnStack_containsAllTest {
     public void whenSomeElementsNull() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-          StmUtils.atomic(new TxnVoidClosure() {
+          StmUtils.atomic(new TxnVoidCallable() {
               @Override
               public void call(Txn tx) throws Exception {
                   stack.add("1");

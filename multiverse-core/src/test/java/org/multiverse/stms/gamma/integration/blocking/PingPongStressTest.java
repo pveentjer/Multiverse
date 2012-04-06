@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnBooleanClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnBooleanCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -76,7 +76,7 @@ public class PingPongStressTest {
         sleepMs(30 * 1000);
         stop = true;
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.set(-abs(ref.get()));
@@ -121,7 +121,7 @@ public class PingPongStressTest {
 
         @Override
         public void doRun() {
-            TxnBooleanClosure closure = new TxnBooleanClosure() {
+            TxnBooleanCallable callable = new TxnBooleanCallable() {
                 @Override
                 public boolean call(Txn tx) throws Exception {
                     if (ref.get() < 0) {
@@ -142,7 +142,7 @@ public class PingPongStressTest {
                     System.out.println(getName() + " " + count);
                 }
 
-                if (!executor.atomic(closure)) {
+                if (!executor.atomic(callable)) {
                     break;
                 }
                 count++;

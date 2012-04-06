@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnLong;
 
 import static org.multiverse.TestUtils.joinAll;
@@ -62,7 +62,7 @@ public class ManyListenersStressTest {
         @Override
         public void doRun() throws Exception {
             while (!stop) {
-                atomic(new TxnVoidClosure() {
+                atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         for (TxnLong ref : refs) {

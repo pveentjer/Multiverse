@@ -7,7 +7,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -296,7 +296,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReadLevel() {
-            pessimisticReadsBlock.atomic(new TxnVoidClosure() {
+            pessimisticReadsBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -306,7 +306,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWriteLevel() {
-            pessimisticWritesBlock.atomic(new TxnVoidClosure() {
+            pessimisticWritesBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -316,7 +316,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSerializedIsolation() {
-            serializedBlock.atomic(new TxnVoidClosure() {
+            serializedBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -326,7 +326,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSnapshotIsolation() {
-            snapshotBlock.atomic(new TxnVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -336,7 +336,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReads() {
-            snapshotBlock.atomic(new TxnVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -346,7 +346,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWrites() {
-            snapshotBlock.atomic(new TxnVoidClosure() {
+            snapshotBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

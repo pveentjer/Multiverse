@@ -2,7 +2,7 @@ package org.multiverse.api;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
 import org.multiverse.api.references.TxnInteger;
 
@@ -18,15 +18,15 @@ public class StmUtils_executeTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void whenNullClosure_thenNullPointerException() {
-        StmUtils.atomic((TxnVoidClosure) null);
+    public void whenNullTxnCallable_thenNullPointerException() {
+        StmUtils.atomic((TxnVoidCallable) null);
     }
 
     @Test
     public void whenExecuteSuccess() {
         final TxnInteger ref = newTxnInteger();
 
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
@@ -42,7 +42,7 @@ public class StmUtils_executeTest {
         final Exception ex = new Exception();
 
         try {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -64,7 +64,7 @@ public class StmUtils_executeTest {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            atomic(new TxnVoidClosure() {
+            atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -83,7 +83,7 @@ public class StmUtils_executeTest {
     public void whenExecuteCheckedSuccess() throws Exception {
         final TxnInteger ref = newTxnInteger();
 
-        atomicChecked(new TxnVoidClosure() {
+        atomicChecked(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
@@ -99,7 +99,7 @@ public class StmUtils_executeTest {
         final Exception ex = new Exception();
 
         try {
-            atomicChecked(new TxnVoidClosure() {
+            atomicChecked(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
@@ -121,7 +121,7 @@ public class StmUtils_executeTest {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            atomicChecked(new TxnVoidClosure() {
+            atomicChecked(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.incrementAndGet(10);

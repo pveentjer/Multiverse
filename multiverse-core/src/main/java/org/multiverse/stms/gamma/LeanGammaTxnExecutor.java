@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.multiverse.api.*;
 import org.multiverse.api.exceptions.*;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.stms.gamma.transactions.*;
 import java.util.logging.Logger;
 
@@ -31,19 +31,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
     @Override
     public final <E> E atomicChecked(
-        final TxnClosure<E> closure)throws Exception{
+        final TxnCallable<E> callable)throws Exception{
 
         try{
-            return atomic(closure);
+            return atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final <E> E atomic(final TxnClosure<E> closure){
+    public final <E> E atomic(final TxnCallable<E> callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -62,7 +62,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.call(tx);
+                return callable.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -72,7 +72,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        E result = closure.call(tx);
+                        E result = callable.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -137,19 +137,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
      @Override
     public final  int atomicChecked(
-        final TxnIntClosure closure)throws Exception{
+        final TxnIntCallable callable)throws Exception{
 
         try{
-            return atomic(closure);
+            return atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  int atomic(final TxnIntClosure closure){
+    public final  int atomic(final TxnIntCallable callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -168,7 +168,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.call(tx);
+                return callable.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -178,7 +178,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        int result = closure.call(tx);
+                        int result = callable.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -243,19 +243,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
      @Override
     public final  long atomicChecked(
-        final TxnLongClosure closure)throws Exception{
+        final TxnLongCallable callable)throws Exception{
 
         try{
-            return atomic(closure);
+            return atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  long atomic(final TxnLongClosure closure){
+    public final  long atomic(final TxnLongCallable callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -274,7 +274,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.call(tx);
+                return callable.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -284,7 +284,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        long result = closure.call(tx);
+                        long result = callable.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -349,19 +349,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
      @Override
     public final  double atomicChecked(
-        final TxnDoubleClosure closure)throws Exception{
+        final TxnDoubleCallable callable)throws Exception{
 
         try{
-            return atomic(closure);
+            return atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  double atomic(final TxnDoubleClosure closure){
+    public final  double atomic(final TxnDoubleCallable callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -380,7 +380,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.call(tx);
+                return callable.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -390,7 +390,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        double result = closure.call(tx);
+                        double result = callable.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -455,19 +455,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
      @Override
     public final  boolean atomicChecked(
-        final TxnBooleanClosure closure)throws Exception{
+        final TxnBooleanCallable callable)throws Exception{
 
         try{
-            return atomic(closure);
+            return atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  boolean atomic(final TxnBooleanClosure closure){
+    public final  boolean atomic(final TxnBooleanCallable callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -486,7 +486,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                return closure.call(tx);
+                return callable.call(tx);
             }
 
             tx = txnFactory.newTransaction(pool);
@@ -496,7 +496,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        boolean result = closure.call(tx);
+                        boolean result = callable.call(tx);
                         tx.commit();
                         abort = false;
                         return result;
@@ -561,19 +561,19 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
      @Override
     public final  void atomicChecked(
-        final TxnVoidClosure closure)throws Exception{
+        final TxnVoidCallable callable)throws Exception{
 
         try{
-            atomic(closure);
+            atomic(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  void atomic(final TxnVoidClosure closure){
+    public final  void atomic(final TxnVoidCallable callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -592,7 +592,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-                closure.call(tx);
+                callable.call(tx);
                 return;
             }
 
@@ -603,7 +603,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-                        closure.call(tx);
+                        callable.call(tx);
                         tx.commit();
                         abort = false;
                         return;

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
@@ -39,7 +39,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
 
         final LeanGammaTxnExecutor executor = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));
 
-        final TxnVoidClosure closure = new TxnVoidClosure() {
+        final TxnVoidCallable callable = new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.openForWrite((LeanMonoGammaTxn) tx, LOCKMODE_NONE).ref_value = "foo";
@@ -51,7 +51,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         for (long k = 0; k < txCount; k++) {
-            executor.atomic(closure);
+            executor.atomic(callable);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

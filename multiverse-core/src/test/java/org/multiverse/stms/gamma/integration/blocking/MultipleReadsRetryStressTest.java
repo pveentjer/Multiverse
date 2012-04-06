@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
@@ -120,7 +120,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
         @Override
         public void doRun() {
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) {
                     if (stopRef.get() < 0) {
@@ -148,7 +148,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                 }
 
                 try {
-                    txnExecutor.atomic(closure);
+                    txnExecutor.atomic(callable);
                 } catch (StopException e) {
                     break;
                 }

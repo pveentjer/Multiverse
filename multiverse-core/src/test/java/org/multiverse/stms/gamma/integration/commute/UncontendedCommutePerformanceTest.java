@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -69,7 +69,7 @@ public class UncontendedCommutePerformanceTest {
                     .setDirtyCheckEnabled(false)
                     .newTxnExecutor();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -78,7 +78,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
             }
         }
     }
@@ -93,7 +93,7 @@ public class UncontendedCommutePerformanceTest {
             TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -102,7 +102,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
             }
         }
     }

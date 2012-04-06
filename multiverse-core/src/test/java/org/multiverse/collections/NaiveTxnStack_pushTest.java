@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -27,7 +27,7 @@ public class NaiveTxnStack_pushTest {
     public void whenNullItem_thenNullPointerException() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -47,7 +47,7 @@ public class NaiveTxnStack_pushTest {
     public void whenEmpty() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.push("1");
@@ -62,7 +62,7 @@ public class NaiveTxnStack_pushTest {
     public void whenNotEmpty() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.push("1");
@@ -79,7 +79,7 @@ public class NaiveTxnStack_pushTest {
     public void whenFull() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm, 2);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.push("1");

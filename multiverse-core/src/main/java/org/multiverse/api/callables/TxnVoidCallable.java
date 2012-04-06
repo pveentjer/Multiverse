@@ -1,20 +1,20 @@
-package org.multiverse.api.closures;
+package org.multiverse.api.callables;
 
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 
 /**
- * A transactional closure contains the logic that needs to be executed transactionally and normally is executed by the
+ * A transactional callable contains the logic that needs to be executed transactionally and normally is executed by the
  * {@link TxnExecutor}.
  *
- * This transactional closure is optimized for returning void. Useful if no value needs to be returned.
+ * This transactional callable is optimized for returning void. Useful if no value needs to be returned.
  *
  * @author Peter Veentjer.
  */
-public interface TxnVoidClosure{
+public interface TxnVoidCallable{
 
     /**
-     * Executes the closure.
+     * Executes the callable.
      *
      * @param txn the Transaction. Depending on the txn {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.

@@ -5,8 +5,8 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnBooleanClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnBooleanCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnBoolean;
 import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaStm;
@@ -82,7 +82,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                 count++;
                 switch (TestUtils.randomInt(3)) {
                     case 0:
-                        executor.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -96,7 +96,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 1:
-                        executor.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -110,7 +110,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 2:
-                        executor.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -127,7 +127,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         throw new RuntimeException();
                 }
             }
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     notifier.awaitNull();
@@ -163,7 +163,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         }
 
         private boolean makeCigarette() {
-            return executor.atomic(new TxnBooleanClosure() {
+            return executor.atomic(new TxnBooleanCallable() {
                 @Override
                 public boolean call(Txn tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -29,7 +29,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final Exception ex = new Exception();
 
         try {
-            executor.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -53,7 +53,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            executor.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -78,7 +78,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final Error ex = new Error();
 
         try {
-            executor.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -102,7 +102,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final Exception ex = new Exception();
 
         try {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -126,7 +126,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final RuntimeException ex = new RuntimeException();
 
         try {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -151,7 +151,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         final Error ex = new Error();
 
         try {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_containsTest {
 
     @Test
     public void whenNullItem() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -41,7 +41,7 @@ public class NaiveTxnLinkedList_containsTest {
 
     @Test
     public void whenListStack() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = stack.contains("foo");
@@ -54,7 +54,7 @@ public class NaiveTxnLinkedList_containsTest {
 
     @Test
     public void whenListDoesntContainItem() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -72,7 +72,7 @@ public class NaiveTxnLinkedList_containsTest {
 
     @Test
     public void whenContainsItem() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");

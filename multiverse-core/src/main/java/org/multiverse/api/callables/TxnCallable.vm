@@ -1,0 +1,36 @@
+package org.multiverse.api.callables;
+
+import org.multiverse.api.Txn;
+import org.multiverse.api.TxnExecutor;
+
+/**
+ * A transactional callable contains the logic that needs to be executed transactionally and normally is executed by the
+ * {@link TxnExecutor}.
+ *
+#if(${callable.type} eq 'E')
+ * This transactional callable is optimized for returning an object reference.
+#elseif(${callable.type} ne 'void')
+ * This transactional callable is optimized for retuning a primitive type: ${callable.type}. Using this ${callable.name} instead of
+ * the {@link TxnCallable} is that no object wrapper needs to be created and there is no reason to deal with a potential
+ * null value.
+#else
+ * This transactional callable is optimized for returning void. Useful if no value needs to be returned.
+#end
+ *
+ * @author Peter Veentjer.
+ */
+public interface ${callable.name}${callable.typeParameter}{
+
+    /**
+     * Executes the callable.
+     *
+     * @param txn the Transaction. Depending on the txn {@link org.multiverse.api.PropagationLevel}, this could
+     *           be null.
+#if(${callable.type} ne 'void')
+     * @return the result of the execution.
+#else
+     * @throws Exception if unable to compute a result
+#end
+     */
+     ${callable.type} call(Txn txn)throws Exception;
+}

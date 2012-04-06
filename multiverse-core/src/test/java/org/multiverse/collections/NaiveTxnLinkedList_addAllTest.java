@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenNullCollectionAdded_thenNullPointerException() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -49,7 +49,7 @@ public class NaiveTxnLinkedList_addAllTest {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
         try {
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     List<String> c = Arrays.asList("a", "b", null, "d");
@@ -69,7 +69,7 @@ public class NaiveTxnLinkedList_addAllTest {
         } catch (NullPointerException expected) {
         }
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertEquals("[]", list.toString());
@@ -82,7 +82,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenNonEmptyListAndEmptyCollection() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -99,7 +99,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenBothEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.addAll(new LinkedList<String>());
@@ -114,7 +114,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenEmptyListEmptyAndNonEmptyCollection() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 List<String> c = Arrays.asList("1", "2");
@@ -131,7 +131,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenBothNonEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 List<String> c = Arrays.asList("2", "1");
@@ -150,7 +150,7 @@ public class NaiveTxnLinkedList_addAllTest {
     public void whenCapacityExceeded() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm, 2);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -158,7 +158,7 @@ public class NaiveTxnLinkedList_addAllTest {
         });
 
         try {
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     List<String> c = Arrays.asList("2", "3");
@@ -180,7 +180,7 @@ public class NaiveTxnLinkedList_addAllTest {
 
         }
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertEquals(1, list.size());

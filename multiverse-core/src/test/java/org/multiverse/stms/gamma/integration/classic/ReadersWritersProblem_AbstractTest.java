@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnLong;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -163,7 +163,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         }
 
         public void acquireReadLock() {
-            acquireReadLockBlock.atomic(new TxnVoidClosure() {
+            acquireReadLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (readerCount.get() == -1) {
@@ -176,7 +176,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         }
 
         public void acquireWriteLock() {
-            acquireWriteLockBlock.atomic(new TxnVoidClosure() {
+            acquireWriteLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (readerCount.get() != 0) {

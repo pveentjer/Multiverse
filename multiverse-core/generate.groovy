@@ -4,7 +4,7 @@ import org.apache.velocity.app.VelocityEngine
 
 @Grab(group = 'org.apache.velocity', module = 'velocity', version = '1.6.4')
 
-class TxnClosure {
+class TxnCallable {
     String type
     String name
     String typeParameter
@@ -33,7 +33,7 @@ VelocityEngine engine = new VelocityEngine();
 engine.init();
 
 def refs = createTxnObjects();
-def txnClosures = createClosures();TxnClosure
+def txnCallables = createCallables();TxnCallable
 def txnExecutors = [new TxnExecutor(name: 'FatGammaTxnExecutor', lean: false),
         new TxnExecutor(name: 'LeanGammaTxnExecutor', lean: true)]
 
@@ -45,49 +45,49 @@ for (def param in refs) {
     generateFunction(engine, param)
 }
 
-for (def closure in txnClosures) {
-    generateTxnClosure(engine, closure)
+for (def closure in txnCallables) {
+    generateTxnCallable(engine, closure)
 }
 
-generateTxnExecutor(engine, txnClosures)
-//generateOrElseBlock(engine, atomicClosures)
-generateGammaOrElseBlock(engine, txnClosures)
-generateStmUtils(engine, txnClosures)
+generateTxnExecutor(engine, txnCallables)
+//generateOrElseBlock(engine, atomicCallables)
+generateGammaOrElseBlock(engine, txnCallables)
+generateStmUtils(engine, txnCallables)
 
 for (def txnExecutor in txnExecutors) {
-    generateGammaTxnExecutor(engine, txnExecutor, txnClosures)
+    generateGammaTxnExecutor(engine, txnExecutor, txnCallables)
 }
 
 
-List<TxnClosure> createClosures() {
+List<TxnCallable> createCallables() {
     def result = []
-    result << new TxnClosure(
-            name: 'TxnClosure',
+    result << new TxnCallable(
+            name: 'TxnCallable',
             type: 'E',
             typeParameter: '<E>'
     )
-    result << new TxnClosure(
-            name: 'TxnIntClosure',
+    result << new TxnCallable(
+            name: 'TxnIntCallable',
             type: 'int',
             typeParameter: ''
     )
-    result << new TxnClosure(
-            name: 'TxnLongClosure',
+    result << new TxnCallable(
+            name: 'TxnLongCallable',
             type: 'long',
             typeParameter: ''
     )
-    result << new TxnClosure(
-            name: 'TxnDoubleClosure',
+    result << new TxnCallable(
+            name: 'TxnDoubleCallable',
             type: 'double',
             typeParameter: ''
     )
-    result << new TxnClosure(
-            name: 'TxnBooleanClosure',
+    result << new TxnCallable(
+            name: 'TxnBooleanCallable',
             type: 'boolean',
             typeParameter: ''
     )
-    result << new TxnClosure(
-            name: 'TxnVoidClosure',
+    result << new TxnCallable(
+            name: 'TxnVoidCallable',
             type: 'void',
             typeParameter: ''
     )
@@ -165,26 +165,26 @@ List<TxnObject> createTxnObjects() {
     result
 }
 
-void generateTxnClosure(VelocityEngine engine, TxnClosure closure) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/closures/TxnClosure.vm')
+void generateTxnCallable(VelocityEngine engine, TxnCallable callable) {
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/callables/TxnCallable.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('closure', closure)
+    context.put('callable', callable)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File("src/main/java/org/multiverse/api/closures/${closure.name}.java")
+    File file = new File("src/main/java/org/multiverse/api/callables/${callable.name}.java")
     file.createNewFile()
     file.text = writer.toString()
 }
 
-void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, List<TxnClosure> closures) {
+void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, List<TxnCallable> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaTxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
     context.put('txnExecutor', txnExecutor)
-    context.put('closures', closures)
+    context.put('callables', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
@@ -194,11 +194,11 @@ void generateGammaTxnExecutor(VelocityEngine engine, TxnExecutor txnExecutor, Li
     file.text = writer.toString()
 }
 
-void generateTxnExecutor(VelocityEngine engine, List<TxnClosure> closures) {
+void generateTxnExecutor(VelocityEngine engine, List<TxnCallable> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/TxnExecutor.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('closures', closures)
+    context.put('callables', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
@@ -208,11 +208,11 @@ void generateTxnExecutor(VelocityEngine engine, List<TxnClosure> closures) {
     file.text = writer.toString()
 }
 
-void generateOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) {
+void generateOrElseBlock(VelocityEngine engine, List<TxnCallable> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/OrElseBlock.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('closures', closures)
+    context.put('callables', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
@@ -222,11 +222,11 @@ void generateOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) {
     file.text = writer.toString()
 }
 
-void generateGammaOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) {
+void generateGammaOrElseBlock(VelocityEngine engine, List<TxnCallable> closures) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/stms/gamma/GammaOrElseBlock.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('closures', closures)
+    context.put('callables', closures)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
@@ -236,11 +236,11 @@ void generateGammaOrElseBlock(VelocityEngine engine, List<TxnClosure> closures) 
     file.text = writer.toString()
 }
 
-void generateStmUtils(VelocityEngine engine, List<TxnClosure> closures) {
+void generateStmUtils(VelocityEngine engine, List<TxnCallable> callables) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/StmUtils.vm')
 
     VelocityContext context = new VelocityContext()
-    context.put('closures', closures)
+    context.put('callables', callables)
 
     StringWriter writer = new StringWriter()
     t.merge(context, writer)

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -25,7 +25,7 @@ public class NaiveTxHashMap_clearTest {
 
     @Test
     public void whenNotEmpty() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.put("1", "a");
@@ -42,7 +42,7 @@ public class NaiveTxHashMap_clearTest {
 
     @Test
     public void whenManyItems() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 for (int k = 0; k < 1000; k++) {
@@ -58,7 +58,7 @@ public class NaiveTxHashMap_clearTest {
 
     @Test
     public void whenEmpty() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.clear();

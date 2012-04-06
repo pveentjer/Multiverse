@@ -1,13 +1,13 @@
 package org.multiverse.api;
 
 import org.multiverse.MultiverseConstants;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 
 /**
  * The OrElse is responsible for executing the either block, or in case of a retry, the orelse block is executed.
  * <p/>
  * Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
- * It also provides an atomicChecked for a TxnVoidClosure which doesn't force a developer to return something when
+ * It also provides an atomicChecked for a TxnVoidCallable which doesn't force a developer to return something when
  * nothing needs to be returned.
  *
  * @author Peter Veentjer.
@@ -31,7 +31,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                              if a checked exception is thrown by the closure.
      */
-    <E> E execute(TxnClosure<E> either, TxnClosure<E> orelse);
+    <E> E execute(TxnCallable<E> either, TxnCallable<E> orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -44,7 +44,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    <E> E executeChecked(TxnClosure<E> either, TxnClosure<E> orelse) throws Exception;
+    <E> E executeChecked(TxnCallable<E> either, TxnCallable<E> orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -62,7 +62,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    int execute(TxnIntClosure either, TxnIntClosure orelse);
+    int execute(TxnIntCallable either, TxnIntCallable orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -75,7 +75,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    int executeChecked(TxnIntClosure either, TxnIntClosure orelse) throws Exception;
+    int executeChecked(TxnIntCallable either, TxnIntCallable orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -93,7 +93,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    long execute(TxnLongClosure either, TxnLongClosure orelse);
+    long execute(TxnLongCallable either, TxnLongCallable orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -106,7 +106,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    long executeChecked(TxnLongClosure either, TxnLongClosure orelse) throws Exception;
+    long executeChecked(TxnLongCallable either, TxnLongCallable orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -124,7 +124,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    double execute(TxnDoubleClosure either, TxnDoubleClosure orelse);
+    double execute(TxnDoubleCallable either, TxnDoubleCallable orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -137,7 +137,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    double executeChecked(TxnDoubleClosure either, TxnDoubleClosure orelse) throws Exception;
+    double executeChecked(TxnDoubleCallable either, TxnDoubleCallable orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -155,7 +155,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    boolean execute(TxnBooleanClosure either, TxnBooleanClosure orelse);
+    boolean execute(TxnBooleanCallable either, TxnBooleanCallable orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -168,7 +168,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    boolean executeChecked(TxnBooleanClosure either, TxnBooleanClosure orelse) throws Exception;
+    boolean executeChecked(TxnBooleanCallable either, TxnBooleanCallable orelse) throws Exception;
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -185,7 +185,7 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
      *                                      if a checked exception is thrown by the closure.
      */
-    void execute(TxnVoidClosure either, TxnVoidClosure orelse);
+    void execute(TxnVoidCallable either, TxnVoidCallable orelse);
 
     /**
      * Executes the either, or when it is retried, the orelse block. This operation makes composable blocking operations
@@ -197,6 +197,6 @@ public interface OrElseBlock extends MultiverseConstants {
      * @throws TxnMandatoryException if no transaction is found on the TxnThreadLocal.
      * @throws Exception                    if the atomicChecked call fails.
      */
-    void executeChecked(TxnVoidClosure either, TxnVoidClosure orelse) throws Exception;
+    void executeChecked(TxnVoidCallable either, TxnVoidCallable orelse) throws Exception;
 
 }

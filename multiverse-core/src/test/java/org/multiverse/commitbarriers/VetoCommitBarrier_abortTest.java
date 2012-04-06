@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
@@ -93,7 +93,7 @@ public class VetoCommitBarrier_abortTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn txn) throws Exception {
                     IncThread.this.txn = txn;

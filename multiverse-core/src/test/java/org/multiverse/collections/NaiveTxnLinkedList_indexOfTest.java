@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -25,7 +25,7 @@ public class NaiveTxnLinkedList_indexOfTest {
 
     @Test
     public void whenNullItem_thenMinusOne() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 int result = list.indexOf(null);
@@ -37,7 +37,7 @@ public class NaiveTxnLinkedList_indexOfTest {
 
     @Test
     public void whenEmptyList() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 int result = list.indexOf("a");
@@ -49,7 +49,7 @@ public class NaiveTxnLinkedList_indexOfTest {
 
     @Test
     public void whenNotFound_thenMinusOne() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -66,7 +66,7 @@ public class NaiveTxnLinkedList_indexOfTest {
 
     @Test
     public void whenOnlyOnceInCollection() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -83,7 +83,7 @@ public class NaiveTxnLinkedList_indexOfTest {
 
     @Test
     public void whenMultipleTimesInCollection() {
-          StmUtils.atomic(new TxnVoidClosure() {
+          StmUtils.atomic(new TxnVoidCallable() {
               @Override
               public void call(Txn tx) throws Exception {
                   list.add("1");

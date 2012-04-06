@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -26,7 +26,7 @@ public class NaiveTxnStack_clearTest {
 
     @Test
     public void whenEmpty() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.clear();
@@ -38,7 +38,7 @@ public class NaiveTxnStack_clearTest {
 
     @Test
     public void whenNotEmpty(){
-         StmUtils.atomic(new TxnVoidClosure() {
+         StmUtils.atomic(new TxnVoidCallable() {
              @Override
              public void call(Txn tx) throws Exception {
                  stack.push("1");

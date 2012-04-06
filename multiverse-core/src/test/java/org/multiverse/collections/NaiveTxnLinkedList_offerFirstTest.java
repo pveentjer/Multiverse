@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -26,7 +26,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
     public void whenNullItem_thenNullPointerException() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -45,7 +45,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
     public void whenEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = list.offerFirst("1");
@@ -61,7 +61,7 @@ public class NaiveTxnLinkedList_offerFirstTest {
     public void whenNotEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        atomic(new TxnVoidClosure() {
+        atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.offerFirst("1");

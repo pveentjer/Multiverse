@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
@@ -93,7 +93,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
 
         public void acquireReadLock() {
-            acquireReadLockBlock.atomic(new TxnVoidClosure() {
+            acquireReadLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (lock.get() < 0) {
@@ -113,7 +113,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
             readers.decrementAndGet();
             assertEquals(0, writers.get());
 
-            releaseReadLockBlock.atomic(new TxnVoidClosure() {
+            releaseReadLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (lock.get() <= 0) {
@@ -126,7 +126,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         }
 
         public void acquireWriteLock() {
-            acquireWriteLockBlock.atomic(new TxnVoidClosure() {
+            acquireWriteLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (lock.get() != 0) {
@@ -145,7 +145,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
             writers.decrementAndGet();
             assertEquals(0, readers.get());
 
-            releaseWriteLockBlock.atomic(new TxnVoidClosure() {
+            releaseWriteLockBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (lock.get() != -1) {

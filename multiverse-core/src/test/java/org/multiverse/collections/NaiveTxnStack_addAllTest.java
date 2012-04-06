@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenNullCollectionAdded_thenNullPointerException() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -49,7 +49,7 @@ public class NaiveTxnStack_addAllTest {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
         try {
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     List<String> list = new LinkedList<String>();
@@ -73,7 +73,7 @@ public class NaiveTxnStack_addAllTest {
         } catch (NullPointerException expected) {
         }
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertEquals("[]", stack.toString());
@@ -86,7 +86,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenNonEmptyStackAndEmptyCollection() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.push("1");
@@ -103,7 +103,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenBothEmpty() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.addAll(new LinkedList<String>());
@@ -118,7 +118,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenEmptyStackEmptyAndNonEmptyCollection() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 List<String> list = Arrays.asList("1", "2");
@@ -135,7 +135,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenBothNonEmpty() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 List<String> list = Arrays.asList("2", "1");
@@ -154,7 +154,7 @@ public class NaiveTxnStack_addAllTest {
     public void whenCapacityExceeded() {
         final NaiveTxnStack<String> stack = new NaiveTxnStack<String>(stm, 2);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 stack.add("1");
@@ -162,7 +162,7 @@ public class NaiveTxnStack_addAllTest {
         });
 
         try {
-            StmUtils.atomic(new TxnVoidClosure() {
+            StmUtils.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     List<String> c = Arrays.asList("2", "3");
@@ -184,7 +184,7 @@ public class NaiveTxnStack_addAllTest {
 
         }
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertEquals(1, stack.size());

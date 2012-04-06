@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -133,7 +133,7 @@ public class DeadLockStressTest {
         }
 
         public void normal() {
-            normalBlock.atomic(new TxnVoidClosure() {
+            normalBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -142,7 +142,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeReadLevel() {
-            pessimisticReadLevelBlock.atomic(new TxnVoidClosure() {
+            pessimisticReadLevelBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -151,7 +151,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeWriteLevel() {
-            pessimisticWriteLevelBlock.atomic(new TxnVoidClosure() {
+            pessimisticWriteLevelBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);

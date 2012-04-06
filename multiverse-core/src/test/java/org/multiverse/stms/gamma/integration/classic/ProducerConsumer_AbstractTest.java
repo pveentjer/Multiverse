@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnInteger;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -110,7 +110,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         int take() {
-            return takeBlock.atomic(new TxnClosure<Integer>() {
+            return takeBlock.atomic(new TxnCallable<Integer>() {
                 @Override
                 public Integer call(Txn tx) throws Exception {
                     if (size.get() == 0) {
@@ -124,7 +124,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         void put(final int item) {
-            putBlock.atomic(new TxnVoidClosure() {
+            putBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (size.get() >= MAX_CAPACITY) {

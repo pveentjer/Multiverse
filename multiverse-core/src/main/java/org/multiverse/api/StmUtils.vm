@@ -1,6 +1,6 @@
 package org.multiverse.api;
 
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.api.collections.*;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.api.lifecycle.*;
@@ -115,74 +115,74 @@ public final class StmUtils {
         return txnCollectionsFactory.newHashMap();
     }
 
-#foreach($closure in $closures)
+#foreach($callable in $callables)
     /**
-     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+     * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
      * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
-     * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
+     * <p>This method doesn't throw a checked exception, but if the callable does, it is wrapped inside an
      * InvisibleCheckedException.
      *
      * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
      * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
      *
-     * @param closure The closure {@link ${closure.name}} to execute.
-#if(${closure.type} ne 'void')
+     * @param callable The callable {@link ${callable.name}} to execute.
+#if(${callable.type} ne 'void')
      * @return the result of the execution
 #end
-     * @throws NullPointerException if closure is null.
+     * @throws NullPointerException if callable is null.
      * @throws org.multiverse.api.exceptions.InvisibleCheckedException
-     *                                  if the closure throws a checked exception.
+     *                                  if the callable throws a checked exception.
      */
-    public static ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} closure){
-#if(${closure.type} eq 'void')
-        defaultTxnExecutor.atomic(closure);
+    public static ${callable.typeParameter} ${callable.type} atomic(${callable.name}${callable.typeParameter} callable){
+#if(${callable.type} eq 'void')
+        defaultTxnExecutor.atomic(callable);
 #else
-        return defaultTxnExecutor.atomic(closure);
+        return defaultTxnExecutor.atomic(callable);
 #end
     }
 
    /**
-    * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
+    * Executes the callable transactionally on the GlobalStmInstance using the default TxnExecutor. If a
     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
     * of relying on the default TxnExecutor that will always provide the most expensive transaction available.
     *
-    * @param closure The {@link ${closure.name}} to execute.
-#if(${closure.type} ne 'void')
+    * @param callable The {@link ${callable.name}} to execute.
+#if(${callable.type} ne 'void')
     * @return the result of the execution
 #end
-    * @throws NullPointerException if closure is null.
-    * @throws Exception is the closure throws an Exception
+    * @throws NullPointerException if callable is null.
+    * @throws Exception is the callable throws an Exception
     */
-   public static ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} closure) throws Exception{
-#if(${closure.type} eq 'void')
-       defaultTxnExecutor.atomicChecked(closure);
+   public static ${callable.typeParameter} ${callable.type} atomicChecked(${callable.name}${callable.typeParameter} callable) throws Exception{
+#if(${callable.type} eq 'void')
+       defaultTxnExecutor.atomicChecked(callable);
 #else
-       return defaultTxnExecutor.atomicChecked(closure);
+       return defaultTxnExecutor.atomicChecked(callable);
 #end
    }
 
    /**
     * Executes the either block, or in case of a retry, the orelse block is executed.
     *
-    * If in the execution of the closure a checked exception is thrown, the exception
+    * If in the execution of the callable a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
     * @param either the either block
     * @param orelse the orelse block.
-#if(${closure.type} ne 'void')
+#if(${callable.type} ne 'void')
     * @return the result of the execution.
 #end
-    * @throws NullPointerException if closure is null.
-    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
+    * @throws NullPointerException if callable is null.
+    * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    public static ${closure.typeParameter} ${closure.type} atomic(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse){
-#if(${closure.type} ne 'void')
+    public static ${callable.typeParameter} ${callable.type} atomic(${callable.name}${callable.typeParameter} either, ${callable.name}${callable.typeParameter} orelse){
+#if(${callable.type} ne 'void')
         return orelseBlock.execute(either,orelse);
 #else
         orelseBlock.execute(either,orelse);
@@ -194,14 +194,14 @@ public final class StmUtils {
     *
     * @param either the either block
     * @param orelse the orelse block
-#if(${closure.type} ne 'void')
+#if(${callable.type} ne 'void')
     * @return the result of the execution.
 #end
-    * @throws NullPointerException if closure is null.
+    * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    public static ${closure.typeParameter} ${closure.type} atomicChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception{
-#if(${closure.type} ne 'void')
+    public static ${callable.typeParameter} ${callable.type} atomicChecked(${callable.name}${callable.typeParameter} either, ${callable.name}${callable.typeParameter} orelse)throws Exception{
+#if(${callable.type} ne 'void')
         return orelseBlock.executeChecked(either,orelse);
 #else
         orelseBlock.executeChecked(either,orelse);

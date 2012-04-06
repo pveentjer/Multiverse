@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnClosure;
-import org.multiverse.api.closures.TxnIntClosure;
-import org.multiverse.api.closures.TxnLongClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnCallable;
+import org.multiverse.api.callables.TxnIntCallable;
+import org.multiverse.api.callables.TxnLongCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
@@ -26,8 +26,8 @@ public class GammaTxnExecutorTest {
     }
 
     @Test
-    public void whenAtomicIntClosureUsed() {
-        int result = executor.atomic(new TxnIntClosure() {
+    public void whenTxnIntCallableUsed() {
+        int result = executor.atomic(new TxnIntCallable() {
             @Override
             public int call(Txn tx) throws Exception {
                 return 10;
@@ -38,8 +38,8 @@ public class GammaTxnExecutorTest {
     }
 
     @Test
-    public void whenAtomicLongClosureUsed() {
-        long result = executor.atomic(new TxnLongClosure() {
+    public void whenTxnLongCallableUsed() {
+        long result = executor.atomic(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
                 return 10;
@@ -50,8 +50,8 @@ public class GammaTxnExecutorTest {
     }
 
     @Test
-    public void whenAtomicVoidClosureUsed() {
-        executor.atomic(new TxnVoidClosure() {
+    public void whenTxnVoidCallableUsed() {
+        executor.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
             }
@@ -59,8 +59,8 @@ public class GammaTxnExecutorTest {
     }
 
     @Test
-    public void whenAtomicClosureUsed() {
-        String result = executor.atomic(new TxnClosure<String>() {
+    public void whenTxnCallableUsed() {
+        String result = executor.atomic(new TxnCallable<String>() {
             @Override
             public String call(Txn tx) throws Exception {
                 return "foo";

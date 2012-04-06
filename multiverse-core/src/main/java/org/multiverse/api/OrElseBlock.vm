@@ -6,10 +6,6 @@ import org.multiverse.api.closures.*;
 /**
 * The OrElse is responsible for executing the either block, or in case of a retry, the orelse block is executed.
 *
-* Another useful features of this design is that for certain primitives it doesn't require any form of boxing.
-* It also provides an execute for a AtomicVoidClosure which doesn't force a developer to return something when
-* nothing needs to be returned.
-*
 * @author Peter Veentjer.
 */
 public interface OrElseBlock extends MultiverseConstants{

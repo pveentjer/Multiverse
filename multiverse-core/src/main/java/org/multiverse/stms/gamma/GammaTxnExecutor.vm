@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma;
 
 import org.multiverse.api.*;
 import org.multiverse.api.exceptions.*;
-import org.multiverse.api.closures.*;
+import org.multiverse.api.callables.*;
 import org.multiverse.stms.gamma.transactions.*;
 import java.util.logging.Logger;
 
@@ -35,16 +35,16 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         return txnFactory;
     }
 
-#foreach($closure in $closures)
+#foreach($callable in $callables)
     @Override
-    public final ${closure.typeParameter} ${closure.type} atomicChecked(
-        final ${closure.name}${closure.typeParameter} closure)throws Exception{
+    public final ${callable.typeParameter} ${callable.type} atomicChecked(
+        final ${callable.name}${callable.typeParameter} callable)throws Exception{
 
         try{
-#if(${closure.type} eq 'void')
-            atomic(closure);
+#if(${callable.type} eq 'void')
+            atomic(callable);
 #else
-            return atomic(closure);
+            return atomic(callable);
 #end
         }catch(InvisibleCheckedException e){
             throw e.getCause();
@@ -53,9 +53,9 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 
 #if(${txnExecutor.lean})
     @Override
-    public final ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
+    public final ${callable.typeParameter} ${callable.type} atomic(final ${callable.name}${callable.typeParameter} callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -74,11 +74,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         Throwable cause = null;
         try{
             if(tx != null && tx.isAlive()){
-#if(${closure.type} eq 'void')
-                closure.call(tx);
+#if(${callable.type} eq 'void')
+                callable.call(tx);
                 return;
 #else
-                return closure.call(tx);
+                return callable.call(tx);
 #end
             }
 
@@ -88,9 +88,9 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         }
 
 #else ## end of txnExecutor.lean
-    public ${closure.typeParameter} ${closure.type} atomic(final ${closure.name}${closure.typeParameter} closure){
+    public ${callable.typeParameter} ${callable.type} atomic(final ${callable.name}${callable.typeParameter} callable){
 
-        if(closure == null){
+        if(callable == null){
             throw new NullPointerException();
         }
 
@@ -120,11 +120,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-#if($closure.type eq 'void')
-                        atomic(tx, transactionContainer,pool, closure);
+#if($callable.type eq 'void')
+                        atomic(tx, transactionContainer,pool, callable);
                         return;
 #else
-                        return atomic(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, callable);
 #end
                     } else {
                         if (TRACING_ENABLED) {
@@ -135,11 +135,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                                 }
                             }
 
-#if($closure.type eq 'void')
-                        closure.call(tx);
+#if($callable.type eq 'void')
+                        callable.call(tx);
                         return;
 #else
-                        return closure.call(tx);
+                        return callable.call(tx);
 #end
                     }
                 case Mandatory:
@@ -163,11 +163,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName, tx.getConfig().getFamilyName()));
                         }
                     }
-#if($closure.type eq 'void')
-                    closure.call(tx);
+#if($callable.type eq 'void')
+                    callable.call(tx);
                     return;
 #else
-                    return closure.call(tx);
+                    return callable.call(tx);
 #end
                 case Never:
                     if (tx != null) {
@@ -193,11 +193,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                                     txnConfig.familyName));
                         }
                     }
-#if($closure.type eq 'void')
-                    closure.call(null);
+#if($callable.type eq 'void')
+                    callable.call(null);
                     return;
 #else
-                    return closure.call(null);
+                    return callable.call(null);
 #end
                 case RequiresNew:
                     if (tx == null) {
@@ -211,11 +211,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-#if($closure.type eq 'void')
-                        atomic(tx, transactionContainer, pool, closure);
+#if($callable.type eq 'void')
+                        atomic(tx, transactionContainer, pool, callable);
                         return;
 #else
-                        return atomic(tx, transactionContainer, pool, closure);
+                        return atomic(tx, transactionContainer, pool, callable);
 #end
                     } else {
                         if(TRACING_ENABLED){
@@ -230,11 +230,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-#if($closure.type eq 'void')
-                            atomic(tx, transactionContainer, pool, closure);
+#if($callable.type eq 'void')
+                            atomic(tx, transactionContainer, pool, callable);
                             return;
 #else
-                            return atomic(tx, transactionContainer, pool, closure);
+                            return atomic(tx, transactionContainer, pool, callable);
 #end
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
@@ -257,11 +257,11 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         }
                     }
 
-#if($closure.type eq 'void')
-                    closure.call(tx);
+#if($callable.type eq 'void')
+                    callable.call(tx);
                     return;
 #else
-                    return closure.call(tx);
+                    return callable.call(tx);
 #end
                 default:
                     throw new IllegalStateException();
@@ -273,8 +273,8 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         }
     }
 
-    private ${closure.typeParameter} ${closure.type} atomic(
-        GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final ${closure.name}${closure.typeParameter} closure)throws Exception{
+    private ${callable.typeParameter} ${callable.type} atomic(
+        GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final ${callable.name}${callable.typeParameter} callable)throws Exception{
         Error cause = null;
 
         try{
@@ -289,14 +289,14 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                 do {
                     try {
                         cause = null;
-#if(${closure.type} eq 'void')
-                        closure.call(tx);
+#if(${callable.type} eq 'void')
+                        callable.call(tx);
 #else
-                        ${closure.type} result = closure.call(tx);
+                        ${callable.type} result = callable.call(tx);
 #end
                         tx.commit();
                         abort = false;
-#if(${closure.type} eq 'void')
+#if(${callable.type} eq 'void')
                         return;
 #else
                         return result;

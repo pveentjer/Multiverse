@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.*;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
@@ -69,7 +69,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
             final String name = getName();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     for (GammaTxnRef ref : refs) {
@@ -80,7 +80,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
 
             int iteration = 0;
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
                 sleepRandomUs(100);
                 iteration++;
 
@@ -545,7 +545,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
         }
 
         private void singleRun() {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);
@@ -592,7 +592,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
         }
 
         private void singleRun() {
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);
@@ -603,7 +603,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
             FatFixedLengthGammaTxn tx = new FatFixedLengthGammaTxn(config);
             while (true) {
                 try {
-                    closure.call(tx);
+                    callable.call(tx);
                     tx.commit();
                     return;
                 } catch (ReadWriteConflict expected) {
@@ -613,7 +613,7 @@ public class Orec_Ref_ReadConsistencyStressTest implements GammaConstants {
                 }
             }
 
-            //executor.atomicChecked(closure);
+            //executor.atomicChecked(callable);
         }
 
         private void fullRead(GammaTxn tx) {

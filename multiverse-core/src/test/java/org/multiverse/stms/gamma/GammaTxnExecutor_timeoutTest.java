@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.RetryTimeoutException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
@@ -60,7 +60,7 @@ public class GammaTxnExecutor_timeoutTest {
         sleepMs(500);
         assertAlive(t);
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -75,7 +75,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenNoWaitingNeededAndZeroTimeout() {
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -106,7 +106,7 @@ public class GammaTxnExecutor_timeoutTest {
 
         @Override
         public void doRun() throws Exception {
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

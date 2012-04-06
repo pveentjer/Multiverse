@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenNullCollection_thenNullPointerException() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -47,7 +47,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenBothEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = list.containsAll(new LinkedList());
@@ -63,7 +63,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenlistEmpty_andCollectionNonEmpty() {
        final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 boolean result = list.containsAll(Arrays.asList("1", "2"));
@@ -79,7 +79,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenlistNonEmpty_andCollectionEmpty() {
        final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -98,7 +98,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenExactMatch() {
          final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -116,7 +116,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenOrderDifferentThanStillMatch() {
           final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -135,7 +135,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenNoneMatch() {
          final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -154,7 +154,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenSomeMatch() {
              final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -173,7 +173,7 @@ public class NaiveTxnLinkedList_containsAllTest {
     public void whenSomeElementsNull() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-          StmUtils.atomic(new TxnVoidClosure() {
+          StmUtils.atomic(new TxnVoidCallable() {
               @Override
               public void call(Txn tx) throws Exception {
                   list.add("1");

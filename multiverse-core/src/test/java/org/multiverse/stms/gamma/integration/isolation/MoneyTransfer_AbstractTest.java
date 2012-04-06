@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
@@ -91,7 +91,7 @@ public abstract class MoneyTransfer_AbstractTest {
         public void doRun() {
             TxnExecutor executor = newTxnExecutor();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -115,7 +115,7 @@ public abstract class MoneyTransfer_AbstractTest {
             int k = 0;
             while (!stop) {
                 try {
-                    executor.atomic(closure);
+                    executor.atomic(callable);
                     if ((k % 500) == 0) {
                         System.out.printf("%s is at iteration %s\n", getName(), k);
                     }

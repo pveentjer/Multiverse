@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -95,7 +95,7 @@ public abstract class RefReadConsistency_AbstractTest {
             final String value = getName();
 
             TxnExecutor executor = createWriteBlock();
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -112,7 +112,7 @@ public abstract class RefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
                 sleepRandomUs(100);
 
                 k++;
@@ -135,7 +135,7 @@ public abstract class RefReadConsistency_AbstractTest {
         public void doRun() throws Exception {
             TxnExecutor executor = createReadBlock();
 
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -156,7 +156,7 @@ public abstract class RefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
                 k++;
 
                 if (k % mod == 0) {

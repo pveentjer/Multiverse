@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -90,7 +90,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modify() {
-            txnExecutor.atomic(new TxnVoidClosure() {
+            txnExecutor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -101,7 +101,7 @@ public class FailureAtomicityStressTest {
         }
 
         private void modifyButAbort() {
-            txnExecutor.atomic(new TxnVoidClosure() {
+            txnExecutor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.SomeUncheckedException;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryError;
@@ -232,7 +232,7 @@ public class GammaTxnLong_await2WithPredicateTest {
 
         @Override
         public void doRun() throws Exception {
-            ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+            ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.await(tx, newLargerThanOrEqualsPredicate(minimumValue));

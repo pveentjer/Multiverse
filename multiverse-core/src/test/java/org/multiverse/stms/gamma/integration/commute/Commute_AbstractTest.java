@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnLongClosure;
+import org.multiverse.api.callables.TxnLongCallable;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -80,7 +80,7 @@ public abstract class Commute_AbstractTest {
         public void doRun() throws Exception {
             TxnExecutor executor = newBlock();
 
-            TxnLongClosure commutingClosure = new TxnLongClosure() {
+            TxnLongCallable commutingCallable = new TxnLongCallable() {
                 @Override
                 public long call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -91,7 +91,7 @@ public abstract class Commute_AbstractTest {
                 }
             };
 
-            TxnLongClosure nonCommutingClosure = new TxnLongClosure() {
+            TxnLongCallable nonCommutingCallable = new TxnLongCallable() {
                 @Override
                 public long call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -104,8 +104,8 @@ public abstract class Commute_AbstractTest {
 
             int k = 0;
             while (!stop) {
-                TxnLongClosure closure = randomOneOf(10) ? nonCommutingClosure : commutingClosure;
-                count += executor.atomic(closure);
+                TxnLongCallable callable = randomOneOf(10) ? nonCommutingCallable : commutingCallable;
+                count += executor.atomic(callable);
                 k++;
 
                 if (k % 100000 == 0) {

@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnClosure;
-import org.multiverse.api.closures.TxnIntClosure;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnCallable;
+import org.multiverse.api.callables.TxnIntCallable;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
@@ -84,7 +84,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         final GammaTxnRef<Node<Connection>> head = new GammaTxnRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
+            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) {
                     size.set(poolsize);
@@ -99,7 +99,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         Connection takeConnection() {
-            return takeConnectionBlock.atomic(new TxnClosure<Connection>() {
+            return takeConnectionBlock.atomic(new TxnCallable<Connection>() {
                 @Override
                 public Connection call(Txn tx) {
                     if (size.get() == 0) {
@@ -115,7 +115,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         void returnConnection(final Connection c) {
-            returnConnectionBlock.atomic(new TxnVoidClosure() {
+            returnConnectionBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     size.incrementAndGet(1);
@@ -127,7 +127,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         int size() {
-            return sizeBlock.atomic(new TxnIntClosure() {
+            return sizeBlock.atomic(new TxnIntCallable() {
                 @Override
                 public int call(Txn tx) throws Exception {
                     return size.get();

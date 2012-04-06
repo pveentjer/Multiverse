@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
@@ -62,7 +62,7 @@ public class ReadonlyRepeatableReadStressTest {
         public void doRun() {
             TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
-            TxnVoidClosure closure = new TxnVoidClosure() {
+            TxnVoidCallable callable = new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -72,7 +72,7 @@ public class ReadonlyRepeatableReadStressTest {
 
 
             while (!stop) {
-                executor.atomic(closure);
+                executor.atomic(callable);
                 sleepRandomMs(5);
             }
         }
@@ -90,7 +90,7 @@ public class ReadonlyRepeatableReadStressTest {
                 .setReadTrackingEnabled(true)
                 .newTxnExecutor();
 
-        private final TxnVoidClosure closure = new TxnVoidClosure() {
+        private final TxnVoidCallable callable = new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -112,10 +112,10 @@ public class ReadonlyRepeatableReadStressTest {
             while (!stop) {
                 switch (k % 2) {
                     case 0:
-                        readTrackingReadonlyBlock.atomic(closure);
+                        readTrackingReadonlyBlock.atomic(callable);
                         break;
                     case 1:
-                        readTrackingUpdateBlock.atomic(closure);
+                        readTrackingUpdateBlock.atomic(callable);
                         break;
                     default:
                         throw new IllegalStateException();

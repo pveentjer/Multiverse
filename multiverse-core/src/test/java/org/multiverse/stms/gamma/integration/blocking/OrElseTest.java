@@ -4,8 +4,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnClosure;
-import org.multiverse.api.closures.TxnLongClosure;
+import org.multiverse.api.callables.TxnCallable;
+import org.multiverse.api.callables.TxnLongCallable;
 import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.references.TxnLong;
 
@@ -21,9 +21,9 @@ public class OrElseTest {
 
     @Test(expected = TxnMandatoryException.class)
     public void whenCalledWithoutTransaction_thenTxnMandatoryException() {
-        TxnClosure closure = mock(TxnClosure.class);
+        TxnCallable callable = mock(TxnCallable.class);
 
-        StmUtils.atomic(closure, closure);
+        StmUtils.atomic(callable, callable);
     }
 
     @Test
@@ -31,20 +31,20 @@ public class OrElseTest {
         final TxnLong ref1 = newTxnLong(1);
         final TxnLong ref2 = newTxnLong(0);
 
-        long value = StmUtils.atomic(new TxnLongClosure() {
+        long value = StmUtils.atomic(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
-                return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
+                return StmUtils.atomic(new GetCallable(ref1), new GetCallable(ref2));
             }
         });
 
         assertEquals(1, value);
     }
 
-    class GetClosure implements TxnLongClosure {
+    class GetCallable implements TxnLongCallable {
         private final TxnLong ref;
 
-        GetClosure(TxnLong ref) {
+        GetCallable(TxnLong ref) {
             this.ref = ref;
         }
 
@@ -64,10 +64,10 @@ public class OrElseTest {
         final TxnLong ref1 = newTxnLong(0);
         final TxnLong ref2 = newTxnLong(2);
 
-        long value = StmUtils.atomic(new TxnLongClosure() {
+        long value = StmUtils.atomic(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
-                return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
+                return StmUtils.atomic(new GetCallable(ref1), new GetCallable(ref2));
             }
         });
 

@@ -4,7 +4,7 @@ import org.benchy.BenchyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
@@ -43,7 +43,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
 
         final LeanGammaTxnExecutor executor = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));
 
-        final TxnVoidClosure closure = new TxnVoidClosure() {
+        final TxnVoidCallable callable = new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 Object x = ref.openForRead((LeanMonoGammaTxn) tx, LOCKMODE_NONE).ref_value;
@@ -54,7 +54,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            executor.atomic(closure);
+            executor.atomic(callable);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

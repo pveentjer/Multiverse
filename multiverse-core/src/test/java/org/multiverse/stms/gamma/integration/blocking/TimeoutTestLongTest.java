@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.exceptions.RetryTimeoutException;
 import org.multiverse.api.references.TxnInteger;
 
@@ -79,7 +79,7 @@ public class TimeoutTestLongTest {
                     .setTimeoutNs(TimeUnit.SECONDS.toNanos(5))
                     .newTxnExecutor();
 
-            executor.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.await(1);

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -27,7 +27,7 @@ public class NaiveTxnLinkedList_pollLastTest {
 
     @Test
     public void whenEmpty(){
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String item = list.pollLast();
@@ -41,7 +41,7 @@ public class NaiveTxnLinkedList_pollLastTest {
 
     @Test
     public void whenMultipleItems(){
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.offerLast("1");
@@ -59,7 +59,7 @@ public class NaiveTxnLinkedList_pollLastTest {
 
     @Test
     public void whenSingleItem(){
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 String item = "1";

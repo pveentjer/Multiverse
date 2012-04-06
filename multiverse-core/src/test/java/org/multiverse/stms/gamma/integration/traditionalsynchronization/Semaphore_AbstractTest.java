@@ -5,7 +5,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
@@ -88,7 +88,7 @@ public abstract class Semaphore_AbstractTest {
         }
 
         public void up() {
-            upBlock.atomic(new TxnVoidClosure() {
+            upBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.set(ref.get() + 1);
@@ -104,7 +104,7 @@ public abstract class Semaphore_AbstractTest {
         public void down() {
             users.decrementAndGet();
 
-            downBlock.atomic(new TxnVoidClosure() {
+            downBlock.atomic(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (ref.get() == 0) {

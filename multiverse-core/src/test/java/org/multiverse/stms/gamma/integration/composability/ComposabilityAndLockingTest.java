@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 import org.multiverse.api.references.TxnLong;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
@@ -29,12 +29,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
-                StmUtils.atomic(new TxnVoidClosure() {
+                StmUtils.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
@@ -53,12 +53,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
-                StmUtils.atomic(new TxnVoidClosure() {
+                StmUtils.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
@@ -77,12 +77,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
-                StmUtils.atomic(new TxnVoidClosure() {
+                StmUtils.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
@@ -101,12 +101,12 @@ public class ComposabilityAndLockingTest {
         final int initialValue = 10;
         final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
-                StmUtils.atomic(new TxnVoidClosure() {
+                StmUtils.atomic(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);

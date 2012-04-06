@@ -14,7 +14,7 @@ import org.multiverse.api.references.TxnRefFactoryBuilder;
  * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
  * </li>
  * <li>{@link TxnExecutor}: responsible for starting/committing/aborting/retrying transactions. The TxnExecutor executes an
- * {@link org.multiverse.api.closures.TxnClosure} (there are different tastes for return values). The TxnClosure contains
+ * {@link org.multiverse.api.callables.TxnCallable} (there are different tastes for return values). The TxnCallable contains
  * the logic that needs to be executed atomicChecked, isolated and consistent.
  * </li>
  * </ol>

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -25,7 +25,7 @@ public class NaiveTxnLinkedList_addFirstTest {
     public void whenNullItem_thenNullPointerException() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -44,7 +44,7 @@ public class NaiveTxnLinkedList_addFirstTest {
     public void whenEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.addFirst("1");
@@ -59,7 +59,7 @@ public class NaiveTxnLinkedList_addFirstTest {
     public void whenNotEmpty() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");
@@ -75,7 +75,7 @@ public class NaiveTxnLinkedList_addFirstTest {
     public void whenFull() {
         final NaiveTxnLinkedList<String> list = new NaiveTxnLinkedList<String>(stm, 2);
 
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 list.add("1");

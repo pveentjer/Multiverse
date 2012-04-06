@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
-import org.multiverse.api.closures.TxnVoidClosure;
+import org.multiverse.api.callables.TxnVoidCallable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class NaiveTxnHashMap_putAllTest {
 
     @Test
     public void whenNullMap_thenNullPointerException() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 try {
@@ -45,7 +45,7 @@ public class NaiveTxnHashMap_putAllTest {
 
     @Test
     public void whenEmptyMapAdded() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.putAll(new HashMap<String, String>());
@@ -62,7 +62,7 @@ public class NaiveTxnHashMap_putAllTest {
 
     @Test
     public void whenAllDifferentItems() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.put("1", "a");
@@ -89,7 +89,7 @@ public class NaiveTxnHashMap_putAllTest {
 
     @Test
     public void whenSomeItemsReplaced() {
-        StmUtils.atomic(new TxnVoidClosure() {
+        StmUtils.atomic(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 map.put("1", "a");
