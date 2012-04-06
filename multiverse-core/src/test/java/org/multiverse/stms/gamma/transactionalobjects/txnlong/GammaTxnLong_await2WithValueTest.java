@@ -92,7 +92,7 @@ public class GammaTxnLong_await2WithValueTest {
                 .setBlockingAllowed(false)
                 .setSpeculative(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.await(tx, 10);

@@ -68,10 +68,10 @@ public class Lock_getLockMode0Test {
 
     public void whenLockedByOther(LockMode lockMode) {
         GammaTxnLong ref = new GammaTxnLong(stm);
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         LockMode result = ref.getLock().getLockMode();
 
@@ -90,7 +90,7 @@ public class Lock_getLockMode0Test {
     public void self_whenLocked(LockMode lockMode){
         GammaTxnLong ref = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.getLock().acquire(tx, lockMode);
         setThreadLocalTxn(tx);
         LockMode result = ref.getLock().getLockMode();
@@ -105,7 +105,7 @@ public class Lock_getLockMode0Test {
     public void whenTransactionPrepared_thenPreparedTxnException() {
         GammaTxnLong ref = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -122,7 +122,7 @@ public class Lock_getLockMode0Test {
     public void whenTransactionAborted_thenDeadTxnException() {
         GammaTxnLong ref = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {
@@ -138,7 +138,7 @@ public class Lock_getLockMode0Test {
     public void whenTransactionCommitted_thenDeadTxnException() {
         GammaTxnLong ref = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {

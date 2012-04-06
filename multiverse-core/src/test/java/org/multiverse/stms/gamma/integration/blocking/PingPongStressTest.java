@@ -68,8 +68,8 @@ public class PingPongStressTest {
     }
 
     public void test(GammaTxnFactory transactionFactory, int threadCount) throws InterruptedException {
-        TxnExecutor block = new LeanGammaTxnExecutor(transactionFactory);
-        PingPongThread[] threads = createThreads(block, threadCount);
+        TxnExecutor executor = new LeanGammaTxnExecutor(transactionFactory);
+        PingPongThread[] threads = createThreads(executor, threadCount);
 
         startAll(threads);
 
@@ -90,10 +90,10 @@ public class PingPongStressTest {
         System.out.println(stm.getGlobalConflictCounter().count());
     }
 
-    private PingPongThread[] createThreads(TxnExecutor block, int threadCount) {
+    private PingPongThread[] createThreads(TxnExecutor executor, int threadCount) {
         PingPongThread[] threads = new PingPongThread[threadCount];
         for (int k = 0; k < threads.length; k++) {
-            threads[k] = new PingPongThread(k, block, threadCount);
+            threads[k] = new PingPongThread(k, executor, threadCount);
         }
         return threads;
     }
@@ -107,15 +107,15 @@ public class PingPongStressTest {
     }
 
     private class PingPongThread extends TestThread {
-        private final TxnExecutor block;
+        private final TxnExecutor executor;
         private final int threadCount;
         private final int id;
         private long count;
 
-        public PingPongThread(int id, TxnExecutor block, int threadCount) {
+        public PingPongThread(int id, TxnExecutor executor, int threadCount) {
             super("PingPongThread-" + id);
             this.id = id;
-            this.block = block;
+            this.executor = executor;
             this.threadCount = threadCount;
         }
 
@@ -142,7 +142,7 @@ public class PingPongStressTest {
                     System.out.println(getName() + " " + count);
                 }
 
-                if (!block.atomic(closure)) {
+                if (!executor.atomic(closure)) {
                     break;
                 }
                 count++;

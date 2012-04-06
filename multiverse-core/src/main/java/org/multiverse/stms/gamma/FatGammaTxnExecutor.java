@@ -27,7 +27,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public GammaTxnFactory getTransactionFactory(){
+    public GammaTxnFactory getTxnFactory(){
         return txnFactory;
     }
 
@@ -55,7 +55,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -73,7 +73,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
@@ -144,7 +144,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
@@ -157,11 +157,11 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -226,7 +226,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -245,7 +245,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -289,7 +289,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -307,7 +307,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
@@ -378,7 +378,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
@@ -391,11 +391,11 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -460,7 +460,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -479,7 +479,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -523,7 +523,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -541,7 +541,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
@@ -612,7 +612,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
@@ -625,11 +625,11 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -694,7 +694,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -713,7 +713,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -757,7 +757,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -775,7 +775,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
@@ -846,7 +846,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
@@ -859,11 +859,11 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -928,7 +928,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -947,7 +947,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -991,7 +991,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -1009,7 +1009,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if (TRACING_ENABLED) {
@@ -1080,7 +1080,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         return atomic(tx, transactionContainer, pool, closure);
                     } else {
                         if(TRACING_ENABLED){
@@ -1093,11 +1093,11 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             return atomic(tx, transactionContainer, pool, closure);
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -1162,7 +1162,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -1181,7 +1181,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -1225,7 +1225,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -1243,7 +1243,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         atomic(tx, transactionContainer,pool, closure);
                         return;
                     } else {
@@ -1318,7 +1318,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         atomic(tx, transactionContainer, pool, closure);
                         return;
                     } else {
@@ -1332,12 +1332,12 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         GammaTxn suspendedTransaction = tx;
                         tx = txnFactory.newTransaction(pool);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                         try {
                             atomic(tx, transactionContainer, pool, closure);
                             return;
                         } finally {
-                            transactionContainer.tx = suspendedTransaction;
+                            transactionContainer.txn = suspendedTransaction;
                         }
                     }
                 case Supports:
@@ -1403,7 +1403,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -1422,7 +1422,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;

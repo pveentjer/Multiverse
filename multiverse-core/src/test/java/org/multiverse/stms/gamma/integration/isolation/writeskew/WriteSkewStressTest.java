@@ -155,12 +155,12 @@ public class WriteSkewStressTest {
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         GammaTxn tx2 = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         customer1.account1.get(tx1);
         customer1.account2.get(tx1);

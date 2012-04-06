@@ -95,7 +95,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            GammaTxnExecutor block = stm.newTxnFactoryBuilder()
+            GammaTxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setSpeculative(false)
                     .setMaxRetries(100000)
                     .newTxnExecutor();
@@ -110,7 +110,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
             int iteration = 0;
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
                 sleepRandomUs(100);
                 iteration++;
 
@@ -428,7 +428,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
     class FatVariableLengthTransactionWithBlockThread extends TestThread {
 
-        private LeanGammaTxnExecutor block;
+        private LeanGammaTxnExecutor executor;
 
         public FatVariableLengthTransactionWithBlockThread(int id) {
             super("VariableReadingWithBlockThread-" + id);
@@ -442,7 +442,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
                     .setSpeculative(false)
                     .setDirtyCheckEnabled(false);
 
-            block = new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
+            executor = new LeanGammaTxnExecutor(new FatVariableLengthGammaTxnFactory(config));
 
             long iteration = 0;
             while (!stop) {
@@ -456,7 +456,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         }
 
         private void singleRun() {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);

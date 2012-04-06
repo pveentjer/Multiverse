@@ -1,11 +1,13 @@
 package org.multiverse.api.closures;
 
 import org.multiverse.api.Txn;
+import org.multiverse.api.TxnExecutor;
 
 /**
- * An atomic closure tailored for returning a primitive type: E. Using this TxnClosure instead of
- * the {@link AtomicClosure} is that no object wrappers need to be created and there is no reason to deal with a potential
- * null value.
+ * A transactional closure contains the logic that needs to be executed transactionally and normally is executed by the
+ * {@link TxnExecutor}.
+ *
+ * This transactional closure is optimized for returning an object reference.
  *
  * @author Peter Veentjer.
  */

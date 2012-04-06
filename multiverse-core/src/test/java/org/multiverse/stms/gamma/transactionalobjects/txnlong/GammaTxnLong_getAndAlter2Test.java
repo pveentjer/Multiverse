@@ -75,7 +75,7 @@ public class GammaTxnLong_getAndAlter2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         try {
             ref.getAndAlter(tx, null);
@@ -92,7 +92,7 @@ public class GammaTxnLong_getAndAlter2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         LongFunction function = mock(LongFunction.class);
@@ -112,7 +112,7 @@ public class GammaTxnLong_getAndAlter2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         LongFunction function = mock(LongFunction.class);
@@ -132,7 +132,7 @@ public class GammaTxnLong_getAndAlter2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         LongFunction function = mock(LongFunction.class);
@@ -156,7 +156,7 @@ public class GammaTxnLong_getAndAlter2Test {
         LongFunction function = mock(LongFunction.class);
         when(function.call(initialValue)).thenThrow(new SomeUncheckedException());
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         try {
             ref.getAndAlter(tx, function);
             fail();
@@ -179,7 +179,7 @@ public class GammaTxnLong_getAndAlter2Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndAlter(tx, Functions.incLongFunction());
         tx.commit();
 
@@ -200,7 +200,7 @@ public class GammaTxnLong_getAndAlter2Test {
         };
 
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndAlter(tx, function);
         tx.commit();
 

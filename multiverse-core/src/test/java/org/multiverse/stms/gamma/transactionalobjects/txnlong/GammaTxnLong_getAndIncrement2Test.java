@@ -69,7 +69,7 @@ public class GammaTxnLong_getAndIncrement2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
         try {
             ref.getAndIncrement(tx, 10);
@@ -103,7 +103,7 @@ public class GammaTxnLong_getAndIncrement2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         try {
             ref.getAndIncrement(tx, 10);
@@ -120,7 +120,7 @@ public class GammaTxnLong_getAndIncrement2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndIncrement(tx, 0);
         tx.commit();
 
@@ -134,7 +134,7 @@ public class GammaTxnLong_getAndIncrement2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndIncrement(tx, 20);
         tx.commit();
 

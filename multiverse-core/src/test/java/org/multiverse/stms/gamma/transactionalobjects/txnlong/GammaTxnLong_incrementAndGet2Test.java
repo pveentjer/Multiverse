@@ -70,7 +70,7 @@ public class GammaTxnLong_incrementAndGet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
         try {
             ref.incrementAndGet(tx, 10);
@@ -87,7 +87,7 @@ public class GammaTxnLong_incrementAndGet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
         try {
             ref.incrementAndGet(tx, 10);
@@ -104,7 +104,7 @@ public class GammaTxnLong_incrementAndGet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         try {
             ref.incrementAndGet(tx, 10);
@@ -121,7 +121,7 @@ public class GammaTxnLong_incrementAndGet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.incrementAndGet(tx, 0);
         tx.commit();
 
@@ -135,7 +135,7 @@ public class GammaTxnLong_incrementAndGet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.incrementAndGet(tx, 20);
         tx.commit();
 
@@ -156,7 +156,7 @@ public class GammaTxnLong_incrementAndGet2Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.incrementAndGet(tx, amount);
         tx.commit();
 

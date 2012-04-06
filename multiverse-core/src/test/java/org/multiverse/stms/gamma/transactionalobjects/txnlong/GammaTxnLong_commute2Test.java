@@ -68,7 +68,7 @@ public class GammaTxnLong_commute2Test {
         RuntimeException ex = new RuntimeException();
         when(function.call(anyLong())).thenThrow(ex);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, function);
 
         assertHasCommutingFunctions(tx.getRefTranlocal(ref), function);
@@ -86,10 +86,10 @@ public class GammaTxnLong_commute2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, Functions.incLongFunction());
 
         try {
@@ -110,10 +110,10 @@ public class GammaTxnLong_commute2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, Functions.incLongFunction());
 
         try {
@@ -134,10 +134,10 @@ public class GammaTxnLong_commute2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, Functions.incLongFunction());
 
         try {
@@ -159,7 +159,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = Functions.incLongFunction();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, function);
 
         Tranlocal commute = tx.getRefTranlocal(ref);
@@ -177,7 +177,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = Functions.identityLongFunction();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, function);
 
         Tranlocal commute = tx.getRefTranlocal(ref);
@@ -195,7 +195,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = Functions.incLongFunction(1);
-        Txn tx = transactionFactory.newTransaction();
+        Txn tx = transactionFactory.newTxn();
         ref.commute(tx, function);
         tx.commit();
 
@@ -209,7 +209,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = Functions.incLongFunction(1);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.get(tx);
         ref.commute(tx, function);
 
@@ -224,7 +224,7 @@ public class GammaTxnLong_commute2Test {
     @Test
     public void whenAlreadyOpenedForConstruction() {
         LongFunction function = Functions.incLongFunction(1);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         GammaTxnLong ref = new GammaTxnLong(tx);
         ref.openForConstruction(tx);
         ref.commute(tx, function);
@@ -242,7 +242,7 @@ public class GammaTxnLong_commute2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         LongFunction function = Functions.incLongFunction();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, 11);
         ref.commute(tx, function);
 
@@ -262,7 +262,7 @@ public class GammaTxnLong_commute2Test {
 
         LongFunction function1 = Functions.incLongFunction();
         LongFunction function2 = Functions.incLongFunction();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, function1);
         ref.commute(tx, function2);
 
@@ -280,7 +280,7 @@ public class GammaTxnLong_commute2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         try {
             ref.commute(tx, null);
@@ -318,7 +318,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {
@@ -339,7 +339,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {
@@ -360,7 +360,7 @@ public class GammaTxnLong_commute2Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -376,16 +376,16 @@ public class GammaTxnLong_commute2Test {
 
     @Test
     public void fullExample() {
-        assumeTrue(!(transactionFactory.newTransaction() instanceof FatMonoGammaTxn));
+        assumeTrue(!(transactionFactory.newTxn() instanceof FatMonoGammaTxn));
 
         GammaTxnLong ref1 = new GammaTxnLong(stm, 10);
         GammaTxnLong ref2 = new GammaTxnLong(stm, 10);
 
-        GammaTxn tx1 = transactionFactory.newTransaction();
+        GammaTxn tx1 = transactionFactory.newTxn();
         ref1.openForWrite(tx1, LOCKMODE_NONE).long_value++;
         ref2.commute(tx1, Functions.incLongFunction(1));
 
-        GammaTxn tx2 = transactionFactory.newTransaction();
+        GammaTxn tx2 = transactionFactory.newTxn();
         ref2.openForWrite(tx2, LOCKMODE_NONE).long_value++;
         tx2.commit();
 
@@ -407,7 +407,7 @@ public class GammaTxnLong_commute2Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.commute(tx, Functions.incLongFunction());
         tx.commit();
 

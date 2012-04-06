@@ -130,7 +130,7 @@ public class ReadBiasedIsolationStressTest {
 
         @Override
         public void doRun() {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setDirtyCheckEnabled(dirtyCheckEnabled)
                     .newTxnExecutor();
 
@@ -152,7 +152,7 @@ public class ReadBiasedIsolationStressTest {
             long startMs = currentTimeMillis();
 
             for (long k = 0; k < count; k++) {
-                if (block.atomic(closure)) {
+                if (executor.atomic(closure)) {
                     incrementCount++;
                 }
 

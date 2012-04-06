@@ -21,7 +21,7 @@ public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public TxnFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTxnFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
@@ -36,7 +36,7 @@ public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public FatVariableLengthGammaTxn newTransaction() {
+    public FatVariableLengthGammaTxn newTxn() {
         return newTransaction(getThreadLocalGammaTxnPool());
     }
 

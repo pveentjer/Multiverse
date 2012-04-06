@@ -54,7 +54,7 @@ public class GammaTxnLong_decrement2Test {
                 .setReadonly(true)
                 .setSpeculative(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.decrement(tx, 5);

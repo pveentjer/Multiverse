@@ -28,7 +28,7 @@ import org.multiverse.api.predicates.*;
  *
  * @author Peter Veentjer.
  */
-public interface TxnLong extends TransactionalObject {
+public interface TxnLong extends TxnObject {
 
     /**
      * Gets the value using the provided txn.

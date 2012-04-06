@@ -50,11 +50,11 @@ public class TooManyRetriesRollbackTest {
     }
 
     public void setAndAwaitUneven(final int value) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setMaxRetries(10)
                 .newTxnExecutor();
 
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -76,7 +76,7 @@ public class TooManyRetriesRollbackTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
@@ -89,7 +89,7 @@ public class TooManyRetriesRollbackTest {
             };
 
             while (!finished) {
-                block.atomic(closure);
+                executor.atomic(closure);
             }
         }
     }

@@ -50,13 +50,13 @@ public class CountDownCommitBarrier_abortTest {
         sleepMs(500);
 
         assertTrue(barrier.isAborted());
-        assertIsAborted(thread1.tx);
-        assertIsAborted(thread2.tx);
+        assertIsAborted(thread1.txn);
+        assertIsAborted(thread2.txn);
     }
 
     class CommitThread extends TestThread {
         final CountDownCommitBarrier barrier;
-        Txn tx;
+        Txn txn;
 
         CommitThread(CountDownCommitBarrier barrier) {
             setPrintStackTrace(false);
@@ -67,9 +67,9 @@ public class CountDownCommitBarrier_abortTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
-                    CommitThread.this.tx = tx;
-                    barrier.joinCommitUninterruptibly(tx);
+                public void execute(Txn txn) throws Exception {
+                    CommitThread.this.txn = txn;
+                    barrier.joinCommitUninterruptibly(txn);
                 }
             });
         }

@@ -74,7 +74,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
         @Override
         public void doRun() throws Exception {
             final long _incCount = transactionsPerThread;
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setReadLockMode(lockLevel)
                     .setDirtyCheckEnabled(dirtyCheck)
                     .newTxnExecutor();
@@ -86,7 +86,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
             };
 
             for (long k = 0; k < _incCount; k++) {
-                block.atomic(closure);
+                executor.atomic(closure);
             }
         }
     }

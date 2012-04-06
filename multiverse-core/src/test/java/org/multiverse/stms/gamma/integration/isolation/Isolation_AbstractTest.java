@@ -159,7 +159,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
 
         @Override
         public void doRun() {
-            TxnExecutor block = newBlock(lockMode, dirtyCheckEnabled);
+            TxnExecutor executor = newBlock(lockMode, dirtyCheckEnabled);
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
@@ -173,7 +173,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
             long startMs = currentTimeMillis();
 
             for (long k = 0; k < transactionsPerThread; k++) {
-                block.atomic(closure);
+                executor.atomic(closure);
 
                 if (k % 500000 == 0) {
                     System.out.printf("%s is at %s\n", getName(), k);

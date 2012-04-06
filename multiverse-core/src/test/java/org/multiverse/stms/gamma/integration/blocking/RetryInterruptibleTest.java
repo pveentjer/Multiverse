@@ -57,11 +57,11 @@ public class RetryInterruptibleTest {
         }
 
         public void await() throws Exception {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setInterruptible(true)
                     .newTxnExecutor();
 
-            block.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

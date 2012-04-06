@@ -98,14 +98,15 @@ import org.multiverse.api.closures.*;
 public interface TxnExecutor extends MultiverseConstants{
 
    /**
-    * Returns the TransactionFactory that is used by this TxnExecutor to create Transactions used inside.
+    * Returns the {@link TxnFactory} that is used by this TxnExecutor to create transactions used to execute
+    * transactional closures.
     *
     * @return the TransactionFactory used by this TxnExecutor.
     */
-    TxnFactory getTransactionFactory();
+    TxnFactory getTxnFactory();
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
@@ -127,7 +128,7 @@ public interface TxnExecutor extends MultiverseConstants{
     <E> E atomicChecked(TxnClosure<E> closure)throws Exception;
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
@@ -149,7 +150,7 @@ public interface TxnExecutor extends MultiverseConstants{
      int atomicChecked(TxnIntClosure closure)throws Exception;
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
@@ -171,7 +172,7 @@ public interface TxnExecutor extends MultiverseConstants{
      long atomicChecked(TxnLongClosure closure)throws Exception;
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
@@ -193,7 +194,7 @@ public interface TxnExecutor extends MultiverseConstants{
      double atomicChecked(TxnDoubleClosure closure)throws Exception;
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *
@@ -215,7 +216,7 @@ public interface TxnExecutor extends MultiverseConstants{
      boolean atomicChecked(TxnBooleanClosure closure)throws Exception;
 
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *

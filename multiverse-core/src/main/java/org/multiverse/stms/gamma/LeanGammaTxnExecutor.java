@@ -25,7 +25,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public GammaTxnFactory getTransactionFactory(){
+    public GammaTxnFactory getTxnFactory(){
         return txnFactory;
     }
 
@@ -54,7 +54,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -66,7 +66,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -96,7 +96,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -115,7 +115,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -160,7 +160,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -172,7 +172,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -202,7 +202,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -221,7 +221,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -266,7 +266,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -278,7 +278,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -308,7 +308,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -327,7 +327,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -372,7 +372,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -384,7 +384,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -414,7 +414,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -433,7 +433,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -478,7 +478,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -490,7 +490,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -520,7 +520,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -539,7 +539,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;
@@ -584,7 +584,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             transactionContainer.txPool = pool;
         }
 
-        GammaTxn tx = (GammaTxn)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.txn;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -597,7 +597,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             }
 
             tx = txnFactory.newTransaction(pool);
-            transactionContainer.tx=tx;
+            transactionContainer.txn=tx;
             boolean abort = true;
             try {
                 do {
@@ -627,7 +627,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
-                        transactionContainer.tx = tx;
+                        transactionContainer.txn = tx;
                     } catch (ReadWriteConflict e) {
                         cause = e;
                         if(TRACING_ENABLED){
@@ -646,7 +646,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                 }
 
                 pool.put(tx);
-                transactionContainer.tx = null;
+                transactionContainer.txn = null;
             }
         }catch(RuntimeException e){
             throw e;

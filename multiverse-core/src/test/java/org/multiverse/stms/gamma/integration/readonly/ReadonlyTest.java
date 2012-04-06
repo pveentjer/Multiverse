@@ -39,11 +39,11 @@ public class ReadonlyTest {
     }
 
     public void updateInReadonlyMethod(final GammaTxnLong ref, final int newValue) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -53,7 +53,7 @@ public class ReadonlyTest {
     }
 
     @Test
-    public void whenReadonly_thenCreationOfNewTransactionalObjectNotFails() {
+    public void whenReadonly_thenCreationOfNewTxnObjectNotFails() {
         try {
             readonly_createNewTransactionObject(10);
             fail();
@@ -62,11 +62,11 @@ public class ReadonlyTest {
     }
 
     public void readonly_createNewTransactionObject(final long value) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -77,18 +77,18 @@ public class ReadonlyTest {
     }
 
     @Test
-    public void whenReadonly_thenCreationOfNonTransactionalObjectSucceeds() {
+    public void whenReadonly_thenCreationOfNonTxnObjectSucceeds() {
         Integer ref = readonly_createNormalObject(100);
         assertNotNull(ref);
         assertEquals(100, ref.intValue());
     }
 
     public Integer readonly_createNormalObject(final int value) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnClosure<Integer>() {
+        return executor.atomic(new TxnClosure<Integer>() {
             @Override
             public Integer execute(Txn tx) throws Exception {
                 return new Integer(value);
@@ -105,11 +105,11 @@ public class ReadonlyTest {
     }
 
     public long readInReadonlyMethod(final GammaTxnLong ref) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnLongClosure() {
+        return executor.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -119,18 +119,18 @@ public class ReadonlyTest {
     }
 
     @Test
-    public void whenUpdate_thenCreationOfNewTransactionalObjectsSucceeds() {
+    public void whenUpdate_thenCreationOfNewTxnObjectsSucceeds() {
         GammaTxnLong ref = update_createNewTransactionObject(100);
         assertNotNull(ref);
         assertEquals(100, ref.atomicGet());
     }
 
     public GammaTxnLong update_createNewTransactionObject(final int value) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnClosure<GammaTxnLong>() {
+        return executor.atomic(new TxnClosure<GammaTxnLong>() {
             @Override
             public GammaTxnLong execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -142,18 +142,18 @@ public class ReadonlyTest {
     }
 
     @Test
-    public void whenUpdate_thenCreationOfNonTransactionalObjectSucceeds() {
+    public void whenUpdate_thenCreationOfNonTxnObjectSucceeds() {
         Integer ref = update_createNormalObject(100);
         assertNotNull(ref);
         assertEquals(100, ref.intValue());
     }
 
     public Integer update_createNormalObject(final int value) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnClosure<Integer>() {
+        return executor.atomic(new TxnClosure<Integer>() {
             @Override
             public Integer execute(Txn tx) throws Exception {
                 return new Integer(value);
@@ -171,11 +171,11 @@ public class ReadonlyTest {
 
 
     public long readInUpdateMethod(final GammaTxnLong ref) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnLongClosure() {
+        return executor.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -192,11 +192,11 @@ public class ReadonlyTest {
     }
 
     public void updateInUpdateMethod(final GammaTxnLong ref, final int newValue) {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 assertFalse(tx.getConfig().isReadonly());

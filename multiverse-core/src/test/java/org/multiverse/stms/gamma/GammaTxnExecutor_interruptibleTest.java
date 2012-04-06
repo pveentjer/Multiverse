@@ -33,11 +33,11 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
     public void whenNoTimeoutAndInterruptible() throws InterruptedException {
         final GammaTxnLong ref = new GammaTxnLong(stm);
 
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setInterruptible(true)
                 .newTxnExecutor();
 
-        WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, block);
+        WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, executor);
         t.setPrintStackTrace(false);
         t.start();
 
@@ -56,12 +56,12 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
     public void whenTimeoutAndInterruptible() throws InterruptedException {
         final GammaTxnLong ref = new GammaTxnLong(stm);
 
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
                 .setInterruptible(true)
                 .newTxnExecutor();
 
-        WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, block);
+        WaitWithoutTimeoutThread t = new WaitWithoutTimeoutThread(ref, executor);
         t.setPrintStackTrace(false);
         t.start();
 
@@ -79,16 +79,16 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
     class WaitWithoutTimeoutThread extends TestThread {
         final GammaTxnLong ref;
-        private TxnExecutor block;
+        private final TxnExecutor executor;
 
-        public WaitWithoutTimeoutThread(GammaTxnLong ref, TxnExecutor block) {
+        public WaitWithoutTimeoutThread(GammaTxnLong ref, TxnExecutor executor) {
             this.ref = ref;
-            this.block = block;
+            this.executor = executor;
         }
 
         @Override
         public void doRun() throws Exception {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

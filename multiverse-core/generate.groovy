@@ -15,7 +15,7 @@ class TxnExecutor {
     boolean lean
 }
 
-class TransactionalObject {
+class TxnObject {
     String type//the type of data it contains
     String objectType//the type of data it contains
     String initialValue//the initial value
@@ -32,7 +32,7 @@ class TransactionalObject {
 VelocityEngine engine = new VelocityEngine();
 engine.init();
 
-def refs = createTransactionalObjects();
+def refs = createTxnObjects();
 def txnClosures = createClosures();TxnClosure
 def txnExecutors = [new TxnExecutor(name: 'FatGammaTxnExecutor', lean: false),
         new TxnExecutor(name: 'LeanGammaTxnExecutor', lean: true)]
@@ -94,9 +94,9 @@ List<TxnClosure> createClosures() {
     result
 }
 
-List<TransactionalObject> createTransactionalObjects() {
+List<TxnObject> createTxnObjects() {
     def result = []
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             type: 'E',
             objectType: '',
             typeParameter: '<E>',
@@ -107,7 +107,7 @@ List<TransactionalObject> createTransactionalObjects() {
             isNumber: false,
             predicateClass: "Predicate",
             incFunctionMethod: '')
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             type: 'int',
             objectType: 'Integer',
             referenceInterface: 'TxnInteger',
@@ -118,7 +118,7 @@ List<TransactionalObject> createTransactionalObjects() {
             isNumber: true,
             predicateClass: "IntPredicate",
             incFunctionMethod: 'newIncIntFunction')
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             type: 'boolean',
             objectType: 'Boolean',
             referenceInterface: 'TxnBoolean',
@@ -129,7 +129,7 @@ List<TransactionalObject> createTransactionalObjects() {
             isNumber: false,
             predicateClass: "BooleanPredicate",
             incFunctionMethod: '')
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             type: 'double',
             objectType: 'Double',
             referenceInterface: 'TxnDouble',
@@ -140,7 +140,7 @@ List<TransactionalObject> createTransactionalObjects() {
             isNumber: true,
             predicateClass: "DoublePredicate",
             incFunctionMethod: '')
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             referenceInterface: 'TxnLong',
             type: 'long',
             objectType: 'Long',
@@ -151,7 +151,7 @@ List<TransactionalObject> createTransactionalObjects() {
             isNumber: true,
             predicateClass: "LongPredicate",
             incFunctionMethod: 'newIncLongFunction')
-    result.add new TransactionalObject(
+    result.add new TxnObject(
             type: '',
             objectType: '',
             typeParameter: '',
@@ -250,7 +250,7 @@ void generateStmUtils(VelocityEngine engine, List<TxnClosure> closures) {
     file.text = writer.toString()
 }
 
-void generatePredicate(VelocityEngine engine, TransactionalObject transactionalObject) {
+void generatePredicate(VelocityEngine engine, TxnObject transactionalObject) {
     if (!transactionalObject.isReference) {
         return
     }
@@ -268,7 +268,7 @@ void generatePredicate(VelocityEngine engine, TransactionalObject transactionalO
     file.text = writer.toString()
 }
 
-void generateFunction(VelocityEngine engine, TransactionalObject transactionalObject) {
+void generateFunction(VelocityEngine engine, TxnObject transactionalObject) {
     if (!transactionalObject.isReference) {
         return
     }
@@ -286,7 +286,7 @@ void generateFunction(VelocityEngine engine, TransactionalObject transactionalOb
     file.text = writer.toString()
 }
 
-void generateRefs(VelocityEngine engine, TransactionalObject transactionalObject) {
+void generateRefs(VelocityEngine engine, TxnObject transactionalObject) {
     if (!transactionalObject.isReference) {
         return;
     }
@@ -304,7 +304,7 @@ void generateRefs(VelocityEngine engine, TransactionalObject transactionalObject
     file.text = writer.toString()
 }
 
-void generateRefFactory(VelocityEngine engine, List<TransactionalObject> refs) {
+void generateRefFactory(VelocityEngine engine, List<TxnObject> refs) {
     Template t = engine.getTemplate('src/main/java/org/multiverse/api/references/TxnRefFactory.vm');
 
     VelocityContext context = new VelocityContext()

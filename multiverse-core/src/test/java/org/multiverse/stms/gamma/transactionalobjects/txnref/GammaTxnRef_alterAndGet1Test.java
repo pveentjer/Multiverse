@@ -61,7 +61,7 @@ public class GammaTxnRef_alterAndGet1Test {
     public void whenActiveTransactionAvailableAndNullFunction_thenNullPointerException() {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         try {
@@ -82,7 +82,7 @@ public class GammaTxnRef_alterAndGet1Test {
         RuntimeException ex = new RuntimeException();
         when(function.call(Matchers.<Long>anyObject())).thenThrow(ex);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         try {
@@ -102,7 +102,7 @@ public class GammaTxnRef_alterAndGet1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         Function<Long> function = Functions.incLongFunction();
@@ -120,7 +120,7 @@ public class GammaTxnRef_alterAndGet1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         Function<Long> function = identityLongFunction();
@@ -139,7 +139,7 @@ public class GammaTxnRef_alterAndGet1Test {
         long initialVersion = ref.getVersion();
 
         Function<Long> function = mock(LongFunction.class);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         setThreadLocalTxn(tx);
 
@@ -177,7 +177,7 @@ public class GammaTxnRef_alterAndGet1Test {
 
     @Test
     public void whenCommittedTransactionAvailable_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.commit();
 
@@ -202,7 +202,7 @@ public class GammaTxnRef_alterAndGet1Test {
 
     @Test
     public void whenAbortedTransactionAvailable_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.abort();
 

@@ -15,19 +15,19 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 public class GammaTxnExecutorTest {
 
     private GammaStm stm;
-    private TxnExecutor block;
+    private TxnExecutor executor;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = new GammaStm();
-        block = stm.newTxnFactoryBuilder()
+        executor = stm.newTxnFactoryBuilder()
                 .newTxnExecutor();
     }
 
     @Test
     public void whenAtomicIntClosureUsed() {
-        int result = block.atomic(new TxnIntClosure() {
+        int result = executor.atomic(new TxnIntClosure() {
             @Override
             public int execute(Txn tx) throws Exception {
                 return 10;
@@ -39,7 +39,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenAtomicLongClosureUsed() {
-        long result = block.atomic(new TxnLongClosure() {
+        long result = executor.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 return 10;
@@ -51,7 +51,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenAtomicVoidClosureUsed() {
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
             }
@@ -60,7 +60,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenAtomicClosureUsed() {
-        String result = block.atomic(new TxnClosure<String>() {
+        String result = executor.atomic(new TxnClosure<String>() {
             @Override
             public String execute(Txn tx) throws Exception {
                 return "foo";

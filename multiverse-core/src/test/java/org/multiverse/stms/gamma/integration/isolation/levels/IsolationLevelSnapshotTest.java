@@ -42,7 +42,7 @@ public class IsolationLevelSnapshotTest {
         final GammaTxnLong ref1 = new GammaTxnLong(stm);
         final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref1.get(tx);
 
@@ -67,7 +67,7 @@ public class IsolationLevelSnapshotTest {
         final GammaTxnLong ref1 = new GammaTxnLong(stm);
         final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref1.get(tx);
 
         ref2.incrementAndGet(tx, 1);

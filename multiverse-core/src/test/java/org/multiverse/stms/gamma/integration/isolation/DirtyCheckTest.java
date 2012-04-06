@@ -29,7 +29,7 @@ public class DirtyCheckTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         ref.set(tx, initialValue);
         tx.commit();
@@ -48,7 +48,7 @@ public class DirtyCheckTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         String newValue = "bar";
         ref.set(tx, newValue);
@@ -67,7 +67,7 @@ public class DirtyCheckTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         ref.set(tx, initialValue);
         tx.commit();
@@ -85,7 +85,7 @@ public class DirtyCheckTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         String newValue = "bar";
         ref.set(tx, newValue);

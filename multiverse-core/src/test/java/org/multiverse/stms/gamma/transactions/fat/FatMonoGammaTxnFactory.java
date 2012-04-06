@@ -22,7 +22,7 @@ public class FatMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public TxnFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTxnFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
@@ -37,7 +37,7 @@ public class FatMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTxn newTransaction() {
+    public GammaTxn newTxn() {
         return newTransaction(getThreadLocalGammaTxnPool());
     }
 

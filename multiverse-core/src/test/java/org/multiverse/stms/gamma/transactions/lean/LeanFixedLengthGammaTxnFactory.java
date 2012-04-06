@@ -26,7 +26,7 @@ public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public TxnFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTxnFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
@@ -41,7 +41,7 @@ public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public LeanFixedLengthGammaTxn newTransaction() {
+    public LeanFixedLengthGammaTxn newTxn() {
         return newTransaction(getThreadLocalGammaTxnPool());
     }
 

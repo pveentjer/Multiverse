@@ -25,8 +25,8 @@ public class LeanGammaTxnExecutor_integrationTest {
     @Test
     public void whenExecutedThenTxnThreadLocalSet() {
         GammaTxnFactory transactionFactory = stm.newTxnFactoryBuilder().newTransactionFactory();
-        TxnExecutor block = new LeanGammaTxnExecutor(transactionFactory);
-        block.atomic(new TxnVoidClosure() {
+        TxnExecutor executor = new LeanGammaTxnExecutor(transactionFactory);
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 assertNotNull(tx);

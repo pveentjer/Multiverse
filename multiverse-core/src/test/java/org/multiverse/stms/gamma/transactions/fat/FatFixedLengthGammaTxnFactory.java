@@ -32,12 +32,12 @@ public class FatFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public TxnFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTxnFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public FatFixedLengthGammaTxn newTransaction() {
+    public FatFixedLengthGammaTxn newTxn() {
         return newTransaction(getThreadLocalGammaTxnPool());
     }
 

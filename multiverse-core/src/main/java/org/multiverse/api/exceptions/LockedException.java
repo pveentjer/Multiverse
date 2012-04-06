@@ -2,7 +2,7 @@ package org.multiverse.api.exceptions;
 
 /**
  * An {@link AtomicOperationException} thrown when an atomicChecked operation was executed on a
- * {@link org.multiverse.api.TransactionalObject} while it was locked. E.g. when an atomicGet was done on a TxnRef
+ * {@link org.multiverse.api.TxnObject} while it was locked. E.g. when an atomicGet was done on a TxnRef
  * that already has an exclusive lock or that a TxnRef.atomicSet while a readlock already was acquired.
  *
  * @author Peter Veentjer.

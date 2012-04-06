@@ -76,13 +76,13 @@ public class NoBlockingTest {
     public void whenBlockingNotAllowed_thenNoBlockingRetryAllowedException() {
         final TxnLong ref = newTxnLong();
 
-        TxnExecutor block = getGlobalStmInstance()
+        TxnExecutor executor = getGlobalStmInstance()
                 .newTxnFactoryBuilder()
                 .setBlockingAllowed(false)
                 .newTxnExecutor();
 
         try {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     ref.set(1);

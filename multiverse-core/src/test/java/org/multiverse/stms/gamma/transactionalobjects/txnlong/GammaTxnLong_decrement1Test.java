@@ -57,7 +57,7 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.decrement(tx);
 
@@ -78,7 +78,7 @@ public class GammaTxnLong_decrement1Test {
                 .setReadonly(true)
                 .setSpeculative(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.decrement(tx);
@@ -97,10 +97,10 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.decrement(tx);
 
@@ -121,10 +121,10 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.decrement(tx);
 
@@ -145,10 +145,10 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.decrement(tx);
 
@@ -169,7 +169,7 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {
@@ -189,7 +189,7 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {
@@ -209,7 +209,7 @@ public class GammaTxnLong_decrement1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -250,7 +250,7 @@ public class GammaTxnLong_decrement1Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.decrement(tx);
         tx.commit();
 

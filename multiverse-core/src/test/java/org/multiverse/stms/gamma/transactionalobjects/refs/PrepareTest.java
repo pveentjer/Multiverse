@@ -41,7 +41,7 @@ public class PrepareTest implements GammaConstants {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         Tranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
 
         boolean success = ref.prepare(tx, tranlocal);
@@ -70,7 +70,7 @@ public class PrepareTest implements GammaConstants {
                 .setFat()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         Tranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
 
@@ -108,7 +108,7 @@ public class PrepareTest implements GammaConstants {
                 .setFat()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         Tranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
         tranlocal.long_value++;
@@ -139,7 +139,7 @@ public class PrepareTest implements GammaConstants {
                 .setFat()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         Tranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
 

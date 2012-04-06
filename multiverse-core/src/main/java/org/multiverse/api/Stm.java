@@ -7,8 +7,8 @@ import org.multiverse.api.references.TxnRefFactoryBuilder;
 /**
  * The main interface for software transactional memory. The main tasks are done by the following structures:
  * <ol>
- * <li>{@link TransactionalObject}: the structure where state and identity are separated and where state change
- * is coordinated through a transaction. An example of the TransactionalObject is the {@link org.multiverse.api.references.TxnRef},
+ * <li>{@link TxnObject}: the structure where state and identity are separated and where state change
+ * is coordinated through a transaction. An example of the TxnObject is the {@link org.multiverse.api.references.TxnRef},
  * but it could just as easily by a more complex transactional datastructure that is enhanced by instrumentation.
  * </li>
  * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
@@ -36,7 +36,7 @@ import org.multiverse.api.references.TxnRefFactoryBuilder;
  *
  * <h3>Multiple Stm instances</h3>
  *
- * <p>It is important that an TransactionalObject only is used within a single Stm. If it is 'shared' between different
+ * <p>It is important that an TxnObject only is used within a single Stm. If it is 'shared' between different
  * stm instances, isolation problems could happen. This can be caused by the fact that different stm instances
  * probably use different clocks or completely different mechanisms for preventing isolation problems. It depends on the
  * implementation if any checking is done (the GammaStm does check if there is a conflict).
@@ -69,7 +69,7 @@ public interface Stm {
     Txn newDefaultTxn();
 
     /**
-     * Returns the default {@link TxnExecutor} block that is useful for testing/experimentation purposes.
+     * Returns the default {@link TxnExecutor} that is useful for testing/experimentation purposes.
      * This method is purely for easy to use access, but it doesn't provide any configuration options.
      * See the {@link #newTxnFactoryBuilder()} for something more configurable.
      *

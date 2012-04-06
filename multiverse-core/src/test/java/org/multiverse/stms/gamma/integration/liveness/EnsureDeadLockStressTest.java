@@ -57,7 +57,7 @@ public class EnsureDeadLockStressTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setSpinCount(1000)
                     .setMaxRetries(10000)
                     .newTxnExecutor();
@@ -81,7 +81,7 @@ public class EnsureDeadLockStressTest {
 
             int k = 0;
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
                 sleepMs(10);
                 k++;
 

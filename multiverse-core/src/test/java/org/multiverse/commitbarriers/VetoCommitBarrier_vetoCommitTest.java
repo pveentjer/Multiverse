@@ -54,9 +54,9 @@ public class VetoCommitBarrier_vetoCommitTest {
         barrier.atomicVetoCommit();
         joinAll(thread1, thread2, thread3);
 
-        assertIsCommitted(thread1.tx);
-        assertIsCommitted(thread2.tx);
-        assertIsCommitted(thread3.tx);
+        assertIsCommitted(thread1.txn);
+        assertIsCommitted(thread2.txn);
+        assertIsCommitted(thread3.txn);
 
         assertEquals(1, ref1.atomicGet());
         assertEquals(1, ref2.atomicGet());
@@ -88,7 +88,7 @@ public class VetoCommitBarrier_vetoCommitTest {
     public class IncThread extends TestThread {
         private final GammaTxnInteger ref;
         private final VetoCommitBarrier barrier;
-        private Txn tx;
+        private Txn txn;
 
         public IncThread(GammaTxnInteger ref, VetoCommitBarrier barrier) {
             super("IncThread");
@@ -100,10 +100,10 @@ public class VetoCommitBarrier_vetoCommitTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
-                    IncThread.this.tx = tx;
-                    ref.getAndIncrement(tx, 1);
-                    barrier.joinCommit(tx);
+                public void execute(Txn txn) throws Exception {
+                    IncThread.this.txn = txn;
+                    ref.getAndIncrement(txn, 1);
+                    barrier.joinCommit(txn);
                 }
             });
         }

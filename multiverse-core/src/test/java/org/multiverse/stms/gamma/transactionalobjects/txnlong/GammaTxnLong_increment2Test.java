@@ -56,7 +56,7 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.increment(tx, 5);
 
@@ -76,7 +76,7 @@ public class GammaTxnLong_increment2Test {
                 .setReadonly(true)
                 .setSpeculative(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.increment(tx, 5);
@@ -94,10 +94,10 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.increment(tx, 5);
 
@@ -119,10 +119,10 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.increment(tx, 5);
 
@@ -143,10 +143,10 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.increment(tx, 5);
 
@@ -167,7 +167,7 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {
@@ -186,7 +186,7 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {
@@ -205,7 +205,7 @@ public class GammaTxnLong_increment2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -245,7 +245,7 @@ public class GammaTxnLong_increment2Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.increment(tx, amount);
         tx.commit();
 

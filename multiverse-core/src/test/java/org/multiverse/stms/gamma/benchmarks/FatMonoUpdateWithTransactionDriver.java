@@ -55,7 +55,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
         final GammaTxnLong ref = new GammaTxnLong(stm, 0);
         long initialVersion = ref.getVersion();
 
-        final GammaTxnExecutor block = stm.newTxnFactoryBuilder()
+        final GammaTxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(false)
                 .setWriteLockMode(writeLockMode)
@@ -71,7 +71,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            block.atomic(closure);
+            executor.atomic(closure);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

@@ -43,7 +43,7 @@ public class IsolationLevelSerializableTest {
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);
@@ -64,7 +64,7 @@ public class IsolationLevelSerializableTest {
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);
@@ -82,7 +82,7 @@ public class IsolationLevelSerializableTest {
         final GammaTxnLong ref1 = new GammaTxnLong(stm);
         final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref1.get(tx);
 
@@ -107,7 +107,7 @@ public class IsolationLevelSerializableTest {
         final GammaTxnLong ref1 = new GammaTxnLong(stm);
         final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref1.get(tx);
 
         ref2.incrementAndGet(tx, 1);

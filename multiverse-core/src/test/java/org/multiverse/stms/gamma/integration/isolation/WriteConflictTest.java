@@ -40,7 +40,7 @@ public class WriteConflictTest implements GammaConstants {
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 
@@ -66,7 +66,7 @@ public class WriteConflictTest implements GammaConstants {
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         ref.openForWrite(tx, LOCKMODE_NONE);
 
@@ -88,7 +88,7 @@ public class WriteConflictTest implements GammaConstants {
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 
@@ -113,7 +113,7 @@ public class WriteConflictTest implements GammaConstants {
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 

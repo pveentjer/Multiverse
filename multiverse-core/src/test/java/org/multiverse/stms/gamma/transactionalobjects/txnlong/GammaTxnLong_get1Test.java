@@ -57,7 +57,7 @@ public class GammaTxnLong_get1Test {
     public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
         TxnLong ref = new GammaTxnLong(stm, 10);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -73,7 +73,7 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.getLock().acquire(tx, LockMode.Exclusive);
 
@@ -93,7 +93,7 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.getLock().acquire(tx, LockMode.Write);
         long value = ref.get(tx);
@@ -111,7 +111,7 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         ref.getLock().acquire(tx, LockMode.Read);
         long value = ref.get(tx);
@@ -129,9 +129,9 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -153,9 +153,9 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
 
         ref.getLock().acquire(otherTx, LockMode.Write);
 
@@ -174,7 +174,7 @@ public class GammaTxnLong_get1Test {
     public void whenActiveTransactionAvailable_thenPreparedTxnException() {
         TxnLong ref = new GammaTxnLong(stm, 10);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         long value = ref.get(tx);
 
@@ -204,7 +204,7 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {
@@ -224,7 +224,7 @@ public class GammaTxnLong_get1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {

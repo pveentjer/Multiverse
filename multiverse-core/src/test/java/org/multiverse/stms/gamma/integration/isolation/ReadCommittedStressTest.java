@@ -66,7 +66,7 @@ public class ReadCommittedStressTest {
 
         @Override
         public void doRun() {
-            TxnExecutor block = stm.getDefaultTxnExecutor();
+            TxnExecutor executor = stm.getDefaultTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
@@ -78,7 +78,7 @@ public class ReadCommittedStressTest {
 
             while (!stop) {
                 try {
-                    block.atomic(closure);
+                    executor.atomic(closure);
                     fail();
                 } catch (DeadTxnException ignore) {
                 }

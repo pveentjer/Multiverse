@@ -32,12 +32,12 @@ public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public TxnFactoryBuilder getTransactionFactoryBuilder() {
+    public TxnFactoryBuilder getTxnFactoryBuilder() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public LeanMonoGammaTxn newTransaction() {
+    public LeanMonoGammaTxn newTxn() {
         return newTransaction(getThreadLocalGammaTxnPool());
     }
 

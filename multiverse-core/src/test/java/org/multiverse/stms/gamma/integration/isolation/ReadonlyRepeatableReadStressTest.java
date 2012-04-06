@@ -60,7 +60,7 @@ public class ReadonlyRepeatableReadStressTest {
 
         @Override
         public void doRun() {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
@@ -72,7 +72,7 @@ public class ReadonlyRepeatableReadStressTest {
 
 
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
                 sleepRandomMs(5);
             }
         }

@@ -58,7 +58,7 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         ref.get();
         ref.ensure();
@@ -79,7 +79,7 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         ref.set(initialValue + 1);
         ref.getLock().acquire(LockMode.Read);
@@ -105,7 +105,7 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         ref.set(initialValue + 1);
         ref.getLock().acquire(LockMode.Write);
@@ -131,7 +131,7 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         ref.set(initialValue + 1);
         ref.getLock().acquire(LockMode.Exclusive);
@@ -158,10 +158,10 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         ref.set(initialValue + 1);
         ref.ensure();
@@ -180,10 +180,10 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         try {
             ref.ensure();
@@ -203,7 +203,7 @@ public class Ensure0Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.ensure();
@@ -234,7 +234,7 @@ public class Ensure0Test implements GammaConstants {
 
     @Test
     public void state_whenAlreadyPrepared_thenPreparedTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.prepare();
 
@@ -256,7 +256,7 @@ public class Ensure0Test implements GammaConstants {
 
     @Test
     public void state_whenAlreadyAborted_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.abort();
 
@@ -278,7 +278,7 @@ public class Ensure0Test implements GammaConstants {
 
     @Test
     public void state_whenAlreadyCommitted_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.commit();
 
@@ -300,16 +300,16 @@ public class Ensure0Test implements GammaConstants {
 
     @Test
     public void whenPossibleWriteSkew_thenCanBeDetectedWithEnsure() {
-        assumeTrue(!(transactionFactory.newTransaction() instanceof FatMonoGammaTxn));
+        assumeTrue(!(transactionFactory.newTxn() instanceof FatMonoGammaTxn));
 
         GammaTxnLong ref1 = new GammaTxnLong(stm);
         GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx1 = transactionFactory.newTransaction();
+        GammaTxn tx1 = transactionFactory.newTxn();
         ref1.get(tx1);
         ref2.incrementAndGet(tx1, 1);
 
-        GammaTxn tx2 = transactionFactory.newTransaction();
+        GammaTxn tx2 = transactionFactory.newTxn();
         ref1.incrementAndGet(tx2, 1);
         ref2.get(tx2);
         ref2.ensure(tx2);

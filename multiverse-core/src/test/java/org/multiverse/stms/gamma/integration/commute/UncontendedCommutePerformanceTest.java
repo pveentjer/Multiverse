@@ -65,7 +65,7 @@ public class UncontendedCommutePerformanceTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setDirtyCheckEnabled(false)
                     .newTxnExecutor();
 
@@ -78,7 +78,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
             }
         }
     }
@@ -90,7 +90,7 @@ public class UncontendedCommutePerformanceTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .newTxnExecutor();
 
             TxnVoidClosure closure = new TxnVoidClosure() {
@@ -102,7 +102,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
             }
         }
     }

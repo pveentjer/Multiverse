@@ -94,7 +94,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = createWriteBlock();
+            TxnExecutor executor = createWriteBlock();
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
@@ -108,7 +108,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
                 sleepRandomUs(100);
 
                 k++;
@@ -129,7 +129,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = createReadBlock();
+            TxnExecutor executor = createReadBlock();
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
@@ -152,7 +152,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                block.atomic(closure);
+                executor.atomic(closure);
                 k++;
 
                 if (k % mod == 0) {

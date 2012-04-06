@@ -133,7 +133,7 @@ public class VetoCommitBarrier_joinCommitTest {
 
     @Test
     public void whenTransactionAborted_thenDeadTxnException() throws InterruptedException {
-        Txn tx = txFactory.newTransaction();
+        Txn tx = txFactory.newTxn();
         tx.abort();
 
         VetoCommitBarrier group = new VetoCommitBarrier();
@@ -150,7 +150,7 @@ public class VetoCommitBarrier_joinCommitTest {
 
     @Test
     public void whenTransactionCommitted_thenDeadTxnException() throws InterruptedException {
-        Txn tx = txFactory.newTransaction();
+        Txn tx = txFactory.newTxn();
         tx.commit();
 
         VetoCommitBarrier group = new VetoCommitBarrier();
@@ -170,7 +170,7 @@ public class VetoCommitBarrier_joinCommitTest {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
         barrier.abort();
 
-        Txn tx = txFactory.newTransaction();
+        Txn tx = txFactory.newTxn();
         try {
             barrier.joinCommit(tx);
             fail();
@@ -189,7 +189,7 @@ public class VetoCommitBarrier_joinCommitTest {
 
         System.out.println("barrier.state: " + barrier);
 
-        Txn tx = txFactory.newTransaction();
+        Txn tx = txFactory.newTxn();
         try {
             barrier.joinCommit(tx);
             fail();

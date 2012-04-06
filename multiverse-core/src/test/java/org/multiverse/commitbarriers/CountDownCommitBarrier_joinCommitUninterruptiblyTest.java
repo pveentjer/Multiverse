@@ -97,7 +97,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier.joinCommitUninterruptibly(tx);
         joinAll(t1, t2);
 
-        assertIsCommitted(tx, t1.tx, t2.tx);
+        assertIsCommitted(tx, t1.txn, t2.txn);
     }
 
     @Test
@@ -164,15 +164,15 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     }
 
     class AwaitThread extends TestThread {
-        private Txn tx;
+        private Txn txn;
 
         @Override
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
-                    AwaitThread.this.tx = tx;
-                    barrier.joinCommitUninterruptibly(tx);
+                public void execute(Txn txn) throws Exception {
+                    AwaitThread.this.txn = txn;
+                    barrier.joinCommitUninterruptibly(txn);
                 }
             });
         }

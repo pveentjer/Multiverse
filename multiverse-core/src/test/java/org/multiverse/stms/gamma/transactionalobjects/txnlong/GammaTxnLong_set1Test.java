@@ -56,7 +56,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         setThreadLocalTxn(tx);
 
@@ -79,7 +79,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         long value = ref.set(20);
 
@@ -106,10 +106,10 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         try {
             ref.set(20);
@@ -133,7 +133,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         long result = ref.set(initialValue);
@@ -172,7 +172,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Exclusive);
@@ -192,7 +192,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Write);
@@ -212,10 +212,10 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -238,10 +238,10 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         long value = ref.set(200);
@@ -276,7 +276,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
         setThreadLocalTxn(tx);
 
@@ -301,7 +301,7 @@ public class GammaTxnLong_set1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
         setThreadLocalTxn(tx);
 

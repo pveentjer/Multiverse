@@ -33,7 +33,7 @@ public final class StmUtils {
      *
      * @return the created TxnList.
      */
-    public static <E> TxnList<E> newLinkedList(){
+    public static <E> TxnList<E> newTxnLinkedList(){
         return txnCollectionsFactory.newLinkedList();
     }
 
@@ -42,7 +42,7 @@ public final class StmUtils {
      *
      * @return the created TxnStack.
      */
-    public static <E> TxnStack<E> newStack(){
+    public static <E> TxnStack<E> newTxnStack(){
         return txnCollectionsFactory.newStack();
     }
 
@@ -53,7 +53,7 @@ public final class StmUtils {
      * @return the create TxnStack
      * @throws IllegalArgumentException if capacity smaller than 0.
      */
-    public static <E> TxnStack<E> newStack(int capacity){
+    public static <E> TxnStack<E> newTxnStack(int capacity){
         return txnCollectionsFactory.newStack(capacity);
     }
 
@@ -62,7 +62,7 @@ public final class StmUtils {
      *
      * @return the created TxnQueue.
      */
-    public static <E> TxnQueue<E> newQueue(){
+    public static <E> TxnQueue<E> newTxnQueue(){
         return txnCollectionsFactory.newQueue();
     }
 
@@ -73,7 +73,7 @@ public final class StmUtils {
      * @return the created TxnQueue
      * @throws IllegalArgumentException if capacity smaller than 0.
      */
-    public static <E> TxnQueue<E> newQueue(int capacity){
+    public static <E> TxnQueue<E> newTxnQueue(int capacity){
         return txnCollectionsFactory.newQueue(capacity);
     }
 
@@ -82,7 +82,7 @@ public final class StmUtils {
      *
      * @return the created TxnDeque
      */
-    public static <E> TxnDeque<E> newDeque(){
+    public static <E> TxnDeque<E> newTxnDeque(){
         return txnCollectionsFactory.newDeque();
     }
 
@@ -93,7 +93,7 @@ public final class StmUtils {
      * @return the created TxnDeque.
      * @throws IllegalArgumentException if capacity is smaller than 0.
      */
-    public static <E> TxnDeque<E> newDeque(int capacity){
+    public static <E> TxnDeque<E> newTxnDeque(int capacity){
         return txnCollectionsFactory.newDeque(capacity);
     }
 
@@ -102,7 +102,7 @@ public final class StmUtils {
      *
      * @return the created TxnSet.
      */
-    public static <E> TxnSet<E> newHashSet(){
+    public static <E> TxnSet<E> newTxnHashSet(){
         return txnCollectionsFactory.newHashSet();
     }
 
@@ -111,7 +111,7 @@ public final class StmUtils {
      *
      * @return the created TxnMap
      */
-    public static <K, V> TxnMap<K, V> newHashMap(){
+    public static <K, V> TxnMap<K, V> newTxnHashMap(){
         return txnCollectionsFactory.newHashMap();
     }
 

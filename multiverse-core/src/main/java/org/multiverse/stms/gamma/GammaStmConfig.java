@@ -107,7 +107,7 @@ public final class GammaStmConfig {
     public int maxRetries = 1000;
 
     /**
-     * The GammaStm makes use of a speculative mechanism to select the optimal transaction settings/implementation for some atomicChecked block.
+     * The GammaStm makes use of a speculative mechanism to select the optimal transaction settings/implementation for executing a transactional closure.
      * An TxnExecutor will start cheap and grow to use more expensive transaction implementations (see the Lean/Fat transactions) and
      * use the automatic retry mechanism of the STM to rescue itself from a situation where the speculation was incorrect. Setting it to false
      * reduces the number of unwanted conflicts (once the TxnExecutor has learned it will not make the same mistakes again, so you only need

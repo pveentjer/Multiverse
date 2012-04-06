@@ -31,7 +31,7 @@ import org.multiverse.api.predicates.*;
 #end
  * @author Peter Veentjer.
  */
-public interface ${transactionalObject.referenceInterface}${transactionalObject.typeParameter} extends TransactionalObject {
+public interface ${transactionalObject.referenceInterface}${transactionalObject.typeParameter} extends TxnObject {
 
     /**
      * Gets the value using the provided txn.

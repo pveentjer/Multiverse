@@ -43,7 +43,7 @@ public class GammaTxnLong_await2WithPredicateTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.await(tx, newEqualsPredicate(initialValue + 1));

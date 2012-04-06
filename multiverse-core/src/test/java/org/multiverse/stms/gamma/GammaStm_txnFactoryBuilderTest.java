@@ -237,7 +237,7 @@ public class GammaStm_txnFactoryBuilderTest implements GammaConstants{
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTxn tx = txFactory.newTransaction();
+        GammaTxn tx = txFactory.newTxn();
         assertTrue(tx instanceof FatMonoGammaTxn);
     }
 
@@ -249,7 +249,7 @@ public class GammaStm_txnFactoryBuilderTest implements GammaConstants{
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .newTransactionFactory();
 
-        GammaTxn tx = txFactory.newTransaction();
+        GammaTxn tx = txFactory.newTxn();
         assertEquals(TRANSACTIONTYPE_LEAN_MONO, tx.transactionType);
     }
 
@@ -261,7 +261,7 @@ public class GammaStm_txnFactoryBuilderTest implements GammaConstants{
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory();
 
-        GammaTxn tx = txFactory.newTransaction();
+        GammaTxn tx = txFactory.newTxn();
         assertEquals(TRANSACTIONTYPE_FAT_MONO,tx.transactionType);
     }
 }

@@ -59,7 +59,7 @@ public class GammaTxnRef_commute1Test {
         Long initialValue = 1L;
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         LongFunction function = Functions.incLongFunction(1);
         ref.commute(function);
@@ -88,7 +88,7 @@ public class GammaTxnRef_commute1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         Function<Long> function = Functions.identityFunction();
         ref.commute(function);
@@ -117,7 +117,7 @@ public class GammaTxnRef_commute1Test {
         Long initalValue = 10L;
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initalValue);
         long version = ref.getVersion();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         try {
@@ -160,7 +160,7 @@ public class GammaTxnRef_commute1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.commit();
 
@@ -186,7 +186,7 @@ public class GammaTxnRef_commute1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.abort();
 
@@ -212,7 +212,7 @@ public class GammaTxnRef_commute1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.prepare();
 
@@ -244,7 +244,7 @@ public class GammaTxnRef_commute1Test {
         Long initialValue = 2L;
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.getLock().acquire(lockMode);
@@ -281,10 +281,10 @@ public class GammaTxnRef_commute1Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
         LongFunction function = Functions.incLongFunction(1);

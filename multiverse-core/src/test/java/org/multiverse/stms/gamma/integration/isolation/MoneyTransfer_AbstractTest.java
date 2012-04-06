@@ -89,7 +89,7 @@ public abstract class MoneyTransfer_AbstractTest {
         }
 
         public void doRun() {
-            TxnExecutor block = newTxnExecutor();
+            TxnExecutor executor = newTxnExecutor();
 
             TxnVoidClosure closure = new TxnVoidClosure() {
                 @Override
@@ -115,7 +115,7 @@ public abstract class MoneyTransfer_AbstractTest {
             int k = 0;
             while (!stop) {
                 try {
-                    block.atomic(closure);
+                    executor.atomic(closure);
                     if ((k % 500) == 0) {
                         System.out.printf("%s is at iteration %s\n", getName(), k);
                     }

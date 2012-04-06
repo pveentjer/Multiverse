@@ -1,9 +1,13 @@
 package org.multiverse.api.closures;
 
 import org.multiverse.api.Txn;
+import org.multiverse.api.TxnExecutor;
 
 /**
- * An AtomicClosure that doesn't return a value.
+ * A transactional closure contains the logic that needs to be executed transactionally and normally is executed by the
+ * {@link TxnExecutor}.
+ *
+ * This transactional closure is optimized for returning void. Useful if no value needs to be returned.
  *
  * @author Peter Veentjer.
  */

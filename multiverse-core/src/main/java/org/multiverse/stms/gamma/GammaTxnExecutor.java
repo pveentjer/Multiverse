@@ -11,5 +11,5 @@ import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 public interface GammaTxnExecutor extends TxnExecutor {
 
     @Override
-    GammaTxnFactory getTransactionFactory();
+    GammaTxnFactory getTxnFactory();
 }

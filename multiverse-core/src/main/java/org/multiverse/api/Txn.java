@@ -3,7 +3,7 @@ package org.multiverse.api;
 import org.multiverse.api.lifecycle.TxnListener;
 
 /**
- * The unit of work for {@link Stm}. The transaction make sure that changes on {@link TransactionalObject} instances are:
+ * The unit of work for {@link Stm}. The transaction make sure that changes on {@link TxnObject} instances are:
  * <ol>
  * <li>Atomic: all or nothing gets committed (Failure atomicity)</li>
  * <li>Consistent : </li>
@@ -27,7 +27,7 @@ import org.multiverse.api.lifecycle.TxnListener;
  * <li>normal listeners: are registered during the execution of a transaction using the
  * {@link Txn#register(org.multiverse.api.lifecycle.TxnListener)} method. If the transactions aborts/commits
  * these listeners are removed. So if the transaction is retried, the listeners need to be registered (this is easy since
- * the logic inside the atomicChecked block that did the register, is executed again.
+ * the logic inside the transactional closure that did the register, is executed again.
  * </li>
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
  * TxnExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TxnListener)}

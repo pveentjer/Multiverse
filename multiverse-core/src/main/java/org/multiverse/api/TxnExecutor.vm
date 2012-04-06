@@ -98,15 +98,16 @@ import org.multiverse.api.closures.*;
 public interface TxnExecutor extends MultiverseConstants{
 
    /**
-    * Returns the TransactionFactory that is used by this TxnExecutor to create Transactions used inside.
+    * Returns the {@link TxnFactory} that is used by this TxnExecutor to create transactions used to execute
+    * transactional closures.
     *
     * @return the TransactionFactory used by this TxnExecutor.
     */
-    TxnFactory getTransactionFactory();
+    TxnFactory getTxnFactory();
 
 #foreach($closure in $closures)
    /**
-    * Executes the closure. If in the execution of the closure a checked exception is thrown, the exception
+    * Executes the transactional closure. If in the execution of the closure a checked exception is thrown, the exception
     * is wrapped in a InvisibleCheckedException. The original exception can be retrieved by calling the
     * getCause method.
     *

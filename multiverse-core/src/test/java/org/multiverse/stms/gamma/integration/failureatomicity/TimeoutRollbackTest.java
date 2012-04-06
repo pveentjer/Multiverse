@@ -43,11 +43,11 @@ public class TimeoutRollbackTest {
     }
 
     public void setAndTimeout() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(1))
                 .newTxnExecutor();
 
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;

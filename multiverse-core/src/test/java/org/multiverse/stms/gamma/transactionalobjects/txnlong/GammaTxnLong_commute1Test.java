@@ -58,7 +58,7 @@ public class GammaTxnLong_commute1Test {
     public void whenActiveTransactionAvailable() {
         GammaTxnLong ref = new GammaTxnLong(stm);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         LongFunction function = Functions.incLongFunction(1);
         ref.commute(function);
@@ -85,7 +85,7 @@ public class GammaTxnLong_commute1Test {
     public void whenActiveTransactionAvailableAndNoChange() {
         GammaTxnLong ref = new GammaTxnLong(stm);
         long version = ref.getVersion();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         LongFunction function = Functions.identityLongFunction();
         ref.commute(function);
@@ -113,7 +113,7 @@ public class GammaTxnLong_commute1Test {
     public void whenActiveTransactionAvailableAndNullFunction_thenNullPointerException() {
         GammaTxnLong ref = new GammaTxnLong(stm);
         long version = ref.getVersion();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         try {
@@ -156,7 +156,7 @@ public class GammaTxnLong_commute1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.commit();
 
@@ -182,7 +182,7 @@ public class GammaTxnLong_commute1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.abort();
 
@@ -207,7 +207,7 @@ public class GammaTxnLong_commute1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 2);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.prepare();
 
@@ -232,7 +232,7 @@ public class GammaTxnLong_commute1Test {
     public void whenAlreadyEnsuredBySelf_thenNoCommute() {
         GammaTxnLong ref = new GammaTxnLong(stm, 2);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Write);
@@ -261,7 +261,7 @@ public class GammaTxnLong_commute1Test {
     public void whenAlreadyPrivatizedBySelf_thenNoCommute() {
         GammaTxnLong ref = new GammaTxnLong(stm, 2);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Exclusive);
@@ -297,10 +297,10 @@ public class GammaTxnLong_commute1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 2);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         LongFunction function = Functions.incLongFunction(1);
@@ -332,10 +332,10 @@ public class GammaTxnLong_commute1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 2);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         LongFunction function = Functions.incLongFunction(1);

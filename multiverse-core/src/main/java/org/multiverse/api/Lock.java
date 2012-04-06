@@ -1,7 +1,7 @@
 package org.multiverse.api;
 
 /**
- * The Lock provides access to pessimistic behavior of a {@link TransactionalObject}. STM normally is very optimistic, but
+ * The Lock provides access to pessimistic behavior of a {@link TxnObject}. STM normally is very optimistic, but
  * in some cases a more pessimistic approach (one with less retries) could be a better fitting solution.
  * <p/>
  * There are 4 different types of lockmodes:
@@ -30,7 +30,7 @@ package org.multiverse.api;
  * released once the transaction commits/aborts. This is essentially the same behavior you get with Oracle once
  * a update/delete/insert is done, or when the record is locked manually by executing the 'select for update'. For
  * this to work it is very important that the {@link org.multiverse.api.exceptions.ControlFlowError} is not caught
- * by the logic executed in an atomicChecked block, but is caught by the TxnExecutor itself.
+ * by the logic executed in an transactional closure, but is caught by the TxnExecutor itself.
  *
  * <h3>Blocking</h3>
  *
@@ -68,7 +68,7 @@ package org.multiverse.api;
  * <p>Locking can be done on the Txn level (see the {@link TxnFactoryBuilder#setReadLockMode(LockMode)} and
  * {@link TxnFactoryBuilder#setWriteLockMode(LockMode)} where all reads or all writes (to do a write also a read
  * is needed) are locked automatically. It can also be done on the reference level using
- * getAndLock/setAndLock/getAndSetAndLock methods or by accessing the {@link TransactionalObject#getLock()}.
+ * getAndLock/setAndLock/getAndSetAndLock methods or by accessing the {@link TxnObject#getLock()}.
  *
  * <h3>Lock escalation</h3>
  *

@@ -13,7 +13,7 @@ public interface GammaTxnFactory extends TxnFactory {
     GammaTxnConfig getConfig();
 
     @Override
-    GammaTxn newTransaction();
+    GammaTxn newTxn();
 
     GammaTxn newTransaction(GammaTxnPool pool);
 

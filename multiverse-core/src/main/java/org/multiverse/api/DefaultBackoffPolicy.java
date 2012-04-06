@@ -5,7 +5,7 @@ import java.util.Random;
 import static java.util.concurrent.locks.LockSupport.parkNanos;
 
 /**
- * A {@link DefaultBackoffPolicy} that does an 'exponential' backoff. So each next attempt, the calculated delay is increased
+ * A {@link BackoffPolicy} that does an 'exponential' backoff. So each next attempt, the calculated delay is increased
  * and randomized (so the next value can be smaller than the previous, but overall they will increase).
  *
  * @author Peter Veentjer.

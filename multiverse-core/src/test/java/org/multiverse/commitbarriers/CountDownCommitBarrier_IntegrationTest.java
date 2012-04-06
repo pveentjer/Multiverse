@@ -44,8 +44,8 @@ public class CountDownCommitBarrier_IntegrationTest {
 
         joinAll(t1, t2);
         assertEquals(0, barrier.getNumberWaiting());
-        assertIsCommitted(t2.tx);
-        assertIsCommitted(t1.tx);
+        assertIsCommitted(t2.txn);
+        assertIsCommitted(t1.txn);
     }
 
     @Test
@@ -57,11 +57,11 @@ public class CountDownCommitBarrier_IntegrationTest {
         joinAll(t1);
         assertEquals(0, barrier.getNumberWaiting());
         assertTrue(barrier.isCommitted());
-        assertIsCommitted(t1.tx);
+        assertIsCommitted(t1.txn);
     }
 
     public class AwaitThread extends TestThread {
-        private Txn tx;
+        private Txn txn;
         private final CountDownCommitBarrier barrier;
 
 
@@ -76,10 +76,10 @@ public class CountDownCommitBarrier_IntegrationTest {
 
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
-                    AwaitThread.this.tx = tx;
-                    ref.set(tx, 10);
-                    barrier.joinCommitUninterruptibly(tx);
+                public void execute(Txn txn) throws Exception {
+                    AwaitThread.this.txn = txn;
+                    ref.set(txn, 10);
+                    barrier.joinCommitUninterruptibly(txn);
                 }
             });
         }

@@ -354,7 +354,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public TxnFactoryBuilder getTransactionFactoryBuilder() {
+        public TxnFactoryBuilder getTxnFactoryBuilder() {
             return builder;
         }
 
@@ -364,7 +364,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxn newTransaction() {
+        public final GammaTxn newTxn() {
             return newTransaction(getThreadLocalGammaTxnPool());
         }
 
@@ -398,7 +398,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public GammaTxnFactoryBuilder getTransactionFactoryBuilder() {
+        public GammaTxnFactoryBuilder getTxnFactoryBuilder() {
             return builder;
         }
 
@@ -408,7 +408,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTxn newTransaction() {
+        public final GammaTxn newTxn() {
             return newTransaction(getThreadLocalGammaTxnPool());
         }
 

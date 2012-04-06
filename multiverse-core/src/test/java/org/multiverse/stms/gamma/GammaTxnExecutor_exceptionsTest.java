@@ -23,13 +23,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenCheckedExceptionThrown() {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Exception ex = new Exception();
 
         try {
-            block.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -47,13 +47,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenRuntimeExceptionThrown() throws Exception {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
 
         try {
-            block.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -72,13 +72,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void executeChecked_whenErrorThrown() throws Exception {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Error ex = new Error();
 
         try {
-            block.atomicChecked(new TxnVoidClosure() {
+            executor.atomicChecked(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -96,13 +96,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenCheckedExceptionThrown() {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Exception ex = new Exception();
 
         try {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -120,13 +120,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenRuntimeExceptionThrown() {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
 
         try {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -145,13 +145,13 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
 
     @Test
     public void execute_whenErrorThrown() {
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Error ex = new Error();
 
         try {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

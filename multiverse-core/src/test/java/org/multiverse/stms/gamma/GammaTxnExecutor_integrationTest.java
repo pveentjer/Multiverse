@@ -29,8 +29,8 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
     public void whenRead() {
         final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        long result = block.atomic(new TxnLongClosure() {
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
+        long result = executor.atomic(new TxnLongClosure() {
             @Override
             public long execute(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
@@ -46,8 +46,8 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
     public void whenUpdate() {
         final GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
-        TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        block.atomic(new TxnVoidClosure() {
+        TxnExecutor executor = stm.newTxnFactoryBuilder().newTxnExecutor();
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
@@ -65,11 +65,11 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         ref.openForWrite(otherTx, LOCKMODE_EXCLUSIVE);
 
         try {
-            TxnExecutor block = stm.newTxnFactoryBuilder()
+            TxnExecutor executor = stm.newTxnFactoryBuilder()
                     .setMaxRetries(100)
                     .newTxnExecutor();
 
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     ref.get(tx);
@@ -86,10 +86,10 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
     public void whenMultipleUpdatesDoneInSingleTransaction() {
         final GammaTxnLong ref = new GammaTxnLong(stm);
 
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
-        block.atomic(new TxnVoidClosure() {
+        executor.atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {
                 for (int k = 0; k < 10; k++) {

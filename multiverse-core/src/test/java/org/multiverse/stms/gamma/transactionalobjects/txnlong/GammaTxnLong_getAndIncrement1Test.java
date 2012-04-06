@@ -57,7 +57,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         setThreadLocalTxn(tx);
 
@@ -76,7 +76,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
     public void whenActiveTransactionAvailable() {
         TxnLong ref = new GammaTxnLong(stm, 10);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         long value = ref.getAndIncrement(20);
         tx.commit();
@@ -92,7 +92,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         long value = ref.getAndIncrement(0);
         tx.commit();
@@ -116,7 +116,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         long result = ref.getAndIncrement(amount);
         tx.commit();
@@ -134,10 +134,10 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         try {
             ref.getAndIncrement(1);
@@ -176,7 +176,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.commit();
 
@@ -200,7 +200,7 @@ public class GammaTxnLong_getAndIncrement1Test implements GammaConstants {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         setThreadLocalTxn(tx);
         tx.abort();
 

@@ -102,7 +102,7 @@ public class GammaTxnRef_awaitNull0Test {
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         setThreadLocalTxn(tx);
 

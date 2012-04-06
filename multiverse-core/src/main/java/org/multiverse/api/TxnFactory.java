@@ -22,12 +22,12 @@ public interface TxnFactory {
      */
     TxnConfig getConfig();
 
-    TxnFactoryBuilder getTransactionFactoryBuilder();
+    TxnFactoryBuilder getTxnFactoryBuilder();
 
     /**
      * Creates a new {@link Txn}.
      *
      * @return the created Txn.
      */
-    Txn newTransaction();
+    Txn newTxn();
 }

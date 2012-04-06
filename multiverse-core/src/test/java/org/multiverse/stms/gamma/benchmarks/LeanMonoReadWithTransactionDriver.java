@@ -41,7 +41,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
         final GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, null);
         long initialVersion = ref.getVersion();
 
-        final LeanGammaTxnExecutor block = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));
+        final LeanGammaTxnExecutor executor = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));
 
         final TxnVoidClosure closure = new TxnVoidClosure() {
             @Override
@@ -54,7 +54,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            block.atomic(closure);
+            executor.atomic(closure);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

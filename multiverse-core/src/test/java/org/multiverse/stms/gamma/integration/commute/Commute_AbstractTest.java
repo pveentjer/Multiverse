@@ -78,7 +78,7 @@ public abstract class Commute_AbstractTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = newBlock();
+            TxnExecutor executor = newBlock();
 
             TxnLongClosure commutingClosure = new TxnLongClosure() {
                 @Override
@@ -105,7 +105,7 @@ public abstract class Commute_AbstractTest {
             int k = 0;
             while (!stop) {
                 TxnLongClosure closure = randomOneOf(10) ? nonCommutingClosure : commutingClosure;
-                count += block.atomic(closure);
+                count += executor.atomic(closure);
                 k++;
 
                 if (k % 100000 == 0) {

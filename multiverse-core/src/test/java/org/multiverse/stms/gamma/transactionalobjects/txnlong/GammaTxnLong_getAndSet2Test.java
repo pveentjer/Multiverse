@@ -67,7 +67,7 @@ public class GammaTxnLong_getAndSet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         try {
@@ -84,7 +84,7 @@ public class GammaTxnLong_getAndSet2Test {
     public void whenAbortedTransaction_thenDeadTxnException() {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         try {
@@ -101,7 +101,7 @@ public class GammaTxnLong_getAndSet2Test {
     public void whenCommittedTransaction_thenCommittedTransactionException() {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         try {
@@ -119,7 +119,7 @@ public class GammaTxnLong_getAndSet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndSet(tx, 20);
         tx.commit();
 
@@ -132,7 +132,7 @@ public class GammaTxnLong_getAndSet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndSet(tx, 20);
         tx.commit();
 
@@ -145,7 +145,7 @@ public class GammaTxnLong_getAndSet2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long value = ref.getAndSet(tx, 10);
         tx.commit();
 
@@ -169,7 +169,7 @@ public class GammaTxnLong_getAndSet2Test {
 
         sleepMs(500);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.getAndSet(tx, newValue);
         tx.commit();
 

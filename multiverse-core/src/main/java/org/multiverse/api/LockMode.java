@@ -14,7 +14,7 @@ import org.multiverse.MultiverseConstants;
  * @see TxnFactoryBuilder#setWriteLockMode(LockMode)
  * @see TxnConfig#getReadLockMode()
  * @see TxnConfig#getWriteLockMode()
- * @see org.multiverse.api.TransactionalObject#getLock()
+ * @see TxnObject#getLock()
  * @see Lock
  */
 public enum LockMode implements MultiverseConstants {
@@ -43,7 +43,7 @@ public enum LockMode implements MultiverseConstants {
      * no other transaction can acquire any lock or can do any reading/writing (unless the transaction previously has read the
      * transactional object).
      *
-     * <p>The ExclusiveLock is the Lock acquired by the STM once a Txn is prepared for writing changes to a TransactionalObject.
+     * <p>The ExclusiveLock is the Lock acquired by the STM once a Txn is prepared for writing changes to a TxnObject.
      */
     Exclusive(LOCKMODE_EXCLUSIVE);
 

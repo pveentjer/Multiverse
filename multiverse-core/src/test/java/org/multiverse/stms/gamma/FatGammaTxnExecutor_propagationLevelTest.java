@@ -31,7 +31,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenNeverAndTransactionAvailable_thenNoTransactionAllowedException() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
 
@@ -41,7 +41,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         TxnVoidClosure closure = mock(TxnVoidClosure.class);
 
         try {
-            block.atomic(closure);
+            executor.atomic(closure);
             fail();
         } catch (TxnNotAllowedException expected) {
         }
@@ -53,7 +53,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenNeverAndNoTransactionAvailable() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
 
@@ -65,7 +65,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTxn());
@@ -73,14 +73,14 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenMandatoryAndNoTransactionAvailable_thenNoTransactionFoundException() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
 
         TxnVoidClosure closure = mock(TxnVoidClosure.class);
 
         try {
-            block.atomic(closure);
+            executor.atomic(closure);
             fail();
         } catch (TxnMandatoryException expected) {
         }
@@ -91,7 +91,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenMandatoryAndTransactionAvailable_thenExistingTransactionUsed() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
 
@@ -106,7 +106,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -170,7 +170,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresNewAndNoTransactionAvailable_thenNewTransactionCreated() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
@@ -186,7 +186,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(10, result);
         assertEquals(1, ref.atomicGet());
@@ -195,7 +195,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenRequiresNewAndTransactionAvailable_thenExistingTransactionSuspended() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
@@ -215,7 +215,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(1, result);
         assertEquals(11, ref.atomicGet());
@@ -225,7 +225,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenSupportsAndTransactionAvailable() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
 
@@ -240,7 +240,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -249,7 +249,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
     @Test
     public void whenSupportsAndNoTransactionAvailable() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
 
@@ -261,7 +261,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = block.atomic(closure);
+        int result = executor.atomic(closure);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTxn());

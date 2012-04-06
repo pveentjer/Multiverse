@@ -34,11 +34,11 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenTimeout() throws InterruptedException {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
                 .newTxnExecutor();
 
-        AwaitThread t = new AwaitThread(block);
+        AwaitThread t = new AwaitThread(executor);
         t.setPrintStackTrace(false);
         t.start();
 
@@ -49,11 +49,11 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenSuccess() {
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(timeoutNs)
                 .newTxnExecutor();
 
-        AwaitThread t = new AwaitThread(block);
+        AwaitThread t = new AwaitThread(executor);
         t.setPrintStackTrace(false);
         t.start();
 
@@ -83,11 +83,11 @@ public class GammaTxnExecutor_timeoutTest {
             }
         });
 
-        TxnExecutor block = stm.newTxnFactoryBuilder()
+        TxnExecutor executor = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(0)
                 .newTxnExecutor();
 
-        AwaitThread t = new AwaitThread(block);
+        AwaitThread t = new AwaitThread(executor);
         t.setPrintStackTrace(false);
         t.start();
 
@@ -98,15 +98,15 @@ public class GammaTxnExecutor_timeoutTest {
 
     class AwaitThread extends TestThread {
 
-        private final TxnExecutor block;
+        private final TxnExecutor executor;
 
-        public AwaitThread(TxnExecutor block) {
-            this.block = block;
+        public AwaitThread(TxnExecutor executor) {
+            this.executor = executor;
         }
 
         @Override
         public void doRun() throws Exception {
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

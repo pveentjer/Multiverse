@@ -52,8 +52,8 @@ public class VetoCommitBarrier_abortTest {
         thread2.join();
 
         assertEquals(0, ref.atomicGet());
-        assertIsAborted(thread1.tx);
-        assertIsAborted(thread2.tx);
+        assertIsAborted(thread1.txn);
+        assertIsAborted(thread2.txn);
         thread1.assertFailedWithException(CommitBarrierOpenException.class);
         thread2.assertFailedWithException(CommitBarrierOpenException.class);
     }
@@ -83,7 +83,7 @@ public class VetoCommitBarrier_abortTest {
 
     public class IncThread extends TestThread {
         private final GammaTxnInteger ref;
-        private Txn tx;
+        private Txn txn;
 
         public IncThread(GammaTxnInteger ref) {
             super("IncThread");
@@ -95,10 +95,10 @@ public class VetoCommitBarrier_abortTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {
                 @Override
-                public void execute(Txn tx) throws Exception {
-                    IncThread.this.tx = tx;
-                    ref.incrementAndGet(tx, 1);
-                    barrier.joinCommit(tx);
+                public void execute(Txn txn) throws Exception {
+                    IncThread.this.txn = txn;
+                    ref.incrementAndGet(txn, 1);
+                    barrier.joinCommit(txn);
                 }
             });
         }

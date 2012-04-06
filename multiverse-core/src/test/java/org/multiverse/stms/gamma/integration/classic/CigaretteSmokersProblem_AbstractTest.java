@@ -32,7 +32,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
     private SmokerThread matchProvider;
     private SmokerThread tobaccoProvider;
     private volatile boolean stop;
-    private TxnExecutor block;
+    private TxnExecutor executor;
     protected GammaStm stm;
 
     protected abstract TxnExecutor newBlock();
@@ -53,7 +53,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
     }
 
     public void run() {
-        block = newBlock();
+        executor = newBlock();
 
         startAll(arbiterThread, paperProvider, matchProvider, tobaccoProvider);
         sleepMs(60000);
@@ -82,7 +82,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                 count++;
                 switch (TestUtils.randomInt(3)) {
                     case 0:
-                        block.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidClosure() {
                             @Override
                             public void execute(Txn tx) {
                                 if (notifier.get() != null) {
@@ -96,7 +96,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 1:
-                        block.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidClosure() {
                             @Override
                             public void execute(Txn tx) {
                                 if (notifier.get() != null) {
@@ -110,7 +110,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 2:
-                        block.atomic(new TxnVoidClosure() {
+                        executor.atomic(new TxnVoidClosure() {
                             @Override
                             public void execute(Txn tx) {
                                 if (notifier.get() != null) {
@@ -127,7 +127,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         throw new RuntimeException();
                 }
             }
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     notifier.awaitNull();
@@ -163,7 +163,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         }
 
         private boolean makeCigarette() {
-            return block.atomic(new TxnBooleanClosure() {
+            return executor.atomic(new TxnBooleanClosure() {
                 @Override
                 public boolean execute(Txn tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {

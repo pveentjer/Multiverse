@@ -74,12 +74,12 @@ public class TimeoutTestLongTest {
 
         @Override
         public void doRun() throws Exception {
-            TxnExecutor block = getGlobalStmInstance()
+            TxnExecutor executor = getGlobalStmInstance()
                     .newTxnFactoryBuilder()
                     .setTimeoutNs(TimeUnit.SECONDS.toNanos(5))
                     .newTxnExecutor();
 
-            block.atomic(new TxnVoidClosure() {
+            executor.atomic(new TxnVoidClosure() {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     ref.await(1);

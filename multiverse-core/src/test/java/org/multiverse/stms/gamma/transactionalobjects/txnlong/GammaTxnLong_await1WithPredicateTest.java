@@ -39,7 +39,7 @@ public class GammaTxnLong_await1WithPredicateTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
         setThreadLocalTxn(tx);
 
         try {
@@ -62,7 +62,7 @@ public class GammaTxnLong_await1WithPredicateTest {
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         setThreadLocalTxn(tx);
 

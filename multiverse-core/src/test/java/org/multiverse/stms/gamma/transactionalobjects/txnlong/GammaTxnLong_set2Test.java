@@ -69,7 +69,7 @@ public class GammaTxnLong_set2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
         try {
             ref.set(tx, 20);
@@ -86,7 +86,7 @@ public class GammaTxnLong_set2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
         try {
             ref.set(tx, 20);
@@ -103,7 +103,7 @@ public class GammaTxnLong_set2Test {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
         try {
             ref.set(tx, 20);
@@ -119,7 +119,7 @@ public class GammaTxnLong_set2Test {
     public void test() {
         GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long value = ref.get(tx);
 
         assertEquals(10, value);

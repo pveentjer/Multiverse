@@ -32,7 +32,7 @@ public final class TxnThreadLocal {
      * @return the threadlocal transaction.
      */
     public static Txn getThreadLocalTxn() {
-        return threadlocal.get().tx;
+        return threadlocal.get().txn;
     }
 
     /**                     ThreadLocalTransaction
@@ -57,7 +57,7 @@ public final class TxnThreadLocal {
      *          if no thread local transaction is found.
      */
     public static Txn getRequiredThreadLocalTxn() {
-        Txn txn = threadlocal.get().tx;
+        Txn txn = threadlocal.get().txn;
 
         if (txn == null) {
             throw new TxnMandatoryException("No transaction is found on the TxnThreadLocal");
@@ -72,7 +72,7 @@ public final class TxnThreadLocal {
      * <p>If a transaction is available, it isn't aborted or committed.
      */
     public static void clearThreadLocalTxn() {
-        threadlocal.get().tx = null;
+        threadlocal.get().txn = null;
     }
 
     /**
@@ -84,7 +84,7 @@ public final class TxnThreadLocal {
      * @param txn the new thread local transaction.
      */
     public static void setThreadLocalTxn(Txn txn) {
-        threadlocal.get().tx = txn;
+        threadlocal.get().txn = txn;
     }
 
     //we don't want any instances.
@@ -93,7 +93,7 @@ public final class TxnThreadLocal {
     }
 
     public static class Container {
-        public Txn tx;
+        public Txn txn;
         public Object txPool;
     }
 }

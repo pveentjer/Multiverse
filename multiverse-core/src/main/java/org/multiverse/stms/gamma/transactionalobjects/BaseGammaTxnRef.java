@@ -1103,7 +1103,7 @@ public abstract class BaseGammaTxnRef extends AbstractGammaObject {
 
     public final void openForCommute(final GammaTxn tx, final Function function) {
         if (tx == null) {
-            throw new NullPointerException("tx can't be null");
+            throw new NullPointerException("txn can't be null");
         }
 
         final int type = tx.transactionType;

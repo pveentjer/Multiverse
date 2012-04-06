@@ -62,7 +62,7 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
 
         setThreadLocalTxn(tx);
@@ -85,7 +85,7 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, initialValue + 1);
         ref.getLock().acquire(tx, LockMode.Read);
         ref.ensure(tx);
@@ -109,7 +109,7 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, initialValue + 1);
         ref.getLock().acquire(tx, LockMode.Write);
         ref.ensure(tx);
@@ -133,7 +133,7 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, initialValue + 1);
         ref.getLock().acquire(tx, LockMode.Exclusive);
         ref.ensure(tx);
@@ -158,10 +158,10 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, initialValue + 1);
         ref.ensure(tx);
 
@@ -179,10 +179,10 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.set(tx, initialValue + 1);
         ref.ensure(tx);
 
@@ -200,10 +200,10 @@ public class Ensure1Test {
         GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         try {
             ref.ensure(tx);
             fail();
@@ -234,7 +234,7 @@ public class Ensure1Test {
 
     @Test
     public void state_whenAlreadyPrepared_thenPreparedTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         long initialValue = 10;
@@ -255,7 +255,7 @@ public class Ensure1Test {
 
     @Test
     public void state_whenAlreadyAborted_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         long initialValue = 10;
@@ -276,7 +276,7 @@ public class Ensure1Test {
 
     @Test
     public void state_whenAlreadyCommitted_thenDeadTxnException() {
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         long initialValue = 10;
@@ -297,16 +297,16 @@ public class Ensure1Test {
 
     @Test
     public void whenPossibleWriteSkew_thenCanBeDetectedWithDeferredEnsure() {
-        assumeTrue(!(transactionFactory.newTransaction() instanceof FatMonoGammaTxn));
+        assumeTrue(!(transactionFactory.newTxn() instanceof FatMonoGammaTxn));
 
         GammaTxnLong ref1 = new GammaTxnLong(stm);
         GammaTxnLong ref2 = new GammaTxnLong(stm);
 
-        GammaTxn tx1 = transactionFactory.newTransaction();
+        GammaTxn tx1 = transactionFactory.newTxn();
         ref1.get(tx1);
         ref2.incrementAndGet(tx1, 1);
 
-        GammaTxn tx2 = transactionFactory.newTransaction();
+        GammaTxn tx2 = transactionFactory.newTxn();
         ref1.incrementAndGet(tx2, 1);
         ref2.get(tx2);
         ref2.ensure(tx2);

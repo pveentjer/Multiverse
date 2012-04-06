@@ -104,7 +104,7 @@ public class GammaTxnRef_awaitNotNullAndGet1Test implements GammaConstants {
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .newTransactionFactory()
-                .newTransaction();
+                .newTxn();
 
         try {
             ref.awaitNotNullAndGet(tx);

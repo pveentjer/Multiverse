@@ -80,7 +80,7 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         try {
             ref.alterAndGet(tx, null);
@@ -99,7 +99,7 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.commit();
 
         LongFunction function = mock(LongFunction.class);
@@ -121,7 +121,7 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.prepare();
 
         LongFunction function = mock(LongFunction.class);
@@ -143,7 +143,7 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         tx.abort();
 
         LongFunction function = mock(LongFunction.class);
@@ -169,7 +169,7 @@ public class GammaTxnRef_alterAndGet2Test {
         RuntimeException ex = new RuntimeException();
         when(function.call(anyLong())).thenThrow(ex);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
 
         try {
             ref.alterAndGet(tx, function);
@@ -190,10 +190,10 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         LongFunction function = mock(LongFunction.class);
 
         try {
@@ -214,10 +214,10 @@ public class GammaTxnRef_alterAndGet2Test {
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTxn otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         LongFunction function = Functions.incLongFunction(1);
         ref.alterAndGet(tx, function);
 
@@ -254,7 +254,7 @@ public class GammaTxnRef_alterAndGet2Test {
             }
         };
 
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         ref.alterAndGet(tx, function);
         tx.commit();
 
@@ -273,7 +273,7 @@ public class GammaTxnRef_alterAndGet2Test {
         };
 
         GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, 100L);
-        GammaTxn tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTxn();
         long result = ref.alterAndGet(tx, function);
         tx.commit();
 

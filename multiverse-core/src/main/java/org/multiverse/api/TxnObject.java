@@ -3,27 +3,27 @@ package org.multiverse.api;
 /**
  * The interface each transactional object needs to implement.
  *
- * <p>A TransactionalObject is an object where all reads/writes are managed through a {@link Txn} (unless an atomicChecked
+ * <p>A TxnObject is an object where all reads/writes are managed through a {@link Txn} (unless an atomicChecked
  * method is used).
  *
- * <p>Each TransactionalObject belongs to 1 {@link Stm} instance.
+ * <p>Each TxnObject belongs to 1 {@link Stm} instance.
  *
  * <p>All methods are threadsafe.
  *
  * @author Peter Veentjer.
  */
-public interface TransactionalObject {
+public interface TxnObject {
 
     /**
-     * Returns the {@link Stm} this TransactionalObject is part of. Once a TransactionalObject is created using some
+     * Returns the {@link Stm} this TxnObject is part of. Once a TxnObject is created using some
      * Stm, it will never become part of another Stm.
      *
-     * @return the Stm this TransactionalObject is part of. Returned value will never be null.
+     * @return the Stm this TxnObject is part of. Returned value will never be null.
      */
     Stm getStm();
 
     /**
-     * Gets the {@link Lock} that belongs to this TransactionalObject. This call doesn't cause any locking, it
+     * Gets the {@link Lock} that belongs to this TxnObject. This call doesn't cause any locking, it
      * only provides access to the object that is able to lock. The returned value will never be null.
      *
      * <p>This call also doesn't rely on a {@link Txn}.
@@ -46,11 +46,11 @@ public interface TransactionalObject {
 
     /**
      * Does an ensure. What is means is that at the end of the transaction (so deferred), the transaction checks if no other
-     * transaction has made an update, if this TransactionalObject only is read. The ensure is a way to prevent to writeskew
+     * transaction has made an update, if this TxnObject only is read. The ensure is a way to prevent to writeskew
      * problem on the ref level (see {@link IsolationLevel} for more detail about the writeskew problem}
      *
-     * <p>This can safely be called on an TransactionalObject that already is locked, although it doesn't provide much value
-     * since with a locked TransactionalObject, since the writeskew problem can't occur anymore because it can't be changed.
+     * <p>This can safely be called on an TxnObject that already is locked, although it doesn't provide much value
+     * since with a locked TxnObject, since the writeskew problem can't occur anymore because it can't be changed.
      *
      * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
@@ -70,11 +70,11 @@ public interface TransactionalObject {
 
     /**
      * Does an ensure. What is means is that at the end of the transaction (so deferred), the transaction checks if no other
-     * transaction has made an update, if this TransactionalObject only is read. The ensure is a way to prevent to writeskew
+     * transaction has made an update, if this TxnObject only is read. The ensure is a way to prevent to writeskew
      * problem on the ref level (see {@link IsolationLevel} for more detail about the writeskew problem}
      *
-     * <p>This can safely be called on an TransactionalObject that already is locked, although it doesn't provide much value
-     * since with a locked TransactionalObject, since the writeskew problem can't occur anymore because it can't be changed.
+     * <p>This can safely be called on an TxnObject that already is locked, although it doesn't provide much value
+     * since with a locked TxnObject, since the writeskew problem can't occur anymore because it can't be changed.
      *
      * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
@@ -93,10 +93,10 @@ public interface TransactionalObject {
     void ensure(Txn self);
 
     /**
-     * Returns a debug representation of the TransactionalObject. The data used doesn't have to be consistent,
+     * Returns a debug representation of the TxnObject. The data used doesn't have to be consistent,
      * it is a best effort. This method doesn't rely on a running transaction.
      *
-     * @return the debug representation of the TransactionalObject.
+     * @return the debug representation of the TxnObject.
      */
     String toDebugString();
 
