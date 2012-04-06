@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * An {@link IllegalStateException} throw when there is a conflict with the {@link org.multiverse.api.Transaction}
+ * An {@link IllegalStateException} throw when there is a conflict with the {@link org.multiverse.api.Txn}
  * propagation. For more information {@link org.multiverse.api.PropagationLevel}.
  *
  * @author Peter Veentjer.

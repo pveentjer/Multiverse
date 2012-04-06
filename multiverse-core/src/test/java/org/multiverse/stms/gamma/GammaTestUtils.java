@@ -6,9 +6,9 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.transactionalobjects.*;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
 
 import java.util.*;
 
@@ -20,11 +20,11 @@ import static org.multiverse.TestUtils.getField;
 
 public class GammaTestUtils implements GammaConstants {
 
-    public static GammaTransaction newArrivingTransaction(GammaStm stm){
+    public static GammaTxn newArrivingTransaction(GammaStm stm){
         GammaTxnConfiguration config = new GammaTxnConfiguration(stm)
                 .setMaximumPoorMansConflictScanLength(0)
                 .setSpeculative(false);
-        return new FatVariableLengthGammaTransaction(config);
+        return new FatVariableLengthGammaTxn(config);
     }
 
     public static void assertGlobalConflictCount(GammaStm stm, long expected){
@@ -48,7 +48,7 @@ public class GammaTestUtils implements GammaConstants {
         Assert.assertEquals(asList(expected), functions);
     }
 
-    public static void assertSpeculativeConfigurationNonRefTypeRequired(GammaTransaction tx) {
+    public static void assertSpeculativeConfigurationNonRefTypeRequired(GammaTxn tx) {
         assertTrue(tx.config.speculativeConfiguration.get().nonRefTypeDetected);
     }
 
@@ -73,7 +73,7 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasReadLock(BaseGammaRef ref, GammaTransaction tx) {
+    public static void assertRefHasReadLock(BaseGammaRef ref, GammaTxn tx) {
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A Tranlocal should have been available for a ref that has the read lock");
@@ -82,7 +82,7 @@ public class GammaTestUtils implements GammaConstants {
         assertLockMode(ref, LOCKMODE_READ);
     }
 
-    public static void assertRefHasNoLocks(BaseGammaRef ref, GammaTransaction tx) {
+    public static void assertRefHasNoLocks(BaseGammaRef ref, GammaTxn tx) {
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
         if (tranlocal != null) {
             Assert.assertEquals(LOCKMODE_NONE, tranlocal.getLockMode());
@@ -91,7 +91,7 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasWriteLock(BaseGammaRef ref, GammaTransaction lockOwner) {
+    public static void assertRefHasWriteLock(BaseGammaRef ref, GammaTxn lockOwner) {
         GammaRefTranlocal tranlocal = lockOwner.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A Tranlocal should have been available for a ref that has the write lock");
@@ -101,7 +101,7 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasExclusiveLock(BaseGammaRef ref, GammaTransaction lockOwner) {
+    public static void assertRefHasExclusiveLock(BaseGammaRef ref, GammaTxn lockOwner) {
         GammaRefTranlocal tranlocal = lockOwner.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A tranlocal should have been stored in the transaction for the ref");
@@ -111,7 +111,7 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasLockMode(BaseGammaRef ref, GammaTransaction lockOwner, int lockMode) {
+    public static void assertRefHasLockMode(BaseGammaRef ref, GammaTxn lockOwner, int lockMode) {
         switch (lockMode) {
             case LOCKMODE_NONE:
                 assertRefHasNoLocks(ref, lockOwner);

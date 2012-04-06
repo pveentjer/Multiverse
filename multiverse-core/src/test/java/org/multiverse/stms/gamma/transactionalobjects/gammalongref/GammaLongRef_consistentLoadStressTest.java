@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -52,7 +52,7 @@ public class GammaLongRef_consistentLoadStressTest implements GammaConstants {
     }
 
     class ReadThread extends TestThread {
-        private final GammaTransaction tx = stm.newDefaultTransaction();
+        private final GammaTxn tx = stm.newDefaultTransaction();
 
         public ReadThread(int id) {
             super("ReadThread-" + id);

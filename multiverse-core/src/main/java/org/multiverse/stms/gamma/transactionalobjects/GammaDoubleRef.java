@@ -1,14 +1,14 @@
 package org.multiverse.stms.gamma.transactionalobjects;
 
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.api.functions.DoubleFunction;
 import org.multiverse.api.predicates.DoublePredicate;
 import org.multiverse.api.references.DoubleRef;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.stms.gamma.GammaStmUtils.*;
@@ -22,11 +22,11 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
     }
 
 
-    public GammaDoubleRef(final GammaTransaction tx) {
+    public GammaDoubleRef(final GammaTxn tx) {
         this(tx, 0);
     }
 
-    public GammaDoubleRef(final GammaTransaction tx, final double value) {
+    public GammaDoubleRef(final GammaTxn tx, final double value) {
         super(tx.getConfiguration().stm, TYPE_DOUBLE);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
@@ -47,72 +47,72 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final double get() {
-        return get(getRequiredThreadLocalGammaTransaction());
+        return get(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final double get(final Transaction tx) {
-        return get(asGammaTransaction(tx));
+    public final double get(final Txn tx) {
+        return get(asGammaTxn(tx));
     }
 
-    public final double get(final GammaTransaction tx) {
+    public final double get(final GammaTxn tx) {
         return longAsDouble(openForRead(tx, LOCKMODE_NONE).long_value);
     }
 
     @Override
     public final double getAndLock(final LockMode lockMode) {
-        return getAndLock(getRequiredThreadLocalGammaTransaction(), lockMode);
+        return getAndLock(getRequiredThreadLocalGammaTxn(), lockMode);
     }
 
     @Override
-    public final double getAndLock(final Transaction tx, final LockMode lockMode) {
-        return getAndLock(asGammaTransaction(tx), lockMode);
+    public final double getAndLock(final Txn tx, final LockMode lockMode) {
+        return getAndLock(asGammaTxn(tx), lockMode);
     }
 
-    public final double getAndLock(final GammaTransaction tx, final LockMode lockMode) {
+    public final double getAndLock(final GammaTxn tx, final LockMode lockMode) {
         return longAsDouble(getLong(tx, lockMode));
     }
 
     @Override
     public final double set(final double value) {
-        return set(getRequiredThreadLocalGammaTransaction(), value);
+        return set(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final double set(final Transaction tx, final double value) {
-        return set(asGammaTransaction(tx), value);
+    public final double set(final Txn tx, final double value) {
+        return set(asGammaTxn(tx), value);
     }
 
-    public final double set(final GammaTransaction tx, final double value) {
+    public final double set(final GammaTxn tx, final double value) {
         openForWrite(tx, LOCKMODE_NONE).long_value = doubleAsLong(value);
         return value;
     }
 
     @Override
     public final double setAndLock(final double value, final LockMode lockMode) {
-        return setAndLock(getRequiredThreadLocalGammaTransaction(), doubleAsLong(value), lockMode);
+        return setAndLock(getRequiredThreadLocalGammaTxn(), doubleAsLong(value), lockMode);
     }
 
     @Override
-    public final double setAndLock(final Transaction tx, final double value, final LockMode lockMode) {
-        return setAndLock(asGammaTransaction(tx), value, lockMode);
+    public final double setAndLock(final Txn tx, final double value, final LockMode lockMode) {
+        return setAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final double setAndLock(final GammaTransaction tx, final double value, final LockMode lockMode) {
+    public final double setAndLock(final GammaTxn tx, final double value, final LockMode lockMode) {
         return longAsDouble(setLong(tx, lockMode, doubleAsLong(value), false));
     }
 
     @Override
     public final double getAndSet(final double value) {
-        return getAndSet(getRequiredThreadLocalGammaTransaction(), value);
+        return getAndSet(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final double getAndSet(final Transaction tx, final double value) {
-        return getAndSet(asGammaTransaction(tx), value);
+    public final double getAndSet(final Txn tx, final double value) {
+        return getAndSet(asGammaTxn(tx), value);
     }
 
-    public final double getAndSet(final GammaTransaction tx, final double value) {
+    public final double getAndSet(final GammaTxn tx, final double value) {
         GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         double oldValue = longAsDouble(tranlocal.long_value);
         tranlocal.long_value = doubleAsLong(value);
@@ -121,15 +121,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final double getAndSetAndLock(final double value, final LockMode lockMode) {
-        return getAndSetAndLock(getRequiredThreadLocalGammaTransaction(), value, lockMode);
+        return getAndSetAndLock(getRequiredThreadLocalGammaTxn(), value, lockMode);
     }
 
     @Override
-    public final double getAndSetAndLock(final Transaction tx, final double value, final LockMode lockMode) {
-        return getAndSetAndLock(asGammaTransaction(tx), value, lockMode);
+    public final double getAndSetAndLock(final Txn tx, final double value, final LockMode lockMode) {
+        return getAndSetAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final double getAndSetAndLock(final GammaTransaction tx, final double value, final LockMode lockMode) {
+    public final double getAndSetAndLock(final GammaTxn tx, final double value, final LockMode lockMode) {
         return longAsDouble(setLong(tx, lockMode, doubleAsLong(value), true));
     }
 
@@ -155,15 +155,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final void commute(final DoubleFunction function) {
-        commute(getRequiredThreadLocalGammaTransaction(), function);
+        commute(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final void commute(final Transaction tx, final DoubleFunction function) {
-        commute(asGammaTransaction(tx), function);
+    public final void commute(final Txn tx, final DoubleFunction function) {
+        commute(asGammaTxn(tx), function);
     }
 
-    public final void commute(final GammaTransaction tx, final DoubleFunction function) {
+    public final void commute(final GammaTxn tx, final DoubleFunction function) {
         openForCommute(tx, function);
     }
 
@@ -232,33 +232,33 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final double alterAndGet(final DoubleFunction function) {
-        return alterAndGet(getRequiredThreadLocalGammaTransaction(), function);
+        return alterAndGet(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final double alterAndGet(final Transaction tx, final DoubleFunction function) {
-        return alterAndGet(asGammaTransaction(tx), function);
+    public final double alterAndGet(final Txn tx, final DoubleFunction function) {
+        return alterAndGet(asGammaTxn(tx), function);
     }
 
-    public final double alterAndGet(final GammaTransaction tx, final DoubleFunction function) {
+    public final double alterAndGet(final GammaTxn tx, final DoubleFunction function) {
         return alter(tx, function, false);
     }
 
     @Override
     public final double getAndAlter(final DoubleFunction function) {
-        return getAndAlter(getRequiredThreadLocalGammaTransaction(), function);
+        return getAndAlter(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final double getAndAlter(final Transaction tx, final DoubleFunction function) {
-        return getAndAlter(asGammaTransaction(tx), function);
+    public final double getAndAlter(final Txn tx, final DoubleFunction function) {
+        return getAndAlter(asGammaTxn(tx), function);
     }
 
-    public final double getAndAlter(final GammaTransaction tx, final DoubleFunction function) {
+    public final double getAndAlter(final GammaTxn tx, final DoubleFunction function) {
         return alter(tx, function, true);
     }
 
-    public final double alter(final GammaTransaction tx, final DoubleFunction function, boolean returnOld) {
+    public final double alter(final GammaTxn tx, final DoubleFunction function, boolean returnOld) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -292,15 +292,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final double getAndIncrement(final double amount) {
-        return getAndIncrement(getRequiredThreadLocalGammaTransaction(), amount);
+        return getAndIncrement(getRequiredThreadLocalGammaTxn(), amount);
     }
 
     @Override
-    public final double getAndIncrement(final Transaction tx, final double amount) {
-        return getAndIncrement(asGammaTransaction(tx), amount);
+    public final double getAndIncrement(final Txn tx, final double amount) {
+        return getAndIncrement(asGammaTxn(tx), amount);
     }
 
-    public final double getAndIncrement(final GammaTransaction tx, final double amount) {
+    public final double getAndIncrement(final GammaTxn tx, final double amount) {
         GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         double oldValue = longAsDouble(tranlocal.long_value);
         tranlocal.long_value = doubleAsLong(oldValue + amount);
@@ -358,15 +358,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final double incrementAndGet(final double amount) {
-        return incrementAndGet(getRequiredThreadLocalGammaTransaction(), amount);
+        return incrementAndGet(getRequiredThreadLocalGammaTxn(), amount);
     }
 
     @Override
-    public final double incrementAndGet(final Transaction tx, final double amount) {
-        return incrementAndGet(asGammaTransaction(tx), amount);
+    public final double incrementAndGet(final Txn tx, final double amount) {
+        return incrementAndGet(asGammaTxn(tx), amount);
     }
 
-    public final double incrementAndGet(final GammaTransaction tx, final double amount) {
+    public final double incrementAndGet(final GammaTxn tx, final double amount) {
         GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         double result = longAsDouble(tranlocal.long_value) + amount;
         tranlocal.long_value = doubleAsLong(result);
@@ -375,15 +375,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final void await(final double value) {
-        await(getRequiredThreadLocalGammaTransaction(), value);
+        await(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final void await(final Transaction tx, final double value) {
-        await(asGammaTransaction(tx), value);
+    public final void await(final Txn tx, final double value) {
+        await(asGammaTxn(tx), value);
     }
 
-    public final void await(final GammaTransaction tx, final double value) {
+    public final void await(final GammaTxn tx, final double value) {
         if (longAsDouble(openForRead(tx, LOCKMODE_NONE).long_value) != value) {
             tx.retry();
         }
@@ -391,15 +391,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final void await(final DoublePredicate predicate) {
-        await(getRequiredThreadLocalGammaTransaction(), predicate);
+        await(getRequiredThreadLocalGammaTxn(), predicate);
     }
 
     @Override
-    public final void await(final Transaction tx, final DoublePredicate predicate) {
-        await(asGammaTransaction(tx), predicate);
+    public final void await(final Txn tx, final DoublePredicate predicate) {
+        await(asGammaTxn(tx), predicate);
     }
 
-    public final void await(final GammaTransaction tx, final DoublePredicate predicate) {
+    public final void await(final GammaTxn tx, final DoublePredicate predicate) {
         final GammaRefTranlocal tranlocal = openForRead(tx, LOCKMODE_NONE);
         boolean abort = true;
         try {
@@ -422,15 +422,15 @@ public class GammaDoubleRef extends BaseGammaRef implements DoubleRef {
 
     @Override
     public final String toString() {
-        return toString(getRequiredThreadLocalGammaTransaction());
+        return toString(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final String toString(Transaction tx) {
-        return toString(asGammaTransaction(tx));
+    public final String toString(Txn tx) {
+        return toString(asGammaTxn(tx));
     }
 
-    public final String toString(GammaTransaction tx) {
+    public final String toString(GammaTxn tx) {
         return Double.toString(get(tx));
     }
 

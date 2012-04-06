@@ -2,12 +2,12 @@ package org.multiverse.stms.gamma.transactions.lean;
 
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
+import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
 
@@ -27,7 +27,7 @@ public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction failingTransaction, GammaTransactionPool pool) {
+    public GammaTxn upgradeAfterSpeculativeFailure(GammaTxn failingTransaction, GammaTxnPool pool) {
         throw new UnsupportedOperationException();
     }
 
@@ -37,15 +37,15 @@ public class LeanMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public LeanMonoGammaTransaction newTransaction() {
-        return newTransaction(getThreadLocalGammaTransactionPool());
+    public LeanMonoGammaTxn newTransaction() {
+        return newTransaction(getThreadLocalGammaTxnPool());
     }
 
     @Override
-    public LeanMonoGammaTransaction newTransaction(GammaTransactionPool pool) {
-        LeanMonoGammaTransaction tx = pool.takeLeanMono();
+    public LeanMonoGammaTxn newTransaction(GammaTxnPool pool) {
+        LeanMonoGammaTxn tx = pool.takeLeanMono();
         if (tx == null) {
-            tx = new LeanMonoGammaTransaction(config);
+            tx = new LeanMonoGammaTxn(config);
         } else {
             tx.init(config);
         }

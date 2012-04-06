@@ -3,16 +3,16 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicLongClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import static org.junit.Assert.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
@@ -21,7 +21,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
 
@@ -32,13 +32,13 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         long result = block.atomic(new AtomicLongClosure() {
             @Override
-            public long execute(Transaction tx) throws Exception {
-                assertSame(tx, getThreadLocalTransaction());
+            public long execute(Txn tx) throws Exception {
+                assertSame(tx, getThreadLocalTxn());
                 return ref.get(tx);
             }
         });
 
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertEquals(10, result);
     }
 
@@ -49,7 +49,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
         TxnExecutor block = stm.newTransactionFactoryBuilder().newTxnExecutor();
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.incrementAndGet(tx, 1);
             }
         });
@@ -61,7 +61,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
     public void whenTooManyRetries() {
         final GammaLongRef ref = new GammaLongRef(stm);
 
-        FatMonoGammaTransaction otherTx = new FatMonoGammaTransaction(stm);
+        FatMonoGammaTxn otherTx = new FatMonoGammaTxn(stm);
         ref.openForWrite(otherTx, LOCKMODE_EXCLUSIVE);
 
         try {
@@ -71,7 +71,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.get(tx);
                 }
             });
@@ -91,7 +91,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
                 .newTxnExecutor();
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 for (int k = 0; k < 10; k++) {
                     long l = ref.get();
                     ref.set(l + 1);

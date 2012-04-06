@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertRefHasLockMode;
@@ -33,7 +33,7 @@ public class GammaRef_getAndLock2Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         long result = ref.getAndLock(tx, lockMode);
 
         assertEquals(initialValue,result);

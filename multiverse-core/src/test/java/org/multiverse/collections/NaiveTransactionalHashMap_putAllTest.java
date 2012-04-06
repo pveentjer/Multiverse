@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalHashMap_putAllTest {
 
@@ -23,7 +23,7 @@ public class NaiveTransactionalHashMap_putAllTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         map = new NaiveTransactionalHashMap<String, String>(stm);
     }
 
@@ -31,7 +31,7 @@ public class NaiveTransactionalHashMap_putAllTest {
     public void whenNullMap_thenNullPointerException() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 try {
                     map.putAll(null);
                     fail();
@@ -47,7 +47,7 @@ public class NaiveTransactionalHashMap_putAllTest {
     public void whenEmptyMapAdded() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 map.putAll(new HashMap<String, String>());
 
                 assertEquals(0, map.size());
@@ -64,7 +64,7 @@ public class NaiveTransactionalHashMap_putAllTest {
     public void whenAllDifferentItems() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -91,7 +91,7 @@ public class NaiveTransactionalHashMap_putAllTest {
     public void whenSomeItemsReplaced() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");

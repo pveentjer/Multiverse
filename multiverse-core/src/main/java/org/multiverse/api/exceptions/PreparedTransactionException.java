@@ -2,7 +2,7 @@ package org.multiverse.api.exceptions;
 
 /**
  * An {@link IllegalTransactionStateException} thrown when an operation is executed on a
- * {@link org.multiverse.api.Transaction} while the transaction is prepared.
+ * {@link org.multiverse.api.Txn} while the transaction is prepared.
  *
  * @author Peter Veentjer.
  */

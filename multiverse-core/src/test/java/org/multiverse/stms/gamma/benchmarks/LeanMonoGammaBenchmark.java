@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
 public class LeanMonoGammaBenchmark implements GammaConstants {
 
@@ -21,7 +21,7 @@ public class LeanMonoGammaBenchmark implements GammaConstants {
     public void testRead() {
         final long txCount = 5L * 1000 * 1000 * 1000;
         final GammaRef<String> ref1 = new GammaRef<String>(stm);
-        final LeanMonoGammaTransaction tx = new LeanMonoGammaTransaction(stm);
+        final LeanMonoGammaTxn tx = new LeanMonoGammaTxn(stm);
 
         final long startMs = System.currentTimeMillis();
 
@@ -43,7 +43,7 @@ public class LeanMonoGammaBenchmark implements GammaConstants {
     public void testWrite() {
         final long txCount = 1L * 1000 * 1000 * 1000;
         final GammaRef<String> ref1 = new GammaRef<String>(stm);
-        final LeanMonoGammaTransaction tx = new LeanMonoGammaTransaction(stm);
+        final LeanMonoGammaTxn tx = new LeanMonoGammaTxn(stm);
 
         final long startMs = System.currentTimeMillis();
 

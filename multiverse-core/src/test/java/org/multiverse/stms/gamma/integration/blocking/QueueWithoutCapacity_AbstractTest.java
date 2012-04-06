@@ -2,14 +2,14 @@ package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.LinkedList;
 
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstants {
 
@@ -31,7 +31,7 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 
@@ -100,8 +100,8 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
         public void push(final E item) {
             pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     pushedStack.push(btx, item);
                 }
             });
@@ -110,8 +110,8 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
         public E pop() {
             return popBlock.atomic(new AtomicClosure<E>() {
                 @Override
-                public E execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public E execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
 
                     if (!readyToPopStack.isEmpty(btx)) {
                         return readyToPopStack.pop(btx);
@@ -131,16 +131,16 @@ public abstract class QueueWithoutCapacity_AbstractTest implements GammaConstant
     class Stack<E> {
         final GammaRef<Node<E>> head = new GammaRef<Node<E>>(stm);
 
-        void push(GammaTransaction tx, E item) {
+        void push(GammaTxn tx, E item) {
             Node<E> newHead = new Node<E>(item, head.get());
             head.set(newHead);
         }
 
-        boolean isEmpty(GammaTransaction tx) {
+        boolean isEmpty(GammaTxn tx) {
             return head.isNull();
         }
 
-        E pop(GammaTransaction tx) {
+        E pop(GammaTxn tx) {
             Node<E> node = head.get();
 
             if (node == null) {

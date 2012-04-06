@@ -3,7 +3,7 @@
 Multiverse 0.7 was released at 1 May 2011 and was a total rewrite from the 0.6 release. The main features are:
 <ol>
     <li><b>Removal of the central clock</b>. The STM design before 0.7 was based on MVCC (TL2 to be more specific) and
-        although it is really amazing, and readonly transactions can be made really cheap, update transaction still need
+        although it is really amazing, and readonly txns can be made really cheap, update txn still need
         to contend for the
         central clock to increment. There are some optimizations that can be applied to remove contention on this clock,
         but the clock
@@ -14,16 +14,16 @@ Multiverse 0.7 was released at 1 May 2011 and was a total rewrite from the 0.6 r
     <li>
         <b>Isolation Levels</b>. Multiverse 0.7 supports the following isolation levels:
         <ul>
-            <li>read committed: where a transaction will only see committed state, but no other consistency guarantees
+            <li>read committed: where a txn will only see committed state, but no other consistency guarantees
                 are provided. Read committed isolation level
                 allows for much higher concurrency (it won't fail unlike the other isolation levels) and therefor scales
                 better, at the cost of reduced consistency. The
-                dirty read isolation level is not supported since a transaction will never see changes made by another
-                transaction.
+                dirty read isolation level is not supported since a txn will never see changes made by another
+                txn.
             </li>
             <li>repeatable read:</li>
             <li>snapshot: the Oracle version of the Serialized isolation level</li>
-            <li>serialized: provides a truly serialized execution of transaction where the writeskew problem is not
+            <li>serialized: provides a truly serialized execution of txn where the writeskew problem is not
                 allowed.
                 explicit support for enabling/disabling the writeskew problem from happening has been removed
             </li>
@@ -33,13 +33,13 @@ Multiverse 0.7 was released at 1 May 2011 and was a total rewrite from the 0.6 r
     <li>
         <b>Pessimistic locking: </b> to compensate for the optimistic behavior STM's normally provide. It can be done on
         the reference level using ensure/privatize,
-        but can also be done on the transaction level using the following pessimistic lock levels:
+        but can also be done on the txn level using the following pessimistic lock levels:
         <ul>
-            <li>None: default. Nothing is locked during the execution of the transaction.</li>
+            <li>None: default. Nothing is locked during the execution of the txn.</li>
             <li>Ensure writes: when this pessimistic lock level is used, you essentially get the same behavior as in the
                 Oracle database, where each update/delete/insert automatically is locked for the remaining duration of
                 the
-                transaction.
+                txn.
             </li>
             <li>Ensure reads</li>
             <li>Privatize writes</li>
@@ -58,14 +58,14 @@ Multiverse 0.7 was released at 1 May 2011 and was a total rewrite from the 0.6 r
     <li>
         <b>Improved performance: </b> a lot of effort was spend on improving the performance of the STM. One of the big
         improvements was the removal of all unwanted
-        object creation by adding an object pool to each transaction (which also can be reused).
+        object creation by adding an object pool to each txn (which also can be reused).
     </li>
 
     <li>
         <b>Atomic operations on refs</b> the api of the references has been improved greatly and one of the new features
         is support
         for atomic operations. Atomic operations are easier to do and a lot faster and can be a better solution than
-        using a transaction
+        using a txn
         where only one ref is updated. The following atomic operations are available:
         <ul>
             <li>atomicGet</li>

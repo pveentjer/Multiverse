@@ -1,7 +1,7 @@
 package org.multiverse.api;
 
 /**
- * A Factory responsible for creating a {@link Transaction}. To set properties on Transactions you need to look
+ * A Factory responsible for creating a {@link Txn}. To set properties on Transactions you need to look
  * at the {@link TxnFactoryBuilder}. It could be that over time different types of transactions are returned,
  * e.g. because the speculative behavior is enabled.
  *
@@ -25,9 +25,9 @@ public interface TxnFactory {
     TxnFactoryBuilder getTransactionFactoryBuilder();
 
     /**
-     * Creates a new {@link Transaction}.
+     * Creates a new {@link Txn}.
      *
-     * @return the created Transaction.
+     * @return the created Txn.
      */
-    Transaction newTransaction();
+    Txn newTransaction();
 }

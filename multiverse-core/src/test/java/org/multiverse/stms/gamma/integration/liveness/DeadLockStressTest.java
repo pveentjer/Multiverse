@@ -3,17 +3,17 @@ package org.multiverse.stms.gamma.integration.liveness;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class DeadLockStressTest {
 
@@ -31,7 +31,7 @@ public class DeadLockStressTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stop = false;
         stm = (GammaStm) getGlobalStmInstance();
     }
@@ -135,8 +135,8 @@ public class DeadLockStressTest {
         public void normal() {
             normalBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    doIt((GammaTransaction) tx);
+                public void execute(Txn tx) throws Exception {
+                    doIt((GammaTxn) tx);
                 }
             });
         }
@@ -144,8 +144,8 @@ public class DeadLockStressTest {
         public void privatizeReadLevel() {
             pessimisticReadLevelBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    doIt((GammaTransaction) tx);
+                public void execute(Txn tx) throws Exception {
+                    doIt((GammaTxn) tx);
                 }
             });
         }
@@ -153,13 +153,13 @@ public class DeadLockStressTest {
         public void privatizeWriteLevel() {
             pessimisticWriteLevelBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    doIt((GammaTransaction) tx);
+                public void execute(Txn tx) throws Exception {
+                    doIt((GammaTxn) tx);
                 }
             });
         }
 
-        public void doIt(GammaTransaction tx) {
+        public void doIt(GammaTxn tx) {
             for (int k = 0; k < refs.length; k++) {
                 if (!randomOneOf(10)) {
                     continue;

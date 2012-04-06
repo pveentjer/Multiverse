@@ -7,13 +7,13 @@ import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfiguration;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.sleepMs;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.setThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.setThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class GammaLongRef_atomicCompareAndSetTest {
@@ -25,7 +25,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
         GammaStmConfiguration config = new GammaStmConfiguration();
         config.maxRetries = 10;
         stm = new GammaStm(config);
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -34,7 +34,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         long newValue = 2;
@@ -55,7 +55,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         long newValue = 2;
@@ -76,8 +76,8 @@ public class GammaLongRef_atomicCompareAndSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.set(initialValue + 100);
 
         long newValue = 2;

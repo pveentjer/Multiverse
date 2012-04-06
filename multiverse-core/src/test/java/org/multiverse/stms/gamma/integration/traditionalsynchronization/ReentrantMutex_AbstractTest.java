@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.IntRef;
 import org.multiverse.api.references.Ref;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public abstract class ReentrantMutex_AbstractTest {
     protected GammaStm stm;
@@ -23,7 +23,7 @@ public abstract class ReentrantMutex_AbstractTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stop = false;
     }
 
@@ -84,7 +84,7 @@ public abstract class ReentrantMutex_AbstractTest {
         public void lock(final Thread thread) {
             lockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (owner.get() == null) {
                         owner.set(thread);
                         count.increment();
@@ -104,7 +104,7 @@ public abstract class ReentrantMutex_AbstractTest {
         public void unlock(final Thread thread) {
             unlockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (owner.get() != thread) {
                         throw new IllegalMonitorStateException();
                     }

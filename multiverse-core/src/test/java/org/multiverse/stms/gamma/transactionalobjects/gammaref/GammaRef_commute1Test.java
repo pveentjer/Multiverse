@@ -16,7 +16,7 @@ import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -27,7 +27,7 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -42,7 +42,7 @@ public class GammaRef_commute1Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -59,8 +59,8 @@ public class GammaRef_commute1Test {
         Long initialValue = 1L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         LongFunction function = Functions.incLongFunction(1);
         ref.commute(function);
 
@@ -72,7 +72,7 @@ public class GammaRef_commute1Test {
         assertRefHasNoLocks(ref);
         assertEquals(0, commuting.long_value);
         assertIsActive(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         tx.commit();
 
         assertEquals(new Long(2), ref.atomicGet());
@@ -88,8 +88,8 @@ public class GammaRef_commute1Test {
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         Function<Long> function = Functions.identityFunction();
         ref.commute(function);
 
@@ -101,7 +101,7 @@ public class GammaRef_commute1Test {
         assertRefHasNoLocks(ref);
         assertNull(commuting.ref_value);
         assertIsActive(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         tx.commit();
 
         assertEquals(initialValue, ref.atomicGet());
@@ -117,8 +117,8 @@ public class GammaRef_commute1Test {
         Long initalValue = 10L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initalValue);
         long version = ref.getVersion();
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         try {
             ref.commute(null);
@@ -160,8 +160,8 @@ public class GammaRef_commute1Test {
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.commit();
 
         LongFunction function = Functions.incLongFunction(1);
@@ -173,7 +173,7 @@ public class GammaRef_commute1Test {
         }
 
         assertIsCommitted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertWriteBiased(ref);
         assertRefHasNoLocks(ref);
@@ -186,8 +186,8 @@ public class GammaRef_commute1Test {
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.abort();
 
         LongFunction function = Functions.incLongFunction(1);
@@ -199,7 +199,7 @@ public class GammaRef_commute1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertWriteBiased(ref);
         assertRefHasNoLocks(ref);
@@ -212,8 +212,8 @@ public class GammaRef_commute1Test {
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.prepare();
 
         LongFunction function = Functions.incLongFunction(1);
@@ -225,7 +225,7 @@ public class GammaRef_commute1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertWriteBiased(ref);
         assertRefHasNoLocks(ref);
@@ -244,8 +244,8 @@ public class GammaRef_commute1Test {
         Long initialValue = 2L;
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         ref.getLock().acquire(lockMode);
         LongFunction function = Functions.incLongFunction(1);
@@ -265,7 +265,7 @@ public class GammaRef_commute1Test {
         assertSurplus(ref, 0);
         assertIsCommitted(tx);
         assertRefHasNoLocks(ref);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertEquals(new Long(3), ref.atomicGet());
     }
 
@@ -281,10 +281,10 @@ public class GammaRef_commute1Test {
         GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
         ref.getLock().acquire(otherTx, lockMode);
 
         LongFunction function = Functions.incLongFunction(1);
@@ -306,7 +306,7 @@ public class GammaRef_commute1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertOrecValue(ref, orecValue);
         assertVersionAndValue(ref, version, initialValue);
     }

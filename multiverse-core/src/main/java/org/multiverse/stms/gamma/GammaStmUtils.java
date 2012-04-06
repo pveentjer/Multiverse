@@ -1,12 +1,12 @@
 package org.multiverse.stms.gamma;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static java.lang.String.format;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public final class GammaStmUtils {
 
@@ -18,28 +18,28 @@ public final class GammaStmUtils {
         }
     }
 
-    public static GammaTransaction getRequiredThreadLocalGammaTransaction() {
-        final Transaction tx = getThreadLocalTransaction();
+    public static GammaTxn getRequiredThreadLocalGammaTxn() {
+        final Txn tx = getThreadLocalTxn();
 
         if (tx == null) {
             throw new TransactionMandatoryException();
         }
 
-        return asGammaTransaction(tx);
+        return asGammaTxn(tx);
     }
 
-    public static GammaTransaction asGammaTransaction(final Transaction tx) {
-        if (tx instanceof GammaTransaction) {
-            return (GammaTransaction) tx;
+    public static GammaTxn asGammaTxn(final Txn tx) {
+        if (tx instanceof GammaTxn) {
+            return (GammaTxn) tx;
         }
 
         if (tx == null) {
-            throw new NullPointerException("Transaction can't be null");
+            throw new NullPointerException("Txn can't be null");
         }
 
         tx.abort();
         throw new ClassCastException(
-                format("Expected Transaction of class %s, found %s", GammaTransaction.class.getName(), tx.getClass().getName()));
+                format("Expected Txn of class %s, found %s", GammaTxn.class.getName(), tx.getClass().getName()));
     }
 
     public static boolean longAsBoolean(long value) {

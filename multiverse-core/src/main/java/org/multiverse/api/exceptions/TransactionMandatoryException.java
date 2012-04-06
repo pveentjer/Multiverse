@@ -3,7 +3,7 @@ package org.multiverse.api.exceptions;
 import static java.lang.String.format;
 
 /**
- * A {@link PropagationException} thrown when no {@link org.multiverse.api.Transaction} is available while it is mandatory. A typical
+ * A {@link PropagationException} thrown when no {@link org.multiverse.api.Txn} is available while it is mandatory. A typical
  * cause of this exception is that the {@link org.multiverse.api.PropagationLevel#Mandatory} is used.
  *
  * @author Peter Veentjer

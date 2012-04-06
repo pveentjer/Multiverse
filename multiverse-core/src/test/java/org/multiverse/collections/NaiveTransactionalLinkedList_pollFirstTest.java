@@ -4,14 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalLinkedList_pollFirstTest {
 
@@ -21,7 +21,7 @@ public class NaiveTransactionalLinkedList_pollFirstTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         list = new NaiveTransactionalLinkedList<String>(stm);
     }
 
@@ -29,7 +29,7 @@ public class NaiveTransactionalLinkedList_pollFirstTest {
     public void whenEmpty(){
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 String item = list.pollFirst();
 
                 assertNull(item);
@@ -43,7 +43,7 @@ public class NaiveTransactionalLinkedList_pollFirstTest {
     public void whenMultipleItems(){
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.offerLast("1");
                 list.offerLast("2");
                 list.offerLast("3");
@@ -61,7 +61,7 @@ public class NaiveTransactionalLinkedList_pollFirstTest {
     public void whenSingleItem(){
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 String item = "1";
                 list.put(item);
 

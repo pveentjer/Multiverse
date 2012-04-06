@@ -32,7 +32,7 @@ can be done in 2 ways:
     the TransactionalLinkedList or the TransactionalTreeMap without relying on
     instrumentation. It also means that it is possible to combine transactional
     datastructures written in different JVM based languages, in the same STM.
-    So in theory a transaction started in Akka/Scala can participate in accessing
+    So in theory a txn started in Akka/Scala can participate in accessing
     datastructures written in Java or in JRuby.
 <p>
     A short note on thread locals and global variables: some are used in Multiverse to
@@ -58,7 +58,7 @@ project also helps make Multiverse a success.
 <h2 id="quick.solution">Quick solution</h2>
 The easiest way to intregrate Multiverse in another language is to use a <tt>ProgrammaticReference</tt> API (introduced
 in Multiverse 0.5) in combination with the <tt>TransactionalTemplate</tt>. The <tt>ProgrammaticReference</tt> is a
-reference that can be used inside transactions, so you have all the isolation and atomicity functionality and blocking
+reference that can be used inside txns, so you have all the isolation and atomicity functionality and blocking
 operations also are not a problem.
 E.g.
 <pre>
@@ -85,15 +85,15 @@ is a ProgrammaticLong (that includes the commuting inc operation, nice for colle
 size field).
 <p>
     The <tt>ProgrammaticReference</tt> contains different sets of methods for different purposes;
-    some require a transaction (so you need to pass a transaction on from the outside), some
+    some require a txn (so you need to pass a txn on from the outside), some
     start their own if one isn't running. Some of them are meant to make the
     <tt>ProgrammaticReference</tt> easy to use, some are meant to give you perfect control
     on transactional behavior. The ProgrammaticReference also contains atomic methods, that
-    completely ignore any current running transaction. These calls are very fast (in
+    completely ignore any current running txn. These calls are very fast (in
     case of an atomicGet only a volatile read needs to be done, the atomicSet/atomicCompareAndSet
     methods are a little bit more expensive.
 <p>
-    The <tt>TransactionTemplate</tt> contains the transaction handling logic like starting, retrying, blocking,
+    The <tt>TransactionTemplate</tt> contains the txn handling logic like starting, retrying, blocking,
     committing or aborting, e.g.:
 <pre>
     public void transfer(final Account from, final Account to, final int amount){
@@ -129,7 +129,7 @@ For more information check the <a href="manual-templates.html#transactiontemplat
 </pre>
 If you don't do this, you won't give the txFactory any chance to learn (see the setSpeculativeConfiguration on
 the TransactionFactoryBuilder for more details). Settings like readonly, automatic readtracking
-and optimal transaction length can be infered at runtime. So no need to bother a user with
+and optimal txn length can be infered at runtime. So no need to bother a user with
 it in most cases. In the future more selflearning optimizations will be added through this
 mechanism.
 <p>
@@ -145,17 +145,17 @@ Although the <tt>AlphaRef</tt>/
 object creation, and because there is extra indirection between the reference and its value.
 Using instrumentation a lot of this overhead can be removed:
 <ol>
-    <li>Inlining the transaction logic in the method and also reducing the need to box/unbox primitives returned by a
+    <li>Inlining the txn logic in the method and also reducing the need to box/unbox primitives returned by a
         method. Perhaps that the JIT (already) is able to do it, but in this case we are 100% certain.
     </li>
     <li>
-        Reducing stress on the transaction by using object granularity instead of field granularity (lower memory
-        usage and commits/aborts are a lot faster). Multiverse uses different transactions based on the expected
-        transaction length (Multiverse learns from a running system). In the future a lot more of this intelligence
+        Reducing stress on the txn by using object granularity instead of field granularity (lower memory
+        usage and commits/aborts are a lot faster). Multiverse uses different txns based on the expected
+        txn length (Multiverse learns from a running system). In the future a lot more of this intelligence
         will be added.
     </li>
     <li>
-        Cheaper managed reference field access: instead of retrieving the tranlocal (transaction local content of
+        Cheaper managed reference field access: instead of retrieving the tranlocal (txn local content of
         a transactional object) for each and every write, the tranlocal for the 'this' will be added as extra
         argument to each instance method of a transactional object. So accessing fields are not much more expensive
         then they originally were (OK, you need to push more stuff on the stack and the JIT could have a harder time
@@ -164,17 +164,17 @@ Using instrumentation a lot of this overhead can be removed:
         once the instrumentation could decide to optimize this as well.
     </li>
     <li>
-        Cheaper transaction reference access. instead of accessing the ThreadLocalTransaction,
+        Cheaper txn reference access. instead of accessing the ThreadLocalTransaction,
         it also can be added as argument to each method.
     </li>
     <li>
         Completely bypassing transactional logic, you can also optimize transactional methods that call other
         transactional methods by moving the call from the original method to an enhanced version that already
-        expects a transaction to have been started.
+        expects a txn to have been started.
     </li>
     <li>
-        Completely inlining the transaction, so that very simple methods like getters/setters that don't rely on having
-        an explicit transaction object become even cheaper.
+        Completely inlining the txn, so that very simple methods like getters/setters that don't rely on having
+        an explicit txn object become even cheaper.
     </li>
 </ol>
 At the moment, not all optimizations are realized, but in the future they will be and perhaps new optimizations will be found and added.
@@ -195,7 +195,7 @@ pre/post commit tasks can be added on top by the software.
 
 
 <h2 id="exception.handling">Exception Handling</h2>
-Multiverse uses a org.multiverse.api.exceptions.ControlFlowError to rely on the transaction template
+Multiverse uses a org.multiverse.api.exceptions.ControlFlowError to rely on the txn template
 and the instrumentation to do it works. Other exceptions like the ReadConflict, WriteConflict
 etc extend from his ControlFlowError. So as long as you don't catch this error in
 your integration, you are alright. If you do catch this error, the transactiontemplate

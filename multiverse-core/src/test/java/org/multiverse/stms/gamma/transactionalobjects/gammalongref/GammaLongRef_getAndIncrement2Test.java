@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertIsAborted;
 import static org.multiverse.TestUtils.assertIsCommitted;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
 @RunWith(Parameterized.class)
@@ -38,7 +38,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -69,7 +69,7 @@ public class GammaLongRef_getAndIncrement2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.commit();
         try {
             ref.getAndIncrement(tx, 10);
@@ -86,7 +86,7 @@ public class GammaLongRef_getAndIncrement2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
         try {
             ref.getAndIncrement(tx, 10);
@@ -103,7 +103,7 @@ public class GammaLongRef_getAndIncrement2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
         try {
             ref.getAndIncrement(tx, 10);
@@ -120,7 +120,7 @@ public class GammaLongRef_getAndIncrement2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndIncrement(tx, 0);
         tx.commit();
 
@@ -134,7 +134,7 @@ public class GammaLongRef_getAndIncrement2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndIncrement(tx, 20);
         tx.commit();
 

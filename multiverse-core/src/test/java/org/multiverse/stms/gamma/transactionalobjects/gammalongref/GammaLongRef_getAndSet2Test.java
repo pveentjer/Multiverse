@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -20,8 +20,8 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -36,7 +36,7 @@ public class GammaLongRef_getAndSet2Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -67,7 +67,7 @@ public class GammaLongRef_getAndSet2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
 
         try {
@@ -84,7 +84,7 @@ public class GammaLongRef_getAndSet2Test {
     public void whenAbortedTransaction_thenDeadTransactionException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.abort();
 
         try {
@@ -101,7 +101,7 @@ public class GammaLongRef_getAndSet2Test {
     public void whenCommittedTransaction_thenCommittedTransactionException() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.commit();
 
         try {
@@ -119,7 +119,7 @@ public class GammaLongRef_getAndSet2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndSet(tx, 20);
         tx.commit();
 
@@ -132,7 +132,7 @@ public class GammaLongRef_getAndSet2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndSet(tx, 20);
         tx.commit();
 
@@ -145,14 +145,14 @@ public class GammaLongRef_getAndSet2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long value = ref.getAndSet(tx, 10);
         tx.commit();
 
         assertEquals(10, value);
         assertIsCommitted(tx);
         assertEquals(10, ref.atomicGet());
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertVersionAndValue(ref, version, 10);
     }
@@ -169,7 +169,7 @@ public class GammaLongRef_getAndSet2Test {
 
         sleepMs(500);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndSet(tx, newValue);
         tx.commit();
 

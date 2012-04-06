@@ -29,7 +29,7 @@ public interface OrElseBlock extends MultiverseConstants{
     * @return the result of the execution.
 #end
     * @throws NullPointerException if either or orelse is null.
-    * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+    * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the closure.
     */
     ${closure.typeParameter} ${closure.type} execute(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse);
@@ -44,7 +44,7 @@ public interface OrElseBlock extends MultiverseConstants{
     * @return the result of the execution.
 #end
     * @throws NullPointerException if either or orelse is null.
-    * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the ThreadLocalTransaction.
+    * @throws org.multiverse.api.exceptions.TransactionMandatoryException if no transaction is found on the TxnThreadLocal.
     * @throws Exception if the execute call fails.
     */
     ${closure.typeParameter} ${closure.type} executeChecked(${closure.name}${closure.typeParameter} either, ${closure.name}${closure.typeParameter} orelse)throws Exception;

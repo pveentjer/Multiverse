@@ -2,7 +2,7 @@ package org.multiverse.api;
 
 /**
  * With the PropagationLevel you have control on how the {@link TxnExecutor} reacts on the existence or the non existence
- * of a {@link Transaction}.
+ * of a {@link Txn}.
  *
  * @author Peter Veentjer.
  * @see TxnFactoryBuilder#setPropagationLevel(PropagationLevel)

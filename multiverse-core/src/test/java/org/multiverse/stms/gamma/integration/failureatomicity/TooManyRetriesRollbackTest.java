@@ -3,20 +3,20 @@ package org.multiverse.stms.gamma.integration.failureatomicity;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class TooManyRetriesRollbackTest {
     private GammaLongRef modifyRef;
@@ -26,7 +26,7 @@ public class TooManyRetriesRollbackTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         modifyRef = new GammaLongRef(stm);
         retryRef = new GammaLongRef(stm);
@@ -56,8 +56,8 @@ public class TooManyRetriesRollbackTest {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
 
                 modifyRef.getAndSet(btx, value);
 
@@ -80,8 +80,8 @@ public class TooManyRetriesRollbackTest {
                     .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
 
                     long value = retryRef.get(btx);
                     retryRef.getAndSet(btx, value + 2);

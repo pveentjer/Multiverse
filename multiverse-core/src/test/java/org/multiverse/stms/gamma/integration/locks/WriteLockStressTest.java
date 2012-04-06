@@ -5,13 +5,13 @@ import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class WriteLockStressTest {
     private GammaStm stm;
 
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 

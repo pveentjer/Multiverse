@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicIntClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * A StressTest that simulates a database connection pool. The code is quite ugly, but that is because
@@ -36,7 +36,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
     }
@@ -86,7 +86,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         ConnectionPool(final int poolsize) {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) {
+                public void execute(Txn tx) {
                     size.set(poolsize);
 
                     Node<Connection> h = null;
@@ -101,7 +101,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         Connection takeConnection() {
             return takeConnectionBlock.atomic(new AtomicClosure<Connection>() {
                 @Override
-                public Connection execute(Transaction tx) {
+                public Connection execute(Txn tx) {
                     if (size.get() == 0) {
                         tx.retry();
                     }
@@ -117,7 +117,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         void returnConnection(final Connection c) {
             returnConnectionBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     size.incrementAndGet(1);
 
                     Node<Connection> oldHead = head.get();
@@ -129,7 +129,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         int size() {
             return sizeBlock.atomic(new AtomicIntClosure() {
                 @Override
-                public int execute(Transaction tx) throws Exception {
+                public int execute(Txn tx) throws Exception {
                     return size.get();
                 }
             });

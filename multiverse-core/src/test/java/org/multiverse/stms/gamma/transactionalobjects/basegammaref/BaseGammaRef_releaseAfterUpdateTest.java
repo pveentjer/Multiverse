@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertRefHasNoLocks;
@@ -28,7 +28,7 @@ public class BaseGammaRef_releaseAfterUpdateTest implements GammaConstants {
         String initialValue = "initialValue";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_EXCLUSIVE);
         tranlocal.isDirty = true;
 
@@ -46,7 +46,7 @@ public class BaseGammaRef_releaseAfterUpdateTest implements GammaConstants {
     public void writeBiased_whenLongRef() {
         GammaLongRef ref = new GammaLongRef(stm, 0);
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_EXCLUSIVE);
         tranlocal.isDirty = true;
 
@@ -63,7 +63,7 @@ public class BaseGammaRef_releaseAfterUpdateTest implements GammaConstants {
         String initialValue = "initialValue";
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_EXCLUSIVE);
         tranlocal.isDirty = true;
 
@@ -81,7 +81,7 @@ public class BaseGammaRef_releaseAfterUpdateTest implements GammaConstants {
     public void readBiased_whenLongRef() {
         GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 0));
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_EXCLUSIVE);
         tranlocal.isDirty = true;
 

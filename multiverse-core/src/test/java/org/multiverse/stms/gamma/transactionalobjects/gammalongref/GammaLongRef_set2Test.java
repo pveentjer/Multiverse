@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertIsAborted;
 import static org.multiverse.TestUtils.assertIsCommitted;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
 @RunWith(Parameterized.class)
@@ -38,7 +38,7 @@ public class GammaLongRef_set2Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -69,7 +69,7 @@ public class GammaLongRef_set2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
         try {
             ref.set(tx, 20);
@@ -86,7 +86,7 @@ public class GammaLongRef_set2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.abort();
         try {
             ref.set(tx, 20);
@@ -103,7 +103,7 @@ public class GammaLongRef_set2Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.commit();
         try {
             ref.set(tx, 20);
@@ -119,7 +119,7 @@ public class GammaLongRef_set2Test {
     public void test() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         long value = ref.get(tx);
 
         assertEquals(10, value);

@@ -6,11 +6,11 @@ import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * A Test that checks if the writeskew problem is happening. When
@@ -51,7 +51,7 @@ public class WriteSkewStressTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         customer1 = new Customer();
         customer2 = new Customer();
         stop = false;
@@ -63,7 +63,7 @@ public class WriteSkewStressTest {
         }
 
         GammaLongRef account = customer1.getRandomAccount();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         account.openForWrite(tx, LOCKMODE_NONE).long_value = 1000;
         tx.commit();
     }
@@ -107,8 +107,8 @@ public class WriteSkewStressTest {
         Customer customer1 = new Customer();
         Customer customer2 = new Customer();
 
-        GammaTransaction tx1 = stm.newDefaultTransaction();
-        GammaTransaction tx2 = stm.newDefaultTransaction();
+        GammaTxn tx1 = stm.newDefaultTransaction();
+        GammaTxn tx2 = stm.newDefaultTransaction();
 
         customer1.account1.get(tx1);
         customer1.account2.get(tx1);
@@ -151,12 +151,12 @@ public class WriteSkewStressTest {
         Customer customer1 = new Customer();
         Customer customer2 = new Customer();
 
-        GammaTransaction tx1 = stm.newTransactionFactoryBuilder()
+        GammaTxn tx1 = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
                 .newTransaction();
-        GammaTransaction tx2 = stm.newTransactionFactoryBuilder()
+        GammaTxn tx2 = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setWriteLockMode(LockMode.Read)
                 .newTransactionFactory()
@@ -298,8 +298,8 @@ public class WriteSkewStressTest {
         private void runWithPessimisticReadLevel() {
             pessimisticReadsBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
             });
@@ -308,8 +308,8 @@ public class WriteSkewStressTest {
         private void runWithPessimisticWriteLevel() {
             pessimisticWritesBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
             });
@@ -318,8 +318,8 @@ public class WriteSkewStressTest {
         private void runWithSerializedIsolation() {
             serializedBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
             });
@@ -328,8 +328,8 @@ public class WriteSkewStressTest {
         private void runWithSnapshotIsolation() {
             snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.None);
                 }
             });
@@ -338,8 +338,8 @@ public class WriteSkewStressTest {
         private void runWithPessimisticReads() {
             snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.Read, LockMode.None);
                 }
             });
@@ -348,14 +348,14 @@ public class WriteSkewStressTest {
         private void runWithPessimisticWrites() {
             snapshotBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     run(btx, LockMode.None, LockMode.Read);
                 }
             });
         }
 
-        public void run(GammaTransaction tx, LockMode readLockMode, LockMode writeLockMode) {
+        public void run(GammaTxn tx, LockMode readLockMode, LockMode writeLockMode) {
             int amount = randomInt(100);
 
             Customer from = random(customer1, customer2);

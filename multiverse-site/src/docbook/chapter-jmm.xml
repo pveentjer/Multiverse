@@ -40,8 +40,8 @@
     <sect1>
         <title>Transaction rule</title>
         <para>
-            Multiverse also provides a happens before rule called the transaction rule. It guarantees that a
-            write on a transactional object is visible after the transaction commits and before another transaction
+            Multiverse also provides a happens before rule called the txn rule. It guarantees that a
+            write on a transactional object is visible after the txn commits and before another txn
             reads the same transactional object. On a lower level this is realized by lifting on the volatile variable
             or lock rule.
         </para>
@@ -69,12 +69,12 @@
           }
      }
         </programlisting>
-        In this example there is a happens before relation between the commit of the write transaction and the start of
-        the read transaction.
+        In this example there is a happens before relation between the commit of the write txn and the start of
+        the read txn.
         </para>
 
         <para>
-            For developers this means that you don't need to worry about the JMM when transactions are used and
+            For developers this means that you don't need to worry about the JMM when txns are used and
             you don't need to define variable as volatile or synchronized blocks to introduce the needed memory
             fences; this is all done for you.
         </para>

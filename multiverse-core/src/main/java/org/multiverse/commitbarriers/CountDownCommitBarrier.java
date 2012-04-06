@@ -1,6 +1,6 @@
 package org.multiverse.commitbarriers;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnStatus;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
@@ -20,7 +20,7 @@ import static java.lang.String.format;
  * experience with that functionality, this one should feel familiar.
  * <p/>
  * A {@code CountDownCommitBarrier} is initialized with a given <em>count</em>. The
- * {@link #joinCommit(org.multiverse.api.Transaction)}  await} methods block until the current count reaches
+ * {@link #joinCommit(org.multiverse.api.Txn)}  await} methods block until the current count reaches
  * zero due to invocations of the {@link #countDown} method, after which  all waiting threads are released. Unlike the
  * CountDownLatch, it isn't allowed for a new transaction to call one of the join methods after the barrier has
  * aborted or committed.
@@ -131,7 +131,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
      * <p/>
      * This method is not transactional, so be very careful calling it within a transaction. Transactions can be
      * retried, so this method could be called more than once. This means that the number of added parties could
-     * be completely bogus. For a transactional version see {@link #incParties(org.multiverse.api.Transaction, int)}.
+     * be completely bogus. For a transactional version see {@link #incParties(org.multiverse.api.Txn, int)}.
      *
      * @param extra the additional parties.
      * @throws IllegalArgumentException   if extra smaller than 0.
@@ -170,7 +170,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
      * Increases the number of parties that need to return before this CommitBarrier can open.
      * The parties are only increased after the transaction has committed.
      * <p/>
-     * If extra is 0, this call is ignored (unless the Transaction is not active, then a
+     * If extra is 0, this call is ignored (unless the Txn is not active, then a
      * IllegalTransactionState will be thrown.
      * <p/>
      * This is the call you want to use when you are doing an atomicIncParties inside a transaction.
@@ -186,7 +186,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
      *                                  if the transaction is not in the correct
      *                                  state for this operation (so not active).
      */
-    public void incParties(Transaction tx, int extra) {
+    public void incParties(Txn tx, int extra) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -248,7 +248,7 @@ public final class CountDownCommitBarrier extends CommitBarrier {
         }
 
         @Override
-        public void notify(Transaction tx, TransactionEvent event) {
+        public void notify(Txn tx, TransactionEvent event) {
             //todo: in the 0.6 release of multiverse this was pre-abort.. but since the pre-abort doesn't
             //exist anymore..
             if (event != TransactionEvent.PostAbort) {

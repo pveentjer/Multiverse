@@ -5,11 +5,11 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class AbaTest {
     private GammaStm stm;
@@ -17,14 +17,14 @@ public class AbaTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
     public void test() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);

@@ -2,19 +2,19 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.functions.Function;
 import org.multiverse.api.lifecycle.TransactionListener;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.multiverse.TestUtils.assertInstanceof;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
@@ -34,7 +34,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -44,7 +44,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
             refs[k] = new GammaRef<Long>(stm, 0L);
         }
 
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final AtomicInteger attempt = new AtomicInteger(1);
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
@@ -55,10 +55,10 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 System.out.println(tx.getClass());
-                assertSame(tx, getThreadLocalTransaction());
-                GammaTransaction btx = (GammaTransaction) tx;
+                assertSame(tx, getThreadLocalTxn());
+                GammaTxn btx = (GammaTxn) tx;
                 assertEquals(attempt.get(), tx.getAttempt());
                 attempt.incrementAndGet();
 
@@ -75,15 +75,15 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         }
 
         assertEquals(4, transactions.size());
-        assertInstanceof(LeanMonoGammaTransaction.class, transactions.get(0));
-        assertInstanceof(LeanFixedLengthGammaTransaction.class, transactions.get(1));
-        assertInstanceof(FatVariableLengthGammaTransaction.class, transactions.get(2));
-        assertInstanceof(FatVariableLengthGammaTransaction.class, transactions.get(3));
+        assertInstanceof(LeanMonoGammaTxn.class, transactions.get(0));
+        assertInstanceof(LeanFixedLengthGammaTxn.class, transactions.get(1));
+        assertInstanceof(FatVariableLengthGammaTxn.class, transactions.get(2));
+        assertInstanceof(FatVariableLengthGammaTxn.class, transactions.get(3));
     }
 
     @Test
     public void whenCommute() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaRef<String> ref = new GammaRef<String>(stm);
         final Function<String> function = mock(Function.class);
 
@@ -94,21 +94,21 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.commute(btx, function);
             }
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
     @Test
     public void whenEnsure() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaRef<String> ref = new GammaRef<String>(stm);
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
@@ -118,8 +118,8 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.get(btx);
                 ref.ensure(btx);
@@ -127,14 +127,14 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
 
     @Test
     public void whenConstructing() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setSpeculative(true)
@@ -143,8 +143,8 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
 
                 new GammaRef(btx);
@@ -152,13 +152,13 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
     @Test
     public void whenNonRef() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaLongRef ref = new GammaLongRef(stm);
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
@@ -168,21 +168,21 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.get(tx);
             }
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
     @Test
     public void whenExplicitLocking() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final GammaRef ref = new GammaRef(stm);
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
@@ -192,21 +192,21 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
                 ref.getLock().acquire(LockMode.Read);
             }
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
     @Test
     public void whenNormalListenerAdded() {
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
         final AtomicBoolean added = new AtomicBoolean();
         final TransactionListener listener = mock(TransactionListener.class);
 
@@ -217,9 +217,9 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                assertSame(tx, getThreadLocalTransaction());
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                assertSame(tx, getThreadLocalTxn());
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
 
                 if (!added.get()) {
@@ -230,8 +230,8 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         });
 
         assertEquals(2, transactions.size());
-        assertTrue(transactions.get(0) instanceof LeanMonoGammaTransaction);
-        assertTrue(transactions.get(1) instanceof FatMonoGammaTransaction);
+        assertTrue(transactions.get(0) instanceof LeanMonoGammaTxn);
+        assertTrue(transactions.get(1) instanceof FatMonoGammaTxn);
     }
 
     @Test
@@ -239,7 +239,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
         final GammaLongRef ref1 = new GammaLongRef(stm);
         final GammaLongRef ref2 = new GammaLongRef(stm);
 
-        final List<GammaTransaction> transactions = new LinkedList<GammaTransaction>();
+        final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
 
         TxnExecutor block = stm.newTransactionFactoryBuilder()
                 .setTimeoutNs(1000)
@@ -249,9 +249,9 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
         block.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                assertSame(tx, getThreadLocalTransaction());
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                assertSame(tx, getThreadLocalTxn());
+                GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
 
                 if (transactions.size() == 1) {

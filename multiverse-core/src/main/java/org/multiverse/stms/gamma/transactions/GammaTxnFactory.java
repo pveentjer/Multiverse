@@ -13,9 +13,9 @@ public interface GammaTxnFactory extends TxnFactory {
     GammaTxnConfiguration getConfiguration();
 
     @Override
-    GammaTransaction newTransaction();
+    GammaTxn newTransaction();
 
-    GammaTransaction newTransaction(GammaTransactionPool pool);
+    GammaTxn newTransaction(GammaTxnPool pool);
 
-    GammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction tx, GammaTransactionPool pool);
+    GammaTxn upgradeAfterSpeculativeFailure(GammaTxn tx, GammaTxnPool pool);
 }

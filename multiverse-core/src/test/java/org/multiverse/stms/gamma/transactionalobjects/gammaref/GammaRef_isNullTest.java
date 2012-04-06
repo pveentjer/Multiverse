@@ -7,11 +7,11 @@ import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
 public class GammaRef_isNullTest {
@@ -21,7 +21,7 @@ public class GammaRef_isNullTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -60,8 +60,8 @@ public class GammaRef_isNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         assertFalse(ref.isNull());
         ref.set(tx, null);
         assertTrue(ref.isNull());
@@ -76,8 +76,8 @@ public class GammaRef_isNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         tx.prepare();
 
         try {
@@ -87,7 +87,7 @@ public class GammaRef_isNullTest {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertEquals(initialVersion, ref.getVersion());
         assertVersionAndValue(ref, initialVersion, initialValue);
     }
@@ -98,9 +98,9 @@ public class GammaRef_isNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.commit();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.isNull();
@@ -110,7 +110,7 @@ public class GammaRef_isNullTest {
         }
 
         assertIsCommitted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, initialVersion, initialValue);
     }
 
@@ -120,9 +120,9 @@ public class GammaRef_isNullTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.isNull();
@@ -132,7 +132,7 @@ public class GammaRef_isNullTest {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, initialVersion, initialValue);
     }
 }

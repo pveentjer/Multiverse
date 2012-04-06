@@ -2,17 +2,17 @@ package org.multiverse.stms.gamma.transactionalobjects;
 
 import org.multiverse.api.Lock;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.PanicError;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.utils.ToolUnsafe;
 import sun.misc.Unsafe;
 
 import static java.lang.String.format;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 @SuppressWarnings({"OverlyComplexClass"})
 public abstract class AbstractGammaObject implements GammaObject, Lock {
@@ -141,7 +141,7 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
 
     @Override
     public final LockMode getLockMode() {
-        final GammaTransaction tx = (GammaTransaction) getThreadLocalTransaction();
+        final GammaTxn tx = (GammaTxn) getThreadLocalTxn();
 
         if (tx == null) {
             throw new TransactionMandatoryException();
@@ -151,11 +151,11 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
     }
 
     @Override
-    public final LockMode getLockMode(final Transaction tx) {
-        return getLockMode((GammaTransaction) tx);
+    public final LockMode getLockMode(final Txn tx) {
+        return getLockMode((GammaTxn) tx);
     }
 
-    public final LockMode getLockMode(final GammaTransaction tx) {
+    public final LockMode getLockMode(final GammaTxn tx) {
         final GammaRefTranlocal tranlocal = tx.locate((BaseGammaRef) this);
 
         if (tranlocal == null) {

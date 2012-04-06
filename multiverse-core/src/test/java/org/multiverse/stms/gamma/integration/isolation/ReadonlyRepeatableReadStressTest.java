@@ -5,16 +5,16 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class ReadonlyRepeatableReadStressTest {
 
@@ -26,7 +26,7 @@ public class ReadonlyRepeatableReadStressTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         ref = new GammaLongRef(stm);
         stop = false;
@@ -64,8 +64,8 @@ public class ReadonlyRepeatableReadStressTest {
                     .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.getAndSet(btx, ref.get(btx));
                 }
             };
@@ -92,8 +92,8 @@ public class ReadonlyRepeatableReadStressTest {
 
         private final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
 
                 long firstTime = ref.get(btx);
                 sleepRandomMs(2);

@@ -8,7 +8,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -31,7 +31,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
@@ -56,7 +56,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
     public void writeBiased_whenRead(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         GammaRefTranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
 
         ref.releaseAfterFailure(tranlocal, tx.pool);
@@ -81,7 +81,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
     public void writeBiased_whenWrite(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
         tranlocal.isDirty = true;
 
@@ -104,7 +104,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
         GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
@@ -138,7 +138,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
             ref.arrive(1);
         }
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
 
         ref.releaseAfterFailure(tranlocal, tx.pool);
@@ -172,7 +172,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
             ref.arrive(1);
         }
 
-        GammaTransaction tx = newArrivingTransaction(stm);
+        GammaTxn tx = newArrivingTransaction(stm);
         GammaRefTranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
         tranlocal.isDirty = true;
 
@@ -191,7 +191,7 @@ public class BaseGammaRef_releaseAfterFailureTest implements GammaConstants {
 
     @Test
     public void whenConstructing() {
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         GammaLongRef ref = new GammaLongRef(tx, 0);
         GammaRefTranlocal tranlocal = tx.locate(ref);
 

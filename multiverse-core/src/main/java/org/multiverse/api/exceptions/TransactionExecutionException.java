@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link RuntimeException} thrown when something fails while executing a {@link org.multiverse.api.Transaction}.
+ * A {@link RuntimeException} thrown when something fails while executing a {@link org.multiverse.api.Txn}.
  *
  * <p>This exception is not caught by the {@link org.multiverse.api.TxnExecutor}.
  *

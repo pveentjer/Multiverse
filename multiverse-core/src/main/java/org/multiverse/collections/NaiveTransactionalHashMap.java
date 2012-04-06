@@ -1,7 +1,7 @@
 package org.multiverse.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TransactionalCollection;
 import org.multiverse.api.collections.TransactionalSet;
 import org.multiverse.api.exceptions.TodoException;
@@ -54,7 +54,7 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
     }
 
     @Override
-    public void clear(Transaction tx) {
+    public void clear(Txn tx) {
         if (size.get(tx) == 0) {
             return;
         }
@@ -67,17 +67,17 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
     }
 
     @Override
-    public int size(Transaction tx) {
+    public int size(Txn tx) {
         return size.get(tx);
     }
 
     @Override
-    public V get(Transaction tx, Object key) {
+    public V get(Txn tx, Object key) {
         NaiveEntry<K, V> entry = getEntry(tx, key);
         return entry == null ? null : entry.value.get(tx);
     }
 
-    private NaiveEntry<K, V> getEntry(Transaction tx, Object key) {
+    private NaiveEntry<K, V> getEntry(Txn tx, Object key) {
         if (key == null) {
             return null;
         }
@@ -98,7 +98,7 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
     }
 
     @Override
-    public V put(Transaction tx, K key, V value) {
+    public V put(Txn tx, K key, V value) {
         if (key == null) {
             throw new NullPointerException();
         }
@@ -120,7 +120,7 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
         return null;
     }
 
-    void addEntry(Transaction tx, int hash, K key, V value, int bucketIndex) {
+    void addEntry(Txn tx, int hash, K key, V value, int bucketIndex) {
         NaiveEntry<K, V> e = table.get(tx)[bucketIndex].get(tx);
         table.get(tx)[bucketIndex].set(new NaiveEntry<K, V>(hash, key, value, e));
         size.increment(tx);
@@ -129,7 +129,7 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
         }
     }
 
-    void resize(Transaction tx, int newCapacity) {
+    void resize(Txn tx, int newCapacity) {
         Ref<NaiveEntry>[] oldTable = table.get(tx);
         int oldCapacity = oldTable.length;
         if (oldCapacity == MAXIMUM_CAPACITY) {
@@ -147,7 +147,7 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
         threshold.set(tx, (int) (newCapacity * loadFactor));
     }
 
-    void transfer(Transaction tx, Ref<NaiveEntry>[] newTable) {
+    void transfer(Txn tx, Ref<NaiveEntry>[] newTable) {
         Ref<NaiveEntry>[] src = table.get(tx);
         int newCapacity = newTable.length;
         for (int j = 0; j < src.length; j++) {
@@ -170,12 +170,12 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
     }
 
     @Override
-    public V remove(Transaction tx, Object key) {
+    public V remove(Txn tx, Object key) {
         throw new TodoException();
     }
 
     @Override
-    public String toString(Transaction tx) {
+    public String toString(Txn tx) {
         int s = size.get(tx);
         if (s == 0) {
             return "[]";
@@ -185,27 +185,27 @@ public final class NaiveTransactionalHashMap<K, V> extends AbstractTransactional
     }
 
     @Override
-    public TransactionalSet<Entry<K, V>> entrySet(Transaction tx) {
+    public TransactionalSet<Entry<K, V>> entrySet(Txn tx) {
         throw new TodoException();
     }
 
     @Override
-    public TransactionalSet<K> keySet(Transaction tx) {
+    public TransactionalSet<K> keySet(Txn tx) {
         throw new TodoException();
     }
 
     @Override
-    public boolean containsKey(Transaction tx, Object key) {
+    public boolean containsKey(Txn tx, Object key) {
         return getEntry(tx, key) != null;
     }
 
     @Override
-    public boolean containsValue(Transaction tx, Object value) {
+    public boolean containsValue(Txn tx, Object value) {
         throw new TodoException();
     }
 
     @Override
-    public TransactionalCollection<V> values(Transaction tx) {
+    public TransactionalCollection<V> values(Txn tx) {
         throw new TodoException();
     }
 

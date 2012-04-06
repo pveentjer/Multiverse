@@ -3,18 +3,18 @@ package org.multiverse.stms.gamma.integration.commute;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicLongClosure;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public abstract class Commute_AbstractTest {
     protected GammaStm stm;
@@ -25,7 +25,7 @@ public abstract class Commute_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
     }
@@ -82,8 +82,8 @@ public abstract class Commute_AbstractTest {
 
             AtomicLongClosure commutingClosure = new AtomicLongClosure() {
                 @Override
-                public long execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public long execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].commute(btx, Functions.incLongFunction(1));
                     }
@@ -93,8 +93,8 @@ public abstract class Commute_AbstractTest {
 
             AtomicLongClosure nonCommutingClosure = new AtomicLongClosure() {
                 @Override
-                public long execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public long execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].openForWrite(btx, LOCKMODE_NONE).long_value++;
                     }

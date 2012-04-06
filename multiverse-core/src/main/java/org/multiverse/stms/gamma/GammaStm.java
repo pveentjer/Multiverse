@@ -6,13 +6,13 @@ import org.multiverse.api.lifecycle.TransactionListener;
 import org.multiverse.collections.NaiveTransactionalCollectionFactory;
 import org.multiverse.stms.gamma.transactionalobjects.*;
 import org.multiverse.stms.gamma.transactions.*;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 
 @SuppressWarnings({"ClassWithTooManyFields"})
@@ -61,8 +61,8 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaTransaction newDefaultTransaction() {
-        return new FatVariableLengthGammaTransaction(this);
+    public final GammaTxn newDefaultTransaction() {
+        return new FatVariableLengthGammaTxn(this);
     }
 
     @Override
@@ -364,16 +364,16 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTransaction newTransaction() {
-            return newTransaction(getThreadLocalGammaTransactionPool());
+        public final GammaTxn newTransaction() {
+            return newTransaction(getThreadLocalGammaTxnPool());
         }
 
         @Override
-        public final GammaTransaction newTransaction(final GammaTransactionPool pool) {
-            FatVariableLengthGammaTransaction tx = pool.takeMap();
+        public final GammaTxn newTransaction(final GammaTxnPool pool) {
+            FatVariableLengthGammaTxn tx = pool.takeMap();
 
             if (tx == null) {
-                tx = new FatVariableLengthGammaTransaction(config);
+                tx = new FatVariableLengthGammaTxn(config);
             } else {
                 tx.init(config);
             }
@@ -382,7 +382,7 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTransaction upgradeAfterSpeculativeFailure(final GammaTransaction tailingTx, final GammaTransactionPool pool) {
+        public final GammaTxn upgradeAfterSpeculativeFailure(final GammaTxn tailingTx, final GammaTxnPool pool) {
             throw new UnsupportedOperationException();
         }
     }
@@ -408,35 +408,35 @@ public final class GammaStm implements Stm {
         }
 
         @Override
-        public final GammaTransaction newTransaction() {
-            return newTransaction(getThreadLocalGammaTransactionPool());
+        public final GammaTxn newTransaction() {
+            return newTransaction(getThreadLocalGammaTxnPool());
         }
 
         @Override
-        public final GammaTransaction upgradeAfterSpeculativeFailure(final GammaTransaction failingTx, final GammaTransactionPool pool) {
-            final GammaTransaction tx = newTransaction(pool);
+        public final GammaTxn upgradeAfterSpeculativeFailure(final GammaTxn failingTx, final GammaTxnPool pool) {
+            final GammaTxn tx = newTransaction(pool);
             tx.copyForSpeculativeFailure(failingTx);
             return tx;
         }
 
         @Override
-        public final GammaTransaction newTransaction(final GammaTransactionPool pool) {
+        public final GammaTxn newTransaction(final GammaTxnPool pool) {
             final SpeculativeGammaConfiguration speculativeConfiguration = config.speculativeConfiguration.get();
             final int length = speculativeConfiguration.minimalLength;
 
             if (length <= 1) {
                 if (speculativeConfiguration.fat) {
-                    FatMonoGammaTransaction tx = pool.takeFatMono();
+                    FatMonoGammaTxn tx = pool.takeFatMono();
                     if (tx == null) {
-                        return new FatMonoGammaTransaction(config);
+                        return new FatMonoGammaTxn(config);
                     }
 
                     tx.init(config);
                     return tx;
                 } else {
-                    LeanMonoGammaTransaction tx = pool.takeLeanMono();
+                    LeanMonoGammaTxn tx = pool.takeLeanMono();
                     if (tx == null) {
-                        return new LeanMonoGammaTransaction(config);
+                        return new LeanMonoGammaTxn(config);
                     }
 
                     tx.init(config);
@@ -445,17 +445,17 @@ public final class GammaStm implements Stm {
 
             } else if (length <= config.maxFixedLengthTransactionSize) {
                 if (speculativeConfiguration.fat) {
-                    final FatFixedLengthGammaTransaction tx = pool.takeFatFixedLength();
+                    final FatFixedLengthGammaTxn tx = pool.takeFatFixedLength();
                     if (tx == null) {
-                        return new FatFixedLengthGammaTransaction(config);
+                        return new FatFixedLengthGammaTxn(config);
                     }
 
                     tx.init(config);
                     return tx;
                 } else {
-                    final LeanFixedLengthGammaTransaction tx = pool.takeLeanFixedLength();
+                    final LeanFixedLengthGammaTxn tx = pool.takeLeanFixedLength();
                     if (tx == null) {
-                        return new LeanFixedLengthGammaTransaction(config);
+                        return new LeanFixedLengthGammaTxn(config);
                     }
 
                     tx.init(config);
@@ -463,9 +463,9 @@ public final class GammaStm implements Stm {
                 }
 
             } else {
-                final FatVariableLengthGammaTransaction tx = pool.takeMap();
+                final FatVariableLengthGammaTxn tx = pool.takeMap();
                 if (tx == null) {
-                    return new FatVariableLengthGammaTransaction(config);
+                    return new FatVariableLengthGammaTxn(config);
                 }
 
                 tx.init(config);

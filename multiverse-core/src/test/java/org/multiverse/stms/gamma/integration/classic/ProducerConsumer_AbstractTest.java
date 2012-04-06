@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.IntRef;
@@ -14,7 +14,7 @@ import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.newIntRef;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * http://en.wikipedia.org/wiki/Producer-consumer_problem
@@ -32,7 +32,7 @@ public abstract class ProducerConsumer_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
     }
@@ -112,7 +112,7 @@ public abstract class ProducerConsumer_AbstractTest {
         int take() {
             return takeBlock.atomic(new AtomicClosure<Integer>() {
                 @Override
-                public Integer execute(Transaction tx) throws Exception {
+                public Integer execute(Txn tx) throws Exception {
                     if (size.get() == 0) {
                         retry();
                     }
@@ -126,7 +126,7 @@ public abstract class ProducerConsumer_AbstractTest {
         void put(final int item) {
             putBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (size.get() >= MAX_CAPACITY) {
                         retry();
                     }

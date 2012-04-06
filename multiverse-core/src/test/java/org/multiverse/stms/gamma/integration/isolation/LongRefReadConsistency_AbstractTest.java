@@ -4,17 +4,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.Assert.assertFalse;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * Question: could the problem be in the quick release mechanism?
@@ -39,7 +39,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stop = false;
         stm = new GammaStm();
         inconsistencyDetected.set(false);
@@ -97,8 +97,8 @@ public abstract class LongRefReadConsistency_AbstractTest {
             TxnExecutor block = createWriteBlock();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     for (int k = 0; k < refs.length; k++) {
                         refs[k].set(btx, id);
                     }
@@ -133,8 +133,8 @@ public abstract class LongRefReadConsistency_AbstractTest {
 
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
 
                     long initial = refs[0].get(btx);
 

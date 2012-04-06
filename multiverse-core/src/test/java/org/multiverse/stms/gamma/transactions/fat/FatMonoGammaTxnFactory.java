@@ -2,12 +2,12 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
+import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 public class FatMonoGammaTxnFactory implements GammaTxnFactory {
 
@@ -32,20 +32,20 @@ public class FatMonoGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction failingTransaction, GammaTransactionPool pool) {
+    public GammaTxn upgradeAfterSpeculativeFailure(GammaTxn failingTransaction, GammaTxnPool pool) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public GammaTransaction newTransaction() {
-        return newTransaction(getThreadLocalGammaTransactionPool());
+    public GammaTxn newTransaction() {
+        return newTransaction(getThreadLocalGammaTxnPool());
     }
 
     @Override
-    public FatMonoGammaTransaction newTransaction(GammaTransactionPool pool) {
-        FatMonoGammaTransaction tx = pool.takeFatMono();
+    public FatMonoGammaTxn newTransaction(GammaTxnPool pool) {
+        FatMonoGammaTxn tx = pool.takeFatMono();
         if (tx == null) {
-            tx = new FatMonoGammaTransaction(config);
+            tx = new FatMonoGammaTxn(config);
         } else {
             tx.init(config);
         }

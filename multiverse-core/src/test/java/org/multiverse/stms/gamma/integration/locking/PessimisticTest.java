@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertRefHasExclusiveLock;
 
 public class PessimisticTest {
@@ -16,12 +16,12 @@ public class PessimisticTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
     public void constructedObjectAutomaticallyIsLocked() {
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         GammaLongRef ref = new GammaLongRef(tx);
         ref.openForConstruction(tx);
 

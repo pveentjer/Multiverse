@@ -49,8 +49,8 @@
     <sect1>
         <title>AtomicBlock per atomic method</title>
         <para>
-            It is best, if there are more than 1 method that needs to have its own transaction, that each of these
-            methods gets it own AtomicBlock. It is useful for debugging purposes because you can see which transaction
+            It is best, if there are more than 1 method that needs to have its own txn, that each of these
+            methods gets it own AtomicBlock. It is useful for debugging purposes because you can see which txn
             is causing problems. It also is more useful for the speculative mechanism, so that the system is able to
             learn from each AtomicBlock independently, and is able to infer the optimal configuration for each
             individual method.
@@ -60,10 +60,10 @@
     <sect1>
         <title>AtomicBlock at service level</title>
         <para>
-            It is best to prevent making every method transaction (so have it own AtomicBlock). In most
+            It is best to prevent making every method txn (so have it own AtomicBlock). In most
             cases it is best to have one high level methods that should be have an AtomicBlock, and the internals
-            can lift on the transaction provided. This is comparable to using database transactions; you create
-            your transactional services, but underneath no transaction management is needed.
+            can lift on the txn provided. This is comparable to using database txns; you create
+            your transactional services, but underneath no txn management is needed.
         </para>
     </sect1>
 

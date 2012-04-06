@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class ReadBiasedTest implements GammaConstants {
@@ -16,7 +16,7 @@ public class ReadBiasedTest implements GammaConstants {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 
@@ -26,7 +26,7 @@ public class ReadBiasedTest implements GammaConstants {
         long version = ref.getVersion();
 
         for (int k = 0; k < 10000; k++) {
-            GammaTransaction tx = stm.newDefaultTransaction();
+            GammaTxn tx = stm.newDefaultTransaction();
             tx.richmansMansConflictScan = true;
             ref.openForRead(tx, LOCKMODE_NONE);
             tx.commit();

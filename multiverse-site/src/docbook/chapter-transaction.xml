@@ -5,12 +5,12 @@
     <sect1>
         <title>Introduction</title>
         <para>
-              This chapter contains many of the transaction configuration options.
+              This chapter contains many of the txn configuration options.
         </para>
     </sect1>
 
     <sect1>
-        <title>Customizing a transaction</title>
+        <title>Customizing a txn</title>
         <para>
             Transactions can be configured by creating a custom AtomicBlock, e.g.
             <programlisting language="java">
@@ -53,7 +53,7 @@
     <sect1>
         <title>Familyname</title>
         <para>
-            For debugging purposes, the transaction family name can be set. It is best to choose a name that makes
+            For debugging purposes, the txn family name can be set. It is best to choose a name that makes
             it easy to find the code that is executed by the AtomicBlock, e.g.:
             <programlisting language="java">
 
@@ -88,7 +88,7 @@
     <sect1>
         <title>Readonly</title>
         <para>
-            By default a transaction is configured as an update transaction; so it is allowed to make changes to transactional
+            By default a txn is configured as an update txn; so it is allowed to make changes to transactional
             references. This behavior can be changed by setting the readonly property of the Transaction, e.g.:
             <programlisting language="java">
 
@@ -117,7 +117,7 @@
     }
     </programlisting>
             In this case a org.multiverse.api.exceptions.ReadonlyException is thrown when the amount.increment is called. In case of the GammaStm
-            it doesn't make much of a performance impact if a transaction is configured as readonly.
+            it doesn't make much of a performance impact if a txn is configured as readonly.
         </para>
 
     </sect1>
@@ -134,11 +134,11 @@
                     An exception (a Throwable) is thrown during the execution of the atomic block.
                 </listitem>
                 <listitem>
-                    The transaction has executed too many times and a org.multiverse.api.exceptions.TooManyRetriesException
+                    The txn has executed too many times and a org.multiverse.api.exceptions.TooManyRetriesException
                     is thrown.
                 </listitem>
                 <listitem>
-                    The transaction is going to block (see the retry functionality for more information how this works).
+                    The txn is going to block (see the retry functionality for more information how this works).
                 </listitem>
             </itemizedlist>
             The default for the maximum retries is 1000 and can be configured through the TransactionFactoryBuilder:
@@ -168,7 +168,7 @@
         ...
     }
     </programlisting>
-            In this example the maximum number of retries is configured to be 200. Setting the value very low, could lead to transactions
+            In this example the maximum number of retries is configured to be 200. Setting the value very low, could lead to txns
             not being able to complete. If the speculative configuration mechanism is enabled for an AtomicBlock (defaults to true), it
             can happen that the first few times an AtomicBlock is used, some ControlFlowErrors (org.multiverse.api.exceptions.SpeculativeConfigurationError)
             are thrown even though there is no contention. If the value is set to a very high value, the system could suffer more from
@@ -180,7 +180,7 @@
     <sect1>
         <title>Don't rely on Transaction instance</title>
         <para>
-            To prevent causing a lot of unwanted gc overhead, transaction instances are reused. This means that the same transaction instance
+            To prevent causing a lot of unwanted gc overhead, txn instances are reused. This means that the same txn instance
             could be used for different executions of the same AtomicBlock, but it also could be reused to execute a completely different
             AtomicBlock. That is why it is important to realize that Transaction instances should not be stored.
         </para>

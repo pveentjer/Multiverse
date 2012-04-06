@@ -4,14 +4,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_abortTest {
     private CountDownCommitBarrier barrier;
@@ -20,7 +20,7 @@ public class CountDownCommitBarrier_abortTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -56,7 +56,7 @@ public class CountDownCommitBarrier_abortTest {
 
     class CommitThread extends TestThread {
         final CountDownCommitBarrier barrier;
-        Transaction tx;
+        Txn tx;
 
         CommitThread(CountDownCommitBarrier barrier) {
             setPrintStackTrace(false);
@@ -67,7 +67,7 @@ public class CountDownCommitBarrier_abortTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     CommitThread.this.tx = tx;
                     barrier.joinCommitUninterruptibly(tx);
                 }

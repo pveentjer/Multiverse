@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalStack_peekTest {
 
@@ -19,7 +19,7 @@ public class NaiveTransactionalStack_peekTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stack = new NaiveTransactionalStack<String>(stm);
     }
 
@@ -27,7 +27,7 @@ public class NaiveTransactionalStack_peekTest {
     public void whenEmpty(){
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 String s = stack.peek();
                 assertNull(s);
                 assertEquals("[]", stack.toString());
@@ -39,7 +39,7 @@ public class NaiveTransactionalStack_peekTest {
     public void whenNotEmpty(){
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.push("1");
                 stack.push("2");
                 String s = stack.peek();

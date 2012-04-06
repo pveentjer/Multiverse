@@ -42,7 +42,7 @@
 </programlisting>
 <para>
     As you can see, the Account class has a single field 'amount' which is of class IntRef; a transactional reference. All reads/writes
-    on this ref are coordinated and perhaps tracked by the transaction. The logic of both methods is captured in an AtomicClosure. There
+    on this ref are coordinated and perhaps tracked by the txn. The logic of both methods is captured in an AtomicClosure. There
     are different types of Closures for the different return types. There are also primitive versions that prevent unwanted autoboxing.
     An AtomicClosure is executed by an AtomicBlock (in our case this AtomicBlock is stored in the StmUtils and exposed through the
     execute methods.

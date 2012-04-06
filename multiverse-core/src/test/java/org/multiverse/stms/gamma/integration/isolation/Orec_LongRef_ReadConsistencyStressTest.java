@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.*;
@@ -12,10 +12,10 @@ import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -101,7 +101,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
                     .newTxnExecutor();
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     for (GammaLongRef ref : refs) {
                         ref.incrementAndGet(1);
                     }
@@ -126,7 +126,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         private GammaRefTranlocal[] tranlocals;
         private long lastConflictCount = stm.getGlobalConflictCounter().count();
         private GammaObjectPool pool = new GammaObjectPool();
-        private GammaTransaction dummyTx = stm.newDefaultTransaction();
+        private GammaTxn dummyTx = stm.newDefaultTransaction();
 
         public ReadingThread(int id) {
             super("ReadingThread-" + id);
@@ -293,7 +293,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
     class FixedReadingThread extends TestThread {
 
-        private FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(
+        private FatFixedLengthGammaTxn tx = new FatFixedLengthGammaTxn(
                 new GammaTxnConfiguration(stm, refs.length)
                         .setMaximumPoorMansConflictScanLength(0)
                         .setDirtyCheckEnabled(false)
@@ -361,7 +361,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
     class VariableReadingThread extends TestThread {
 
-        private FatVariableLengthGammaTransaction tx = new FatVariableLengthGammaTransaction(
+        private FatVariableLengthGammaTxn tx = new FatVariableLengthGammaTxn(
                 new GammaTxnConfiguration(stm, refs.length)
                         .setMaximumPoorMansConflictScanLength(0)
                         .setDirtyCheckEnabled(false)
@@ -458,14 +458,14 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         private void singleRun() {
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    fullRead((GammaTransaction) tx);
-                    assertReadConsistent((GammaTransaction) tx);
+                public void execute(Txn tx) throws Exception {
+                    fullRead((GammaTxn) tx);
+                    assertReadConsistent((GammaTxn) tx);
                 }
             });
         }
 
-        private void fullRead(GammaTransaction tx) {
+        private void fullRead(GammaTxn tx) {
             long value = refs[0].get(tx);
 
             for (int k = 0; k < refs.length; k++) {
@@ -474,7 +474,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         }
     }
 
-    private void assertReadConsistent(GammaTransaction tx) {
+    private void assertReadConsistent(GammaTxn tx) {
         long version = tx.getRefTranlocal(refs[0]).version;
         long value = refs[0].get(tx);
         for (int k = 1; k < refs.length; k++) {

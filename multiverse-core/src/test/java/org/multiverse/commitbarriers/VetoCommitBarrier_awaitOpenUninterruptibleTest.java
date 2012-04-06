@@ -8,14 +8,14 @@ import org.multiverse.TestThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class VetoCommitBarrier_awaitOpenUninterruptibleTest {
     private VetoCommitBarrier barrier;
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 

@@ -52,7 +52,7 @@
     </sect1>
 
     <sect1>
-         <title>Readonly transaction</title>
+         <title>Readonly txn</title>
          <para>
              Transactions that are readonly, can't suffer from the writeskew problem. So if they are configured using the Snapshot IsolationLevel,
              they have the same isolation guarantees as when the IsolationLevel.Serializable is configured.
@@ -61,7 +61,7 @@
 
     <sect1>
         <title>Dirty read</title>
-        <para>A dirty read happens when a transactions reads information written by another transaction, but the transaction fails in the end.
+        <para>A dirty read happens when a txns reads information written by another txn, but the txn fails in the end.
         The problem is that values can be seen, that never made it in the system. Multiverse doesn't support (or have the need to) for dealing
         with dirty reads. So they can't happen.</para>
     </sect1>

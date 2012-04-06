@@ -2,15 +2,15 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.PropagationLevel;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicIntClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.api.exceptions.TransactionNotAllowedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 import static junit.framework.Assert.assertEquals;
@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.multiverse.TestUtils.assertIsActive;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 
 public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants {
     private GammaStm stm;
@@ -26,7 +26,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -35,8 +35,8 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.Never)
                 .newTxnExecutor();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(otherTx);
+        GammaTxn otherTx = stm.newDefaultTransaction();
+        setThreadLocalTxn(otherTx);
 
         AtomicVoidClosure closure = mock(AtomicVoidClosure.class);
 
@@ -48,7 +48,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         verifyZeroInteractions(closure);
         assertIsActive(otherTx);
-        assertSame(otherTx, getThreadLocalTransaction());
+        assertSame(otherTx, getThreadLocalTxn());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertNull(tx);
                 return 10;
             }
@@ -68,7 +68,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         int result = block.atomic(closure);
 
         assertEquals(10, result);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         }
 
         verifyZeroInteractions(closure);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
     }
 
     @Test
@@ -95,12 +95,12 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.Mandatory)
                 .newTxnExecutor();
 
-        final GammaTransaction otherTx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(otherTx);
+        final GammaTxn otherTx = stm.newDefaultTransaction();
+        setThreadLocalTxn(otherTx);
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
                 return 10;
             }
@@ -110,7 +110,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         assertEquals(10, result);
         assertIsActive(otherTx);
-        assertSame(otherTx, getThreadLocalTransaction());
+        assertSame(otherTx, getThreadLocalTxn());
     }
 
     @Test
@@ -123,9 +123,9 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
-                GammaTransaction btx = (GammaTransaction) tx;
+                GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(1);
                 return 10;
             }
@@ -134,7 +134,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         int result = new FatGammaTxnExecutor(txFactory).atomic(closure);
 
         assertEquals(10, result);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertEquals(1, ref.atomicGet());
     }
 
@@ -144,16 +144,16 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 
-        final GammaTransaction existingTx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(existingTx);
+        final GammaTxn existingTx = stm.newDefaultTransaction();
+        setThreadLocalTxn(existingTx);
 
         final GammaLongRef ref = new GammaLongRef(stm);
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertSame(existingTx, tx);
-                GammaTransaction btx = (GammaTransaction) tx;
+                GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(btx, 1);
                 return 10;
             }
@@ -162,7 +162,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         int result = new FatGammaTxnExecutor(txFactory).atomic(closure);
 
         assertEquals(10, result);
-        assertSame(existingTx, getThreadLocalTransaction());
+        assertSame(existingTx, getThreadLocalTxn());
         assertIsActive(existingTx);
         //since the value hasn't committed yet, it still is zero (the value before the transaction began).
         assertEquals(0, ref.atomicGet());
@@ -178,9 +178,9 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
-                GammaTransaction btx = (GammaTransaction) tx;
+                GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(btx, 1);
                 return 10;
             }
@@ -190,7 +190,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         assertEquals(10, result);
         assertEquals(1, ref.atomicGet());
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
     }
 
     @Test
@@ -199,17 +199,17 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
-        final GammaTransaction otherTx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(otherTx);
+        final GammaTxn otherTx = stm.newDefaultTransaction();
+        setThreadLocalTxn(otherTx);
 
         final GammaLongRef ref = new GammaLongRef(stm, 10);
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertNotNull(tx);
                 assertNotSame(otherTx, tx);
-                GammaTransaction btx = (GammaTransaction) tx;
+                GammaTxn btx = (GammaTxn) tx;
                 ref.incrementAndGet(btx, 1);
                 return 1;
             }
@@ -219,7 +219,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         assertEquals(1, result);
         assertEquals(11, ref.atomicGet());
-        assertSame(otherTx, getThreadLocalTransaction());
+        assertSame(otherTx, getThreadLocalTxn());
         assertIsActive(otherTx);
     }
 
@@ -229,12 +229,12 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.Supports)
                 .newTxnExecutor();
 
-        final GammaTransaction otherTx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(otherTx);
+        final GammaTxn otherTx = stm.newDefaultTransaction();
+        setThreadLocalTxn(otherTx);
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertSame(otherTx, tx);
                 return 10;
             }
@@ -244,7 +244,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         assertEquals(10, result);
         assertIsActive(otherTx);
-        assertSame(otherTx, getThreadLocalTransaction());
+        assertSame(otherTx, getThreadLocalTxn());
     }
 
     @Test
@@ -255,7 +255,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
 
         AtomicIntClosure closure = new AtomicIntClosure() {
             @Override
-            public int execute(Transaction tx) throws Exception {
+            public int execute(Txn tx) throws Exception {
                 assertNull(tx);
                 return 10;
             }
@@ -264,6 +264,6 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         int result = block.atomic(closure);
 
         assertEquals(10, result);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
     }
 }

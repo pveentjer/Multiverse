@@ -72,7 +72,7 @@ package org.multiverse.api;
  *
  * <h3>Implementation and isolation level upgrade</h3>
  *
- * <p>An implementation of the {@link Transaction} is free to upgrade the isolation level to a higher one if it doesn't support that specific isolation
+ * <p>An implementation of the {@link Txn} is free to upgrade the isolation level to a higher one if it doesn't support that specific isolation
  * level. This is the same as Oracle is doing with the ReadUncommitted, which automatically is upgraded to a ReadCommitted or the RepeatableRead which is
  * automatically upgraded to Snapshot (Oracle calls this the Serialized isolation level).
  *

@@ -3,14 +3,14 @@ package org.multiverse.stms.gamma.integration.classic;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.BooleanRef;
 import org.multiverse.api.references.IntRef;
 
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * http://en.wikipedia.org/wiki/Sleeping_barber_problem
@@ -22,7 +22,7 @@ public class SleepingBarberStressTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         barberShop = new BarberShop();
         stop = false;
     }
@@ -65,7 +65,7 @@ public class SleepingBarberStressTest {
         public void doRun() {
             AtomicVoidClosure closure = new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     //todo
                 }
             };
@@ -87,7 +87,7 @@ public class SleepingBarberStressTest {
         public void doRun() throws Exception {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (barberShop.closed.get()) {
                         return;
                     }

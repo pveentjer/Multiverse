@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * A Stresstest that sees if the stm can be used to create a readwritelock that is not reentrant.
@@ -30,7 +30,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stop = false;
     }
 
@@ -95,7 +95,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         public void acquireReadLock() {
             acquireReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (lock.get() < 0) {
                         retry();
                     }
@@ -115,7 +115,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
             releaseReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (lock.get() <= 0) {
                         throw new IllegalMonitorStateException();
                     }
@@ -128,7 +128,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
         public void acquireWriteLock() {
             acquireWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (lock.get() != 0) {
                         retry();
                     }
@@ -147,7 +147,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
 
             releaseWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (lock.get() != -1) {
                         throw new IllegalMonitorStateException();
                     }

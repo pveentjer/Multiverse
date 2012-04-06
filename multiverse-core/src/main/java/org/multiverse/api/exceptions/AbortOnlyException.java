@@ -1,12 +1,12 @@
 package org.multiverse.api.exceptions;
 
 /**
- * An {@link IllegalTransactionStateException} thrown when a {@link org.multiverse.api.Transaction} is configured
+ * An {@link IllegalTransactionStateException} thrown when a {@link org.multiverse.api.Txn} is configured
  * as abort only and a prepare/commit is executed.
  *
  * @author Peter Veentjer.
- * @see org.multiverse.api.Transaction#setAbortOnly()
- * @see org.multiverse.api.Transaction#isAbortOnly()
+ * @see org.multiverse.api.Txn#setAbortOnly()
+ * @see org.multiverse.api.Txn#isAbortOnly()
  */
 public class AbortOnlyException extends IllegalTransactionStateException {
 

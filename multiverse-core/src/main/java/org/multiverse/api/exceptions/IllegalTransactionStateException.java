@@ -2,7 +2,7 @@ package org.multiverse.api.exceptions;
 
 /**
  * A {@link TransactionExecutionException} thrown when an operation is executed on a
- * {@link org.multiverse.api.Transaction} when it is not in a valid state for that operation.
+ * {@link org.multiverse.api.Txn} when it is not in a valid state for that operation.
  *
  * @author Peter Veentjer
  */

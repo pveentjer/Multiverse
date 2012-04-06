@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
     private CountDownCommitBarrier barrier;
@@ -23,7 +23,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -50,7 +50,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
     public void whenNullTimeout_thenNullPointerException() throws InterruptedException {
         barrier = new CountDownCommitBarrier(1);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.tryJoinCommit(tx, 1, null);
             fail();
@@ -97,7 +97,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getAndIncrement(tx, 1);
                         boolean result = barrier.tryJoinCommit(tx, 1, TimeUnit.DAYS);
                         assertTrue(result);
@@ -122,7 +122,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
         barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
 
         try {
             barrier.tryJoinCommit(tx, 1, TimeUnit.DAYS);
@@ -139,7 +139,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
     public void whenCommitted_thenCommitBarrierOpenException() throws InterruptedException {
         barrier = new CountDownCommitBarrier(0);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
 
         try {
             barrier.tryJoinCommit(tx, 1, TimeUnit.DAYS);

@@ -6,11 +6,11 @@ import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertRefHasNoLocks;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
@@ -21,7 +21,7 @@ public class GammaRef_setTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -31,7 +31,7 @@ public class GammaRef_setTest {
         long initialVersion = ref.getVersion();
         long initialOrec = ref.orec;
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         String newValue = "bar";
         String result = ref.set(tx, newValue);
 
@@ -48,7 +48,7 @@ public class GammaRef_setTest {
         long initialVersion = ref.getVersion();
         long initialOrec = ref.orec;
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.prepare();
         try {
             ref.set(tx, "bar");
@@ -68,7 +68,7 @@ public class GammaRef_setTest {
         long initialVersion = ref.getVersion();
         long initialOrec = ref.orec;
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
         try {
             ref.set(tx, "bar");
@@ -88,7 +88,7 @@ public class GammaRef_setTest {
         long initialVersion = ref.getVersion();
         long initialOrec = ref.orec;
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.commit();
         try {
             ref.set(tx, "bar");

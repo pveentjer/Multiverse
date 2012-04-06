@@ -30,7 +30,7 @@
 
 <h2 id="introduction">1 Introduction</h2>
 The NoSQL database movement promotes migrating away from traditional sql databases as the default solution
-to share state and synchronize state changes between transactions. I have seen enough customers with:
+to share state and synchronize state changes between txns. I have seen enough customers with:
 <ol>
     <li>
         <b>high development costs:</b> caused by complex software. Often the mismatch between objects and
@@ -78,8 +78,8 @@ I think it is going to be very hard to outperform a STM on a single JVM if you c
 SQL database out there. If everything is done in memory (so no netwerk or disk io)
 performance could be hundreds or even thousands of times higher than if you are using a traditional database.
 <p/>
-Doing hondred thousands to a few million update transaction per second, and perhaps a another magnitude more
-readonly transactions, is realizable with STM. Ofcourse this depends on the transaction being executed (it could be
+Doing hondred thousands to a few million update txn per second, and perhaps a another magnitude more
+readonly txns, is realizable with STM. Ofcourse this depends on the txn being executed (it could be
 suffering from contention or do a lot of work for example). And once transactional memory instructions has been added
 to the CPU's, you could have hybrid transactional memory systems that can outperform any software based one. That is
 why I expect that transactional memory systems are going to play a very important role in the future.
@@ -109,40 +109,40 @@ transactional objects, instead of a single one. This is caused by the
 limitation that a thread can only wait in a single waitset. And composing blocking operations also is extremely
 simple that is very hard to realize with a lock based approach.
 <p/>
-With Multiverse you are able to listen to changes and combined with non blocking transactions, you could create
-millions of transactions that all are blocking on different sets of data, while only using a few threads.
+With Multiverse you are able to listen to changes and combined with non blocking txns, you could create
+millions of txns that all are blocking on different sets of data, while only using a few threads.
 
 <h2 id="consistency.through.java.objects">4 Consistency through Java objects</h2>
-Consistency is the property that guarantees that all transaction start with a consistent view of the system
+Consistency is the property that guarantees that all txn start with a consistent view of the system
 and leave the system in a consistent state. In traditional databases in some cases you need to struggle
 with triggers, but in Multiverse it all can be done in memory by the Java objects themselves. So no
 other mechanism is needed, just write well behaving java objects. And if you really can't say anything
-anymore about consistency, just abort the transaction and pray it works better next time (or finally start
-throwing TooManyRetriesException if the stm detects that a transaction is livelocking.
+anymore about consistency, just abort the txn and pray it works better next time (or finally start
+throwing TooManyRetriesException if the stm detects that a txn is livelocking.
 
 <h2 id="atomicity">5 Atomicity</h2>
 Failure atomicity is the property that guarantees that all writes are written, or non of them happen. For example
 when a transfer of money between two accounts is executed, the changes on both accounts will be written
-or no changes at all will be written. Out of the box all Multiverse transactions will guarantee this
+or no changes at all will be written. Out of the box all Multiverse txns will guarantee this
 behavior.
 
 <h2 id="durability">6 Durability</h2>
 If you need the state to be persisted, it is best to
-allow for write behind (so the actual state becomes durable after the transaction commit)
+allow for write behind (so the actual state becomes durable after the txn commit)
 instead of a write through solution (that becomes durable in the commit).
 <p/>
 Once Multiverse exposes access to the tranlocals to be stored, I think some really cool stuff could be done.
 One of the simlest things is to write the content periodically to file (in large batches).
-With multiverse you also can have access to all the changes made in the transaction (there is
+With multiverse you also can have access to all the changes made in the txn (there is
 a perfect and stable before view and a perfect after after (although you could get read conflicts if
-reads are not tracked because other transactions have updated, and the older versions dont exist anymore.
+reads are not tracked because other txns have updated, and the older versions dont exist anymore.
 
 If the persistance is in place, you really have <a href="persistant.datastructures">Persistent datastructures</a>
 in place/
 
 <h3 id="flashback.queries">6.1 Flashback queries</h3>
 With Multiversioning, you can have a perfect view on every commit done in the system. If previous state is persisted,
-you could execute transaction that go back in time. Oracle provides this feature and calls it flashback queries.
+you could execute txn that go back in time. Oracle provides this feature and calls it flashback queries.
 But once the persistance mechanism is added, this would be peanuts.
 
 So not only the actual state is updated, the previous versions also are available.
@@ -171,7 +171,7 @@ if you are doing a version upgrade, you need a reliable way to migrate the datab
 This is going to be a hard nut to crack I think. Multiverse (and all other TL2 based STM's) have a single
 shared clock (could be an AtomicLong) to determine if read or write problems occurred. If the transactional
 objects are distributed, the clock needs to be distributed as well and this is going to be a scalability
-bottleneck. If the increase of the clock takes 1 ms over the cluster, the maximum number of transactions/second
+bottleneck. If the increase of the clock takes 1 ms over the cluster, the maximum number of txns/second
 would be 1000. No matter how much hardware you are adding to the equation (eventually the performance could
 start to decrease).
 <p/>
@@ -210,4 +210,4 @@ Since transactional memory is very flexibile, it can not only coordinate state c
 notification, it would not be that hard to create a message queue implementation, for example a JMS implementation.
 And instead of relying on an expense 2 phase commit between de database and the message queue, or accepting that
 the message queue or database could get in an inconsistent state because one of them fails while doing a commit,
-you can using a single software transactional memory transaction.
+you can using a single software transactional memory txn.

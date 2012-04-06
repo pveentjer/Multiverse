@@ -2,7 +2,7 @@ package org.multiverse.api.exceptions;
 
 /**
  * An {@link IllegalTransactionStateException} thrown when a write action is executed using
- * a readonly {@link org.multiverse.api.Transaction}.
+ * a readonly {@link org.multiverse.api.Txn}.
  *
  * @author Peter Veentjer.
  * @see org.multiverse.api.TxnFactoryBuilder#setReadonly(boolean)

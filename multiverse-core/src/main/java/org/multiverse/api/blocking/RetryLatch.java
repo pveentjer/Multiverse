@@ -5,7 +5,7 @@ package org.multiverse.api.blocking;
  * 'listener' is added to each read transactional object. This listener is the Latch. Each transactional object
  * can have a set of listeners.
  * <p/>
- * The Latch can safely be created once by a Transaction and reused by the same Transaction because it works based on
+ * The Latch can safely be created once by a Txn and reused by the same Txn because it works based on
  * an listenerEra. So of opens happen with an older listener-era, the open is ignored. So even though the Latch could
  * be attached to an older ref that didn't get updated, but is updated eventually even though the latch is notified
  * by another ref, there is no problem.

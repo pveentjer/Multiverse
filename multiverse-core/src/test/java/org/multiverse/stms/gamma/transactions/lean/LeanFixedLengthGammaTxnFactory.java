@@ -2,12 +2,12 @@ package org.multiverse.stms.gamma.transactions.lean;
 
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
+import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
 
@@ -36,20 +36,20 @@ public class LeanFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction failingTransaction, GammaTransactionPool pool) {
+    public GammaTxn upgradeAfterSpeculativeFailure(GammaTxn failingTransaction, GammaTxnPool pool) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public LeanFixedLengthGammaTransaction newTransaction() {
-        return newTransaction(getThreadLocalGammaTransactionPool());
+    public LeanFixedLengthGammaTxn newTransaction() {
+        return newTransaction(getThreadLocalGammaTxnPool());
     }
 
     @Override
-    public LeanFixedLengthGammaTransaction newTransaction(GammaTransactionPool pool) {
-        LeanFixedLengthGammaTransaction tx = pool.takeLeanFixedLength();
+    public LeanFixedLengthGammaTxn newTransaction(GammaTxnPool pool) {
+        LeanFixedLengthGammaTxn tx = pool.takeLeanFixedLength();
         if (tx == null) {
-            tx = new LeanFixedLengthGammaTransaction(config);
+            tx = new LeanFixedLengthGammaTxn(config);
         } else {
             tx.init(config);
         }

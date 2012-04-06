@@ -4,14 +4,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     private CountDownCommitBarrier barrier;
@@ -20,7 +20,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -48,7 +48,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier = new CountDownCommitBarrier(1);
 
         Thread.currentThread().interrupt();
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
 
         barrier.joinCommitUninterruptibly(tx);
 
@@ -59,7 +59,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionActive() {
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.prepare();
 
         barrier = new CountDownCommitBarrier(1);
@@ -71,7 +71,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionPrepared() {
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.prepare();
 
         barrier = new CountDownCommitBarrier(1);
@@ -93,7 +93,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         assertAlive(t1, t2);
         assertTrue(barrier.isClosed());
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         barrier.joinCommitUninterruptibly(tx);
         joinAll(t1, t2);
 
@@ -102,7 +102,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionAborted_thenDeadTransactionException() {
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.abort();
 
         barrier = new CountDownCommitBarrier(1);
@@ -118,7 +118,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
 
     @Test
     public void whenOpenAndTransactionCommitted_thenDeadTransactionException() {
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.commit();
 
         barrier = new CountDownCommitBarrier(1);
@@ -137,7 +137,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
 
         try {
             barrier.joinCommitUninterruptibly(tx);
@@ -153,7 +153,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
         barrier = new CountDownCommitBarrier(1);
         barrier.joinCommitUninterruptibly(stm.newDefaultTransaction());
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail();
@@ -164,13 +164,13 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyTest {
     }
 
     class AwaitThread extends TestThread {
-        private Transaction tx;
+        private Txn tx;
 
         @Override
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     AwaitThread.this.tx = tx;
                     barrier.joinCommitUninterruptibly(tx);
                 }

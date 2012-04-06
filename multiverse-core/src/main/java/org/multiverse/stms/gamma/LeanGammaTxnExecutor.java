@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.transactions.*;
 import java.util.logging.Logger;
 
 import static java.lang.String.format;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 
 /**
 * An GammaTxnExecutor made for the GammaStm.
@@ -47,14 +47,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -93,7 +93,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
@@ -153,14 +153,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -199,7 +199,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
@@ -259,14 +259,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -305,7 +305,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
@@ -365,14 +365,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -411,7 +411,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
@@ -471,14 +471,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -517,7 +517,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;
@@ -577,14 +577,14 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
             throw new NullPointerException();
         }
 
-        final ThreadLocalTransaction.Container transactionContainer = getThreadLocalTransactionContainer();
-        GammaTransactionPool pool = (GammaTransactionPool) transactionContainer.txPool;
+        final TxnThreadLocal.Container transactionContainer = getThreadLocalTxnContainer();
+        GammaTxnPool pool = (GammaTxnPool) transactionContainer.txPool;
         if (pool == null) {
-            pool = new GammaTransactionPool();
+            pool = new GammaTxnPool();
             transactionContainer.txPool = pool;
         }
 
-        GammaTransaction tx = (GammaTransaction)transactionContainer.tx;
+        GammaTxn tx = (GammaTxn)transactionContainer.tx;
         if(tx == null || !tx.isAlive()){
             tx = null;
         }
@@ -624,7 +624,7 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         }
 
                         abort = false;
-                        GammaTransaction old = tx;
+                        GammaTxn old = tx;
                         tx = txnFactory.upgradeAfterSpeculativeFailure(tx,pool);
                         pool.put(old);
                         transactionContainer.tx = tx;

@@ -1,18 +1,14 @@
 package org.multiverse.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TransactionalCollection;
 import org.multiverse.api.collections.TransactionalIterator;
-import org.multiverse.api.exceptions.TodoException;
-import org.multiverse.api.functions.BinaryFunction;
-import org.multiverse.api.functions.Function;
-import org.multiverse.api.predicates.Predicate;
 import org.multiverse.api.references.RefFactory;
 
 import java.util.Collection;
 
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public abstract class AbstractTransactionalCollection<E> implements TransactionalCollection<E> {
 
@@ -34,36 +30,36 @@ public abstract class AbstractTransactionalCollection<E> implements Transactiona
 
     @Override
     public boolean isEmpty() {
-        return isEmpty(getThreadLocalTransaction());
+        return isEmpty(getThreadLocalTxn());
     }
 
     @Override
-    public boolean isEmpty(final Transaction tx) {
+    public boolean isEmpty(final Txn tx) {
         return size(tx) == 0;
     }
 
     @Override
     public int size() {
-        return size(getThreadLocalTransaction());
+        return size(getThreadLocalTxn());
     }
 
     @Override
     public void clear() {
-        clear(getThreadLocalTransaction());
+        clear(getThreadLocalTxn());
     }
 
     @Override
     public boolean contains(final Object item) {
-        return contains(getThreadLocalTransaction(), item);
+        return contains(getThreadLocalTxn(), item);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return containsAll(getThreadLocalTransaction(), c);
+        return containsAll(getThreadLocalTxn(), c);
     }
 
     @Override
-    public boolean containsAll(Transaction tx, Collection<?> c) {
+    public boolean containsAll(Txn tx, Collection<?> c) {
         if (c == null) {
             throw new NullPointerException();
         }
@@ -87,21 +83,21 @@ public abstract class AbstractTransactionalCollection<E> implements Transactiona
 
     @Override
     public boolean remove(Object o) {
-        return remove(getThreadLocalTransaction(), o);
+        return remove(getThreadLocalTxn(), o);
     }
 
     @Override
     public boolean add(final E item) {
-        return add(getThreadLocalTransaction(), item);
+        return add(getThreadLocalTxn(), item);
     }
 
     @Override
     public boolean addAll(final Collection<? extends E> c) {
-        return addAll(getThreadLocalTransaction(), c);
+        return addAll(getThreadLocalTxn(), c);
     }
 
     @Override
-    public boolean addAll(final Transaction tx, final Collection<? extends E> c) {
+    public boolean addAll(final Txn tx, final Collection<? extends E> c) {
         if (c == null) {
             throw new NullPointerException();
         }
@@ -122,11 +118,11 @@ public abstract class AbstractTransactionalCollection<E> implements Transactiona
 
     @Override
     public boolean addAll(final TransactionalCollection<? extends E> c) {
-        return addAll(getThreadLocalTransaction(), c);
+        return addAll(getThreadLocalTxn(), c);
     }
 
     @Override
-    public boolean addAll(final Transaction tx, final TransactionalCollection<? extends E> c) {
+    public boolean addAll(final Txn tx, final TransactionalCollection<? extends E> c) {
         if (c == null) {
             throw new NullPointerException();
         }
@@ -148,12 +144,12 @@ public abstract class AbstractTransactionalCollection<E> implements Transactiona
 
     @Override
     public TransactionalIterator<E> iterator() {
-        return iterator(getThreadLocalTransaction());
+        return iterator(getThreadLocalTxn());
     }
 
     @Override
     public String toString() {
-        return toString(getThreadLocalTransaction());
+        return toString(getThreadLocalTxn());
     }
 
     @Override

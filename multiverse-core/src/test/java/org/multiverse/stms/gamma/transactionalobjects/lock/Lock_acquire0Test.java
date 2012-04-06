@@ -11,15 +11,15 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.setThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.setThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -35,7 +35,7 @@ public class Lock_acquire0Test {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -59,8 +59,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(null);
             fail();
@@ -96,8 +96,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.None);
 
         assertIsActive(tx);
@@ -111,8 +111,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Read);
 
         assertIsActive(tx);
@@ -127,8 +127,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Write);
 
         assertIsActive(tx);
@@ -142,8 +142,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Exclusive);
 
         assertIsActive(tx);
@@ -157,8 +157,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Read);
         ref.getLock().acquire(LockMode.None);
 
@@ -174,8 +174,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Read);
         ref.getLock().acquire(LockMode.Write);
 
@@ -190,8 +190,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Read);
         ref.getLock().acquire(LockMode.Exclusive);
 
@@ -206,8 +206,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Write);
         ref.getLock().acquire(LockMode.None);
 
@@ -222,8 +222,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Write);
         ref.getLock().acquire(LockMode.Read);
 
@@ -238,8 +238,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Write);
         ref.getLock().acquire(LockMode.Write);
 
@@ -254,8 +254,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Write);
         ref.getLock().acquire(LockMode.Exclusive);
 
@@ -270,8 +270,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Exclusive);
         ref.getLock().acquire(LockMode.None);
 
@@ -286,8 +286,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Exclusive);
         ref.getLock().acquire(LockMode.Read);
 
@@ -302,8 +302,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Exclusive);
         ref.getLock().acquire(LockMode.Write);
 
@@ -318,8 +318,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Exclusive);
         ref.getLock().acquire(LockMode.Exclusive);
 
@@ -338,11 +338,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.None);
 
         //todo: check state of tx with regard to lock
@@ -357,11 +357,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.Read);
 
         assertRefHasReadLock(ref, tx);
@@ -376,11 +376,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Write);
             fail();
@@ -398,11 +398,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Exclusive);
             fail();
@@ -420,11 +420,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.getLock().acquire(LockMode.None);
 
         //todo: check state of tx and locking
@@ -439,11 +439,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Read);
             fail();
@@ -462,11 +462,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Write);
             fail();
@@ -485,11 +485,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Exclusive);
             fail();
@@ -507,11 +507,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.None);
             fail();
@@ -529,11 +529,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Read);
             fail();
@@ -552,11 +552,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Write);
             fail();
@@ -575,11 +575,11 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getLock().acquire(LockMode.Exclusive);
             fail();
@@ -600,8 +600,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         tx.prepare();
 
         try {
@@ -622,8 +622,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         tx.abort();
 
         try {
@@ -644,8 +644,8 @@ public class Lock_acquire0Test {
         GammaLongRef ref = newLongRef(initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         tx.commit();
 
         try {

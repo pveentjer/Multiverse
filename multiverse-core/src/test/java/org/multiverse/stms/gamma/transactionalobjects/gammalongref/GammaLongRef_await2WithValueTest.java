@@ -8,11 +8,11 @@ import org.multiverse.api.exceptions.PreparedTransactionException;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertIsAborted;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class GammaLongRef_await2WithValueTest {
     private GammaStm stm;
@@ -20,7 +20,7 @@ public class GammaLongRef_await2WithValueTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -43,7 +43,7 @@ public class GammaLongRef_await2WithValueTest {
     @Test
     public void whenPreparedTransaction_thenPreparedTransactionException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.prepare();
 
         try {
@@ -58,7 +58,7 @@ public class GammaLongRef_await2WithValueTest {
     @Test
     public void whenAbortedTransaction_thenDeadTransactionException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
 
         try {
@@ -73,7 +73,7 @@ public class GammaLongRef_await2WithValueTest {
     @Test
     public void whenCommittedTransaction_thenDeadTransactionException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
 
         try {
@@ -88,7 +88,7 @@ public class GammaLongRef_await2WithValueTest {
     @Test
     public void whenBlockingNotAllowed_thenRetryNotAllowedException() {
         GammaLongRef ref = new GammaLongRef(stm);
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setBlockingAllowed(false)
                 .setSpeculative(false)
                 .newTransactionFactory()

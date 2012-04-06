@@ -3,12 +3,12 @@
         <!ENTITY chapter-transactional-references SYSTEM "chapter-transactional-references.xml">
         <!ENTITY chapter-deferredandcompensatingtasks SYSTEM "chapter-deferredandcompensatingtasks.xml">
         <!ENTITY chapter-performance-tuning SYSTEM "chapter-performance-tuning.xml">
-        <!ENTITY chapter-blockingtransactions SYSTEM "chapter-blocking-transactions.xml">
+        <!ENTITY chapter-blockingtransactions SYSTEM "chapter-blocking-txns.xml">
         <!ENTITY chapter-pessimistic-locking SYSTEM "chapter-pessimistic-locking.xml">
         <!ENTITY chapter-isolationlevel SYSTEM "chapter-isolationlevel.xml">
         <!ENTITY chapter-gammastm SYSTEM "chapter-gammastm.xml">
         <!ENTITY chapter-propagation SYSTEM "chapter-propagation.xml">
-        <!ENTITY chapter-transaction SYSTEM "chapter-transaction.xml">
+        <!ENTITY chapter-txn SYSTEM "chapter-txn.xml">
         <!ENTITY chapter-2pc SYSTEM "chapter-2pc.xml">
         <!ENTITY chapter-controlflow-errors SYSTEM "chapter-controlflow-errors.xml">
         <!ENTITY chapter-designguidelines SYSTEM "chapter-designguidelines.xml">
@@ -56,7 +56,7 @@
 
     &chapter-introduction;
     &chapter-transactional-references;
-    &chapter-transaction;;
+    &chapter-txn;;
     &chapter-propagation;
     &chapter-blockingtransactions;
     &chapter-controlflow-errors;

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -19,7 +19,7 @@ import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * The test is not very efficient since a lot of temporary objects like the transaction template are created.
@@ -36,7 +36,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 
@@ -112,7 +112,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         public void push(final E item) {
             pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (size.get() >= maxCapacity) {
                         retry();
                     }
@@ -126,7 +126,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         public E pop() {
             return popBlock.atomic(new AtomicClosure<E>() {
                 @Override
-                public E execute(Transaction tx) throws Exception {
+                public E execute(Txn tx) throws Exception {
                     if (head.isNull()) {
                         retry();
                     }

@@ -12,7 +12,7 @@ import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.api.functions.Functions.identityLongFunction;
 import static org.multiverse.api.functions.Functions.incLongFunction;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
@@ -42,7 +42,7 @@ public class GammaLongRef_alterAndGet1Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -58,8 +58,8 @@ public class GammaLongRef_alterAndGet1Test {
     public void whenActiveTransactionAvailableAndNullFunction_thenNullPointerException() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         try {
             ref.alterAndGet(null);
@@ -68,7 +68,7 @@ public class GammaLongRef_alterAndGet1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
     }
 
     @Test
@@ -79,8 +79,8 @@ public class GammaLongRef_alterAndGet1Test {
         RuntimeException ex = new RuntimeException();
         when(function.call(anyLong())).thenThrow(ex);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         try {
             ref.alterAndGet(function);
@@ -90,7 +90,7 @@ public class GammaLongRef_alterAndGet1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
     }
 
     @Test
@@ -99,8 +99,8 @@ public class GammaLongRef_alterAndGet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         LongFunction function = Functions.incLongFunction();
         ref.alterAndGet(function);
@@ -117,8 +117,8 @@ public class GammaLongRef_alterAndGet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         LongFunction function = identityLongFunction();
         ref.alterAndGet(function);
@@ -136,9 +136,9 @@ public class GammaLongRef_alterAndGet1Test {
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.alterAndGet(function);
@@ -167,15 +167,15 @@ public class GammaLongRef_alterAndGet1Test {
         }
 
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
     }
 
     @Test
     public void whenCommittedTransactionAvailable_thenDeadTransactionException() {
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.commit();
 
         long initialValue = 10;
@@ -191,7 +191,7 @@ public class GammaLongRef_alterAndGet1Test {
         }
 
         assertIsCommitted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion, initialValue);
@@ -199,8 +199,8 @@ public class GammaLongRef_alterAndGet1Test {
 
     @Test
     public void whenAbortedTransactionAvailable_thenDeadTransactionException() {
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.abort();
 
         long initialValue = 10;
@@ -215,7 +215,7 @@ public class GammaLongRef_alterAndGet1Test {
         }
 
         assertIsAborted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion, initialValue);
@@ -232,8 +232,8 @@ public class GammaLongRef_alterAndGet1Test {
 
         sleepMs(500);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.alterAndGet(Functions.incLongFunction());
         tx.commit();
 

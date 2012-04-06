@@ -8,13 +8,13 @@ import org.multiverse.api.references.IntRef;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class StmUtils_executeTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test(expected = NullPointerException.class)
@@ -28,7 +28,7 @@ public class StmUtils_executeTest {
 
         atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
             }
         });
@@ -44,7 +44,7 @@ public class StmUtils_executeTest {
         try {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -66,7 +66,7 @@ public class StmUtils_executeTest {
         try {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -85,7 +85,7 @@ public class StmUtils_executeTest {
 
         atomicChecked(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.incrementAndGet(10);
             }
         });
@@ -101,7 +101,7 @@ public class StmUtils_executeTest {
         try {
             atomicChecked(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }
@@ -123,7 +123,7 @@ public class StmUtils_executeTest {
         try {
             atomicChecked(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.incrementAndGet(10);
                     throw ex;
                 }

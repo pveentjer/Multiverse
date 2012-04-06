@@ -6,7 +6,7 @@ import org.multiverse.api.lifecycle.TransactionListener;
  * A Builder for creating a {@link TxnFactory} and {@link TxnExecutor}. This builder provides full control
  * on transaction settings.
  *
- * <p>Since the {@link Transaction} and {@link TxnExecutor} are very closely integrated, both of them are created
+ * <p>Since the {@link Txn} and {@link TxnExecutor} are very closely integrated, both of them are created
  * by this TxnFactoryBuilder.
  *
  * <p>Instances of this class are considered immutable, so when you call one of the modifying methods, make sure
@@ -38,7 +38,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setControlFlowErrorsReused(boolean reused);
 
     /**
-     * Sets the {@link Transaction} familyname. If an {@link TxnExecutor} is used inside a method, a useful familyname could
+     * Sets the {@link Txn} familyname. If an {@link TxnExecutor} is used inside a method, a useful familyname could
      * be the full name of the class and the method.
      * <p/>
      * The transaction familyName is useful debugging purposes, but has not other meaning.
@@ -64,7 +64,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setPropagationLevel(PropagationLevel propagationLevel);
 
     /**
-     * Sets the {@link Transaction} {@link LockMode} for all reads. If a LockMode is set higher than {@link LockMode#None}, this transaction
+     * Sets the {@link Txn} {@link LockMode} for all reads. If a LockMode is set higher than {@link LockMode#None}, this transaction
      * will locks all reads (and writes since a read is needed for a write) and the transaction automatically becomes
      * serialized.
      *
@@ -77,7 +77,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setReadLockMode(LockMode lockMode);
 
     /**
-     * Sets the {@link Transaction} {@link LockMode} for all writes. For a write, always a read needs to be done, so if the read LockMode is
+     * Sets the {@link Txn} {@link LockMode} for all writes. For a write, always a read needs to be done, so if the read LockMode is
      *
      * <p>Freshly constructed objects that are not committed, automatically are locked with {@link LockMode#Exclusive}.
      *
@@ -97,7 +97,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setWriteLockMode(LockMode lockMode);
 
     /**
-     * Adds a permanent {@link Transaction} {@link TransactionListener}. All permanent listeners are always executed after all normal
+     * Adds a permanent {@link Txn} {@link TransactionListener}. All permanent listeners are always executed after all normal
      * listeners are executed. If the same listener is added multiple times, it will be executed multiple times.
      *
      * <p>This method is very useful for integrating Multiverse in other JVM based environments because with this
@@ -112,7 +112,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder addPermanentListener(TransactionListener listener);
 
     /**
-     * Sets the {@link Transaction} {@link TraceLevel}. With tracing it is possible to see what is happening inside a transaction.
+     * Sets the {@link Txn} {@link TraceLevel}. With tracing it is possible to see what is happening inside a transaction.
      *
      * @param traceLevel the new traceLevel.
      * @return the updated TxnFactoryBuilder.
@@ -123,18 +123,18 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setTraceLevel(TraceLevel traceLevel);
 
     /**
-     * Sets the timeout (the maximum time a {@link Transaction} is allowed to block. Long.MAX_VALUE indicates that an
+     * Sets the timeout (the maximum time a {@link Txn} is allowed to block. Long.MAX_VALUE indicates that an
      * unbound timeout should be used.
      *
      * @param timeoutNs the timeout specified in nano seconds
      * @return the updated TxnFactoryBuilder
      * @see TxnConfiguration#getTimeoutNs()
-     * @see Transaction#getRemainingTimeoutNs()
+     * @see Txn#getRemainingTimeoutNs()
      */
     TxnFactoryBuilder setTimeoutNs(long timeoutNs);
 
     /**
-     * Sets if the {@link Transaction} can be interrupted while doing blocking operations.
+     * Sets if the {@link Txn} can be interrupted while doing blocking operations.
      *
      * @param interruptible if the transaction can be interrupted while doing blocking operations.
      * @return the updated TxnFactoryBuilder
@@ -143,7 +143,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setInterruptible(boolean interruptible);
 
     /**
-     * Sets the {@link Transaction} {@link BackoffPolicy}. Policy is used to backoff when a transaction conflicts with another {@link Transaction}.
+     * Sets the {@link Txn} {@link BackoffPolicy}. Policy is used to backoff when a transaction conflicts with another {@link Txn}.
      * See the {@link BackoffPolicy} for more information.
      *
      * @param backoffPolicy the backoff policy to use.
@@ -154,7 +154,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setBackoffPolicy(BackoffPolicy backoffPolicy);
 
     /**
-     * Sets if the {@link Transaction} dirty check is enabled. Dirty check is that something only needs to be written,
+     * Sets if the {@link Txn} dirty check is enabled. Dirty check is that something only needs to be written,
      * if there really is a change (else it will be interpreted as a read). If it is disabled, it will always write, and
      * this could prevent the aba isolation anomaly, but causes more conflicts so more contention. In most cases enabling
      * it is the best option.
@@ -166,7 +166,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setDirtyCheckEnabled(boolean dirtyCheckEnabled);
 
     /**
-     * Sets the maximum number of spins that are allowed when a {@link Transaction} can't be read/written/locked
+     * Sets the maximum number of spins that are allowed when a {@link Txn} can't be read/written/locked
      * because it is locked by another transaction.
      *
      * <p>Setting the value to a very high value, could lead to more an increased chance of a live locking.
@@ -179,7 +179,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setSpinCount(int spinCount);
 
     /**
-     * Sets the readonly property on a {@link Transaction}. If a transaction is configured as readonly, no write operations
+     * Sets the readonly property on a {@link Txn}. If a transaction is configured as readonly, no write operations
      * (also no construction of new transactional objects making use of that transaction) is allowed
      *
      * @param readonly true if the transaction should be readonly, false otherwise.
@@ -189,7 +189,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setReadonly(boolean readonly);
 
     /**
-     * Sets if the {@link Transaction} should automatically track all reads that have been done. This is needed for blocking
+     * Sets if the {@link Txn} should automatically track all reads that have been done. This is needed for blocking
      * operations, but also for other features like writeskew detection.
      *
      * <p>Tracking reads puts more pressure on the transaction since it needs to store all reads, but it reduces the chance
@@ -205,7 +205,7 @@ public interface TxnFactoryBuilder {
 
     /**
      * With the speculative configuration enabled, the {@link Stm} is allowed to determine optimal settings for
-     * a {@link Transaction}.
+     * a {@link Txn}.
      *
      * <p>Some behavior like readonly or the need for tracking reads can be determined runtime. The system can start with
      * a readonly non readtracking transaction and upgrade to an update or a read tracking once a write or retry
@@ -222,7 +222,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setSpeculative(boolean speculative);
 
     /**
-     * Sets the the maximum count a {@link Transaction} can be retried. The default is 1000. Setting it to a very low value
+     * Sets the the maximum count a {@link Txn} can be retried. The default is 1000. Setting it to a very low value
      * could mean that a transaction can't complete. Setting it to a very high value could lead to live-locking.
      *
      * <p>If the speculative configuration mechanism is enabled ({@link #setSpeculative(boolean)}), a few retries
@@ -236,9 +236,9 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setMaxRetries(int maxRetries);
 
     /**
-     * Sets the {@link IsolationLevel} on the {@link Transaction}.
+     * Sets the {@link IsolationLevel} on the {@link Txn}.
      *
-     * <p>The {@link Transaction} is free to upgraded to a higher {@link IsolationLevel}. This is essentially the same
+     * <p>The {@link Txn} is free to upgraded to a higher {@link IsolationLevel}. This is essentially the same
      * behavior you get when Oracle is used, where a read uncommitted is upgraded to a read committed and a repeatable
      * read is upgraded to the Oracle version of serialized (so with the writeskew problem still there).
      *
@@ -251,7 +251,7 @@ public interface TxnFactoryBuilder {
     TxnFactoryBuilder setIsolationLevel(IsolationLevel isolationLevel);
 
     /**
-     * Sets if the {@link Transaction} is allowed to do an explicit retry (needed for a blocking operation). One use case
+     * Sets if the {@link Txn} is allowed to do an explicit retry (needed for a blocking operation). One use case
      * for disallowing it, it when the transaction is used inside an actor, and you don't want that inside the logic
      * executed by the agent a blocking operations is done (e.g. taking an item of a blocking queue).
      *

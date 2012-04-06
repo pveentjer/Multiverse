@@ -4,7 +4,7 @@
     <sect1>
         <title>Introduction</title>
         <para>
-            STM in most cases is very optimistic, this means that a transaction can fail at the end and needs to be
+            STM in most cases is very optimistic, this means that a txn can fail at the end and needs to be
             retried because the next time it is more likely to succeed. The problem with normal Java code is that
             control flow only is limited to normal returns in methods or through exceptions (throwables). Multiverse
             lifts on the latter to regulate control flow. E.g. if a read conflict is detected, a special multiverse
@@ -23,7 +23,7 @@
                 </listitem>
             </itemizedlist>
             These exceptions normally should not be caught. Therefor it is best to make sure that all resources used
-            inside a transaction are used in a try/finally clause to make sure that they are cleaned up.
+            inside a txn are used in a try/finally clause to make sure that they are cleaned up.
         </para>
     </sect1>
 
@@ -31,8 +31,8 @@
         <title>org.multiverse.api.exceptions.ReadWriteConflict</title>
         <para>
             If the Transaction detects a read or write conflict, a org.multiverse.api.exceptions.ReadWriteConflict is
-            thrown. This Error is caught by the AtomicBlock and it automatically retries the transaction. To prevent
-            contention, there also is a org.multiverse.api.BackoffPolicy available, that control if the transaction
+            thrown. This Error is caught by the AtomicBlock and it automatically retries the txn. To prevent
+            contention, there also is a org.multiverse.api.BackoffPolicy available, that control if the txn
             should wait a little (so should back off), or should retry immediately. The maximum number of retries can
             be configured through the maxRetries property on the org.multiverse.api.TxnFactoryBuilder.
         </para>
@@ -50,12 +50,12 @@
     <sect1>
         <title>org.multiverse.api.exceptions.SpeculativeConfigurationError</title>
         <para>
-            Multiverse uses a speculative mechanism to figure out the best configuration for a transaction. E.g.
-            there a different transaction implementations optimized for a different number of refs. The speculative
+            Multiverse uses a speculative mechanism to figure out the best configuration for a txn. E.g.
+            there a different txn implementations optimized for a different number of refs. The speculative
             configuration mechanism starts with a settings, but as soon as it figures out that the settings are too
             cheap,
             it throws a org.multiverse.api.exceptions.SpeculativeConfigurationError. This error is caught by the
-            org.multiverse.api.TxnExecutor and upgrades the transaction/settings. Once the AtomicBlock has learned, it
+            org.multiverse.api.TxnExecutor and upgrades the txn/settings. Once the AtomicBlock has learned, it
             will not make the same mistakes again. So in the beginning there can be some unexpected failure, but
             after a few tries, they won't appear again. This mechanism can be disabled by setting the 'setSpeculative'
             to true on the org.multiverse.api.TxnFactoryBuilder.

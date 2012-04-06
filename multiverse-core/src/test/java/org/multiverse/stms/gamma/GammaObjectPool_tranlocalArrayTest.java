@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +21,7 @@ public class GammaObjectPool_tranlocalArrayTest implements GammaConstants {
     @Test
     public void whenItemPutInPool_thenPreparedForPooling() {
         GammaRefTranlocal[] array = new GammaRefTranlocal[2];
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
 
         array[0] = new GammaLongRef(stm).openForRead(tx, LOCKMODE_NONE);
         array[1] = new GammaLongRef(stm).openForRead(tx, LOCKMODE_NONE);

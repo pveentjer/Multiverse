@@ -5,8 +5,8 @@ import org.multiverse.api.lifecycle.TransactionListener;
 import java.util.List;
 
 /**
- * Contains the transaction configuration used by a {@link Transaction}. In the beginning this was all
- * placed in the Transaction, adding a lot of 'informational' methods to the transaction and therefor
+ * Contains the transaction configuration used by a {@link Txn}. In the beginning this was all
+ * placed in the Txn, adding a lot of 'informational' methods to the transaction and therefor
  * complicating its usage. So all the configurational properties of the transaction are contained in
  * this structure.
  * <p/>
@@ -92,7 +92,7 @@ public interface TxnConfiguration {
     boolean isSpeculative();
 
     /**
-     * Returns the family name of this Transaction. Every transaction in principle should have a family name. This
+     * Returns the family name of this Txn. Every transaction in principle should have a family name. This
      * information can be used for debugging/logging purposes but also other techniques that rely to know something
      * about similar types of transactions like profiling.
      *
@@ -102,7 +102,7 @@ public interface TxnConfiguration {
     String getFamilyName();
 
     /**
-     * Checks if this Transaction is readonly. With a readonly transaction you can prevent any updates or
+     * Checks if this Txn is readonly. With a readonly transaction you can prevent any updates or
      * new objects being created.
      *
      * @return true if readonly, false otherwise.
@@ -156,7 +156,7 @@ public interface TxnConfiguration {
 
     /**
      * If an explicit retry (so a blocking transaction) is allowed. With this property one can prevent
-     * that a Transaction is able to block waiting for some change.
+     * that a Txn is able to block waiting for some change.
      *
      * @return true if explicit retry is allowed, false otherwise.
      * @see TxnFactoryBuilder#setBlockingAllowed(boolean)
@@ -164,9 +164,9 @@ public interface TxnConfiguration {
     boolean isBlockingAllowed();
 
     /**
-     * Checks if the Transaction can be interrupted if it is blocking.
+     * Checks if the Txn can be interrupted if it is blocking.
      *
-     * @return true if the Transaction can be interrupted if it is blocking, false otherwise.
+     * @return true if the Txn can be interrupted if it is blocking, false otherwise.
      * @see TxnFactoryBuilder#setInterruptible(boolean)
      */
     boolean isInterruptible();
@@ -180,7 +180,7 @@ public interface TxnConfiguration {
     List<TransactionListener> getPermanentListeners();
 
     /**
-     * Returns the maximum number of times this Transaction be retried before failing. The returned value will
+     * Returns the maximum number of times this Txn be retried before failing. The returned value will
      * always be equal or larger than 0. If the value is getAndSet high and you are encountering a lot of
      * TooManyRetryExceptions it could be that the objects are just not concurrent enough.
      *

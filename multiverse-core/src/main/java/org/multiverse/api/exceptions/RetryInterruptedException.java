@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link RetryException} thrown when the blocking operation on a {@link org.multiverse.api.Transaction}
+ * A {@link RetryException} thrown when the blocking operation on a {@link org.multiverse.api.Txn}
  * using the retry has been interrupted.
  *
  * <p>Unlike the {@link InterruptedException} this exception is not checked. A checked interrupted

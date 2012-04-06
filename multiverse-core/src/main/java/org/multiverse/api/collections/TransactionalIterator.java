@@ -1,6 +1,6 @@
 package org.multiverse.api.collections;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 import java.util.Iterator;
 
@@ -11,20 +11,20 @@ public interface TransactionalIterator<E> extends Iterator<E> {
      * words, returns <tt>true</tt> if <tt>next</tt> would return an element
      * rather than throwing an exception.)
      *
-     * @param tx Transaction used for this operation
+     * @param tx Txn used for this operation
      * @return <tt>true</tt> if the iterator has more elements.
      */
-    boolean hasNext(Transaction tx);
+    boolean hasNext(Txn tx);
 
     /**
      * Returns the next element in the iteration.
      *
-     * @param tx Transaction used for this operation
+     * @param tx Txn used for this operation
      * @return the next element in the iteration.
      * @throws java.util.NoSuchElementException
      *          iteration has no more elements.
      */
-    E next(Transaction tx);
+    E next(Txn tx);
 
     /**
      * Removes from the underlying collection the last element returned by the
@@ -33,7 +33,7 @@ public interface TransactionalIterator<E> extends Iterator<E> {
      * the underlying collection is modified while the iteration is in
      * progress in any way other than by calling this method.
      *
-     * @param tx Transaction used for this operation
+     * @param tx Txn used for this operation
      * @throws UnsupportedOperationException if the <tt>remove</tt>
      *                                       operation is not supported by this Iterator.
      * @throws IllegalStateException         if the <tt>next</tt> method has not
@@ -41,5 +41,5 @@ public interface TransactionalIterator<E> extends Iterator<E> {
      *                                       been called after the last call to the <tt>next</tt>
      *                                       method.
      */
-    void remove(Transaction tx);
+    void remove(Txn tx);
 }

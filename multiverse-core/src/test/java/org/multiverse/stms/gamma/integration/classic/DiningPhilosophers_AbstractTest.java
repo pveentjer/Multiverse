@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.classic;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.BooleanRef;
 import org.multiverse.api.references.RefFactory;
@@ -14,7 +14,7 @@ import org.multiverse.stms.gamma.GammaStmConfiguration;
 import static org.junit.Assert.assertFalse;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 
 /**
@@ -31,7 +31,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         GammaStmConfiguration config = new GammaStmConfiguration();
         //config.backoffPolicy = new SpinningBackoffPolicy();
         stm = new GammaStm(config);
@@ -124,7 +124,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         public void releaseForks() {
             releaseForksBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     leftFork.set(false);
                     rightFork.set(false);
 
@@ -135,7 +135,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         public void takeForks() {
             takeForksBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (leftFork.get() || rightFork.get()) {
                         retry();
                     }

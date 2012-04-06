@@ -8,7 +8,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 
@@ -38,7 +38,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNormalRead(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setFat()
                 .newTransactionFactory()
                 .newTransaction();
@@ -66,7 +66,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNonDirtyWriteAndDirtyCheckEnabled(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
@@ -104,7 +104,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNormalDirtyWrite(LockMode lockMode, boolean dirtyCheck) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(dirtyCheck)
                 .newTransactionFactory()
@@ -135,7 +135,7 @@ public class BaseGammaRef_prepareTest implements GammaConstants {
     public void whenNonDirtyWrite(LockMode lockMode) {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setFat()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()

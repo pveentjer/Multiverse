@@ -8,11 +8,11 @@ import org.multiverse.api.references.*;
 import java.util.*;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.getRequiredThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getRequiredThreadLocalTxn;
 
 /**
  * A utility class with convenience methods to access the {@link org.multiverse.api.Stm} or
- * {@link Transaction}. These methods can be imported using the static import for a less
+ * {@link Txn}. These methods can be imported using the static import for a less
  * ugly syntax.
  *
  * @author Peter Veentjer.
@@ -118,7 +118,7 @@ public final class StmUtils {
 #foreach($closure in $closures)
     /**
      * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
-     * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
+     * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
      * transaction (so the propagation level is Requires) and will not commit this transaction.
      *
      * <p>This method doesn't throw a checked exception, but if the closure does, it is wrapped inside an
@@ -145,7 +145,7 @@ public final class StmUtils {
 
    /**
     * Executes the closure transactionally on the GlobalStmInstance using the default TxnExecutor. If a
-    * Transaction already is active on the ThreadLocalTransaction, this transaction will lift on that
+    * Transaction already is active on the TxnThreadLocal, this transaction will lift on that
     * transaction (so the propagation level is Requires) and will not commit this transaction.
     *
     * <p>If you want to get most out of performance, it is best to make use of a customized {@link TxnExecutor} instead
@@ -314,14 +314,14 @@ public final class StmUtils {
      * (by the {@link TxnExecutor} for example). The Retry should not be caught by user code in almost all cases.
      */
     public static void retry() {
-        Transaction tx = getRequiredThreadLocalTransaction();
-        tx.retry();
+        Txn txn = getRequiredThreadLocalTxn();
+        txn.retry();
     }
 
     /**
-     * Prepares the Transaction in the ThreadLocalTransaction transaction.
+     * Prepares the Transaction in the TxnThreadLocal transaction.
      *
-     * <p>For more information see {@link Transaction#prepare()}.
+     * <p>For more information see {@link Txn#prepare()}.
      *
      * @throws TransactionMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
@@ -329,14 +329,14 @@ public final class StmUtils {
      * @throws ControlFlowError
      */
     public static void prepare() {
-        Transaction tx = getRequiredThreadLocalTransaction();
-        tx.prepare();
+        Txn txn = getRequiredThreadLocalTxn();
+        txn.prepare();
     }
 
     /**
-     * Aborts the Transaction in the ThreadLocalTransaction transaction.
+     * Aborts the Transaction in the TxnThreadLocal transaction.
      *
-     * <p>For more information see {@link Transaction#abort()}.
+     * <p>For more information see {@link Txn#abort()}.
      *
      * @throws TransactionMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
@@ -344,14 +344,14 @@ public final class StmUtils {
      * @throws ControlFlowError
      */
     public static void abort() {
-        Transaction tx = getRequiredThreadLocalTransaction();
-        tx.abort();
+        Txn txn = getRequiredThreadLocalTxn();
+        txn.abort();
     }
 
     /**
-     * Commits the Transaction in the ThreadLocalTransaction transaction.
+     * Commits the Transaction in the TxnThreadLocal transaction.
      *
-     * <p>For more information see {@link Transaction#commit()}.
+     * <p>For more information see {@link Txn#commit()}.
      *
      * @throws TransactionMandatoryException if no active transaction is found.
      * @throws IllegalTransactionStateException if the active transaction is not in the correct
@@ -359,18 +359,18 @@ public final class StmUtils {
      * @throws ControlFlowError
      */
      public static void commit() {
-         Transaction tx = getRequiredThreadLocalTransaction();
-         tx.commit();
+         Txn txn = getRequiredThreadLocalTxn();
+         txn.commit();
      }
 
      /**
-      * Scheduled an deferred or compensating task on the Transaction in the ThreadLocalTransaction. Thistask is
+      * Scheduled an deferred or compensating task on the {@link Txn} in the TxnThreadLocal. This task is
       * executed after the transaction commits or aborts.
       *
       * @param task the deferred task to execute.
       * @throws NullPointerException if task is null.
       * @throws org.multiverse.api.exceptions.TransactionMandatoryException
-                        if no Transaction is set on the {@link org.multiverse.api.ThreadLocalTransaction}.
+                        if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
       * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
       *                 if the transaction is not in the correct state to accept a compensating or deferred task.
       */
@@ -379,10 +379,10 @@ public final class StmUtils {
                 throw new NullPointerException();
             }
 
-            Transaction tx = getRequiredThreadLocalTransaction();
-            tx.register(new TransactionListener() {
+            Txn txn = getRequiredThreadLocalTxn();
+            txn.register(new TransactionListener() {
                 @Override
-                public void notify(Transaction tx, TransactionEvent event) {
+                public void notify(Txn txn, TransactionEvent event) {
                     if (event == TransactionEvent.PostCommit || event == TransactionEvent.PostAbort) {
                         task.run();
                     }
@@ -391,13 +391,13 @@ public final class StmUtils {
        }
 
        /**
-        * Scheduled an deferred task on the {@link Transaction} in the {@link ThreadLocalTransaction}. This task is executed after
+        * Scheduled an deferred task on the {@link Txn} in the {@link TxnThreadLocal}. This task is executed after
         * the transaction commits and one of the use cases is starting transactions.
         *
         * @param task the deferred task to execute.
         * @throws NullPointerException if task is null.
         * @throws org.multiverse.api.exceptions.TransactionMandatoryException
-        *                   if no Transaction is set on the {@link org.multiverse.api.ThreadLocalTransaction}.
+        *                   if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
         * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
         *                   if the transaction is not in the correct state to accept a deferred task.
         */
@@ -406,10 +406,10 @@ public final class StmUtils {
                 throw new NullPointerException();
             }
 
-            Transaction tx = getRequiredThreadLocalTransaction();
-            tx.register(new TransactionListener() {
+            Txn txn = getRequiredThreadLocalTxn();
+            txn.register(new TransactionListener() {
                 @Override
-                public void notify(Transaction tx, TransactionEvent event) {
+                public void notify(Txn txn, TransactionEvent event) {
                     if (event == TransactionEvent.PostCommit) {
                         task.run();
                     }
@@ -418,13 +418,13 @@ public final class StmUtils {
        }
 
        /**
-        * Scheduled a compensating task on the {@link Transaction} in the {@link ThreadLocalTransaction}. This task is executed after
+        * Scheduled a compensating task on the {@link Txn} in the {@link TxnThreadLocal}. This task is executed after
         * the transaction aborts and one of the use cases is cleaning up non transaction resources like the file system.
         *
         * @param task the deferred task to execute.
         * @throws NullPointerException if task is null.
         * @throws org.multiverse.api.exceptions.TransactionMandatoryException
-        *                       if no Transaction is set on the {@link org.multiverse.api.ThreadLocalTransaction}.
+        *                       if no transaction is set on the {@link org.multiverse.api.TxnThreadLocal}.
         * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
         *                       if the transaction is not in the correct state to accept a compensating task.
         */
@@ -433,10 +433,10 @@ public final class StmUtils {
                 throw new NullPointerException();
             }
 
-            Transaction tx = getRequiredThreadLocalTransaction();
-            tx.register(new TransactionListener() {
+            Txn txn = getRequiredThreadLocalTxn();
+            txn.register(new TransactionListener() {
                 @Override
-                public void notify(Transaction tx, TransactionEvent event) {
+                public void notify(Txn txn, TransactionEvent event) {
                     if (event == TransactionEvent.PostAbort) {
                         task.run();
                     }

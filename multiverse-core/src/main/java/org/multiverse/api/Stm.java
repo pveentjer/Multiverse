@@ -11,7 +11,7 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * is coordinated through a transaction. An example of the TransactionalObject is the {@link org.multiverse.api.references.Ref},
  * but it could just as easily by a more complex transactional datastructure that is enhanced by instrumentation.
  * </li>
- * <li>{@link Transaction}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
+ * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
  * </li>
  * <li>{@link TxnExecutor}: responsible for starting/committing/aborting/retrying transactions. The TxnExecutor executes an
  * {@link org.multiverse.api.closures.AtomicClosure} (there are different tastes for return values). The AtomicClosure contains
@@ -26,11 +26,11 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * be replaced by a Sky-STM or a lock based STM. Of course every Stm implementation will have its strong and weak
  * spots.
  *
- * <p>All functionality like TxnExecutors, Refs, Transaction etc can be customized by providing a custom implementation of the
+ * <p>All functionality like TxnExecutors, Refs, Txn etc can be customized by providing a custom implementation of the
  * factory/builder interfaces:
  * <ol>
  * <li>{@link RefFactoryBuilder} a builder for creating {@link RefFactory}</li>
- * <li>{@link TxnFactoryBuilder} a builder for creating an {@link TxnExecutor}/{@link Transaction}.
+ * <li>{@link TxnFactoryBuilder} a builder for creating an {@link TxnExecutor}/{@link Txn}.
  * <li>{@link TransactionalCollectionsFactory} a factory for creating transactional collections</li>
  * </ol>
  *
@@ -49,24 +49,24 @@ import org.multiverse.api.references.RefFactoryBuilder;
 public interface Stm {
 
     /**
-     * Gets the {@link TxnFactoryBuilder} that needs to be used to atomicChecked a {@link Transaction} created by this Stm.
+     * Gets the {@link TxnFactoryBuilder} that needs to be used to atomicChecked a {@link Txn} created by this Stm.
      * See the {@link TxnFactoryBuilder} for more info. The TxnFactoryBuilder also is responsible for creating
-     * the TxnExecutor since the Transaction and TxnExecutor can be tightly coupled.
+     * the TxnExecutor since the Txn and TxnExecutor can be tightly coupled.
      *
      * @return the TxnFactoryBuilder that is used to atomicChecked transactions on this Stm.
      */
     TxnFactoryBuilder newTransactionFactoryBuilder();
 
     /**
-     * Starts a default Transaction that is useful for testing/experimentation purposes. This method is purely for easy to use access,
+     * Starts a default Txn that is useful for testing/experimentation purposes. This method is purely for easy to use access,
      * but doesn't provide any configuration options. See the {@link #newTransactionFactoryBuilder()} for something more configurable.
      * In mose cases this is not the method you want to use to manage transactions.
      *
      * <p>Transactions returned by this method are not speculative.
      *
-     * @return the new default Transaction.
+     * @return the new default Txn.
      */
-    Transaction newDefaultTransaction();
+    Txn newDefaultTransaction();
 
     /**
      * Returns the default {@link TxnExecutor} block that is useful for testing/experimentation purposes.

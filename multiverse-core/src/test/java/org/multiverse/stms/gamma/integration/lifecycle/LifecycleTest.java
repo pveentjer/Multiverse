@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.integration.lifecycle;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class LifecycleTest {
     private GammaStm stm;
@@ -19,7 +19,7 @@ public class LifecycleTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class LifecycleTest {
 
         atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);
                 tx.commit();
             }
@@ -44,7 +44,7 @@ public class LifecycleTest {
         try {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
                     tx.abort();
                 }
@@ -63,7 +63,7 @@ public class LifecycleTest {
 
         atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleDeferredTask(task);
                 tx.commit();
             }
@@ -78,7 +78,7 @@ public class LifecycleTest {
 
         atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleCompensatingTask(task);
                 tx.commit();
             }
@@ -94,7 +94,7 @@ public class LifecycleTest {
         try {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleDeferredTask(task);
                     tx.abort();
                 }
@@ -114,7 +114,7 @@ public class LifecycleTest {
         try {
             atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleCompensatingTask(task);
                     tx.abort();
                 }

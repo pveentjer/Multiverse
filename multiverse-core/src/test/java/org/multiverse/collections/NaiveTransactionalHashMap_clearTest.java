@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalHashMap_clearTest {
 
@@ -19,7 +19,7 @@ public class NaiveTransactionalHashMap_clearTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         map = new NaiveTransactionalHashMap<String, String>(stm);
     }
 
@@ -27,7 +27,7 @@ public class NaiveTransactionalHashMap_clearTest {
     public void whenNotEmpty() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 map.put("1", "a");
                 map.put("2", "b");
                 map.put("3", "c");
@@ -44,7 +44,7 @@ public class NaiveTransactionalHashMap_clearTest {
     public void whenManyItems() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 for (int k = 0; k < 1000; k++) {
                     map.put("" + k, "" + k);
                 }
@@ -60,7 +60,7 @@ public class NaiveTransactionalHashMap_clearTest {
     public void whenEmpty() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 map.clear();
                 assertEquals(0, map.size());
                 assertEquals("[]", map.toString());

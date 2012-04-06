@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaStm;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class ComposabilityAndLockingTest {
 
@@ -21,7 +21,7 @@ public class ComposabilityAndLockingTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -31,12 +31,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
                 StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
                         assertEquals(LockMode.Write, ref.getLock().getLockMode());
                     }
@@ -55,12 +55,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Write);
 
                 StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }
@@ -79,12 +79,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
                 StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Write);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }
@@ -103,12 +103,12 @@ public class ComposabilityAndLockingTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.getLock().acquire(LockMode.Exclusive);
 
                 StmUtils.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getLock().acquire(LockMode.Exclusive);
                         assertEquals(LockMode.Exclusive, ref.getLock().getLockMode());
                     }

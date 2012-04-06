@@ -2,15 +2,15 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     private GammaStm stm;
@@ -18,7 +18,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -31,8 +31,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomicChecked(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }
@@ -55,8 +55,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomicChecked(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }
@@ -80,8 +80,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomicChecked(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }
@@ -104,8 +104,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }
@@ -128,8 +128,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }
@@ -153,8 +153,8 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
         try {
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
                     ref.openForWrite(btx, LOCKMODE_NONE).long_value++;
                     throw ex;
                 }

@@ -17,14 +17,14 @@
         <title>CountDownCommitBarrier</title>
         <para>
             The CountDownCommitBarrier is a CommitBarrier implementation comparable to the java.util.concurrent.CountDownLatch where
-            all pending transactions can continue when the configured number of parties have arrived.
+            all pending txns can continue when the configured number of parties have arrived.
         </para>
     </sect1>
 
     <sect1>
         <title>VetoCommitBarrier</title>
         <para>
-            The VetoCommitBarrier is a CommitBarrier implementation where all pending transactions can continue when one of the Transactions
+            The VetoCommitBarrier is a CommitBarrier implementation where all pending txns can continue when one of the Transactions
             veto's the VetoCommitBarrier to open.
         </para>
     </sect1>

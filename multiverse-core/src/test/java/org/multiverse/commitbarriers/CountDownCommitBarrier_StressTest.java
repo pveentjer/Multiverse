@@ -2,7 +2,7 @@ package org.multiverse.commitbarriers;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_StressTest {
 
@@ -40,7 +40,7 @@ public class CountDownCommitBarrier_StressTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = new GammaStm();
         commitInc = new AtomicLong();
         totalInc = new AtomicLong();
@@ -103,9 +103,9 @@ public class CountDownCommitBarrier_StressTest {
             totalInc.addAndGet(partyCount);
             CountDownCommitBarrier countDownCommitBarrier = new CountDownCommitBarrier(partyCount);
 
-            Vector<Transaction> transactions = new Vector<Transaction>();
+            Vector<Txn> txns = new Vector<Txn>();
             for (int k = 0; k < partyCount; k++) {
-                executor.execute(new WorkerTask(k == 0, countDownCommitBarrier, transactions));
+                executor.execute(new WorkerTask(k == 0, countDownCommitBarrier, txns));
             }
 
             countDownCommitBarrier.awaitOpenUninterruptibly();
@@ -119,18 +119,18 @@ public class CountDownCommitBarrier_StressTest {
     class WorkerTask implements Runnable {
         final CountDownCommitBarrier countDownCommitBarrier;
         final boolean first;
-        private Vector<Transaction> transactions;
+        private Vector<Txn> txns;
 
-        WorkerTask(boolean first, CountDownCommitBarrier countDownCommitBarrier, Vector<Transaction> transactions) {
+        WorkerTask(boolean first, CountDownCommitBarrier countDownCommitBarrier, Vector<Txn> txns) {
             this.countDownCommitBarrier = countDownCommitBarrier;
-            this.transactions = transactions;
+            this.txns = txns;
             this.first = first;
         }
 
         @Override
         public void run() {
             try {
-                clearThreadLocalTransaction();
+                clearThreadLocalTxn();
                 doRun();
             } catch (IllegalStateException ignore) {
             }
@@ -139,12 +139,12 @@ public class CountDownCommitBarrier_StressTest {
         public void doRun() {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     sleepRandomMs(10);
                     refs[randomInt(refs.length)].getAndIncrement(tx, 1);
                     sleepRandomMs(10);
 
-                    transactions.add(tx);
+                    txns.add(tx);
 
                     if (first && randomOneOf(oneOfFails)) {
                         countDownCommitBarrier.abort();

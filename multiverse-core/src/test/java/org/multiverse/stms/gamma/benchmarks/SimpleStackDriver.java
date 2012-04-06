@@ -3,9 +3,9 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.benchy.BenchmarkDriver;
 import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.IntRef;
@@ -119,7 +119,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             while (!shutdown) {
                 pushBlock.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         stack.push(tx, "item");
                     }
                 });
@@ -130,7 +130,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             for (int k = 0; k < popThreadCount; k++) {
                 pushBlock.atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         stack.push(tx, "end");
 
                     }
@@ -157,7 +157,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             String item;
 
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.push(tx, item);
             }
         }
@@ -192,7 +192,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             while (!end) {
                 end = popBlock.atomic(new AtomicBooleanClosure() {
                     @Override
-                    public boolean execute(Transaction tx) throws Exception {
+                    public boolean execute(Txn tx) throws Exception {
                         return !stack.pop(tx).equals("end");
                     }
                 });
@@ -212,7 +212,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         class PopClosure implements AtomicBooleanClosure {
             @Override
-            public boolean execute(Transaction tx) throws Exception {
+            public boolean execute(Txn tx) throws Exception {
                 return !stack.pop(tx).endsWith("end");
             }
         }
@@ -222,7 +222,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
         private final Ref<StackNode<E>> head = stm.getDefaultRefFactory().newRef(null);
         private final IntRef size = stm.getRefFactoryBuilder().build().newIntRef(0);
 
-        public void push(Transaction tx, final E item) {
+        public void push(Txn tx, final E item) {
             if (capacity != Integer.MAX_VALUE) {
                 if (size.get(tx) == capacity) {
                     tx.retry();
@@ -232,7 +232,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             head.set(tx, new StackNode<E>(item, head.get(tx)));
         }
 
-        public E pop(Transaction tx) {
+        public E pop(Txn tx) {
             E value = head.awaitNotNullAndGet(tx).value;
 
             if (capacity != Integer.MAX_VALUE) {

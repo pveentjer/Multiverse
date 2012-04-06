@@ -5,13 +5,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryError;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalStack_popTest {
 
@@ -21,7 +21,7 @@ public class NaiveTransactionalStack_popTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stack = new NaiveTransactionalStack<String>(stm);
     }
 
@@ -29,7 +29,7 @@ public class NaiveTransactionalStack_popTest {
     public void whenSingleItem() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 String item = "1";
                 stack.push(item);
 
@@ -45,7 +45,7 @@ public class NaiveTransactionalStack_popTest {
     public void whenMultipleItems() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 String item1 = "1";
                 String item2 = "2";
                 stack.push(item1);
@@ -64,7 +64,7 @@ public class NaiveTransactionalStack_popTest {
     public void whenEmpty_thenRetryError() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 try {
                     stack.pop();
                     fail();

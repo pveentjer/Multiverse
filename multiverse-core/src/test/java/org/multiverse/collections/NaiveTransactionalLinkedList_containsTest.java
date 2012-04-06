@@ -4,14 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalLinkedList_containsTest {
 
@@ -21,7 +21,7 @@ public class NaiveTransactionalLinkedList_containsTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stack = new NaiveTransactionalLinkedList<String>(stm);
     }
 
@@ -29,7 +29,7 @@ public class NaiveTransactionalLinkedList_containsTest {
     public void whenNullItem() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 boolean result = stack.contains(null);
@@ -43,7 +43,7 @@ public class NaiveTransactionalLinkedList_containsTest {
     public void whenListStack() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 boolean result = stack.contains("foo");
 
                 assertFalse(result);
@@ -56,7 +56,7 @@ public class NaiveTransactionalLinkedList_containsTest {
     public void whenListDoesntContainItem() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 stack.add("3");
@@ -74,7 +74,7 @@ public class NaiveTransactionalLinkedList_containsTest {
     public void whenContainsItem() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.add("1");
                 stack.add("2");
                 stack.add("3");

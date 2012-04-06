@@ -4,7 +4,7 @@ package org.multiverse.api.exceptions;
  * A {@link ControlFlowError} thrown when a reading or writing a {@link org.multiverse.api.TransactionalObject}
  * failed, e.g. because it was locked or because a read or write conflict was detected.
  * <p/>
- * A ReadWriteConflict can in most cases be solved by retrying the {@link org.multiverse.api.Transaction} (this will
+ * A ReadWriteConflict can in most cases be solved by retrying the {@link org.multiverse.api.Txn} (this will
  * automatically be done by the {@link org.multiverse.api.TxnExecutor}).
  *
  * @author Peter Veentjer.

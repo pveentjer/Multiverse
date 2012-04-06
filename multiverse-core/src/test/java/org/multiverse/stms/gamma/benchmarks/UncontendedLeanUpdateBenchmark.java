@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -95,9 +95,9 @@ public class UncontendedLeanUpdateBenchmark implements GammaConstants {
         public void doRun() {
             GammaLongRef ref = new GammaLongRef(stm);
 
-            //FatArrayTreeGammaTransaction tx = new FatArrayTreeGammaTransaction(stm);
-            //FatArrayGammaTransaction tx = new FatArrayGammaTransaction(stm,1);
-            FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
+            //FatArrayTreeGammaTxn tx = new FatArrayTreeGammaTxn(stm);
+            //FatArrayGammaTxn tx = new FatArrayGammaTxn(stm,1);
+            FatMonoGammaTxn tx = new FatMonoGammaTxn(
                     new GammaTxnConfiguration(stm)
                             .setReadLockMode(LockMode.Exclusive)
                             .setDirtyCheckEnabled(false));

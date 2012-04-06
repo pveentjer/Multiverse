@@ -9,7 +9,7 @@ package org.multiverse.api.exceptions;
  *
  * <p>For more information see:
  * <ol>
- * <li>the remaining timeout: {@link org.multiverse.api.Transaction#getRemainingTimeoutNs()}</li>
+ * <li>the remaining timeout: {@link org.multiverse.api.Txn#getRemainingTimeoutNs()}</li>
  * <li>reading the configured timeout: {@link org.multiverse.api.TxnConfiguration#getTimeoutNs()}.</li>
  * <li>configuring the timeout: {@link org.multiverse.api.TxnFactoryBuilder#setTimeoutNs(long)}</li>
  * </ol>

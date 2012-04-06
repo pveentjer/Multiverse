@@ -7,11 +7,11 @@ import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfiguration;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class GammaRef_atomicGetAndSetTest {
@@ -23,7 +23,7 @@ public class GammaRef_atomicGetAndSetTest {
         GammaStmConfiguration config = new GammaStmConfiguration();
         config.maxRetries = 10;
         stm = new GammaStm(config);
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -36,7 +36,7 @@ public class GammaRef_atomicGetAndSetTest {
         String result = ref.atomicGetAndSet(newValue);
 
         assertEquals(initialValue, result);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);
@@ -49,8 +49,8 @@ public class GammaRef_atomicGetAndSetTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
 
         String newValue = "newValue";
         String result = ref.atomicGetAndSet(newValue);
@@ -58,7 +58,7 @@ public class GammaRef_atomicGetAndSetTest {
         assertIsActive(tx);
         assert (tx.getRefTranlocal(ref) == null);
         assertEquals(initialValue, result);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);
@@ -77,7 +77,7 @@ public class GammaRef_atomicGetAndSetTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, lockMode);
 
         long orecValue = ref.orec;
@@ -101,7 +101,7 @@ public class GammaRef_atomicGetAndSetTest {
 
         assertEquals(initialValue, result);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);

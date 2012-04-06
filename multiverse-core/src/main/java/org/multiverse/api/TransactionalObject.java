@@ -3,7 +3,7 @@ package org.multiverse.api;
 /**
  * The interface each transactional object needs to implement.
  *
- * <p>A TransactionalObject is an object where all reads/writes are managed through a {@link Transaction} (unless an atomicChecked
+ * <p>A TransactionalObject is an object where all reads/writes are managed through a {@link Txn} (unless an atomicChecked
  * method is used).
  *
  * <p>Each TransactionalObject belongs to 1 {@link Stm} instance.
@@ -26,7 +26,7 @@ public interface TransactionalObject {
      * Gets the {@link Lock} that belongs to this TransactionalObject. This call doesn't cause any locking, it
      * only provides access to the object that is able to lock. The returned value will never be null.
      *
-     * <p>This call also doesn't rely on a {@link Transaction}.
+     * <p>This call also doesn't rely on a {@link Txn}.
      *
      * @return the Lock
      * @throws UnsupportedOperationException if this operation is not supported.
@@ -38,7 +38,7 @@ public interface TransactionalObject {
      * on the stm implementation if the version over references has any meaning. With the MVCC there is a relation, but with the
      * SkySTM isn't.
      *
-     * <p>This method doesn't look at the {@link ThreadLocalTransaction}.
+     * <p>This method doesn't look at the {@link TxnThreadLocal}.
      *
      * @return the current version.
      */
@@ -55,16 +55,16 @@ public interface TransactionalObject {
      * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
      *
-     * <p>This method has no effect if the {@link Transaction} is readonly, because a writeskew is not possible with a
+     * <p>This method has no effect if the {@link Txn} is readonly, because a writeskew is not possible with a
      * readonly transaction.
      *
-     * <p>This call lifts on the {@link Transaction} stored in the {@link ThreadLocalTransaction}.
+     * <p>This call lifts on the {@link Txn} stored in the {@link TxnThreadLocal}.
      *
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
-     * @see #ensure(Transaction)
+     * @see #ensure(Txn)
      */
     void ensure();
 
@@ -79,10 +79,10 @@ public interface TransactionalObject {
      * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
      *
-     * <p>This method has no effect if the {@link Transaction} is readonly, because a writeskew is not possible with a
+     * <p>This method has no effect if the {@link Txn} is readonly, because a writeskew is not possible with a
      * readonly transaction.
      *
-     * @param self the Transaction this call lifts on.
+     * @param self the Txn this call lifts on.
      * @throws NullPointerException if self is null.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *
@@ -90,7 +90,7 @@ public interface TransactionalObject {
      *
      * @see #ensure()
      */
-    void ensure(Transaction self);
+    void ensure(Txn self);
 
     /**
      * Returns a debug representation of the TransactionalObject. The data used doesn't have to be consistent,
@@ -101,7 +101,7 @@ public interface TransactionalObject {
     String toDebugString();
 
     /**
-     * Returns a String representation of the Object using the {@link Transaction} on the {@link ThreadLocalTransaction}.
+     * Returns a String representation of the Object using the {@link Txn} on the {@link TxnThreadLocal}.
      *
      * @return the toString representation
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
@@ -113,19 +113,19 @@ public interface TransactionalObject {
     String toString();
 
     /**
-     * Returns a String representation of the object using the provided {@link Transaction}.
+     * Returns a String representation of the object using the provided {@link Txn}.
      *
-     * @param txn the Transaction used.
+     * @param txn the Txn used.
      * @return the String representation of the object.
      * @throws NullPointerException if tx is null.
      * @throws org.multiverse.api.exceptions.ControlFlowError
      *
      */
-    String toString(Transaction txn);
+    String toString(Txn txn);
 
     /**
      * Returns a String representation of the object using the provided transaction without looking
-     * at a {@link ThreadLocalTransaction}. The outputted value doesn't need to be consistent from some point
+     * at a {@link TxnThreadLocal}. The outputted value doesn't need to be consistent from some point
      * in time, only a best effort is made.
      *
      * @return the String representation.

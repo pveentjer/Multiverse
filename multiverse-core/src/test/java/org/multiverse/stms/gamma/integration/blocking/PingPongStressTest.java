@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicBooleanClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 
 public class PingPongStressTest {
@@ -31,7 +31,7 @@ public class PingPongStressTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         ref = new GammaLongRef(stm);
         stop = false;
@@ -78,7 +78,7 @@ public class PingPongStressTest {
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref.set(-abs(ref.get()));
             }
         });
@@ -123,7 +123,7 @@ public class PingPongStressTest {
         public void doRun() {
             AtomicBooleanClosure closure = new AtomicBooleanClosure() {
                 @Override
-                public boolean execute(Transaction tx) throws Exception {
+                public boolean execute(Txn tx) throws Exception {
                     if (ref.get() < 0) {
                         return false;
                     }

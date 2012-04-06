@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -59,7 +59,7 @@ public class GammaRef_consistentLoadStressTest implements GammaConstants {
         @Override
         public void doRun() throws Exception {
             int k = 0;
-            GammaTransaction tx = stm.newDefaultTransaction();
+            GammaTxn tx = stm.newDefaultTransaction();
             GammaRefTranlocal tranlocal = new GammaRefTranlocal();
             while (!stop) {
                 boolean success = ref.load(tx, tranlocal, LOCKMODE_NONE, 100, true);

@@ -1,6 +1,6 @@
 package org.multiverse.api.collections;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 import java.util.Queue;
 
@@ -13,21 +13,21 @@ public interface TransactionalQueue<E> extends TransactionalCollection<E>, Queue
 
     int getCapacity();
 
-    E remove(Transaction txn);
+    E remove(Txn txn);
 
-    E element(Transaction txn);
+    E element(Txn txn);
 
-    boolean offer(Transaction tx, E item);
+    boolean offer(Txn tx, E item);
 
     void put(E item);
 
-    void put(Transaction txn, E item);
+    void put(Txn txn, E item);
 
     E take();
 
-    E take(Transaction txn);
+    E take(Txn txn);
 
-    E poll(Transaction txn);
+    E poll(Txn txn);
 
-    E peek(Transaction txn);
+    E peek(Txn txn);
 }

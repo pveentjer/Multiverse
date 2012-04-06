@@ -6,13 +6,13 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class WriteLockTest {
@@ -22,14 +22,14 @@ public class WriteLockTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
     public void whenUnlocked() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Write);
 
         assertIsActive(tx);
@@ -40,10 +40,10 @@ public class WriteLockTest {
     public void whenReadLockAlreadyAcquiredByOther_thenWriteLockFails() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         try {
             ref.getLock().acquire(tx, LockMode.Exclusive);
             fail();
@@ -60,10 +60,10 @@ public class WriteLockTest {
     public void whenWriteLockAlreadyAcquiredOther_thenWriteLockFails() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         try {
             ref.getLock().acquire(tx, LockMode.Write);
             fail();
@@ -79,10 +79,10 @@ public class WriteLockTest {
     public void whenExclusiveLockAlreadyAcquiredByOther_thenWriteLockFails() {
         GammaLongRef ref = new GammaLongRef(stm);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         try {
             ref.getLock().acquire(tx, LockMode.Write);
             fail();
@@ -99,10 +99,10 @@ public class WriteLockTest {
     public void whenWriteLockAcquiredByOther_thenReadStillAllowed() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
 
         long result = ref.get(tx);
 
@@ -115,10 +115,10 @@ public class WriteLockTest {
     public void whenPreviouslyReadByOtherThread_thenNoProblems() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.get(tx);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         long result = ref.get(tx);
@@ -132,10 +132,10 @@ public class WriteLockTest {
     public void whenPreviouslyReadByOtherTransaction_thenWriteSuccessButCommitFails() {
         GammaLongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.get(tx);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         ref.set(tx, 100);
@@ -154,10 +154,10 @@ public class WriteLockTest {
     public void whenWriteLockAcquired_thenWriteAllowedButCommitFails() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.set(tx, 100);
 
         try {
@@ -174,7 +174,7 @@ public class WriteLockTest {
     public void whenReadLockAlreadyAcquiredBySelf_thenWriteLockAcquired() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Read);
         ref.getLock().acquire(tx, LockMode.Write);
 
@@ -186,10 +186,10 @@ public class WriteLockTest {
     public void whenReadLockAlsoAcquiredByOther_thenWriteLockFails() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Read);
 
         try {
@@ -208,7 +208,7 @@ public class WriteLockTest {
     public void whenWriteLockAlreadyAcquiredBySelf_thenSuccess() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Write);
         ref.getLock().acquire(tx, LockMode.Write);
 
@@ -220,7 +220,7 @@ public class WriteLockTest {
     public void whenExclusiveLockAlreadyAcquiredBySelf_thenExclusiveLockRemains() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Exclusive);
         ref.getLock().acquire(tx, LockMode.Write);
 
@@ -232,7 +232,7 @@ public class WriteLockTest {
     public void whenTransactionCommits_thenWriteLockIsReleased() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Write);
         tx.commit();
 
@@ -244,7 +244,7 @@ public class WriteLockTest {
     public void whenTransactionIsPrepared_thenWriteLockRemains() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Write);
         tx.prepare();
 
@@ -256,7 +256,7 @@ public class WriteLockTest {
     public void whenTransactionAborts_thenWriteLockReleased() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, LockMode.Write);
         tx.abort();
 
@@ -268,7 +268,7 @@ public class WriteLockTest {
     public void whenReadConflict_thenAcquireWriteLockFails() {
         GammaLongRef ref = new GammaLongRef(stm, 5);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);

@@ -5,16 +5,16 @@
     <sect1>
         <title>Introduction</title>
         <para>
-            When a Multiverse transaction is used, all changes made to transactional references during that transactions
-            are either committed or aborted. So it won't happen that changes of an uncommitted transaction ever become
-            visible in another transaction. But in some cases you need to execute logic that is not managed by a
-            transaction, e.g. cleaning up resources. This can be done using:
+            When a Multiverse txn is used, all changes made to transactional references during that txns
+            are either committed or aborted. So it won't happen that changes of an uncommitted txn ever become
+            visible in another txn. But in some cases you need to execute logic that is not managed by a
+            txn, e.g. cleaning up resources. This can be done using:
             <itemizedlist>
                 <listitem>
-                    <para>Deferred tasks: executed after transaction commit</para>
+                    <para>Deferred tasks: executed after txn commit</para>
                 </listitem>
                 <listitem>
-                    <para>Compensating tasks: executed after transaction abort</para>
+                    <para>Compensating tasks: executed after txn abort</para>
                 </listitem>
             </itemizedlist>
         </para>
@@ -23,14 +23,14 @@
             In Multiverse there are 2 different tastes of deferred and compensating actions:
             <itemizedlist>
                 <listitem>
-                    normal tasks: these tasks are registered during the execution of the transaction,
-                    and are automatically cleared on transaction commit/abort. This type of task is useful,
-                    if it depends on logic executed during the execution of the transaction.
+                    normal tasks: these tasks are registered during the execution of the txn,
+                    and are automatically cleared on txn commit/abort. This type of task is useful,
+                    if it depends on logic executed during the execution of the txn.
                 </listitem>
                 <listitem>
                     permanent tasks: these tasks are registered when the org.multiverse.api.TxnExecutor is created.
                     The advantage of permanent tasks is that they don't need to be registered
-                    every time the transaction runs, so there is a lot less overhead (especially gc). Permanent listeners
+                    every time the txn runs, so there is a lot less overhead (especially gc). Permanent listeners
                     are also useful if Multiverse needs to be integrated in other systems/languages so that integration
                     logic can be executed.
                 </listitem>
@@ -41,8 +41,8 @@
     <sect1>
         <title>Normal compensating task</title>
         <para>
-            When a transaction commits, using the normal compensating tasks, additional logic can be executed after the
-            commit of the transaction.
+            When a txn commits, using the normal compensating tasks, additional logic can be executed after the
+            commit of the txn.
         <programlisting language="java">
     import org.multiverse.api.*;
     import org.multiverse.api.refs.*;
@@ -78,8 +78,8 @@
     <sect1>
         <title>Normal deferred task</title>
        <para>
-            When a transaction aborts, using the normal compensating tasks, additional logic can be executed after the
-            abort of the transaction.
+            When a txn aborts, using the normal compensating tasks, additional logic can be executed after the
+            abort of the txn.
         <programlisting language="java">
     import org.multiverse.api.*;
     import org.multiverse.api.refs.*;

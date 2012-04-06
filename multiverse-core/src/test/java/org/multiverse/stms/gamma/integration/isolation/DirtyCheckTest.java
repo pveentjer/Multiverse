@@ -4,11 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.assertVersionAndValue;
 
 public class DirtyCheckTest {
@@ -17,7 +17,7 @@ public class DirtyCheckTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -26,7 +26,7 @@ public class DirtyCheckTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
                 .newTransaction();
@@ -45,7 +45,7 @@ public class DirtyCheckTest {
         long initialVersion = ref.getVersion();
 
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
                 .newTransaction();
@@ -64,7 +64,7 @@ public class DirtyCheckTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
                 .newTransaction();
@@ -82,7 +82,7 @@ public class DirtyCheckTest {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
                 .newTransaction();

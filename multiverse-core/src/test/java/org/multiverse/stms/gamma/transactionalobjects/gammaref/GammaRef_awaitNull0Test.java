@@ -7,13 +7,13 @@ import org.multiverse.api.exceptions.*;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
 import static org.multiverse.TestUtils.assertIsCommitted;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.setThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.setThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class GammaRef_awaitNull0Test {
@@ -23,7 +23,7 @@ public class GammaRef_awaitNull0Test {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -31,8 +31,8 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.awaitNull();
 
         GammaRefTranlocal tranlocal = tx.locate(ref);
@@ -53,11 +53,11 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.awaitNull();
             fail();
@@ -75,11 +75,11 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.awaitNull();
 
         GammaRefTranlocal tranlocal = tx.locate(ref);
@@ -100,11 +100,11 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newTransactionFactoryBuilder()
+        GammaTxn tx = stm.newTransactionFactoryBuilder()
                 .newTransactionFactory()
                 .newTransaction();
 
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.awaitNull();
@@ -136,9 +136,9 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.prepare();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.awaitNull();
@@ -155,9 +155,9 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.abort();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.awaitNull();
@@ -174,9 +174,9 @@ public class GammaRef_awaitNull0Test {
         GammaRef<String> ref = new GammaRef<String>(stm);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         tx.commit();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.awaitNull();

@@ -3,17 +3,17 @@
 Multiverse 0.4 was released at 24 Februari 2010. The following features have been added:
 <ol>
     <li>
-        Read-tracking readonly transaction: unlike a non tracking readonly transaction,
-        a tracking readonly transaction is able to participate in blocking operations because it knows
+        Read-tracking readonly txn: unlike a non tracking readonly txn,
+        a tracking readonly txn is able to participate in blocking operations because it knows
         which transactional objects have been read and therefor which objects to listen to. A tracking
-        readonly transaction also is less subject to read-conflicts. This disadvantage of this transaction
-        is that it requires more resources than a non tracking readonly transaction. One of the ways
+        readonly txn also is less subject to read-conflicts. This disadvantage of this txn
+        is that it requires more resources than a non tracking readonly txn. One of the ways
         this functionality is exposed, is through the automaticReadTracking property of the TransactionalMethod
         annotation.
     </li>
     <li>
-        Non read-tracking update transaction: unlike a tracking update transaction, a non tracking
-        update transaction doesn't consume more resources for reads. The disadvantage is that it can't
+        Non read-tracking update txn: unlike a tracking update txn, a non tracking
+        update txn doesn't consume more resources for reads. The disadvantage is that it can't
         participate in blocking operations because it isn't known which reads have been executed. One of the ways
         this functionality is exposed, is through the automaticReadTracking property of the TransactionalMethod
         annotation.
@@ -24,14 +24,14 @@ Multiverse 0.4 was released at 24 Februari 2010. The following features have bee
         activate this behavior is through the interruptible property of the @TransactionalMethod annotation.
     </li>
     <li>
-        Optional writeskew detection: in readtracking update transactions. If writeskew detection is enabled,
-        concurrent executing transaction will appear to be executing serially. If writeskew detection is not
+        Optional writeskew detection: in readtracking update txns. If writeskew detection is enabled,
+        concurrent executing txn will appear to be executing serially. If writeskew detection is not
         enabled, the system could be subject to certain isolation problems. For more information see the
         following <a href="http://en.wikipedia.org/wiki/Snapshot_isolation">link</a>.
     </li>
     <li>
         TransactionalThreadPoolExecutor: a Transactional clone of the java.util.concurrent.ThreadPoolExecutor
-        where the execute methods can participate in transactions. This makes it possible that tasks are executed
+        where the execute methods can participate in txns. This makes it possible that tasks are executed
         atomically (so all of them are executed or none of them).
     </li>
     <li>
@@ -51,13 +51,13 @@ Multiverse 0.4 was released at 24 Februari 2010. The following features have bee
     </li>
     <li>
         Self learning transactional implementation selector: based on runtime observation the system is
-        able to select the transaction implementation that is optimal for a certain number of reads and or writes.
-        The system begins with an implementation transaction (all transactions belonging to a transaction
+        able to select the txn implementation that is optimal for a certain number of reads and or writes.
+        The system begins with an implementation txn (all txns belonging to a txn
         family to be precise) that is small and once these implementation complain that they are not big enough
-        a 'bigger' implementation is selected. The following transaction 'tastes' are created.
+        a 'bigger' implementation is selected. The following txn 'tastes' are created.
         <ul>
             <li><b>Tiny:</b> optimized for a single tracked read or update</li>
-            <li><b>Fixed: </b> optimized for transactions with a very small number of tracked reads or
+            <li><b>Fixed: </b> optimized for txns with a very small number of tracked reads or
                 updates.
             </li>
             <li><b>Growing:</b> optimized for a larger number of tracked reads or updates</li>
@@ -65,7 +65,7 @@ Multiverse 0.4 was released at 24 Februari 2010. The following features have bee
     </li>
     <li>
         2 phase commit: this makes it possible to create barrier like synchronization structures
-        where all transactions commit or none commit. The performance of the 2phase commit can't be compared
+        where all txns commit or none commit. The performance of the 2phase commit can't be compared
         to a distributed 2 phase commit (which is orders of magnitude slower).
     </li>
     <li>
@@ -75,7 +75,7 @@ Multiverse 0.4 was released at 24 Februari 2010. The following features have bee
     <li>
         Transaction access: instead of going to the ThreadLocalTransaction to retrieve the Transaction
         every time it is used in the instrumented code, every transactional method is 'widened' so that the
-        transaction reference is passed as additional argument.
+        txn reference is passed as additional argument.
     </li>
 </ol>
 

@@ -4,14 +4,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class VetoCommitBarrier_vetoCommitTest {
     private GammaStm stm;
@@ -19,7 +19,7 @@ public class VetoCommitBarrier_vetoCommitTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -88,7 +88,7 @@ public class VetoCommitBarrier_vetoCommitTest {
     public class IncThread extends TestThread {
         private final GammaIntRef ref;
         private final VetoCommitBarrier barrier;
-        private Transaction tx;
+        private Txn tx;
 
         public IncThread(GammaIntRef ref, VetoCommitBarrier barrier) {
             super("IncThread");
@@ -100,7 +100,7 @@ public class VetoCommitBarrier_vetoCommitTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     IncThread.this.tx = tx;
                     ref.getAndIncrement(tx, 1);
                     barrier.joinCommit(tx);

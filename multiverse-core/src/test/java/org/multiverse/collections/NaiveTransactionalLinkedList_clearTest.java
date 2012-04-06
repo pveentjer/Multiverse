@@ -4,12 +4,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalLinkedList_clearTest {
 
@@ -19,7 +19,7 @@ public class NaiveTransactionalLinkedList_clearTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         list = new NaiveTransactionalLinkedList<String>(stm);
     }
 
@@ -27,7 +27,7 @@ public class NaiveTransactionalLinkedList_clearTest {
     public void whenEmpty() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.clear();
 
                 assertEquals(0, list.size());
@@ -40,7 +40,7 @@ public class NaiveTransactionalLinkedList_clearTest {
     public void whenSingleItem() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.put("foo");
                 list.clear();
 
@@ -54,7 +54,7 @@ public class NaiveTransactionalLinkedList_clearTest {
     public void whenMultipleItems() {
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.put("foo");
                 list.put("bar");
                 list.clear();

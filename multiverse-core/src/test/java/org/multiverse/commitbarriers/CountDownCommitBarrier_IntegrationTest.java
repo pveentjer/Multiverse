@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaStm;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_IntegrationTest {
 
@@ -21,7 +21,7 @@ public class CountDownCommitBarrier_IntegrationTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -61,7 +61,7 @@ public class CountDownCommitBarrier_IntegrationTest {
     }
 
     public class AwaitThread extends TestThread {
-        private Transaction tx;
+        private Txn tx;
         private final CountDownCommitBarrier barrier;
 
 
@@ -76,7 +76,7 @@ public class CountDownCommitBarrier_IntegrationTest {
 
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     AwaitThread.this.tx = tx;
                     ref.set(tx, 10);
                     barrier.joinCommitUninterruptibly(tx);

@@ -9,7 +9,7 @@ import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.joinAll;
@@ -72,7 +72,7 @@ public class BoxingOverheadDriver extends BenchmarkDriver implements GammaConsta
         }
 
         public void doRun() {
-            FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
+            FatMonoGammaTxn tx = new FatMonoGammaTxn(
                     new GammaTxnConfiguration(stm)
                             .setReadLockMode(LockMode.Exclusive)
                             .setDirtyCheckEnabled(false));

@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.After;
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * The test is not very efficient since a lot of temporary objects like the transaction template are created.
@@ -33,7 +33,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = new GammaStm();
     }
 
@@ -115,7 +115,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         public void push(final E item) {
             pushExecutor.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     head.set(new Node<E>(item, head.get()));
                 }
             });
@@ -124,7 +124,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         public E pop() {
             return popExecutor.atomic(new AtomicClosure<E>() {
                 @Override
-                public E execute(Transaction tx) throws Exception {
+                public E execute(Txn tx) throws Exception {
                     Node<E> node = head.awaitNotNullAndGet();
                     head.set(node.next);
                     return node.item;

@@ -12,8 +12,8 @@
         </ul>
     </li>
     <li><a href="multiverse">Multiverse</a></li>
-    <li><a href="transaction.mapping">Transaction Mapping</a></li>
-    <li><a href="blocking.transactions">Blocking transactions</a>
+    <li><a href="txn.mapping">Transaction Mapping</a></li>
+    <li><a href="blocking.txns">Blocking txns</a>
         <ul>
             <li><a href="">Blocking on multiple transactional objects</a></li>
         </ul>
@@ -104,7 +104,7 @@ Multiverse also wants to make use of those features.
 <p/>
 Multiverse relies on bytecode instrumentation to add the needed logic transactional objects (if you want you can also
 bypass instrumentation but makes integration with the Java language more intrusive). To make an object
-transaction, the TransactionalObject annotation needs to be added:
+txn, the TransactionalObject annotation needs to be added:
 
 <pre>
     import org.multiverse.annotations.TransactionalObject;
@@ -145,9 +145,9 @@ public static void transfer(Account from Account to, int amount){
 </pre>
 
 
-<h2 id="transaction.mapping">Transaction Mapping</h2>
+<h2 id="txn.mapping">Transaction Mapping</h2>
 
-<h2 id="blocking.transactions">Blocking transactions</h2>
+<h2 id="blocking.txns">Blocking txns</h2>
 Apart from making objects transactional, there is a lot more than just correct isolation between thread; notification.
 For example when a thread needs to wait on a BlockingQueue for an item to come available. With a lock
 based approach you can make use lower primitives like:
@@ -226,7 +226,7 @@ The same behavior can also be realized with Multiverse:
 </pre>
 
 The cool thing about the blocking behavior is that it also is possible to listen to multiple transactional objects. If
-a transaction wants to listen on
+a txn wants to listen on
 
 <pre>
 

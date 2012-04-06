@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnFactory;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.PreparedTransactionException;
@@ -13,7 +13,7 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -41,7 +41,7 @@ public class GammaLongRef_get1Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -57,7 +57,7 @@ public class GammaLongRef_get1Test {
     public void whenPreparedTransactionAvailable_thenPreparedTransactionException() {
         LongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
 
         try {
@@ -73,7 +73,7 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
         ref.getLock().acquire(tx, LockMode.Exclusive);
 
@@ -93,7 +93,7 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
         ref.getLock().acquire(tx, LockMode.Write);
         long value = ref.get(tx);
@@ -111,7 +111,7 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
         ref.getLock().acquire(tx, LockMode.Read);
         long value = ref.get(tx);
@@ -129,9 +129,9 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -153,9 +153,9 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
 
         ref.getLock().acquire(otherTx, LockMode.Write);
 
@@ -174,7 +174,7 @@ public class GammaLongRef_get1Test {
     public void whenActiveTransactionAvailable_thenPreparedTransactionException() {
         LongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
         long value = ref.get(tx);
 
@@ -189,7 +189,7 @@ public class GammaLongRef_get1Test {
         long initialVersion = ref.getVersion();
 
         try {
-            ref.get((Transaction)null);
+            ref.get((Txn)null);
             fail();
         } catch (NullPointerException expected) {
 
@@ -204,7 +204,7 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.commit();
 
         try {
@@ -224,7 +224,7 @@ public class GammaLongRef_get1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.abort();
 
         try {

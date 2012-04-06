@@ -6,8 +6,8 @@
         <title>Introduction</title>
         <para>
             It can happen that AtomicBlocks are called within the execution of other AtomicBlock and this leads to
-            transaction nesting. In a lot of cases you want to allow this, but in some cases you want to control it.
-            This can be done by configuration the transaction propagation.
+            txn nesting. In a lot of cases you want to allow this, but in some cases you want to control it.
+            This can be done by configuration the txn propagation.
         </para>
     </sect1>
 
@@ -18,29 +18,29 @@
             (defaults to PropagationLevel.Requires). The following propagation levels are supported:
             <itemizedlist>
                 <listitem>
-                    <para>PropagationLevel.RequiresNew: Indicates that a new transaction always is started, even when
-                        there is an active transaction. The active transaction is postponed and used again after the
-                        nested transaction commits. It could be that the outer transaction conflicts made on changes
-                        by the inner transaction.
+                    <para>PropagationLevel.RequiresNew: Indicates that a new txn always is started, even when
+                        there is an active txn. The active txn is postponed and used again after the
+                        nested txn commits. It could be that the outer txn conflicts made on changes
+                        by the inner txn.
                     </para>
                 </listitem>
                 <listitem>
-                    <para>PropagationLevel.Requires: Indicates that a new transaction will be used if none exists. If
-                        one exists, the logic will lift on that transaction. This is the default propagation level
+                    <para>PropagationLevel.Requires: Indicates that a new txn will be used if none exists. If
+                        one exists, the logic will lift on that txn. This is the default propagation level
                     </para>
                 </listitem>
                 <listitem>
                     <para>PropagationLevel.Supports: Indicates that it the logic can either be run with or without
-                        transaction.
+                        txn.
                     </para>
                 </listitem>
                 <listitem>
-                    <para>PropagationLevel.Never: Indicates that no active transaction should be available. If a
-                        transaction is found, a org.multiverse.api.exceptions.TransactionNotAllowedException is thrown.
+                    <para>PropagationLevel.Never: Indicates that no active txn should be available. If a
+                        txn is found, a org.multiverse.api.exceptions.TransactionNotAllowedException is thrown.
                     </para>
                 </listitem>
                 <listitem>
-                    <para>PropagationLevel.Mandatory: Indicates that a transaction should always be available. If not, a
+                    <para>PropagationLevel.Mandatory: Indicates that a txn should always be available. If not, a
                         org.multiverse.api.exceptions.TransactionMandatoryException is thrown.
                     </para>
                 </listitem>
@@ -74,7 +74,7 @@
     }
 
             </programlisting>
-            In this example the transfer method will lift on an already running transaction, but if none is found,
+            In this example the transfer method will lift on an already running txn, but if none is found,
             it will use it own.
         </para>
     </sect1>
@@ -83,7 +83,7 @@
         <title>Warning</title>
         <para>
             Atm there are no checks if outer AtomicBlock violates the inner AtomicBlock. If the inner AtomicBlock is configured
-            as readonly and the outer as an update transaction, an outer transaction is able to make updates.
+            as readonly and the outer as an update txn, an outer txn is able to make updates.
         </para>
     </sect1>
 </chapter>

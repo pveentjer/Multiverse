@@ -8,7 +8,7 @@ import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import static org.benchy.BenchyUtils.format;
 import static org.multiverse.TestUtils.joinAll;
@@ -73,7 +73,7 @@ public class MonoReadDriver extends BenchmarkDriver implements GammaConstants {
         public void doRun() {
             GammaLongRef ref = new GammaLongRef(stm);
 
-            FatMonoGammaTransaction tx = new FatMonoGammaTransaction(
+            FatMonoGammaTxn tx = new FatMonoGammaTxn(
                     new GammaTxnConfiguration(stm)
                             .setReadLockMode(LockMode.Exclusive)
                             .setDirtyCheckEnabled(false));

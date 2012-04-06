@@ -1,10 +1,7 @@
 package org.multiverse.api.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
-import org.multiverse.api.functions.BinaryFunction;
-import org.multiverse.api.functions.Function;
-import org.multiverse.api.predicates.Predicate;
+import org.multiverse.api.Txn;
 
 import java.util.Collection;
 
@@ -28,7 +25,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @param txn the transaction used for this operation.
      * @return <tt>true</tt> if this collection contains no elements
      */
-    boolean isEmpty(Transaction txn);
+    boolean isEmpty(Txn txn);
 
     /**
      * Returns the number of elements in this collection.  If this collection
@@ -38,7 +35,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @param txn the transaction used for this operation.
      * @return the number of elements in this collection
      */
-    int size(Transaction txn);
+    int size(Txn txn);
 
     /**
      * Returns <tt>true</tt> if this collection contains the specified element.
@@ -55,7 +52,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws NullPointerException if the specified element is null and this
      *                              collection does not permit null elements (optional)
      */
-    boolean contains(Transaction txn, Object o);
+    boolean contains(Txn txn, Object o);
 
     /**
      * Returns <tt>true</tt> if this collection contains all of the elements
@@ -73,7 +70,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                              elements (optional), or if the specified collection is null
      * @see #contains(Object)
      */
-    boolean containsAll(Transaction txn, Collection<?> c);
+    boolean containsAll(Txn txn, Collection<?> c);
 
     /**
      * Removes a single instance of the specified element from this
@@ -94,7 +91,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws UnsupportedOperationException if the <tt>remove</tt> operation
      *                                       is not supported by this collection
      */
-    boolean remove(Transaction txn, Object o);
+    boolean remove(Txn txn, Object o);
 
     /**
      * Removes all of the elements from this collection (optional operation).
@@ -104,7 +101,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws UnsupportedOperationException if the <tt>clear</tt> operation
      *                                       is not supported by this collection
      */
-    void clear(Transaction txn);
+    void clear(Txn txn);
 
     /**
      * Ensures that this collection contains the specified element (optional
@@ -140,7 +137,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      * @throws IllegalStateException         if the element cannot be added at this
      *                                       time due to insertion restrictions
      */
-    boolean add(Transaction txn, E e);
+    boolean add(Txn txn, E e);
 
 /**
      * Adds all of the elements in the specified collection to this collection
@@ -167,7 +164,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                                       this time due to insertion restrictions
      * @see #add(Object)
      */
-    boolean addAll(Transaction txn, Collection<? extends E> c);
+    boolean addAll(Txn txn, Collection<? extends E> c);
 
     /**
      * Adds all of the elements in the specified collection to this collection
@@ -219,7 +216,7 @@ public interface TransactionalCollection<E> extends TransactionalIterable<E>, Co
      *                                       this time due to insertion restrictions
      * @see #add(Object)
      */
-    boolean addAll(Transaction txn, TransactionalCollection<? extends E> c);
+    boolean addAll(Txn txn, TransactionalCollection<? extends E> c);
 
-    String toString(Transaction txn);
+    String toString(Txn txn);
 }

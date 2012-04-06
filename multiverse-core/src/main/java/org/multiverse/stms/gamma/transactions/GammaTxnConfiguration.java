@@ -23,7 +23,7 @@ import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.unmodifiableList;
 
 /**
- * A configuration object that contains the configuration for a GammaTransaction.
+ * A configuration object that contains the configuration for a GammaTxn.
  * <p/>
  * GammaTxnConfiguration object is considered to be immutable. The only mutable part if the speculative
  * configuration that can get upgraded if enabled and speculations failed.

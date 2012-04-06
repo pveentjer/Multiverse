@@ -39,7 +39,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        readonly count: so the number of transaction that have only read and not updated the
+                        readonly count: so the number of txn that have only read and not updated the
                         transactional reference.
                     </para>
                 </listitem>
@@ -50,7 +50,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        lock information: readlock (so the number of transaction that acquired the read-lock),
+                        lock information: readlock (so the number of txn that acquired the read-lock),
                         write-lock and exclusive-lock.
                     </para>
                 </listitem>
@@ -63,7 +63,7 @@
         <title>No Garbage</title>
         <para>
             One of the causes of a not scalable STM is that a lot of garbage is created. The new GammaStm is able to
-            reuse a lot of objects (so it pools internally) for almost all transactions. The only object that needs to
+            reuse a lot of objects (so it pools internally) for almost all txns. The only object that needs to
             be created is the AtomicClosure. If you can even pool that, then there will be zero waste.
         </para>
 
@@ -78,12 +78,12 @@
         <title>Read consistency</title>
         <para>
             The new GammaStm uses 1 basic mechanism for providing read consistency. The basic mechanism is based is on
-            semi visible reads (so it is visible that other transactions have read the data, but not which ones). When
-            a transaction reads a ref, it increments the surplus, and when the transaction is done with it (so aborts or
-            commits), automatically a depart is done. When a transaction commits, and finds that there are reading
+            semi visible reads (so it is visible that other txns have read the data, but not which ones). When
+            a txn reads a ref, it increments the surplus, and when the txn is done with it (so aborts or
+            commits), automatically a depart is done. When a txn commits, and finds that there are reading
             threads,
             it increments the global conflict counter (which in the future probably will be striped). When a reading
-            transaction
+            txn
             sees that the global conflict counter has changed, it does a full conflict scan. Transactions used by the
             GammaStm
             always use readtracking.
@@ -101,19 +101,19 @@
                         arrive/depart, which
                         in turn limits scalability. If they have become readbiased, and an update is done, the global
                         conflict counter
-                        will always be increased and all transactions are forced to do a full conflict scan. Once a ref
+                        will always be increased and all txns are forced to do a full conflict scan. Once a ref
                         is written,
                         it automatically become update biased until a certain number of reads have been done.
                     </para>
                 </listitem>
                 <listitem>
-                    <para>Always do a full conflict scan: short transactions (so ranging to 20 refs.. this value is
+                    <para>Always do a full conflict scan: short txns (so ranging to 20 refs.. this value is
                         configurable)
                         always do a full conflict scan. It should expensive, but in most cases it will only cause some
                         volatile reads.
-                        The advantage of using this approach is that a short transaction never needs to do an
+                        The advantage of using this approach is that a short txn never needs to do an
                         arrive/depart and never
-                        cause the global conflict counter to increment. If only short transactions are used, independant
+                        cause the global conflict counter to increment. If only short txns are used, independant
                         datastructure
                         will scale independently.
                     </para>
@@ -127,7 +127,7 @@
 
         <itemizedlist>
             <listitem>
-                <para>Pessimistic transactions</para>
+                <para>Pessimistic txns</para>
             </listitem>
             <listitem>
                 <para>Propagation level</para>

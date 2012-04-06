@@ -7,11 +7,11 @@ import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfiguration;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class GammaLongRef_atomicSetTest {
@@ -23,7 +23,7 @@ public class GammaLongRef_atomicSetTest {
         GammaStmConfiguration config = new GammaStmConfiguration();
         config.maxRetries = 10;
         stm = new GammaStm(config);
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -36,7 +36,7 @@ public class GammaLongRef_atomicSetTest {
         long result = ref.atomicSet(newValue);
 
         assertEquals(newValue, result);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);
@@ -49,8 +49,8 @@ public class GammaLongRef_atomicSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
 
         long newValue = 10;
         long result = ref.atomicSet(newValue);
@@ -58,7 +58,7 @@ public class GammaLongRef_atomicSetTest {
         assertIsActive(tx);
         assert (tx.getRefTranlocal(ref) == null);
         assertEquals(newValue, result);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);
@@ -71,7 +71,7 @@ public class GammaLongRef_atomicSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -91,7 +91,7 @@ public class GammaLongRef_atomicSetTest {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         try {
@@ -115,7 +115,7 @@ public class GammaLongRef_atomicSetTest {
 
         assertEquals(initialValue, result);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertWriteBiased(ref);

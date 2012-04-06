@@ -2,7 +2,7 @@ package org.multiverse.stms.gamma.transactionalobjects;
 
 import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
@@ -11,18 +11,18 @@ import org.multiverse.stms.gamma.GammaObjectPool;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmUtils;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
 import static java.lang.Math.max;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
-import static org.multiverse.stms.gamma.GammaStmUtils.asGammaTransaction;
-import static org.multiverse.stms.gamma.GammaStmUtils.getRequiredThreadLocalGammaTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
+import static org.multiverse.stms.gamma.GammaStmUtils.asGammaTxn;
+import static org.multiverse.stms.gamma.GammaStmUtils.getRequiredThreadLocalGammaTxn;
 import static org.multiverse.stms.gamma.ThreadLocalGammaObjectPool.getThreadLocalGammaObjectPool;
 import static org.multiverse.utils.Bugshaker.shakeBugs;
 
@@ -40,7 +40,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
-    public final boolean flattenCommute(final GammaTransaction tx, final GammaRefTranlocal tranlocal, final int lockMode) {
+    public final boolean flattenCommute(final GammaTxn tx, final GammaRefTranlocal tranlocal, final int lockMode) {
         assert tranlocal.mode == TRANLOCAL_COMMUTING;
 
         final GammaTxnConfiguration config = tx.config;
@@ -79,7 +79,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return true;
     }
 
-    private void evaluate(final GammaRefTranlocal tranlocal, GammaTransaction tx, final Function function) {
+    private void evaluate(final GammaRefTranlocal tranlocal, GammaTxn tx, final Function function) {
         tx.evaluatingCommute = true;
 
         try {
@@ -167,7 +167,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
-    public final boolean prepare(final GammaTransaction tx, final GammaRefTranlocal tranlocal) {
+    public final boolean prepare(final GammaTxn tx, final GammaRefTranlocal tranlocal) {
         final int mode = tranlocal.getMode();
 
         if (mode == TRANLOCAL_CONSTRUCTING) {
@@ -274,7 +274,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     public final boolean load(
-            final GammaTransaction tx, final GammaRefTranlocal tranlocal, final int lockMode, int spinCount, final boolean arriveNeeded) {
+            final GammaTxn tx, final GammaRefTranlocal tranlocal, final int lockMode, int spinCount, final boolean arriveNeeded) {
 
         if (lockMode != LOCKMODE_NONE) {
             final int result = arriveAndLock(spinCount, lockMode);
@@ -359,7 +359,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         }
     }
 
-    public final GammaRefTranlocal openForConstruction(GammaTransaction tx) {
+    public final GammaRefTranlocal openForConstruction(GammaTxn tx) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -367,11 +367,11 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         final int type = tx.transactionType;
 
         if (type == TRANSACTIONTYPE_FAT_MONO) {
-            return openForConstruction((FatMonoGammaTransaction) tx);
+            return openForConstruction((FatMonoGammaTxn) tx);
         } else if (type == TRANSACTIONTYPE_FAT_FIXED_LENGTH) {
-            return openForConstruction((FatFixedLengthGammaTransaction) tx);
+            return openForConstruction((FatFixedLengthGammaTxn) tx);
         } else if (type == TRANSACTIONTYPE_FAT_VARIABLE_LENGTH) {
-            return openForConstruction((FatVariableLengthGammaTransaction) tx);
+            return openForConstruction((FatVariableLengthGammaTxn) tx);
         } else {
             throw tx.abortOpenForConstructionRequired(this);
         }
@@ -391,7 +391,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         }
     }
 
-    public final GammaRefTranlocal openForConstruction(FatMonoGammaTransaction tx) {
+    public final GammaRefTranlocal openForConstruction(FatMonoGammaTxn tx) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
@@ -432,7 +432,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForConstruction(FatVariableLengthGammaTransaction tx) {
+    public final GammaRefTranlocal openForConstruction(FatVariableLengthGammaTxn tx) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
@@ -475,7 +475,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForConstruction(FatFixedLengthGammaTransaction tx) {
+    public final GammaRefTranlocal openForConstruction(FatFixedLengthGammaTxn tx) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForConstructionOnBadStatus(this);
         }
@@ -536,7 +536,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     // =============================== open for read ==============================================
     // ============================================================================================
 
-    public final GammaRefTranlocal openForRead(final GammaTransaction tx, final int lockMode) {
+    public final GammaRefTranlocal openForRead(final GammaTxn tx, final int lockMode) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -544,19 +544,19 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         final int type = tx.transactionType;
 
         if (type == TRANSACTIONTYPE_LEAN_MONO) {
-            return openForRead((LeanMonoGammaTransaction) tx, lockMode);
+            return openForRead((LeanMonoGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_LEAN_FIXED_LENGTH) {
-            return openForRead((LeanFixedLengthGammaTransaction) tx, lockMode);
+            return openForRead((LeanFixedLengthGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_FAT_MONO) {
-            return openForRead((FatMonoGammaTransaction) tx, lockMode);
+            return openForRead((FatMonoGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_FAT_FIXED_LENGTH) {
-            return openForRead((FatFixedLengthGammaTransaction) tx, lockMode);
+            return openForRead((FatFixedLengthGammaTxn) tx, lockMode);
         } else {
-            return openForRead((FatVariableLengthGammaTransaction) tx, lockMode);
+            return openForRead((FatVariableLengthGammaTxn) tx, lockMode);
         }
     }
 
-    public final GammaRefTranlocal openForRead(final LeanMonoGammaTransaction tx, int lockMode) {
+    public final GammaRefTranlocal openForRead(final LeanMonoGammaTxn tx, int lockMode) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
@@ -629,7 +629,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForRead(final LeanFixedLengthGammaTransaction tx, int lockMode) {
+    public final GammaRefTranlocal openForRead(final LeanFixedLengthGammaTxn tx, int lockMode) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
@@ -765,7 +765,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         tranlocal.version = -1;
     }
 
-    public final GammaRefTranlocal openForRead(final FatMonoGammaTransaction tx, int lockMode) {
+    public final GammaRefTranlocal openForRead(final FatMonoGammaTxn tx, int lockMode) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
@@ -824,7 +824,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForRead(final FatFixedLengthGammaTransaction tx, int desiredLockMode) {
+    public final GammaRefTranlocal openForRead(final FatFixedLengthGammaTxn tx, int desiredLockMode) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
@@ -910,7 +910,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return newNode;
     }
 
-    public final GammaRefTranlocal openForRead(final FatVariableLengthGammaTransaction tx, int desiredLockMode) {
+    public final GammaRefTranlocal openForRead(final FatVariableLengthGammaTxn tx, int desiredLockMode) {
         if (tx.status != TX_ACTIVE) {
             throw tx.abortOpenForReadOnBadStatus(this);
         }
@@ -983,7 +983,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     // =============================== open for write =============================================
     // ============================================================================================
 
-    public final GammaRefTranlocal openForWrite(final GammaTransaction tx, final int lockMode) {
+    public final GammaRefTranlocal openForWrite(final GammaTxn tx, final int lockMode) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -991,19 +991,19 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         final int type = tx.transactionType;
 
         if (type == TRANSACTIONTYPE_LEAN_MONO) {
-            return openForWrite((LeanMonoGammaTransaction) tx, lockMode);
+            return openForWrite((LeanMonoGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_LEAN_FIXED_LENGTH) {
-            return openForWrite((LeanFixedLengthGammaTransaction) tx, lockMode);
+            return openForWrite((LeanFixedLengthGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_FAT_MONO) {
-            return openForWrite((FatMonoGammaTransaction) tx, lockMode);
+            return openForWrite((FatMonoGammaTxn) tx, lockMode);
         } else if (type == TRANSACTIONTYPE_FAT_FIXED_LENGTH) {
-            return openForWrite((FatFixedLengthGammaTransaction) tx, lockMode);
+            return openForWrite((FatFixedLengthGammaTxn) tx, lockMode);
         } else {
-            return openForWrite((FatVariableLengthGammaTransaction) tx, lockMode);
+            return openForWrite((FatVariableLengthGammaTxn) tx, lockMode);
         }
     }
 
-    public final GammaRefTranlocal openForWrite(final LeanMonoGammaTransaction tx, int lockMode) {
+    public final GammaRefTranlocal openForWrite(final LeanMonoGammaTxn tx, int lockMode) {
         final GammaRefTranlocal tranlocal = openForRead(tx, lockMode);
 
         if (!tx.hasWrites) {
@@ -1017,7 +1017,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForWrite(final LeanFixedLengthGammaTransaction tx, int lockMode) {
+    public final GammaRefTranlocal openForWrite(final LeanFixedLengthGammaTxn tx, int lockMode) {
         final GammaRefTranlocal tranlocal = openForRead(tx, lockMode);
 
         if (!tx.hasWrites) {
@@ -1031,7 +1031,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForWrite(final FatMonoGammaTransaction tx, final int desiredLockMode) {
+    public final GammaRefTranlocal openForWrite(final FatMonoGammaTxn tx, final int desiredLockMode) {
         GammaTxnConfiguration config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(desiredLockMode, config.writeLockModeAsInt));
@@ -1053,7 +1053,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForWrite(final FatFixedLengthGammaTransaction tx, final int lockMode) {
+    public final GammaRefTranlocal openForWrite(final FatFixedLengthGammaTxn tx, final int lockMode) {
         GammaTxnConfiguration config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(lockMode, config.writeLockModeAsInt));
@@ -1075,7 +1075,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return tranlocal;
     }
 
-    public final GammaRefTranlocal openForWrite(final FatVariableLengthGammaTransaction tx, final int lockMode) {
+    public final GammaRefTranlocal openForWrite(final FatVariableLengthGammaTxn tx, final int lockMode) {
         GammaTxnConfiguration config = tx.config;
 
         GammaRefTranlocal tranlocal = openForRead(tx, max(lockMode, config.writeLockModeAsInt));
@@ -1101,7 +1101,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     // ================================= open for commute =========================================
     // ============================================================================================
 
-    public final void openForCommute(final GammaTransaction tx, final Function function) {
+    public final void openForCommute(final GammaTxn tx, final Function function) {
         if (tx == null) {
             throw new NullPointerException("tx can't be null");
         }
@@ -1109,11 +1109,11 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         final int type = tx.transactionType;
 
         if (type == TRANSACTIONTYPE_FAT_MONO) {
-            openForCommute((FatMonoGammaTransaction) tx, function);
+            openForCommute((FatMonoGammaTxn) tx, function);
         } else if (type == TRANSACTIONTYPE_FAT_FIXED_LENGTH) {
-            openForCommute((FatFixedLengthGammaTransaction) tx, function);
+            openForCommute((FatFixedLengthGammaTxn) tx, function);
         } else if (type == TRANSACTIONTYPE_FAT_VARIABLE_LENGTH) {
-            openForCommute((FatVariableLengthGammaTransaction) tx, function);
+            openForCommute((FatVariableLengthGammaTxn) tx, function);
         } else {
             throw tx.abortCommuteOnCommuteDetected(this);
         }
@@ -1126,7 +1126,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         tranlocal.writeSkewCheck = false;
     }
 
-    public final void openForCommute(final FatMonoGammaTransaction tx, final Function function) {
+    public final void openForCommute(final FatMonoGammaTxn tx, final Function function) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -1198,7 +1198,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         }
     }
 
-    public final void openForCommute(final FatFixedLengthGammaTransaction tx, final Function function) {
+    public final void openForCommute(final FatFixedLengthGammaTxn tx, final Function function) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -1287,7 +1287,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         }
     }
 
-    public final void openForCommute(final FatVariableLengthGammaTransaction tx, final Function function) {
+    public final void openForCommute(final FatVariableLengthGammaTxn tx, final Function function) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -1357,14 +1357,14 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     public final void ensure() {
-        ensure(getRequiredThreadLocalGammaTransaction());
+        ensure(getRequiredThreadLocalGammaTxn());
     }
 
-    public final void ensure(final Transaction self) {
-        ensure(asGammaTransaction(self));
+    public final void ensure(final Txn self) {
+        ensure(asGammaTxn(self));
     }
 
-    public final void ensure(final GammaTransaction tx) {
+    public final void ensure(final GammaTxn tx) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -1385,7 +1385,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         tranlocal.writeSkewCheck = true;
     }
 
-    protected final long getLong(final GammaTransaction tx, final LockMode lockMode) {
+    protected final long getLong(final GammaTxn tx, final LockMode lockMode) {
         assert type != TYPE_REF;
 
         if (tx == null) {
@@ -1403,7 +1403,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return openForRead(tx, lockMode.asInt()).long_value;
     }
 
-    protected final Object getObject(final GammaTransaction tx, final LockMode lockMode) {
+    protected final Object getObject(final GammaTxn tx, final LockMode lockMode) {
         assert type == TYPE_REF;
 
         if (tx == null) {
@@ -1421,7 +1421,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return openForRead(tx, lockMode.asInt()).ref_value;
     }
 
-    protected final long setLong(final GammaTransaction tx, final LockMode lockMode, final long newValue, final boolean returnOld) {
+    protected final long setLong(final GammaTxn tx, final LockMode lockMode, final long newValue, final boolean returnOld) {
         assert type != TYPE_REF;
 
         if (tx == null) {
@@ -1442,7 +1442,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
         return returnOld ? oldValue : newValue;
     }
 
-    protected final Object setObject(final GammaTransaction tx, final LockMode lockMode, final Object newValue, final boolean returnOld) {
+    protected final Object setObject(final GammaTxn tx, final LockMode lockMode, final Object newValue, final boolean returnOld) {
         assert type == TYPE_REF;
 
         if (tx == null) {
@@ -1626,7 +1626,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
 
     @Override
     public final void acquire(final LockMode desiredLockMode) {
-        final GammaTransaction tx = (GammaTransaction) getThreadLocalTransaction();
+        final GammaTxn tx = (GammaTxn) getThreadLocalTxn();
 
         if (tx == null) {
             throw new TransactionMandatoryException();
@@ -1636,11 +1636,11 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
     }
 
     @Override
-    public final void acquire(final Transaction tx, final LockMode desiredLockMode) {
-        acquire((GammaTransaction) tx, desiredLockMode);
+    public final void acquire(final Txn tx, final LockMode desiredLockMode) {
+        acquire((GammaTxn) tx, desiredLockMode);
     }
 
-    public final void acquire(final GammaTransaction tx, final LockMode lockMode) {
+    public final void acquire(final GammaTxn tx, final LockMode lockMode) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -1668,7 +1668,7 @@ public abstract class BaseGammaRef extends AbstractGammaObject {
      * @return true if the lock was acquired successfully and there was no conflict.
      */
     public final boolean tryLockAndCheckConflict(
-            final GammaTransaction tx,
+            final GammaTxn tx,
             final GammaRefTranlocal tranlocal,
             final int spinCount,
             final int desiredLockMode) {

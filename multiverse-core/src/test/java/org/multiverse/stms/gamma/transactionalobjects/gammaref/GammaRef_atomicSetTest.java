@@ -7,12 +7,12 @@ import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfiguration;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertOrecValue;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 import static org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject.setReadonlyCount;
 import static org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject.setSurplus;
@@ -26,7 +26,7 @@ public class GammaRef_atomicSetTest {
         GammaStmConfiguration config = new GammaStmConfiguration();
         config.maxRetries = 0;
         stm = new GammaStm(config);
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     // =================== write biased ==============================
@@ -50,7 +50,7 @@ public class GammaRef_atomicSetTest {
         String initialValue = "foo";
         GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
         long initialVersion = ref.version;
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, lockMode);
         long orecValue = ref.orec;
         long globalConflictCount = stm.globalConflictCounter.count();
@@ -140,7 +140,7 @@ public class GammaRef_atomicSetTest {
         String initialValue = "foo";
         GammaRef<String> ref = makeReadBiased(new GammaRef<String>(stm, initialValue));
         long initialVersion = ref.version;
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.getLock().acquire(tx, lockMode);
         long orecValue = ref.orec;
         long globalConflictCount = stm.globalConflictCounter.count();

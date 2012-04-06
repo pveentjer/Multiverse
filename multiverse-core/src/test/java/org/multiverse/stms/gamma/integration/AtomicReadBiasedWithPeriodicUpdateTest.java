@@ -7,7 +7,7 @@ import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class AtomicReadBiasedWithPeriodicUpdateTest {
@@ -16,7 +16,7 @@ public class AtomicReadBiasedWithPeriodicUpdateTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 

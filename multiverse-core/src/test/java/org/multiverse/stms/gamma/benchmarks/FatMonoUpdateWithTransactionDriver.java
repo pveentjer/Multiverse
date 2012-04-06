@@ -4,13 +4,13 @@ import org.benchy.BenchyUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import static org.junit.Assert.assertEquals;
 
@@ -63,8 +63,8 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
 
         final AtomicVoidClosure closure = new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                ref.openForWrite((FatMonoGammaTransaction) tx, LOCKMODE_NONE).long_value++;
+            public void execute(Txn tx) throws Exception {
+                ref.openForWrite((FatMonoGammaTxn) tx, LOCKMODE_NONE).long_value++;
             }
         };
 

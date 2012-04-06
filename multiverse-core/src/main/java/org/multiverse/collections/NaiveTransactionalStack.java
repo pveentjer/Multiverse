@@ -1,8 +1,7 @@
 package org.multiverse.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
-import org.multiverse.api.collections.TransactionalCollection;
+import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TransactionalIterator;
 import org.multiverse.api.collections.TransactionalStack;
 import org.multiverse.api.references.IntRef;
@@ -10,7 +9,7 @@ import org.multiverse.api.references.Ref;
 
 import java.util.NoSuchElementException;
 
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public final class NaiveTransactionalStack<E> extends AbstractTransactionalCollection<E> implements TransactionalStack<E> {
 
@@ -35,7 +34,7 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
     }
 
     @Override
-    public int size(Transaction tx) {
+    public int size(Txn tx) {
         return size.get(tx);
     }
 
@@ -45,7 +44,7 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
     }
 
     @Override
-    public void clear(Transaction tx) {
+    public void clear(Txn tx) {
         int s = size.get(tx);
         if (s == 0) {
             return;
@@ -57,11 +56,11 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
 
     @Override
     public boolean offer(E item) {
-        return offer(getThreadLocalTransaction(), item);
+        return offer(getThreadLocalTxn(), item);
     }
 
     @Override
-    public boolean offer(Transaction tx, E item) {
+    public boolean offer(Txn tx, E item) {
         if (capacity == size(tx)) {
             return false;
         }
@@ -72,11 +71,11 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
 
     @Override
     public E poll() {
-        return poll(getThreadLocalTransaction());
+        return poll(getThreadLocalTxn());
     }
 
     @Override
-    public E poll(Transaction tx) {
+    public E poll(Txn tx) {
         if (size.get(tx) == 0) {
             return null;
         }
@@ -86,22 +85,22 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
 
     @Override
     public E peek() {
-        return peek(getThreadLocalTransaction());
+        return peek(getThreadLocalTxn());
     }
 
     @Override
-    public E peek(Transaction tx) {
+    public E peek(Txn tx) {
         Node<E> h = head.get(tx);
         return h == null ? null : h.value;
     }
 
     @Override
     public void push(E item) {
-        push(getThreadLocalTransaction(), item);
+        push(getThreadLocalTxn(), item);
     }
 
     @Override
-    public void push(Transaction tx, E item) {
+    public void push(Txn tx, E item) {
         if (item == null) {
             throw new NullPointerException();
         }
@@ -116,11 +115,11 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
 
     @Override
     public E pop() {
-        return pop(getThreadLocalTransaction());
+        return pop(getThreadLocalTxn());
     }
 
     @Override
-    public E pop(Transaction tx) {
+    public E pop(Txn tx) {
         if (size.get(tx) == 0) {
             tx.retry();
         }
@@ -132,7 +131,7 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
     }
 
     @Override
-    public boolean add(Transaction tx, E e) {
+    public boolean add(Txn tx, E e) {
         if (!offer(tx, e)) {
             throw new IllegalStateException("NaiveTransactionalStack full");
         }
@@ -141,12 +140,12 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
     }
 
     @Override
-    public TransactionalIterator<E> iterator(Transaction tx) {
+    public TransactionalIterator<E> iterator(Txn tx) {
         return new It<E>(stm, head.get(tx));
     }
 
     @Override
-    public boolean contains(Transaction tx, Object o) {
+    public boolean contains(Txn tx, Object o) {
         if (o == null) {
             return false;
         }
@@ -168,7 +167,7 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
     }
 
     @Override
-    public boolean remove(Transaction tx, Object o) {
+    public boolean remove(Txn tx, Object o) {
         throw new UnsupportedOperationException();
     }
 
@@ -180,12 +179,12 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
         }
 
         @Override
-        public boolean hasNext(Transaction tx) {
+        public boolean hasNext(Txn tx) {
             return node.get() != null;
         }
 
         @Override
-        public E next(Transaction tx) {
+        public E next(Txn tx) {
             Node<E> n = node.get(tx);
 
             if (n == null) {
@@ -198,13 +197,13 @@ public final class NaiveTransactionalStack<E> extends AbstractTransactionalColle
         }
 
         @Override
-        public void remove(Transaction tx) {
+        public void remove(Txn tx) {
             throw new UnsupportedOperationException();
         }
     }
 
     @Override
-    public String toString(Transaction tx) {
+    public String toString(Txn tx) {
         int s = size.get(tx);
         if (s == 0) {
             return "[]";

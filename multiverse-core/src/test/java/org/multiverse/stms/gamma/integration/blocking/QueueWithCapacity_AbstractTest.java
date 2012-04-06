@@ -2,15 +2,15 @@ package org.multiverse.stms.gamma.integration.blocking;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.LinkedList;
 
@@ -19,7 +19,7 @@ import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
 
@@ -30,7 +30,7 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 
@@ -105,12 +105,12 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
         public void push(final E item) {
             pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (size.get() >= maxCapacity) {
                         retry();
                     }
 
-                    GammaTransaction btx = (GammaTransaction) tx;
+                    GammaTxn btx = (GammaTxn) tx;
                     size.incrementAndGet(1);
                     pushedStack.push(btx, item);
                 }
@@ -120,8 +120,8 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
         public E pop() {
             return popBlock.atomic(new AtomicClosure<E>() {
                 @Override
-                public E execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public E execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
 
                     if (!readyToPopStack.isEmpty(btx)) {
                         size.decrement();
@@ -148,15 +148,15 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
     class Stack<E> {
         final GammaRef<Node<E>> head = new GammaRef<Node<E>>(stm);
 
-        void push(GammaTransaction tx, E item) {
+        void push(GammaTxn tx, E item) {
             head.set(tx, new Node<E>(item, head.get(tx)));
         }
 
-        boolean isEmpty(GammaTransaction tx) {
+        boolean isEmpty(GammaTxn tx) {
             return head.isNull(tx);
         }
 
-        E pop(GammaTransaction tx) {
+        E pop(GammaTxn tx) {
             Node<E> node = head.get();
             if (node == null) {
                 tx.retry();

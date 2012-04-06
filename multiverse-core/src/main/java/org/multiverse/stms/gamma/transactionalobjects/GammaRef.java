@@ -1,19 +1,19 @@
 package org.multiverse.stms.gamma.transactionalobjects;
 
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.api.functions.Function;
 import org.multiverse.api.predicates.Predicate;
 import org.multiverse.api.references.Ref;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.getRequiredThreadLocalTransaction;
-import static org.multiverse.stms.gamma.GammaStmUtils.asGammaTransaction;
-import static org.multiverse.stms.gamma.GammaStmUtils.getRequiredThreadLocalGammaTransaction;
+import static org.multiverse.api.TxnThreadLocal.getRequiredThreadLocalTxn;
+import static org.multiverse.stms.gamma.GammaStmUtils.asGammaTxn;
+import static org.multiverse.stms.gamma.GammaStmUtils.getRequiredThreadLocalGammaTxn;
 import static org.multiverse.stms.gamma.ThreadLocalGammaObjectPool.getThreadLocalGammaObjectPool;
 
 /**
@@ -29,11 +29,11 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
         this((GammaStm) getGlobalStmInstance(), value);
     }
 
-    public GammaRef(final GammaTransaction tx) {
+    public GammaRef(final GammaTxn tx) {
         this(tx, null);
     }
 
-    public GammaRef(final GammaTransaction tx, final E value) {
+    public GammaRef(final GammaTxn tx, final E value) {
         super(tx.getConfiguration().stm, TYPE_REF);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
@@ -55,43 +55,43 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final E get() {
-        return get(getRequiredThreadLocalGammaTransaction());
+        return get(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final E get(final Transaction tx) {
-        return get(asGammaTransaction(tx));
+    public final E get(final Txn tx) {
+        return get(asGammaTxn(tx));
     }
 
-    public final E get(final GammaTransaction tx) {
+    public final E get(final GammaTxn tx) {
         return (E) openForRead(tx, LOCKMODE_NONE).ref_value;
     }
 
     @Override
     public final E getAndLock(final LockMode lockMode) {
-        return getAndLock(getRequiredThreadLocalGammaTransaction(), lockMode);
+        return getAndLock(getRequiredThreadLocalGammaTxn(), lockMode);
     }
 
     @Override
-    public final E getAndLock(final Transaction tx, final LockMode lockMode) {
-        return getAndLock(asGammaTransaction(tx), lockMode);
+    public final E getAndLock(final Txn tx, final LockMode lockMode) {
+        return getAndLock(asGammaTxn(tx), lockMode);
     }
 
-    public final E getAndLock(final GammaTransaction tx, final LockMode lockMode) {
+    public final E getAndLock(final GammaTxn tx, final LockMode lockMode) {
         return (E) getObject(tx, lockMode);
     }
 
     @Override
     public final E set(final E value) {
-        return set(getRequiredThreadLocalTransaction(), value);
+        return set(getRequiredThreadLocalTxn(), value);
     }
 
     @Override
-    public final E set(final Transaction tx, final E value) {
-        return set(asGammaTransaction(tx), value);
+    public final E set(final Txn tx, final E value) {
+        return set(asGammaTxn(tx), value);
     }
 
-    public final E set(final GammaTransaction tx, final E value) {
+    public final E set(final GammaTxn tx, final E value) {
         final GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         tranlocal.ref_value = value;
         return value;
@@ -99,29 +99,29 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final E setAndLock(final E value, final LockMode lockMode) {
-        return setAndLock(getRequiredThreadLocalGammaTransaction(), value, lockMode);
+        return setAndLock(getRequiredThreadLocalGammaTxn(), value, lockMode);
     }
 
     @Override
-    public final E setAndLock(final Transaction tx, final E value, final LockMode lockMode) {
-        return setAndLock(asGammaTransaction(tx), value, lockMode);
+    public final E setAndLock(final Txn tx, final E value, final LockMode lockMode) {
+        return setAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final E setAndLock(final GammaTransaction tx, final E value, final LockMode lockMode) {
+    public final E setAndLock(final GammaTxn tx, final E value, final LockMode lockMode) {
         return (E) setObject(tx, lockMode, value, false);
     }
 
     @Override
     public final E getAndSet(final E value) {
-        return getAndSet(getRequiredThreadLocalTransaction(), value);
+        return getAndSet(getRequiredThreadLocalTxn(), value);
     }
 
     @Override
-    public final E getAndSet(final Transaction tx, final E value) {
-        return getAndSet(asGammaTransaction(tx), value);
+    public final E getAndSet(final Txn tx, final E value) {
+        return getAndSet(asGammaTxn(tx), value);
     }
 
-    public final E getAndSet(final GammaTransaction tx, final E value) {
+    public final E getAndSet(final GammaTxn tx, final E value) {
         GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         E oldValue = (E) tranlocal.ref_value;
         tranlocal.ref_value = value;
@@ -130,15 +130,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final E getAndSetAndLock(final E value, final LockMode lockMode) {
-        return getAndSetAndLock(getRequiredThreadLocalGammaTransaction(), value, lockMode);
+        return getAndSetAndLock(getRequiredThreadLocalGammaTxn(), value, lockMode);
     }
 
     @Override
-    public final E getAndSetAndLock(final Transaction tx, final E value, final LockMode lockMode) {
-        return getAndSetAndLock(asGammaTransaction(tx), value, lockMode);
+    public final E getAndSetAndLock(final Txn tx, final E value, final LockMode lockMode) {
+        return getAndSetAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final E getAndSetAndLock(final GammaTransaction tx, final E value, final LockMode lockMode) {
+    public final E getAndSetAndLock(final GammaTxn tx, final E value, final LockMode lockMode) {
         return (E) setObject(tx, lockMode, value, true);
     }
 
@@ -165,15 +165,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final void commute(final Function<E> function) {
-        commute(getRequiredThreadLocalTransaction(), function);
+        commute(getRequiredThreadLocalTxn(), function);
     }
 
     @Override
-    public final void commute(final Transaction tx, final Function<E> function) {
-        commute(asGammaTransaction(tx), function);
+    public final void commute(final Txn tx, final Function<E> function) {
+        commute(asGammaTxn(tx), function);
     }
 
-    public final void commute(final GammaTransaction tx, final Function<E> function) {
+    public final void commute(final GammaTxn tx, final Function<E> function) {
         openForCommute(tx, function);
     }
 
@@ -241,33 +241,33 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final E alterAndGet(final Function<E> function) {
-        return alterAndGet(getRequiredThreadLocalTransaction(), function);
+        return alterAndGet(getRequiredThreadLocalTxn(), function);
     }
 
     @Override
-    public final E alterAndGet(final Transaction tx, final Function<E> function) {
-        return alterAndGet(asGammaTransaction(tx), function);
+    public final E alterAndGet(final Txn tx, final Function<E> function) {
+        return alterAndGet(asGammaTxn(tx), function);
     }
 
-    public final E alterAndGet(final GammaTransaction tx, final Function<E> function) {
+    public final E alterAndGet(final GammaTxn tx, final Function<E> function) {
         return alter(tx, function, false);
     }
 
     @Override
     public final E getAndAlter(final Function<E> function) {
-        return getAndAlter(getRequiredThreadLocalTransaction(), function);
+        return getAndAlter(getRequiredThreadLocalTxn(), function);
     }
 
     @Override
-    public final E getAndAlter(final Transaction tx, final Function<E> function) {
-        return getAndAlter(asGammaTransaction(tx), function);
+    public final E getAndAlter(final Txn tx, final Function<E> function) {
+        return getAndAlter(asGammaTxn(tx), function);
     }
 
-    public final E getAndAlter(final GammaTransaction tx, final Function<E> function) {
+    public final E getAndAlter(final GammaTxn tx, final Function<E> function) {
         return alter(tx, function, true);
     }
 
-    private E alter(final GammaTransaction tx, final Function<E> function, final boolean returnOld) {
+    private E alter(final GammaTxn tx, final Function<E> function, final boolean returnOld) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -339,15 +339,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final boolean isNull() {
-        return isNull(getRequiredThreadLocalGammaTransaction());
+        return isNull(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final boolean isNull(final Transaction tx) {
-        return isNull(asGammaTransaction(tx));
+    public final boolean isNull(final Txn tx) {
+        return isNull(asGammaTxn(tx));
     }
 
-    public final boolean isNull(final GammaTransaction tx) {
+    public final boolean isNull(final GammaTxn tx) {
         return openForRead(tx, LOCKMODE_NONE).ref_value == null;
     }
 
@@ -358,15 +358,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final E awaitNotNullAndGet() {
-        return awaitNotNullAndGet(getRequiredThreadLocalGammaTransaction());
+        return awaitNotNullAndGet(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final E awaitNotNullAndGet(final Transaction tx) {
-        return awaitNotNullAndGet(asGammaTransaction(tx));
+    public final E awaitNotNullAndGet(final Txn tx) {
+        return awaitNotNullAndGet(asGammaTxn(tx));
     }
 
-    public final E awaitNotNullAndGet(final GammaTransaction tx) {
+    public final E awaitNotNullAndGet(final GammaTxn tx) {
         final GammaRefTranlocal tranlocal = openForRead(tx, LOCKMODE_NONE);
 
         if (tranlocal.ref_value == null) {
@@ -378,29 +378,29 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final void awaitNull() {
-        await(getRequiredThreadLocalGammaTransaction(), (E) null);
+        await(getRequiredThreadLocalGammaTxn(), (E) null);
     }
 
     @Override
-    public final void awaitNull(final Transaction tx) {
-        await(asGammaTransaction(tx), (E) null);
+    public final void awaitNull(final Txn tx) {
+        await(asGammaTxn(tx), (E) null);
     }
 
-    public final void awaitNull(final GammaTransaction tx) {
+    public final void awaitNull(final GammaTxn tx) {
         await(tx, (E) null);
     }
 
     @Override
     public final void await(final E value) {
-        await(getRequiredThreadLocalTransaction(), value);
+        await(getRequiredThreadLocalTxn(), value);
     }
 
     @Override
-    public final void await(final Transaction tx, final E value) {
-        await(asGammaTransaction(tx), value);
+    public final void await(final Txn tx, final E value) {
+        await(asGammaTxn(tx), value);
     }
 
-    public final void await(final GammaTransaction tx, final E value) {
+    public final void await(final GammaTxn tx, final E value) {
         //noinspection ObjectEquality
         if (openForRead(tx, LOCKMODE_NONE).ref_value != value) {
             tx.retry();
@@ -409,15 +409,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final void await(final Predicate<E> predicate) {
-        await(getRequiredThreadLocalTransaction(), predicate);
+        await(getRequiredThreadLocalTxn(), predicate);
     }
 
     @Override
-    public final void await(final Transaction tx, final Predicate<E> predicate) {
-        await(asGammaTransaction(tx), predicate);
+    public final void await(final Txn tx, final Predicate<E> predicate) {
+        await(asGammaTxn(tx), predicate);
     }
 
-    public final void await(final GammaTransaction tx, final Predicate<E> predicate) {
+    public final void await(final GammaTxn tx, final Predicate<E> predicate) {
         final GammaRefTranlocal tranlocal = openForRead(tx, LOCKMODE_NONE);
         boolean abort = true;
         try {
@@ -440,15 +440,15 @@ public class GammaRef<E> extends BaseGammaRef implements Ref<E> {
 
     @Override
     public final String toString() {
-        return toString(getRequiredThreadLocalGammaTransaction());
+        return toString(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final String toString(Transaction tx) {
-        return toString(asGammaTransaction(tx));
+    public final String toString(Txn tx) {
+        return toString(asGammaTxn(tx));
     }
 
-    public final String toString(GammaTransaction tx) {
+    public final String toString(GammaTxn tx) {
         final E value = get(tx);
         return value == null ? "null" : value.toString();
     }

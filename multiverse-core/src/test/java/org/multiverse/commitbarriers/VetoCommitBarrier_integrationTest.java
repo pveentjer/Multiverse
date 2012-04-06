@@ -4,15 +4,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public class VetoCommitBarrier_integrationTest {
 
@@ -21,7 +21,7 @@ public class VetoCommitBarrier_integrationTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
         stm = new GammaStm();
     }
@@ -88,9 +88,9 @@ public class VetoCommitBarrier_integrationTest {
         public void doRun() throws Exception {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     ref.getAndIncrement(tx, 1);
-                    barrier.joinCommit(getThreadLocalTransaction());
+                    barrier.joinCommit(getThreadLocalTxn());
                 }
             });
         }

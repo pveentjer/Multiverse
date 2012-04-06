@@ -4,18 +4,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.IsolationLevel;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 import static org.multiverse.stms.gamma.GammaTestUtils.makeReadBiased;
 
 public class IsolationLevelSerializableTest {
@@ -26,7 +26,7 @@ public class IsolationLevelSerializableTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         transactionFactory = stm.newTransactionFactoryBuilder()
                 .setSpeculative(false)
                 .setIsolationLevel(IsolationLevel.Serializable)
@@ -43,7 +43,7 @@ public class IsolationLevelSerializableTest {
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);
@@ -64,7 +64,7 @@ public class IsolationLevelSerializableTest {
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         ref.get(tx);
 
         ref.atomicIncrementAndGet(1);
@@ -82,13 +82,13 @@ public class IsolationLevelSerializableTest {
         final GammaLongRef ref1 = new GammaLongRef(stm);
         final GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
 
         ref1.get(tx);
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 ref1.incrementAndGet(1);
                 ref2.incrementAndGet(1);
             }
@@ -107,7 +107,7 @@ public class IsolationLevelSerializableTest {
         final GammaLongRef ref1 = new GammaLongRef(stm);
         final GammaLongRef ref2 = new GammaLongRef(stm);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         ref1.get(tx);
 
         ref2.incrementAndGet(tx, 1);

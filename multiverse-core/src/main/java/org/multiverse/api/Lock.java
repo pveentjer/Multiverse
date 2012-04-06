@@ -57,7 +57,7 @@ package org.multiverse.api;
  * <li>LockMode.Write->LockMode.Exclusive: will always succeed</li>
  * </ol>
  * <p>
- * The Transaction is allowed to apply a more strict LockMode than the one specified.
+ * The Txn is allowed to apply a more strict LockMode than the one specified.
  *
  * <h3>Lock downgrade</h3>
  *
@@ -65,7 +65,7 @@ package org.multiverse.api;
  *
  * <h3>Locking scope</h3>
  *
- * <p>Locking can be done on the Transaction level (see the {@link TxnFactoryBuilder#setReadLockMode(LockMode)} and
+ * <p>Locking can be done on the Txn level (see the {@link TxnFactoryBuilder#setReadLockMode(LockMode)} and
  * {@link TxnFactoryBuilder#setWriteLockMode(LockMode)} where all reads or all writes (to do a write also a read
  * is needed) are locked automatically. It can also be done on the reference level using
  * getAndLock/setAndLock/getAndSetAndLock methods or by accessing the {@link TransactionalObject#getLock()}.
@@ -100,7 +100,7 @@ public interface Lock {
     /**
      * Returns the current LockMode. This call doesn't look at any running transaction, it shows the actual
      * state of the Lock. The value could be stale as soon as it is received. To retrieve the LockMode a
-     * a Transaction has on a Lock, the {@link #getLockMode()} or {@link #getLockMode(Transaction)} need
+     * a Txn has on a Lock, the {@link #getLockMode()} or {@link #getLockMode(Txn)} need
      * to be used.
      *
      * @return the current LockMode.
@@ -108,7 +108,7 @@ public interface Lock {
     LockMode atomicGetLockMode();
 
     /**
-     * Gets the LockMode the transaction stored in the the {@link ThreadLocalTransaction} has on this Lock.
+     * Gets the LockMode the transaction stored in the the {@link TxnThreadLocal} has on this Lock.
      * To retrieve the actual LockMode of the Lock, you need to use the {@link #atomicGetLockMode()}.
      *
      * @return the LockMode.
@@ -118,7 +118,7 @@ public interface Lock {
      *          if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *          is guaranteed to have been aborted.
      * @see #atomicGetLockMode()
-     * @see #getLockMode(Transaction)
+     * @see #getLockMode(Txn)
      */
     LockMode getLockMode();
 
@@ -134,17 +134,17 @@ public interface Lock {
      *          if the Stm needs to control the flow in a different way than normal returns of exceptions. The transaction
      *          is guaranteed to have been aborted.
      * @see #atomicGetLockMode()
-     * @see #getLockMode(Transaction)
+     * @see #getLockMode(Txn)
      */
-    LockMode getLockMode(Transaction txn);
+    LockMode getLockMode(Txn txn);
 
     /**
      * Acquires a Lock with the provided LockMode. This call doesn't block if the Lock can't be upgraded, but throws
      * a {@link org.multiverse.api.exceptions.ReadWriteConflict}. It could also  be that the Lock is acquired, but the
-     * Transaction sees that it isn't consistent anymore. In that case also a
+     * Txn sees that it isn't consistent anymore. In that case also a
      * {@link org.multiverse.api.exceptions.ReadWriteConflict} is thrown.
      *
-     * <p>This call makes use of the Transaction stored in the {@link ThreadLocalTransaction}.
+     * <p>This call makes use of the Txn stored in the {@link TxnThreadLocal}.
      *
      * <p>If the lockMode is lower than the LockMode the transaction already has on this Lock, the call is ignored.
      *
@@ -162,12 +162,12 @@ public interface Lock {
     /**
      * Acquires a Lock with the provided LockMode using the provided transaction. This call doesn't block if the Lock can't be
      * upgraded but throws a {@link org.multiverse.api.exceptions.ReadWriteConflict}. It could also be that the Lock is acquired,
-     * but the Transaction sees that it isn't consistent anymore. In that case also a
+     * but the Txn sees that it isn't consistent anymore. In that case also a
      * {@link org.multiverse.api.exceptions.ReadWriteConflict} is thrown.
      *
      * <p>If the lockMode is lower than the LockMode the transaction already has on this Lock, the call is ignored.
      *
-     * @param txn              the Transaction used for this operation.
+     * @param txn              the Txn used for this operation.
      * @param desiredLockMode the desired lockMode.
      * @throws org.multiverse.api.exceptions.TransactionExecutionException
      *                              if something failed while using the transaction. The transaction is guaranteed to have been aborted.
@@ -177,5 +177,5 @@ public interface Lock {
      * @throws NullPointerException if tx or desiredLockMode is null. If an alive transaction is available, it will
      *                              be aborted.
      */
-    void acquire(Transaction txn, LockMode desiredLockMode);
+    void acquire(Txn txn, LockMode desiredLockMode);
 }

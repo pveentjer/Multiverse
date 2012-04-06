@@ -1,6 +1,6 @@
 package org.multiverse;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnStatus;
 import org.multiverse.api.blocking.RetryLatch;
 import org.multiverse.stms.gamma.GammaConstants;
@@ -124,26 +124,26 @@ public class TestUtils implements MultiverseConstants {
         assertFalse(format("both values are %s, but should not be equal", l2), l1 == l2);
     }
 
-    public static void assertIsPrepared(Transaction... transactions) {
-        for (Transaction tx : transactions) {
+    public static void assertIsPrepared(Txn... txns) {
+        for (Txn tx : txns) {
             assertEquals(TxnStatus.Prepared, tx.getStatus());
         }
     }
 
-    public static void assertIsAborted(Transaction... transactions) {
-        for (Transaction tx : transactions) {
+    public static void assertIsAborted(Txn... txns) {
+        for (Txn tx : txns) {
             assertEquals(TxnStatus.Aborted, tx.getStatus());
         }
     }
 
-    public static void assertIsCommitted(Transaction... transactions) {
-        for (Transaction tx : transactions) {
+    public static void assertIsCommitted(Txn... txns) {
+        for (Txn tx : txns) {
             assertEquals(TxnStatus.Committed, tx.getStatus());
         }
     }
 
-    public static void assertIsActive(Transaction... transactions) {
-        for (Transaction tx : transactions) {
+    public static void assertIsActive(Txn... txns) {
+        for (Txn tx : txns) {
             assertEquals(TxnStatus.Active, tx.getStatus());
         }
     }

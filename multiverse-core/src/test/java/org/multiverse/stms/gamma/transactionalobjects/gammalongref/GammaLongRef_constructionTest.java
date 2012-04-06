@@ -5,10 +5,10 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
@@ -25,8 +25,8 @@ public class GammaLongRef_constructionTest {
     }
 
     @Test
-    public void withTransaction_whenFatMonoGammaTransactionUsed() {
-        FatMonoGammaTransaction tx = new FatMonoGammaTransaction(stm);
+    public void withTransaction_whenFatMonoGammaTxnUsed() {
+        FatMonoGammaTxn tx = new FatMonoGammaTxn(stm);
         GammaLongRef ref = new GammaLongRef(tx, 10);
 
         assertIsActive(tx);
@@ -36,8 +36,8 @@ public class GammaLongRef_constructionTest {
     }
 
     @Test
-    public void withTransaction_whenFatFixedLengthGammaTransactionUsed() {
-        FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(stm);
+    public void withTransaction_whenFatFixedLengthGammaTxnUsed() {
+        FatFixedLengthGammaTxn tx = new FatFixedLengthGammaTxn(stm);
         GammaLongRef ref = new GammaLongRef(tx, 10);
 
         assertIsActive(tx);
@@ -47,8 +47,8 @@ public class GammaLongRef_constructionTest {
     }
 
     @Test
-    public void withTransaction_whenFatVariableLengthGammaTransactionUsed() {
-        FatFixedLengthGammaTransaction tx = new FatFixedLengthGammaTransaction(stm);
+    public void withTransaction_whenFatVariableLengthGammaTxnUsed() {
+        FatFixedLengthGammaTxn tx = new FatFixedLengthGammaTxn(stm);
         GammaLongRef ref = new GammaLongRef(tx, 10);
 
         assertIsActive(tx);
@@ -58,8 +58,8 @@ public class GammaLongRef_constructionTest {
     }
 
     @Test
-    public void withTransaction_whenLeanFixedLengthGammaTransactionUsed() {
-        LeanFixedLengthGammaTransaction tx = new LeanFixedLengthGammaTransaction(stm);
+    public void withTransaction_whenLeanFixedLengthGammaTxnUsed() {
+        LeanFixedLengthGammaTxn tx = new LeanFixedLengthGammaTxn(stm);
 
         try {
             new GammaLongRef(tx, 10);
@@ -72,8 +72,8 @@ public class GammaLongRef_constructionTest {
     }
 
     @Test
-    public void withTransaction_whenLeanMonoGammaTransactionUsed() {
-        LeanMonoGammaTransaction tx = new LeanMonoGammaTransaction(stm);
+    public void withTransaction_whenLeanMonoGammaTxnUsed() {
+        LeanMonoGammaTxn tx = new LeanMonoGammaTxn(stm);
 
         try {
             new GammaLongRef(tx, 10);

@@ -3,20 +3,20 @@ package org.multiverse.stms.gamma;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class GammaTxnExecutor_timeoutTest {
 
@@ -26,7 +26,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = new GammaStm();
         ref = new GammaLongRef(stm);
         timeoutNs = TimeUnit.SECONDS.toNanos(2);
@@ -62,8 +62,8 @@ public class GammaTxnExecutor_timeoutTest {
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 ref.openForWrite(btx, LOCKMODE_NONE).long_value = 1;
             }
         });
@@ -77,8 +77,8 @@ public class GammaTxnExecutor_timeoutTest {
     public void whenNoWaitingNeededAndZeroTimeout() {
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
-                GammaTransaction btx = (GammaTransaction) tx;
+            public void execute(Txn tx) throws Exception {
+                GammaTxn btx = (GammaTxn) tx;
                 ref.openForWrite(btx, LOCKMODE_NONE).long_value = 1;
             }
         });
@@ -108,8 +108,8 @@ public class GammaTxnExecutor_timeoutTest {
         public void doRun() throws Exception {
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
-                    GammaTransaction btx = (GammaTransaction) tx;
+                public void execute(Txn tx) throws Exception {
+                    GammaTxn btx = (GammaTxn) tx;
 
                     GammaRefTranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                     if (write.long_value == 0) {

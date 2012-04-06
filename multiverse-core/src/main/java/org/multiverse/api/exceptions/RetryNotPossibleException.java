@@ -1,8 +1,8 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link RetryException} throw when a {@link org.multiverse.api.StmUtils#retry()} or {@link org.multiverse.api.Transaction#retry()}
- * done on a {@link org.multiverse.api.Transaction} without the possibility of progress, for example when the readset of a transaction
+ * A {@link RetryException} throw when a {@link org.multiverse.api.StmUtils#retry()} or {@link org.multiverse.api.Txn#retry()}
+ * done on a {@link org.multiverse.api.Txn} without the possibility of progress, for example when the readset of a transaction
  * is empty.
  *
  * @author Peter Veentjer.

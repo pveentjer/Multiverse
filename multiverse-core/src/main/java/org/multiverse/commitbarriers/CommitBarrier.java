@@ -1,6 +1,6 @@
 package org.multiverse.commitbarriers;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.TodoException;
 import org.multiverse.utils.StandardThreadFactory;
@@ -458,13 +458,13 @@ public abstract class CommitBarrier {
     }
 
     /**
-     * Finishes a Transaction.
+     * Finishes a Txn.
      * <p/>
      * Can be called without the mainlock is acquired.
      *
      * @param tx the transaction to finish
      */
-    protected final void finish(final Transaction tx) {
+    protected final void finish(final Txn tx) {
         if (tx == null) {
             return;
         }
@@ -490,14 +490,14 @@ public abstract class CommitBarrier {
      * @throws DeadTransactionException if tx is dead.
      * @throws NullPointerException     if tx is null.
      */
-    protected static void ensureNotDead(final Transaction tx, final String operation) {
+    protected static void ensureNotDead(final Txn tx, final String operation) {
         if (tx == null) {
             throw new NullPointerException();
         }
 
         if (!tx.getStatus().isAlive()) {
             throw new DeadTransactionException(
-                    format("[%s] Transaction can't be used for %s since it isn't alive",
+                    format("[%s] Txn can't be used for %s since it isn't alive",
                             tx.getConfiguration().getFamilyName(), operation)
             );
         }
@@ -512,7 +512,7 @@ public abstract class CommitBarrier {
      * This method is responsive to interrupts. If the waiting thread is interrupted, it will abort itself and
      * this CommitGroup.
      *
-     * @param tx the Transaction to commit.
+     * @param tx the Txn to commit.
      * @throws InterruptedException       if the thread is interrupted while waiting.
      * @throws NullPointerException       if tx is null.
      * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
@@ -520,7 +520,7 @@ public abstract class CommitBarrier {
      *                                    state for this operation.
      * @throws CommitBarrierOpenException if this VetoCommitBarrier is committed or aborted.
      */
-    public void joinCommit(final Transaction tx) throws InterruptedException {
+    public void joinCommit(final Txn tx) throws InterruptedException {
         ensureNotDead(tx, "joinCommit");
 
         List<Runnable> tasks = null;
@@ -572,14 +572,14 @@ public abstract class CommitBarrier {
      * <p/>
      * If the CommitBarrier already is aborted or committed, the transaction is aborted.
      *
-     * @param tx the Transaction to join in the commit.
+     * @param tx the Txn to join in the commit.
      * @throws NullPointerException       if tx is null.
      * @throws org.multiverse.api.exceptions.IllegalTransactionStateException
      *                                    if the tx is not in the correct
      *                                    state for the operation.
      * @throws CommitBarrierOpenException if this VetoCommitBarrier is committed or aborted.
      */
-    public void joinCommitUninterruptibly(final Transaction tx) {
+    public void joinCommitUninterruptibly(final Txn tx) {
         ensureNotDead(tx, "joinCommitUninterruptibly");
 
         List<Runnable> postCommitTasks = null;
@@ -627,12 +627,12 @@ public abstract class CommitBarrier {
      * <p/>
      * If the CommitBarrier already is aborted or committed, the transaction is aborted.
      *
-     * @param tx the Transaction that wants to join the other parties to commit with.
+     * @param tx the Txn that wants to join the other parties to commit with.
      * @return true if CountDownCommitBarrier was committed, false if aborted.
      * @throws CommitBarrierOpenException if tx or this CountDownCommitBarrier is aborted or committed.
      * @throws NullPointerException       if tx is null.
      */
-    public boolean tryJoinCommit(final Transaction tx) {
+    public boolean tryJoinCommit(final Txn tx) {
         ensureNotDead(tx, "tryJoinCommit");
 
         List<Runnable> postCommitTasks = null;
@@ -691,7 +691,7 @@ public abstract class CommitBarrier {
      * This method is responsive to interrupts. If the waiting thread is interrupted, it will abort itself and
      * this CommitBarrier.
      *
-     * @param tx      the Transaction that wants to join the other parties to commit with.
+     * @param tx      the Txn that wants to join the other parties to commit with.
      * @param timeout the maximum time to wait.
      * @param unit    the TimeUnit for the timeout argument.
      * @return true if CountDownCommitBarrier was committed, false if aborted.
@@ -699,7 +699,7 @@ public abstract class CommitBarrier {
      * @throws NullPointerException       if tx or unit is null is null.
      * @throws InterruptedException       if the calling thread is interrupted while waiting.
      */
-    public boolean tryJoinCommit(final Transaction tx, final long timeout, final TimeUnit unit) throws InterruptedException {
+    public boolean tryJoinCommit(final Txn tx, final long timeout, final TimeUnit unit) throws InterruptedException {
         ensureNotDead(tx, "tryJoinCommit");
 
         long timeoutNs = unit.toNanos(timeout);
@@ -763,14 +763,14 @@ public abstract class CommitBarrier {
      * <p/>
      * This method is not responsive to interrupts.
      *
-     * @param tx      the Transaction that wants to join the other parties to commit with.
+     * @param tx      the Txn that wants to join the other parties to commit with.
      * @param timeout the maximum time to wait.
      * @param unit    the TimeUnit for the timeout argument.
      * @return true if CountDownCommitBarrier was committed, false if aborted.
      * @throws CommitBarrierOpenException if tx or this CountDownCommitBarrier is aborted or committed.
      * @throws NullPointerException       if tx or unit is null is null.
      */
-    public boolean tryJoinCommitUninterruptibly(final Transaction tx, final long timeout, final TimeUnit unit) {
+    public boolean tryJoinCommitUninterruptibly(final Txn tx, final long timeout, final TimeUnit unit) {
         ensureNotDead(tx, "tryJoinCommitUninterruptibly");
 
         long timeoutNs = unit.toNanos(timeout);

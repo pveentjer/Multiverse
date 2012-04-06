@@ -1,6 +1,6 @@
 package org.multiverse.api.collections;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 /**
  *
@@ -14,21 +14,21 @@ public interface TransactionalStack<E> extends TransactionalCollection<E> {
 
     void push(E item);
 
-    void push(Transaction txn, E item);
+    void push(Txn txn, E item);
 
     boolean offer(E item);
 
-    boolean offer(Transaction txn, E item);
+    boolean offer(Txn txn, E item);
 
     E pop();
 
-    E pop(Transaction txn);
+    E pop(Txn txn);
 
     E poll();
 
-    E poll(Transaction txn);
+    E poll(Txn txn);
 
     E peek();
 
-    E peek(Transaction txn);
+    E peek(Txn txn);
 }

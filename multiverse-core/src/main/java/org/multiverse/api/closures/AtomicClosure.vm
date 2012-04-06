@@ -1,6 +1,6 @@
 package org.multiverse.api.closures;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 /**
 #if(${closure.type} ne 'void')
@@ -20,7 +20,7 @@ public interface ${closure.name}${closure.typeParameter}{
     /**
      * Executes the closure.
      *
-     * @param txn the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
+     * @param txn the Transaction. Depending on the txn {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.
 #if(${closure.type} ne 'void')
      * @return the result of the execution.
@@ -28,5 +28,5 @@ public interface ${closure.name}${closure.typeParameter}{
      * @throws Exception if unable to compute a result
 #end
      */
-     ${closure.type} execute(Transaction txn)throws Exception;
+     ${closure.type} execute(Txn txn)throws Exception;
 }

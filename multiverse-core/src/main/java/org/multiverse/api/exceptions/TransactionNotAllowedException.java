@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link PropagationException} thrown when a {@link org.multiverse.api.Transaction} is found, but is not allowed.
+ * A {@link PropagationException} thrown when a {@link org.multiverse.api.Txn} is found, but is not allowed.
  * A typical cause of this exception is that the {@link org.multiverse.api.PropagationLevel#Never} is used and
  * a transaction is available.
  *

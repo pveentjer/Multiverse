@@ -6,7 +6,7 @@ not be on adding new features, but on improving scalability, performance and sta
     The expected features are:
 <ol>
     <li>
-        Profiling support for transaction and transactional object level behavior. Information will be made
+        Profiling support for txn and transactional object level behavior. Information will be made
         available by writing a report to file periodically. In the future more advanced profiling mechanisms
         will be added, but this should shed some light in the darkness.
     </li>
@@ -14,13 +14,13 @@ not be on adding new features, but on improving scalability, performance and sta
         New bytecode optimizations:
         <ul>
             <li>
-                speculative inlining of transactions: removing the creation of the transaction object and inlining
+                speculative inlining of txns: removing the creation of the txn object and inlining
                 it completely in simple methods. Based on experiments, this should give a big performance boost.
             </li>
             <li>
                 transactional objects as arguments: once the tranlocal is retrieved it can be stored for later use
                 and can be added as extra arguments by widening the methods in the instrumentation. This reduces
-                unwanted access to the transaction and improves the chance for the JIT to do its magic.
+                unwanted access to the txn and improves the chance for the JIT to do its magic.
             </li>
             <li>
                 removing junk instructions: atm some swaps and duplications of operand-stack elements are needed to
@@ -30,12 +30,12 @@ not be on adding new features, but on improving scalability, performance and sta
         </ul>
     </li>
     <li>
-        Transaction reuse: instead of creating a new transaction every time a transactional method is executed,
+        Transaction reuse: instead of creating a new txn every time a transactional method is executed,
         an old one can be reset and reused.
     </li>
     <li>
-        Better scalable clock. Multiverse 0.5 uses a shared (by all transactions of the same STM) AtomicLong as
-        clock that needs to be incremented by every update transaction (that has updates of course). In 0.5
+        Better scalable clock. Multiverse 0.5 uses a shared (by all txns of the same STM) AtomicLong as
+        clock that needs to be incremented by every update txn (that has updates of course). In 0.5
         the tick to the clock is optimized in such a way that concurrent ticks don't need to lead to unique
         timestamp. (this already removes a lot of pressure on the memory bus). But the 0.6 release is going to have
         a configurable 'sync to clock' property that relaxes the updating of central clock. This should make the

@@ -5,11 +5,11 @@ import org.junit.Test;
 import org.multiverse.api.*;
 import org.multiverse.api.exceptions.IllegalTransactionFactoryException;
 import org.multiverse.api.lifecycle.TransactionListener;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactoryBuilder;
-import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import java.util.List;
 
@@ -237,8 +237,8 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setIsolationLevel(IsolationLevel.Serializable)
                 .newTransactionFactory();
 
-        GammaTransaction tx = txFactory.newTransaction();
-        assertTrue(tx instanceof FatMonoGammaTransaction);
+        GammaTxn tx = txFactory.newTransaction();
+        assertTrue(tx instanceof FatMonoGammaTxn);
     }
 
     @Test
@@ -249,7 +249,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setIsolationLevel(IsolationLevel.Snapshot)
                 .newTransactionFactory();
 
-        GammaTransaction tx = txFactory.newTransaction();
+        GammaTxn tx = txFactory.newTransaction();
         assertEquals(TRANSACTIONTYPE_LEAN_MONO, tx.transactionType);
     }
 
@@ -261,7 +261,7 @@ public class GammaStm_transactionFactoryBuilderTest implements GammaConstants{
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory();
 
-        GammaTransaction tx = txFactory.newTransaction();
+        GammaTxn tx = txFactory.newTransaction();
         assertEquals(TRANSACTIONTYPE_FAT_MONO,tx.transactionType);
     }
 }

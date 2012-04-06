@@ -1,14 +1,14 @@
 package org.multiverse.stms.gamma.transactionalobjects;
 
 import org.multiverse.api.LockMode;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.api.functions.BooleanFunction;
 import org.multiverse.api.predicates.BooleanPredicate;
 import org.multiverse.api.references.BooleanRef;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.stms.gamma.GammaStmUtils.*;
@@ -25,11 +25,11 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
         this((GammaStm) getGlobalStmInstance(),value);
     }
 
-    public GammaBooleanRef(final GammaTransaction tx) {
+    public GammaBooleanRef(final GammaTxn tx) {
         this(tx, false);
     }
 
-    public GammaBooleanRef(final GammaTransaction tx, final boolean value) {
+    public GammaBooleanRef(final GammaTxn tx, final boolean value) {
         super(tx.getConfiguration().stm, TYPE_BOOLEAN);
 
         arriveAndLock(1, LOCKMODE_EXCLUSIVE);
@@ -50,86 +50,86 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
 
     @Override
     public final boolean get() {
-        return get(getRequiredThreadLocalGammaTransaction());
+        return get(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final boolean get(final Transaction tx) {
-        return get(asGammaTransaction(tx));
+    public final boolean get(final Txn tx) {
+        return get(asGammaTxn(tx));
     }
 
-    public final boolean get(final GammaTransaction tx) {
+    public final boolean get(final GammaTxn tx) {
         return longAsBoolean(openForRead(tx, LOCKMODE_NONE).long_value);
     }
 
     @Override
     public final boolean getAndLock(LockMode lockMode) {
-        return getAndLock(getRequiredThreadLocalGammaTransaction(), lockMode);
+        return getAndLock(getRequiredThreadLocalGammaTxn(), lockMode);
     }
 
     @Override
-    public final boolean getAndLock(Transaction tx, LockMode lockMode) {
-        return getAndLock(asGammaTransaction(tx), lockMode);
+    public final boolean getAndLock(Txn tx, LockMode lockMode) {
+        return getAndLock(asGammaTxn(tx), lockMode);
     }
 
-    public final boolean getAndLock(GammaTransaction tx, LockMode lockMode) {
-        return longAsBoolean(getLong(asGammaTransaction(tx), lockMode));
+    public final boolean getAndLock(GammaTxn tx, LockMode lockMode) {
+        return longAsBoolean(getLong(asGammaTxn(tx), lockMode));
     }
 
     @Override
     public final boolean set(final boolean value) {
-        return set(getRequiredThreadLocalGammaTransaction(), value);
+        return set(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final boolean set(final Transaction tx, final boolean value) {
-        return set(asGammaTransaction(tx), value);
+    public final boolean set(final Txn tx, final boolean value) {
+        return set(asGammaTxn(tx), value);
     }
 
-    public final boolean set(final GammaTransaction tx, final boolean value) {
+    public final boolean set(final GammaTxn tx, final boolean value) {
         openForWrite(tx, LOCKMODE_NONE).long_value = booleanAsLong(value);
         return value;
     }
 
     @Override
     public final boolean setAndLock(boolean value, LockMode lockMode) {
-        return setAndLock(getRequiredThreadLocalGammaTransaction(), value, lockMode);
+        return setAndLock(getRequiredThreadLocalGammaTxn(), value, lockMode);
     }
 
     @Override
-    public final boolean setAndLock(Transaction tx, boolean value, LockMode lockMode) {
-        return setAndLock(asGammaTransaction(tx), value, lockMode);
+    public final boolean setAndLock(Txn tx, boolean value, LockMode lockMode) {
+        return setAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final boolean setAndLock(GammaTransaction tx, boolean value, LockMode lockMode) {
+    public final boolean setAndLock(GammaTxn tx, boolean value, LockMode lockMode) {
         return longAsBoolean(setLong(tx, lockMode, booleanAsLong(value), false));
     }
 
     @Override
     public final boolean getAndSet(final boolean value) {
-        return getAndSet(getRequiredThreadLocalGammaTransaction(), value);
+        return getAndSet(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final boolean getAndSet(final Transaction tx, final boolean value) {
-        return getAndSet(asGammaTransaction(tx), value);
+    public final boolean getAndSet(final Txn tx, final boolean value) {
+        return getAndSet(asGammaTxn(tx), value);
     }
 
     @Override
     public final boolean getAndSetAndLock(boolean value, LockMode lockMode) {
-        return getAndSetAndLock(getRequiredThreadLocalGammaTransaction(), value, lockMode);
+        return getAndSetAndLock(getRequiredThreadLocalGammaTxn(), value, lockMode);
     }
 
     @Override
-    public final boolean getAndSetAndLock(Transaction tx, boolean value, LockMode lockMode) {
-        return getAndSetAndLock(asGammaTransaction(tx), value, lockMode);
+    public final boolean getAndSetAndLock(Txn tx, boolean value, LockMode lockMode) {
+        return getAndSetAndLock(asGammaTxn(tx), value, lockMode);
     }
 
-    public final boolean getAndSetAndLock(GammaTransaction tx, boolean value, LockMode lockMode) {
+    public final boolean getAndSetAndLock(GammaTxn tx, boolean value, LockMode lockMode) {
         return longAsBoolean(setLong(tx, lockMode, booleanAsLong(value), true));
     }
 
-    public final boolean getAndSet(final GammaTransaction tx, final boolean value) {
+    public final boolean getAndSet(final GammaTxn tx, final boolean value) {
         GammaRefTranlocal tranlocal = openForWrite(tx, LOCKMODE_NONE);
         boolean oldValue = longAsBoolean(tranlocal.long_value);
         tranlocal.long_value = booleanAsLong(value);
@@ -158,47 +158,47 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
 
     @Override
     public final void commute(final BooleanFunction function) {
-        commute(getRequiredThreadLocalGammaTransaction(), function);
+        commute(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final void commute(final Transaction tx, final BooleanFunction function) {
-        commute(asGammaTransaction(tx), function);
+    public final void commute(final Txn tx, final BooleanFunction function) {
+        commute(asGammaTxn(tx), function);
     }
 
-    public final void commute(final GammaTransaction tx, final BooleanFunction function) {
+    public final void commute(final GammaTxn tx, final BooleanFunction function) {
         openForCommute(tx, function);
     }
 
     @Override
     public final boolean getAndAlter(final BooleanFunction function) {
-        return getAndAlter(getRequiredThreadLocalGammaTransaction(), function);
+        return getAndAlter(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final boolean getAndAlter(final Transaction tx, final BooleanFunction function) {
-        return getAndAlter(asGammaTransaction(tx), function);
+    public final boolean getAndAlter(final Txn tx, final BooleanFunction function) {
+        return getAndAlter(asGammaTxn(tx), function);
     }
 
-    public final boolean getAndAlter(final GammaTransaction tx, final BooleanFunction function) {
+    public final boolean getAndAlter(final GammaTxn tx, final BooleanFunction function) {
         return alter(tx, function, true);
     }
 
     @Override
     public final boolean alterAndGet(final BooleanFunction function) {
-        return alterAndGet(getRequiredThreadLocalGammaTransaction(), function);
+        return alterAndGet(getRequiredThreadLocalGammaTxn(), function);
     }
 
     @Override
-    public final boolean alterAndGet(final Transaction tx, final BooleanFunction function) {
-        return alterAndGet(asGammaTransaction(tx), function);
+    public final boolean alterAndGet(final Txn tx, final BooleanFunction function) {
+        return alterAndGet(asGammaTxn(tx), function);
     }
 
-    public final boolean alterAndGet(final GammaTransaction tx, final BooleanFunction function) {
+    public final boolean alterAndGet(final GammaTxn tx, final BooleanFunction function) {
         return alter(tx, function, false);
     }
 
-    public final boolean alter(final GammaTransaction tx, final BooleanFunction function, final boolean returnOld) {
+    public final boolean alter(final GammaTxn tx, final BooleanFunction function, final boolean returnOld) {
         if (tx == null) {
             throw new NullPointerException();
         }
@@ -294,15 +294,15 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
 
     @Override
     public final void await(final boolean value) {
-        await(getRequiredThreadLocalGammaTransaction(), value);
+        await(getRequiredThreadLocalGammaTxn(), value);
     }
 
     @Override
-    public final void await(final Transaction tx, final boolean value) {
-        await(asGammaTransaction(tx), value);
+    public final void await(final Txn tx, final boolean value) {
+        await(asGammaTxn(tx), value);
     }
 
-    public final void await(final GammaTransaction tx, final boolean value) {
+    public final void await(final GammaTxn tx, final boolean value) {
         if (longAsBoolean(openForRead(tx, LOCKMODE_NONE).long_value) != value) {
             tx.retry();
         }
@@ -310,15 +310,15 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
 
     @Override
     public final void await(final BooleanPredicate predicate) {
-        await(getRequiredThreadLocalGammaTransaction(), predicate);
+        await(getRequiredThreadLocalGammaTxn(), predicate);
     }
 
     @Override
-    public final void await(final Transaction tx, final BooleanPredicate predicate) {
-        await(asGammaTransaction(tx), predicate);
+    public final void await(final Txn tx, final BooleanPredicate predicate) {
+        await(asGammaTxn(tx), predicate);
     }
 
-    public final void await(final GammaTransaction tx, final BooleanPredicate predicate) {
+    public final void await(final GammaTxn tx, final BooleanPredicate predicate) {
         final GammaRefTranlocal tranlocal = openForRead(tx, LOCKMODE_NONE);
         boolean abort = true;
         try {
@@ -341,15 +341,15 @@ public class GammaBooleanRef extends BaseGammaRef implements BooleanRef {
 
     @Override
     public final String toString() {
-        return toString(getRequiredThreadLocalGammaTransaction());
+        return toString(getRequiredThreadLocalGammaTxn());
     }
 
     @Override
-    public final String toString(Transaction tx) {
-        return toString(asGammaTransaction(tx));
+    public final String toString(Txn tx) {
+        return toString(asGammaTxn(tx));
     }
 
-    public final String toString(GammaTransaction tx) {
+    public final String toString(GammaTxn tx) {
         return Boolean.toString(get(tx));
     }
 

@@ -1,7 +1,7 @@
 package org.multiverse.api.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @param txn
      * @return the number of key-value mappings in this map
      */
-    int size(Transaction txn);
+    int size(Txn txn);
 
     /**
      * Returns <tt>true</tt> if this map contains no key-value mappings.
@@ -31,7 +31,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @return <tt>true</tt> if this map contains no key-value mappings
      */
 
-    boolean isEmpty(Transaction txn);
+    boolean isEmpty(Txn txn);
 
     /**
      * Removes all of the mappings from this map (optional operation).
@@ -41,7 +41,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @throws UnsupportedOperationException if the <tt>clear</tt> operation
      *                                       is not supported by this map
      */
-    void clear(Transaction txn);
+    void clear(Txn txn);
 
     /**
      * Returns the value to which the specified key is mapped,
@@ -68,7 +68,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                              does not permit null keys (optional)
      */
 
-    V get(Transaction txn, Object key);
+    V get(Txn txn, Object key);
 
     /**
      * Returns <tt>true</tt> if this map contains a mapping for the specified
@@ -86,7 +86,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @throws NullPointerException if the specified key is null and this map
      *                              does not permit null keys (optional)
      */
-    boolean containsKey(Transaction txn, Object key);
+    boolean containsKey(Txn txn, Object key);
 
     /**
      * Returns <tt>true</tt> if this map maps one or more keys to the
@@ -106,7 +106,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                              map does not permit null values (optional)
      */
 
-    boolean containsValue(Transaction txn, Object value);
+    boolean containsValue(Txn txn, Object value);
 
     /**
      * Associates the specified value with the specified key in this map
@@ -134,7 +134,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                                       or value prevents it from being stored in this map
      */
 
-    V put(Transaction txn, K key, V value);
+    V put(Txn txn, K key, V value);
 
     /**
      * Copies all of the mappings from the specified map to this map
@@ -156,7 +156,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @throws IllegalArgumentException      if some property of a key or value in
      *                                       the specified map prevents it from being stored in this map
      */
-    void putAll(Transaction txn, Map<? extends K, ? extends V> m);
+    void putAll(Txn txn, Map<? extends K, ? extends V> m);
 
     /**
      * Removes the mapping for a key from this map if it is present
@@ -188,7 +188,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      *                                       map does not permit null keys (optional)
      */
 
-    V remove(Transaction txn, Object key);
+    V remove(Txn txn, Object key);
 
     /**
      * Returns a {@link TransactionalCollection} view of the values contained in this map.
@@ -224,7 +224,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @param txn
      * @return a collection view of the values contained in this map
      */
-    TransactionalCollection<V> values(Transaction txn);
+    TransactionalCollection<V> values(Txn txn);
 
     /**
      * Returns a {@link TransactionalSet} view of the keys contained in this map.
@@ -259,7 +259,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @param txn
      * @return a set view of the keys contained in this map
      */
-    TransactionalSet<K> keySet(Transaction txn);
+    TransactionalSet<K> keySet(Txn txn);
 
     /**
      * Returns a {@link TransactionalSet} view of the mappings contained in this map.
@@ -296,7 +296,7 @@ public interface TransactionalMap<K, V> extends Map<K, V> {
      * @param txn
      * @return a set view of the mappings contained in this map
      */
-    TransactionalSet<Entry<K, V>> entrySet(Transaction txn);
+    TransactionalSet<Entry<K, V>> entrySet(Txn txn);
 
-    String toString(Transaction txn);
+    String toString(Txn txn);
 }

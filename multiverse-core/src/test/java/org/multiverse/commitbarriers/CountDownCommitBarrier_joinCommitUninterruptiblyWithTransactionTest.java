@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnStatus;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
@@ -16,7 +16,7 @@ import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest {
     private CountDownCommitBarrier barrier;
@@ -25,7 +25,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -51,13 +51,13 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
     @Test
     public void whenTransactionFailsToPrepare() {
         barrier = new CountDownCommitBarrier(1);
-        Transaction tx = mock(Transaction.class);
+        Txn tx = mock(Txn.class);
 
         when(tx.getStatus()).thenReturn(TxnStatus.Active);
         doThrow(new RuntimeException()).when(tx).prepare();
         try {
             barrier.joinCommitUninterruptibly(tx);
-            fail("Expecting Runtime Exception thrown on Transaction preparation");
+            fail("Expecting Runtime Exception thrown on Txn preparation");
         } catch (RuntimeException ex) {
 
         }
@@ -69,7 +69,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
     public void whenTransactionAborted_thenDeadTransactionException() {
         barrier = new CountDownCommitBarrier(1);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.abort();
         try {
             barrier.joinCommitUninterruptibly(tx);
@@ -86,7 +86,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
     public void whenTransactionCommitted_thenDeadTransactionException() {
         barrier = new CountDownCommitBarrier(1);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.commit();
         try {
             barrier.joinCommitUninterruptibly(tx);
@@ -115,7 +115,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
                         barrier.joinCommitUninterruptibly(tx);
                     }
@@ -147,7 +147,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
                         barrier.joinCommitUninterruptibly(tx);
                     }
@@ -180,7 +180,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.getAndIncrement(tx, 1);
                         barrier.joinCommitUninterruptibly(tx);
                     }
@@ -207,7 +207,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
         barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail("Expecting CommitBarrierOpenException");
@@ -223,7 +223,7 @@ public class CountDownCommitBarrier_joinCommitUninterruptiblyWithTransactionTest
     public void whenCommitted_thenCommitBarrierOpenException() {
         barrier = new CountDownCommitBarrier(0);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.joinCommitUninterruptibly(tx);
             fail("Expecting CommitBarrierOpenException");

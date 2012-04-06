@@ -2,21 +2,21 @@ package org.multiverse.stms.gamma;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class StmUtilsTest {
     private GammaStm stm;
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = new GammaStm();
     }
 
@@ -44,7 +44,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleDeferredTask(task);
             }
         });
@@ -59,7 +59,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleDeferredTask(task);
                     throw new NonsenseException();
                 }
@@ -100,7 +100,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleCompensatingTask(task);
                     throw new NonsenseException();
                 }
@@ -119,7 +119,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleCompensatingTask(task);
             }
         });
@@ -152,7 +152,7 @@ public class StmUtilsTest {
         try {
             stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     scheduleCompensatingOrDeferredTask(task);
                     throw new NonsenseException();
                 }
@@ -171,7 +171,7 @@ public class StmUtilsTest {
 
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 scheduleCompensatingOrDeferredTask(task);
             }
         });

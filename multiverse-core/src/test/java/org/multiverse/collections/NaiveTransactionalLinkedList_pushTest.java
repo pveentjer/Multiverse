@@ -4,13 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalLinkedList_pushTest {
    private Stm stm;
@@ -18,7 +18,7 @@ public class NaiveTransactionalLinkedList_pushTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -27,7 +27,7 @@ public class NaiveTransactionalLinkedList_pushTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 try {
                     list.push(null);
                     fail();
@@ -46,7 +46,7 @@ public class NaiveTransactionalLinkedList_pushTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.push("1");
 
                 assertEquals("[1]", list.toString());
@@ -61,7 +61,7 @@ public class NaiveTransactionalLinkedList_pushTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.add("1");
                 list.push("2");
 
@@ -77,7 +77,7 @@ public class NaiveTransactionalLinkedList_pushTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 list.add("1");
                 list.add("2");
 

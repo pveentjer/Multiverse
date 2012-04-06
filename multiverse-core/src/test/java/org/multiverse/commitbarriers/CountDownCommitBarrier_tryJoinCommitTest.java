@@ -3,14 +3,14 @@ package org.multiverse.commitbarriers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertIsAborted;
 import static org.multiverse.TestUtils.clearCurrentThreadInterruptedStatus;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_tryJoinCommitTest {
     private GammaStm stm;
@@ -18,7 +18,7 @@ public class CountDownCommitBarrier_tryJoinCommitTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -44,7 +44,7 @@ public class CountDownCommitBarrier_tryJoinCommitTest {
     @Test
     public void whenOpenAndTransactionCommitted_thenDeadTransactionException() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(1);
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.commit();
         try {
             barrier.tryJoinCommit(tx);
@@ -58,7 +58,7 @@ public class CountDownCommitBarrier_tryJoinCommitTest {
     @Test
     public void whenOpenAndTransactionAborted_DeadTransactionException() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(1);
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.abort();
         try {
             barrier.tryJoinCommit(tx);
@@ -74,7 +74,7 @@ public class CountDownCommitBarrier_tryJoinCommitTest {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(1);
         barrier.abort();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.tryJoinCommit(tx);
             fail("Expecting CommitBarrierOpenException");
@@ -90,7 +90,7 @@ public class CountDownCommitBarrier_tryJoinCommitTest {
     public void whenCommitted_thenCommitBarrierOpenException() {
         CountDownCommitBarrier barrier = new CountDownCommitBarrier(0);
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.tryJoinCommit(tx);
             fail("Expected CommitBarrierOpenException");

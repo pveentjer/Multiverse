@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma;
 import org.multiverse.api.*;
 import org.multiverse.api.closures.*;
 import org.multiverse.api.exceptions.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 
 public class GammaOrElseBlock implements OrElseBlock{
 
@@ -29,15 +29,15 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            return either.execute(tx);
+            return either.execute(txn);
         }catch(RetryError retry){
-            return orelse.execute(tx);
+            return orelse.execute(txn);
         }
     }
 
@@ -62,15 +62,15 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            return either.execute(tx);
+            return either.execute(txn);
         }catch(RetryError retry){
-            return orelse.execute(tx);
+            return orelse.execute(txn);
         }
     }
 
@@ -95,15 +95,15 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            return either.execute(tx);
+            return either.execute(txn);
         }catch(RetryError retry){
-            return orelse.execute(tx);
+            return orelse.execute(txn);
         }
     }
 
@@ -128,15 +128,15 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            return either.execute(tx);
+            return either.execute(txn);
         }catch(RetryError retry){
-            return orelse.execute(tx);
+            return orelse.execute(txn);
         }
     }
 
@@ -161,15 +161,15 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            return either.execute(tx);
+            return either.execute(txn);
         }catch(RetryError retry){
-            return orelse.execute(tx);
+            return orelse.execute(txn);
         }
     }
 
@@ -195,16 +195,16 @@ public class GammaOrElseBlock implements OrElseBlock{
             throw new NullPointerException("orelse closure can't be null");
         }
 
-        Transaction tx = getThreadLocalTransaction();
-        if(tx == null){
-            throw new TransactionMandatoryException("No transaction is found, but one is required for the orelse");
+        Txn txn = getThreadLocalTxn();
+        if(txn == null){
+            throw new TransactionMandatoryException("No txn is found, but one is required for the orelse");
         }
 
         try{
-            either.execute(tx);
+            either.execute(txn);
             return;
         }catch(RetryError retry){
-            orelse.execute(tx);
+            orelse.execute(txn);
             return;
         }
     }

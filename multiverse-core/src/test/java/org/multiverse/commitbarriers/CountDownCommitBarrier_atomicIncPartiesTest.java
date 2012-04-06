@@ -6,7 +6,7 @@ import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class CountDownCommitBarrier_atomicIncPartiesTest {
     private GammaStm stm;
@@ -14,7 +14,7 @@ public class CountDownCommitBarrier_atomicIncPartiesTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test

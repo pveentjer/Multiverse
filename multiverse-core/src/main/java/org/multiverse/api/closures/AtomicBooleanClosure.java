@@ -1,6 +1,6 @@
 package org.multiverse.api.closures;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 /**
  * An atomic closure tailored for returning a primitive type: boolean. Using this AtomicBooleanClosure instead of
@@ -14,9 +14,9 @@ public interface AtomicBooleanClosure{
     /**
      * Executes the closure.
      *
-     * @param tx the Transaction. Depending on the transaction {@link org.multiverse.api.PropagationLevel}, this could
+     * @param txn the Transaction. Depending on the txn {@link org.multiverse.api.PropagationLevel}, this could
      *           be null.
      * @return the result of the execution.
      */
-     boolean execute(Transaction txn)throws Exception;
+     boolean execute(Txn txn)throws Exception;
 }

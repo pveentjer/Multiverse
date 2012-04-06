@@ -2,12 +2,12 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
+import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
     private final GammaTxnConfiguration config;
@@ -31,20 +31,20 @@ public final class FatVariableLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public FatVariableLengthGammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction failingTransaction, GammaTransactionPool pool) {
+    public FatVariableLengthGammaTxn upgradeAfterSpeculativeFailure(GammaTxn failingTransaction, GammaTxnPool pool) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public FatVariableLengthGammaTransaction newTransaction() {
-        return newTransaction(getThreadLocalGammaTransactionPool());
+    public FatVariableLengthGammaTxn newTransaction() {
+        return newTransaction(getThreadLocalGammaTxnPool());
     }
 
     @Override
-    public FatVariableLengthGammaTransaction newTransaction(GammaTransactionPool pool) {
-        FatVariableLengthGammaTransaction tx = pool.takeMap();
+    public FatVariableLengthGammaTxn newTransaction(GammaTxnPool pool) {
+        FatVariableLengthGammaTxn tx = pool.takeMap();
         if (tx == null) {
-            tx = new FatVariableLengthGammaTransaction(config);
+            tx = new FatVariableLengthGammaTxn(config);
         } else {
             tx.init(config);
         }

@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
@@ -12,7 +12,7 @@ import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * A stresstest that checks if the NonReentrantMutex; a traditional synchronization structure, can be build
@@ -31,7 +31,7 @@ public abstract class NonReentrantMutex_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
     }
@@ -117,7 +117,7 @@ public abstract class NonReentrantMutex_AbstractTest {
 
         final AtomicVoidClosure lockClosure = new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 locked.awaitNull(tx);
                 locked.set(tx, this);
             }
@@ -125,7 +125,7 @@ public abstract class NonReentrantMutex_AbstractTest {
 
         final AtomicVoidClosure unlockClosure = new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 if (locked.isNull(tx)) {
                     throw new IllegalStateException();
                 }

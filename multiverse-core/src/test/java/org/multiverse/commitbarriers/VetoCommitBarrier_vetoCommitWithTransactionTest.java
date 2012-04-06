@@ -5,18 +5,18 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.exceptions.DeadTransactionException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaConstants {
     private GammaStm stm;
@@ -24,7 +24,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         clearCurrentThreadInterruptedStatus();
     }
 
@@ -50,7 +50,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenNoPendingTransactions() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         barrier.vetoCommit(tx);
 
         assertTrue(barrier.isCommitted());
@@ -69,7 +69,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
             public void doRun() throws Exception {
                 stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
                     @Override
-                    public void execute(Transaction tx) throws Exception {
+                    public void execute(Txn tx) throws Exception {
                         ref.incrementAndGet(tx, 1);
                         barrier.joinCommit(tx);
                     }
@@ -97,7 +97,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenTransactionFailedToPrepare_thenBarrierNotAbortedOrCommitted() {
         final GammaIntRef ref = new GammaIntRef(stm);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.get(tx);
 
         //conflicting write
@@ -119,7 +119,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenTransactionAborted_thenDeadTransactionException() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.abort();
 
         try {
@@ -136,7 +136,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenTransactionCommitted_thenDeadTransactionException() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         tx.commit();
 
         try {
@@ -154,7 +154,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         VetoCommitBarrier barrier = new VetoCommitBarrier();
         barrier.atomicVetoCommit();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.vetoCommit(tx);
             fail();
@@ -170,7 +170,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
         VetoCommitBarrier barrier = new VetoCommitBarrier();
         barrier.abort();
 
-        Transaction tx = stm.newDefaultTransaction();
+        Txn tx = stm.newDefaultTransaction();
         try {
             barrier.vetoCommit(tx);
             fail();

@@ -1,15 +1,14 @@
 package org.multiverse.collections;
 
 import org.multiverse.api.Stm;
-import org.multiverse.api.Transaction;
-import org.multiverse.api.collections.TransactionalCollection;
+import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TransactionalIterator;
 import org.multiverse.api.collections.TransactionalSet;
 import org.multiverse.api.exceptions.TodoException;
 
 import java.util.Map;
 
-import static org.multiverse.api.ThreadLocalTransaction.getThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 public final class NaiveTransactionalHashSet<E>
         extends AbstractTransactionalCollection<E>
@@ -23,42 +22,42 @@ public final class NaiveTransactionalHashSet<E>
     }
 
     @Override
-    public boolean add(Transaction tx, E e) {
+    public boolean add(Txn tx, E e) {
         return map.put(tx, e, this) == null;
     }
 
     @Override
     public boolean contains(Object item) {
-        return contains(getThreadLocalTransaction(), item);
+        return contains(getThreadLocalTxn(), item);
     }
 
     @Override
-    public boolean contains(Transaction tx, Object o) {
+    public boolean contains(Txn tx, Object o) {
         return map.get(tx, o) != null;
     }
 
     @Override
     public boolean remove(Object item) {
-        return remove(getThreadLocalTransaction(), item);
+        return remove(getThreadLocalTxn(), item);
     }
 
     @Override
-    public boolean remove(Transaction tx, Object item) {
+    public boolean remove(Txn tx, Object item) {
         return map.remove(tx, item) != null;
     }
 
     @Override
-    public int size(Transaction tx) {
+    public int size(Txn tx) {
         return map.size(tx);
     }
 
     @Override
-    public void clear(Transaction tx) {
+    public void clear(Txn tx) {
         map.clear(tx);
     }
 
     @Override
-    public TransactionalIterator<E> iterator(Transaction tx) {
+    public TransactionalIterator<E> iterator(Txn tx) {
         return map.keySet(tx).iterator(tx);
     }
 
@@ -71,23 +70,23 @@ public final class NaiveTransactionalHashSet<E>
         }
 
         @Override
-        public boolean hasNext(Transaction tx) {
+        public boolean hasNext(Txn tx) {
             return iterator.hasNext(tx);
         }
 
         @Override
-        public E next(Transaction tx) {
+        public E next(Txn tx) {
             return iterator.next(tx).getKey();
         }
 
         @Override
-        public void remove(Transaction tx) {
+        public void remove(Txn tx) {
             iterator.remove(tx);
         }
     }
 
     @Override
-    public String toString(Transaction tx) {
+    public String toString(Txn tx) {
         throw new TodoException();
     }
 }

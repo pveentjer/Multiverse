@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.*;
 import org.multiverse.stms.gamma.transactionalobjects.*;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.stms.gamma.GammaStmUtils.doubleAsLong;
@@ -29,7 +29,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         int newValue = 20;
@@ -52,7 +52,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -74,7 +74,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         int newValue = 20;
@@ -101,7 +101,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -121,7 +121,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         boolean newValue = false;
@@ -145,7 +145,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -168,7 +168,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         boolean newValue = false;
@@ -195,7 +195,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -215,7 +215,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         double newValue = 20;
@@ -238,7 +238,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -260,7 +260,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         double newValue = 20;
@@ -287,7 +287,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -307,7 +307,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         long newValue = 20;
@@ -330,7 +330,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -352,7 +352,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         long newValue = 20;
@@ -379,7 +379,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -400,7 +400,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         String newValue = "bar";
@@ -424,7 +424,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         long initialVersion = ref.version;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);
@@ -448,7 +448,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         String newValue = "bar";
@@ -477,7 +477,7 @@ public class BaseGammaRef_commitTest implements GammaConstants {
         ref.listeners = listeners;
 
         GammaRefTranlocal tranlocal = new GammaRefTranlocal();
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, false);
 
         tranlocal.setDirty(false);

@@ -14,7 +14,7 @@ import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -25,7 +25,7 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -41,7 +41,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -58,9 +58,9 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.getAndIncrement(30);
@@ -77,15 +77,15 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
     public void whenActiveTransactionAvailable() {
         LongRef ref = new GammaLongRef(stm, 10);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long value = ref.getAndIncrement(20);
         tx.commit();
 
         assertEquals(10, value);
         assertIsCommitted(tx);
         assertEquals(30, ref.atomicGet());
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
     }
 
     @Test
@@ -93,15 +93,15 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long value = ref.getAndIncrement(0);
         tx.commit();
 
         assertEquals(10, value);
         assertIsCommitted(tx);
         assertEquals(10, ref.atomicGet());
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
     }
 
@@ -117,8 +117,8 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
 
         sleepMs(500);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long result = ref.getAndIncrement(amount);
         tx.commit();
 
@@ -135,11 +135,11 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long version = ref.getVersion();
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         try {
             ref.getAndIncrement(1);
             fail();
@@ -168,7 +168,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertNull(getThreadLocalTransaction());
+        assertNull(getThreadLocalTxn());
     }
 
     @Test
@@ -177,8 +177,8 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.commit();
 
         try {
@@ -191,7 +191,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertIsCommitted(tx);
     }
 
@@ -201,8 +201,8 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         tx.abort();
 
         try {
@@ -214,7 +214,7 @@ public class GammaLongRef_getAndIncrement1Test implements GammaConstants {
         assertSurplus(ref, 0);
         assertRefHasNoLocks(ref);
         assertVersionAndValue(ref, initialVersion, initialValue);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertIsAborted(tx);
     }
 

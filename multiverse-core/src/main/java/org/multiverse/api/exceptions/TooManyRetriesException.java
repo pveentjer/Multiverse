@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link RetryException} thrown when a {@link org.multiverse.api.Transaction} is retried too many times. Uncontrolled
+ * A {@link RetryException} thrown when a {@link org.multiverse.api.Txn} is retried too many times. Uncontrolled
  * retrying could lead to liveness problems like livelocks and starvation.
  *
  * @author Peter Veentjer.

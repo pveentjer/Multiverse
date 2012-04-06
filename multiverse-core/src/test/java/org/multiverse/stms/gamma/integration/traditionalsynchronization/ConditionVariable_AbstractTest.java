@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.integration.traditionalsynchronization;
 
 import org.junit.Before;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.BooleanRef;
@@ -15,7 +15,7 @@ import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public abstract class ConditionVariable_AbstractTest {
     protected GammaStm stm;
@@ -25,7 +25,7 @@ public abstract class ConditionVariable_AbstractTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     protected abstract TxnExecutor newPopBlock();
@@ -90,7 +90,7 @@ public abstract class ConditionVariable_AbstractTest {
         void push(final String item) {
             pushBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     isNotFull.awaitTrue();
 
                     head.set(new Node(item, head.get()));
@@ -107,7 +107,7 @@ public abstract class ConditionVariable_AbstractTest {
         String pop() {
             return popBlock.atomic(new AtomicClosure<String>() {
                 @Override
-                public String execute(Transaction tx) throws Exception {
+                public String execute(Txn tx) throws Exception {
                     isNotEmpty.awaitTrue();
 
                     Node node = head.get();

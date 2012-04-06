@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Stm;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalStack_removeTest {
 
@@ -15,7 +15,7 @@ public class NaiveTransactionalStack_removeTest {
     @Before
     public void setUp(){
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stack = new NaiveTransactionalStack<String>(stm);
     }
 

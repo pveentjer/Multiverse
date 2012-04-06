@@ -2,12 +2,12 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.multiverse.api.TxnFactoryBuilder;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfiguration;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
-import org.multiverse.stms.gamma.transactions.GammaTransactionPool;
+import org.multiverse.stms.gamma.transactions.GammaTxnPool;
 
-import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTransactionPool.getThreadLocalGammaTransactionPool;
+import static org.multiverse.stms.gamma.transactions.ThreadLocalGammaTxnPool.getThreadLocalGammaTxnPool;
 
 public class FatFixedLengthGammaTxnFactory implements GammaTxnFactory {
 
@@ -27,7 +27,7 @@ public class FatFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public GammaTransaction upgradeAfterSpeculativeFailure(GammaTransaction failingTransaction, GammaTransactionPool pool) {
+    public GammaTxn upgradeAfterSpeculativeFailure(GammaTxn failingTransaction, GammaTxnPool pool) {
         throw new UnsupportedOperationException();
     }
 
@@ -37,15 +37,15 @@ public class FatFixedLengthGammaTxnFactory implements GammaTxnFactory {
     }
 
     @Override
-    public FatFixedLengthGammaTransaction newTransaction() {
-        return newTransaction(getThreadLocalGammaTransactionPool());
+    public FatFixedLengthGammaTxn newTransaction() {
+        return newTransaction(getThreadLocalGammaTxnPool());
     }
 
     @Override
-    public FatFixedLengthGammaTransaction newTransaction(GammaTransactionPool pool) {
-        FatFixedLengthGammaTransaction tx = pool.takeFatFixedLength();
+    public FatFixedLengthGammaTxn newTransaction(GammaTxnPool pool) {
+        FatFixedLengthGammaTxn tx = pool.takeFatFixedLength();
         if (tx == null) {
-            tx = new FatFixedLengthGammaTransaction(config);
+            tx = new FatFixedLengthGammaTxn(config);
         } else {
             tx.init(config);
         }

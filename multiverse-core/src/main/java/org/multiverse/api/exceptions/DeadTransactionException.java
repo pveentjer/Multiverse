@@ -2,7 +2,7 @@ package org.multiverse.api.exceptions;
 
 /**
  * An {@link IllegalTransactionStateException} thrown when an action is executed on a
- * {@link org.multiverse.api.Transaction} that is either committed or aborted.
+ * {@link org.multiverse.api.Txn} that is either committed or aborted.
  *
  * @author Peter Veentjer.
  */

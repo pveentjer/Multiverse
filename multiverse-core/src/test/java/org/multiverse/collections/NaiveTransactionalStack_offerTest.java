@@ -5,12 +5,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.Stm;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class NaiveTransactionalStack_offerTest {
 
@@ -19,7 +19,7 @@ public class NaiveTransactionalStack_offerTest {
     @Before
     public void setUp() {
         stm = getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class NaiveTransactionalStack_offerTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 try {
                     stack.offer(null);
                     fail();
@@ -48,7 +48,7 @@ public class NaiveTransactionalStack_offerTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 boolean result = stack.offer("1");
 
                 assertTrue(result);
@@ -64,7 +64,7 @@ public class NaiveTransactionalStack_offerTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.offer("1");
                 boolean result = stack.offer("2");
 
@@ -81,7 +81,7 @@ public class NaiveTransactionalStack_offerTest {
 
         StmUtils.atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 stack.offer("1");
                 stack.offer("2");
                 boolean result = stack.offer("3");

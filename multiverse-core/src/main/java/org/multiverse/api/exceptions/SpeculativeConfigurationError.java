@@ -4,7 +4,7 @@ package org.multiverse.api.exceptions;
  * A {@link ControlFlowError} thrown for dealing with the speculative configuration mechanism.
  *
  * <p>Multiverse uses a speculative configuration mechanism if enabled makes certain optimizations possible. E.g. one of the optimizations
- * is to use different {@link org.multiverse.api.Transaction} implementations that are optimized for certain transaction lengths. As
+ * is to use different {@link org.multiverse.api.Txn} implementations that are optimized for certain transaction lengths. As
  * long as the speculation is not violated, you will get better performance than when a more heavy weight transaction/configuration.
  *
  * <p>So ControlFlowErrors are not something bad, but just a way for the STM to figure out what the cheapest settings are for
@@ -17,7 +17,7 @@ package org.multiverse.api.exceptions;
  * has learned, it will not make the same mistakes again, but if you do io (e.g. print to the System.out or do logging) you can expect
  * to see aborts, even though there is no other reason to.
  *
- * Speculative behavior can be turned of (either on the Transaction or STM level) but you will not get the best out of performance. For
+ * Speculative behavior can be turned of (either on the Txn or STM level) but you will not get the best out of performance. For
  * the speculative behavior to learn, it is important that the {@link org.multiverse.api.TxnExecutor} is reused.
  *
  * @author Peter Veentjer.

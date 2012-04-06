@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.integration.classic;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicBooleanClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.BooleanRef;
@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * http://en.wikipedia.org/wiki/Cigarette_smokers_problem
@@ -39,7 +39,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         tobaccoAvailable = newBooleanRef();
         paperAvailable = newBooleanRef();
@@ -84,7 +84,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 0:
                         block.atomic(new AtomicVoidClosure() {
                             @Override
-                            public void execute(Transaction tx) {
+                            public void execute(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -98,7 +98,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 1:
                         block.atomic(new AtomicVoidClosure() {
                             @Override
-                            public void execute(Transaction tx) {
+                            public void execute(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -112,7 +112,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                     case 2:
                         block.atomic(new AtomicVoidClosure() {
                             @Override
-                            public void execute(Transaction tx) {
+                            public void execute(Txn tx) {
                                 if (notifier.get() != null) {
                                     retry();
                                 }
@@ -129,7 +129,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
             }
             block.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     notifier.awaitNull();
                     notifier.set(arbiterThread);
                 }
@@ -165,7 +165,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         private boolean makeCigarette() {
             return block.atomic(new AtomicBooleanClosure() {
                 @Override
-                public boolean execute(Transaction tx) throws Exception {
+                public boolean execute(Txn tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {
                         if (notifier.get() == arbiterThread) {
                             return false;

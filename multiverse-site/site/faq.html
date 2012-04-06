@@ -10,18 +10,18 @@
     <li><a href="#question.7">Can TransactionalObjects be combined with JPA/Hibernate annotations?</a></li>
     <li><a href="#question.8">Can Multiverse be distributed?</a></li>
     <li><a href="#question.9">Which License is used?</a></li>
-    <li><a href="#question.10">Does Multiverse support blocking transactions?</a></li>
+    <li><a href="#question.10">Does Multiverse support blocking txns?</a></li>
     <li><a href="#question.11">Does Multiverse scale linearly?</a></li>
     <li><a href="#question.12">Does Multiverse prevent deadlocking?</a></li>
     <li><a href="#question.13">Does Multiverse prevent livelocking?</a></li>
     <li><a href="#question.14">Does Multiverse prevent starvation?</a></li>
-    <li><a href="#question.14">Can Multiverse transactions participate in a distributed transaction?</a></li>
+    <li><a href="#question.14">Can Multiverse txns participate in a distributed txn?</a></li>
     <li><a href="#question.15">Does Multiverse suffer from Zombie threads?</a></li>
-    <li><a href="#question.16">Can non transactional objects be used in transactions?</a></li>
-    <li><a href="#question.17">Can IO be done in transactions?</a></li>
+    <li><a href="#question.16">Can non transactional objects be used in txns?</a></li>
+    <li><a href="#question.17">Can IO be done in txns?</a></li>
     <li><a href="#question.18">Does Multiverse provide support for pessimistic locking?</a></li>
-    <li><a href="#question.19">Does Multiverse support nesting of transactions?</a></li>
-    <li><a href="#question.20">Does Multiverse allow non transaction access?</a></li>
+    <li><a href="#question.19">Does Multiverse support nesting of txns?</a></li>
+    <li><a href="#question.20">Does Multiverse allow non txn access?</a></li>
     <li><a href="#question.21">Does Multiverse support early or late conflict detection?</a></li>
     <li><a href="#question.22">Does Multiverse support direct or deferred updates?</a></li>
     <li><a href="#question.23">Can Multiverse be combined with traditional lock based technology?</a></li>
@@ -75,7 +75,7 @@ No, for the moment Multiverse doesn't support any functionality for creating a d
 it would be possible (for example by using a transparant clustering technology like Terracotta), it would not
 be very scalable. The main STM implementation, called the AlphaSTM, relies on a logical clock. When this clock
 is distributed, the performance of the system is limited to the rate the clock can be increased over the network.
-If a single increase takes 1ms, the maximum performance of the STM would be 1000 transactions/second no matter
+If a single increase takes 1ms, the maximum performance of the STM would be 1000 txns/second no matter
 how many machines you add (it probably is going to degrade because the time it to increase the clock is going
 to increase). In the future we want to experiment with different approaches, but it doesn't have the highest
 priority atm.
@@ -83,17 +83,17 @@ priority atm.
 <h2 id="question.9">Which License is used</h2>
 Multiverse is released under the <a href="license.html">Apache 2 License</a>.
 
-<h2 id="question.10">Does Multiverse support blocking transactions?</h2>
+<h2 id="question.10">Does Multiverse support blocking txns?</h2>
 Yes. For more information about blocking operations, check the <a href="manual-blocking.html">5 Minute guide to
-    blocking transactions</a>.
+    blocking txns</a>.
 
 <h2 id="question.11">Does Multiverse scale linearly?</h2>
 No. Transactions that doesn't share state, should scale linearly (throw in twice as much hardware, and you will
-get twice the performance). But there is 1 central component touched by every transaction: the clock.
+get twice the performance). But there is 1 central component touched by every txn: the clock.
 This clock (an AtomicLong) will eventually cause a bottleneck. This issue is going to get a lot of attention.
 
 <h2 id="question.12">Does Multiverse prevent deadlocking?</h2>
-Yes. As long as transactional resources of Multiverse are used, transactions won't deadlock. There are 2 requirements
+Yes. As long as transactional resources of Multiverse are used, txns won't deadlock. There are 2 requirements
 for a deadlock:
 <ol>
     <li>uncontrolled order of locking</li>
@@ -104,55 +104,55 @@ not present. The lock behavior can be customized by providing a custom CommitLoc
 
 <h2 id="question.13">Does Multiverse prevent livelocking?</h2>
 Multiverse is very optimistic, so it could be that while reading/writing to transactional object a failure is encountered
-or when the transaction commits. The transaction management automatically retries the transaction in the hope that it
+or when the txn commits. The txn management automatically retries the txn in the hope that it
 will succeed next time. Oncontrolled retrying could lead to livelocking because resources are consumed (memory
-and cpu cycles) but no progress is made because transactions keep aborting. But retrying in Multiverse is bounded.
+and cpu cycles) but no progress is made because txns keep aborting. But retrying in Multiverse is bounded.
 And can be configured with the maxRetries property of the TransactionalMethod annotation.
 
 <h2 id="question.14">Does Multiverse prevent starvation?</h2>
-No. Multiverse doesn't provide any guarantee that transaction that content over resources are going to commit. Meaning
-that a transaction eventually fails with a TooManyRetriesException. A practical example of starving transactions
-are long running transactions, the keep conflicting on very short running transactions. In the future a
+No. Multiverse doesn't provide any guarantee that txn that content over resources are going to commit. Meaning
+that a txn eventually fails with a TooManyRetriesException. A practical example of starving txns
+are long running txns, the keep conflicting on very short running txns. In the future a
 contention manager is going to be added, but for the time being there is no support available.
 
 <h2 id="question.15">Does Multiverse suffer from Zombie threads?</h2>
-No. A transaction will always get transaction level read consistency. So it is impossible that a transaction sees
+No. A txn will always get txn level read consistency. So it is impossible that a txn sees
 state that it shouldn't and could enter some infinite loop and becomes a zombie.
 
-<h2 id="question.16">Can non transactional objects be used in transactions?</h2>
-Yes you can. Normal objects can be used on transactions, for example a normal Person POJO (without the
+<h2 id="question.16">Can non transactional objects be used in txns?</h2>
+Yes you can. Normal objects can be used on txns, for example a normal Person POJO (without the
 TransactionalObject annotation) be exchanged over a transactional BlockingQueue (the TransactionalLinkedList)
-for example. But changes made on these objects won't be protected by the transaction, so you need to
+for example. But changes made on these objects won't be protected by the txn, so you need to
 know what you are doing.
 
-<h2 id="question.17">Can IO be used in transactions?</h2>
-It is possible to do IO  in a transaction, but it could be that the transaction is aborted and restarted many times
+<h2 id="question.17">Can IO be used in txns?</h2>
+It is possible to do IO  in a txn, but it could be that the txn is aborted and restarted many times
 (for example because a read conflict or write conflict is encountered). It is possible to register tasks to be executed
 when a Transaction aborts or commits, giving the option to 'undo' what is done. Support for transacional IO is planned,
 but doesn't have a high priority at the moment.
 
 <h2 id="question.18">Does Multiverse provide support for pessimistic locking?</h2>
-Not yet. In a transaction it isn't possible to 'claim' resources.  In the MVCC database Oracle (and MySQL + InnoDB and
+Not yet. In a txn it isn't possible to 'claim' resources.  In the MVCC database Oracle (and MySQL + InnoDB and
 Postgresql) it is possible to do a pessimistic lock using 'select .. for update'. In the near future such a mechanism
 will be provided, but for the time being this
 functionality is not available.
 
-<h2 id="question.19">Does Multiverse provide support for nesting transactions?</h2>
-Yes. Transactions can be nested and atm they will always be flattened (so only the other transaction counts). An abort
-or commit will always be executed on the while transaction and not subtransactions. In the future different
+<h2 id="question.19">Does Multiverse provide support for nesting txns?</h2>
+Yes. Transactions can be nested and atm they will always be flattened (so only the other txn counts). An abort
+or commit will always be executed on the while txn and not subtransactions. In the future different
 progagation levels will be added (for example open nesting).
 
-<h2 id="question.20">Does Multiverse allow non transaction access?</h2>
+<h2 id="question.20">Does Multiverse allow non txn access?</h2>
 No this is not possible. The mutable state of a transactional object is moved to a tranlocal; object that contains
-the transaction local state of a transactional object. To access the tranlocal, you always need a transaction.
-When a transactional method is called without a transaction, a transaction automatically is started and
+the txn local state of a transactional object. To access the tranlocal, you always need a txn.
+When a transactional method is called without a txn, a txn automatically is started and
 committed/aborted when the method completes.
 
 <h2 id="question.21">Does Multiverse support early or late conflict detection?</h2>
 It depends.
 
 <h2 id="question.22">Does Multiverse support direct or deferred updates?</h2>
-Multiverse only supports updates, so the changes are made when the transaction commits and not when the change (the
+Multiverse only supports updates, so the changes are made when the txn commits and not when the change (the
 write on a transactional object) is made.
 
 <h2 id="question.23">Can Multiverse be combined with traditional lock based technology?</h2>
@@ -162,20 +162,20 @@ to multiple blocking resources, etc. So if you know what you are doing, traditio
 be combined with Multiverse.
 
 <h2 id="question.24">Does Multiverse support privatization?</h2>
-No. Privatization is a technique that can be used to temporary remove a transactional object from the STM so a transaction
+No. Privatization is a technique that can be used to temporary remove a transactional object from the STM so a txn
 has exclusive access.
 
 <h2 id="question.25">Does Multiverse need special factories for creating transactional objects?</h2>
 No. Transactional Object can be created with ordinary constructors.
 
 <h2 id="question.26">Are Multiverse Transactions thread-safe?</h2>
-No, a transaction is not thread-safe to use and therefor can't be used by multiple threads
-concurrently. It is possible however to hand over a transaction from one thread to another
+No, a txn is not thread-safe to use and therefor can't be used by multiple threads
+concurrently. It is possible however to hand over a txn from one thread to another
 because the transation itself doesn't rely on any thread/threadlocal information. But it could
 be that the systems in front of the STM (e.g. the instrumentation) does rely on this. So threads
 can safely be handed over from one thread to another, if you really know what you are doing.
 <p>
-    The org.multiverse.api.Transaction can be compared to the Hibernate Session, that also isn't threadsafe to use.
+    The org.multiverse.api.Txn can be compared to the Hibernate Session, that also isn't threadsafe to use.
 
 <h2 id="question.27">Is lock based concurrency control bad?</h2>
 I certainly don't think that lock based concurrency control is bad. Multiverse even couldn't exist with low
@@ -193,18 +193,18 @@ easy to introduce reordening or visibility problems if you don't understand the 
 The Java Memory Model is defined in happens before rules, for example the volatile variable rule that states
 that all changes made before a volatile write, will be visible when a volatile read is done. Using this mechanism
 it is possible to hand over an object graph from one thread to another without worrying about visibility
-or reordering issues. Multiverse also provides a happens before rule: all changes made before a transaction commits,
-will be visible to all starting transactions. So you don't need to worry about reordering or visibility problems.
+or reordering issues. Multiverse also provides a happens before rule: all changes made before a txn commits,
+will be visible to all starting txns. So you don't need to worry about reordering or visibility problems.
 <p>
     On a lower level this behavior is realized using CAS instructions (for example an AtomicReference) that provides
     the same happens before semantics as volatile variables.
 
 <h2 id="question.29">Does Multiverse have object or field granularity?</h2>
 It depends. The main STM implementation; the AlphaStm doesn't impose any restrictions on this behavior. It manages
-'tranlocals' (transaction local state). And it doesn't matter if this is a single field (so field granularity)
+'tranlocals' (txn local state). And it doesn't matter if this is a single field (so field granularity)
 or a complete object (object granularity). The advantage of object granularity is that there is less overhead.
 The advantage of field granularity is that there will be less read or write conflicts. If the TransactionalObject
-annotation is used, automatically object granularity is used. But if the org.multiverse.transactions.refs are
+annotation is used, automatically object granularity is used. But if the org.multiverse.txns.refs are
 used, you have field granularity.
 
 <h2 id="question.30">Does Multiverse have provides support for contention management?</h2>
@@ -225,9 +225,9 @@ Yes it can. But atm there is no spring TransactionManager, so you have to make u
 or you have to make use of a more explicit approach (TransactionlReference/TransactionTemplate).
 
 <h2 id="question.33">What is wrong with read or write conflicts?</h2>
-During the execution of transactions it could be that a transaction is aborted because a read or write conflict
+During the execution of txns it could be that a txn is aborted because a read or write conflict
 happened. Read and write conflicts are the way for software transactional memory to prevent unwanted interleavings
-of transactions, and since no partial changes will be written (transactions are atomic), it doesn't cause
+of txns, and since no partial changes will be written (txns are atomic), it doesn't cause
 problems in transactional resources. But if there are a lot of conflicts, the processors will doing a lot of work and
 consume memory (opening tranlocals, trying to commit, perhaps executing a lot of code in the transactional objects) without
 making any progress. This is called a lifelock and something you want to prevent. If certain objects cause a lot
@@ -239,10 +239,10 @@ areas of research for transactional memory to lower the amount of contention (fo
     done in this area.
     The most important low hanging fruit are the Multiverse collection implementations and the size field. For
     the time being these structures are not going to scale because they will conflict on this field, so it is important
-    that for the time being to keep transactions on these structures short if there is contention.
+    that for the time being to keep txns on these structures short if there is contention.
 
 <p>
-    Multiverse provides basic support for preving transactions to livelock by limiting the maximum number of retries
+    Multiverse provides basic support for preving txns to livelock by limiting the maximum number of retries
     ( can be configured with the maxRetries) in combination with a backoff policy. Bby default an exponential backoff
     policy is used.
 

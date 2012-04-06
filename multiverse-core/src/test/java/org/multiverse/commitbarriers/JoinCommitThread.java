@@ -1,7 +1,7 @@
 package org.multiverse.commitbarriers;
 
 import org.multiverse.TestThread;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -23,7 +23,7 @@ public class JoinCommitThread extends TestThread {
     public void doRun() throws Exception {
         stm.getDefaultTxnExecutor().atomic(new AtomicVoidClosure() {
             @Override
-            public void execute(Transaction tx) throws Exception {
+            public void execute(Txn tx) throws Exception {
                 assertNotNull(tx);
                 barrier.joinCommit(tx);
             }

@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.api.StmUtils;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicClosure;
 import org.multiverse.api.closures.AtomicLongClosure;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
@@ -33,7 +33,7 @@ public class OrElseTest {
 
         long value = StmUtils.atomic(new AtomicLongClosure() {
             @Override
-            public long execute(Transaction tx) throws Exception {
+            public long execute(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });
@@ -49,7 +49,7 @@ public class OrElseTest {
         }
 
         @Override
-        public long execute(Transaction tx) throws Exception {
+        public long execute(Txn tx) throws Exception {
             if (ref.get() == 0) {
                 retry();
             }
@@ -66,7 +66,7 @@ public class OrElseTest {
 
         long value = StmUtils.atomic(new AtomicLongClosure() {
             @Override
-            public long execute(Transaction tx) throws Exception {
+            public long execute(Txn tx) throws Exception {
                 return StmUtils.atomic(new GetClosure(ref1), new GetClosure(ref2));
             }
         });

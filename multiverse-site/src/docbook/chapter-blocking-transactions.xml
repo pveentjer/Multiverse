@@ -1,4 +1,4 @@
-<chapter xml:id="chapter-blocking-transactions">
+<chapter xml:id="chapter-blocking-txns">
 
 <title>Blocking Transactions (in progress)</title>
 
@@ -41,7 +41,7 @@
            ...
        }
        </programlisting>
-       In this example, when a transaction executed the await and finds that the value has not reached the expected value, the transaction will block until
+       In this example, when a txn executed the await and finds that the value has not reached the expected value, the txn will block until
        the value become equal or larger to the expected value.
 </para>
     <para>
@@ -53,10 +53,10 @@
 <sect1>
     <title>RetryError</title>
     <para>
-        The blocking functionality works like this: when a retry is called, the transaction will register a listener on all reads it has executed, aborts
-        the transaction and throws a org.multiverse.api.exceptions.RetryError (an instance of the org.multiverse.api.exceptions.ControlFlowError). This Error
+        The blocking functionality works like this: when a retry is called, the txn will register a listener on all reads it has executed, aborts
+        the txn and throws a org.multiverse.api.exceptions.RetryError (an instance of the org.multiverse.api.exceptions.ControlFlowError). This Error
         should only be caught by the AtomicBlock and till it is caught, it unwinds the callstack. When it is caught by the AtomicBlock, the RetryLatch.await
-        that was registered on all reads references, will be called and the transaction is going to block. So do not catch this Error unless you really know
+        that was registered on all reads references, will be called and the txn is going to block. So do not catch this Error unless you really know
         what you are doing.
     </para>
 </sect1>
@@ -96,7 +96,7 @@
 
         ...
     }
-        This example show hows to wait until both counters have reached some value. A transaction will automatically block on all references
+        This example show hows to wait until both counters have reached some value. A txn will automatically block on all references
         it has read.
         </programlisting>
 
@@ -106,7 +106,7 @@
 <sect1>
     <title>Prevent blocking</title>
     <para>
-        The default setting for a transaction, is that it is allowed to block. If you don't want a transaction to be able to block, the
+        The default setting for a txn, is that it is allowed to block. If you don't want a txn to be able to block, the
         TransactionFactoryBuilder.setBlockingAllowed can be called.
     <programlisting language="java">
 
@@ -143,7 +143,7 @@
 <sect1>
     <title>Timeout</title>
     <para>
-        The default is that unbound waiting is used. But in some cases you want to configure how long a transaction is allowed to block
+        The default is that unbound waiting is used. But in some cases you want to configure how long a txn is allowed to block
         before throwing a org.multiverse.api.exceptions.RetryTimeoutException. This can be done through the TransactionFactoryBuilder.setTimeoutNs
         method. Atm no support is provided to configure this on a lower level.
     <programlisting language="java">
@@ -179,7 +179,7 @@
 <sect1>
     <title>Interruptibility</title>
     <para>
-          The default is that a transaction is not interruptible. But in some cases you want a transaction to be interruptible. This can be done using the
+          The default is that a txn is not interruptible. But in some cases you want a txn to be interruptible. This can be done using the
           setInterruptible method on the org.multiverse.api.TxnFactoryBuilder.
     <programlisting language="java">
 

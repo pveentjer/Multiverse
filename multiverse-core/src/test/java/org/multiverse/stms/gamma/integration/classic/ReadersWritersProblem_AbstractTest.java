@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.classic;
 import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.LongRef;
 import org.multiverse.stms.gamma.GammaStm;
@@ -16,7 +16,7 @@ import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.StmUtils.newLongRef;
 import static org.multiverse.api.StmUtils.retry;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 /**
  * http://en.wikipedia.org/wiki/Readers-writers_problem
@@ -39,7 +39,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
     }
 
@@ -165,7 +165,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         public void acquireReadLock() {
             acquireReadLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (readerCount.get() == -1) {
                         retry();
                     }
@@ -178,7 +178,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
         public void acquireWriteLock() {
             acquireWriteLockBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     if (readerCount.get() != 0) {
                         retry();
                     }

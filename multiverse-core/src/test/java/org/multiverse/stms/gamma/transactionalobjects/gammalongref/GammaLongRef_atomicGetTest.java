@@ -6,11 +6,11 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.assertOrecValue;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 public class GammaLongRef_atomicGetTest {
@@ -20,12 +20,12 @@ public class GammaLongRef_atomicGetTest {
     @Before
     public void setUp() {
         stm = new GammaStm();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test(expected = LockedException.class)
     public void whenUnconstructed() {
-        GammaTransaction tx = stm.newDefaultTransaction();
+        GammaTxn tx = stm.newDefaultTransaction();
         GammaLongRef ref = new GammaLongRef(tx);
         ref.atomicGet();
     }
@@ -34,13 +34,13 @@ public class GammaLongRef_atomicGetTest {
     public void whenActiveTransactionAvailable_thenIgnored() {
         GammaLongRef ref = new GammaLongRef(stm, 100);
 
-        GammaTransaction tx = stm.newDefaultTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = stm.newDefaultTransaction();
+        setThreadLocalTxn(tx);
         ref.set(10);
 
         assertEquals(100, ref.atomicGet());
 
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -77,7 +77,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = new GammaLongRef(stm, 100);
         long version = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
         long result = ref.atomicGet();
@@ -103,7 +103,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
         long version = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         long orecValue = ref.orec;
@@ -123,7 +123,7 @@ public class GammaLongRef_atomicGetTest {
         GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
         long version = ref.getVersion();
 
-        GammaTransaction otherTx = stm.newDefaultTransaction();
+        GammaTxn otherTx = stm.newDefaultTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         long orecValue = ref.orec;

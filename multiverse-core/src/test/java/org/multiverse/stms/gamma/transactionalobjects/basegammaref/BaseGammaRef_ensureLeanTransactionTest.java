@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTransaction;
-import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTransaction;
+import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
+import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -22,10 +22,10 @@ public class BaseGammaRef_ensureLeanTransactionTest {
     }
 
     @Test
-    public void whenLeanMonoGammaTransactionUsed() {
+    public void whenLeanMonoGammaTxnUsed() {
         GammaRef<String> ref = new GammaRef<String>(stm, null);
 
-        LeanMonoGammaTransaction tx = new LeanMonoGammaTransaction(stm);
+        LeanMonoGammaTxn tx = new LeanMonoGammaTxn(stm);
         try {
             ref.ensure(tx);
             fail();
@@ -37,10 +37,10 @@ public class BaseGammaRef_ensureLeanTransactionTest {
     }
 
     @Test
-    public void whenLeanFixedLengthGammaTransactionUsed() {
+    public void whenLeanFixedLengthGammaTxnUsed() {
         GammaRef<String> ref = new GammaRef<String>(stm, null);
 
-        LeanFixedLengthGammaTransaction tx = new LeanFixedLengthGammaTransaction(stm);
+        LeanFixedLengthGammaTxn tx = new LeanFixedLengthGammaTxn(stm);
         try {
             ref.ensure(tx);
             fail();

@@ -9,7 +9,7 @@ import org.multiverse.stms.gamma.transactionalobjects.gammalongref.LongRefAwaitT
 import static org.multiverse.TestUtils.assertAlive;
 import static org.multiverse.TestUtils.sleepMs;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.ThreadLocalTransaction.clearThreadLocalTransaction;
+import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class BlockingTest {
 
@@ -18,7 +18,7 @@ public class BlockingTest {
     @Before
     public void setUp() {
         stm = (GammaStm) getGlobalStmInstance();
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Test

@@ -11,8 +11,8 @@ every bit of spare time I had). This is a list of the most important features of
         fields of transactional objects.
     </li>
     <li>
-        Non tracking readonly transaction: causes less stress on the transaction, so
-        much cheaper than an update transaction. But it isn't allowed to participate
+        Non tracking readonly txn: causes less stress on the txn, so
+        much cheaper than an update txn. But it isn't allowed to participate
         in blocking operations and it also is more subject to read conflicts.
     </li>
     <li>
@@ -31,7 +31,7 @@ every bit of spare time I had). This is a list of the most important features of
     <li>
         TransactionTemplate: a Template method implementation that can be used to
         create an transactional executed piece of code. The advantage of using a
-        TransactionTemplate is that it provides the same transaction management
+        TransactionTemplate is that it provides the same txn management
         logic the bytecode-instrumentation provides.
     </li>
     <li>

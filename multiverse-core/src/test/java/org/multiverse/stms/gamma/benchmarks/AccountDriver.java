@@ -3,8 +3,8 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.benchy.BenchmarkDriver;
 import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
+import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
-import org.multiverse.api.Transaction;
 import org.multiverse.api.closures.AtomicDoubleClosure;
 import org.multiverse.api.closures.AtomicVoidClosure;
 import org.multiverse.api.references.DoubleRef;
@@ -166,7 +166,7 @@ public class AccountDriver extends BenchmarkDriver {
         public void addInterest(final float rate) {
             addInterrestBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     for (Account a : accounts) {
                         a.deposit(a.getBalance() * rate);
                         if (s_yield)
@@ -179,7 +179,7 @@ public class AccountDriver extends BenchmarkDriver {
         public double computeTotal() {
             return computeTotalBlock.atomic(new AtomicDoubleClosure() {
                 @Override
-                public double execute(Transaction tx) throws Exception {
+                public double execute(Txn tx) throws Exception {
                     double total = 0.0;
                     for (Account a : accounts) {
                         total += a.getBalance();
@@ -194,7 +194,7 @@ public class AccountDriver extends BenchmarkDriver {
         public void transfer(final Account src, final Account dst, final float amount) throws OverdraftException {
             transferBlock.atomic(new AtomicVoidClosure() {
                 @Override
-                public void execute(Transaction tx) throws Exception {
+                public void execute(Txn tx) throws Exception {
                     dst.deposit(amount);
                     if (s_yield)
                         Thread.yield();

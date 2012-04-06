@@ -1,58 +1,58 @@
 package org.multiverse.api.collections;
 
-import org.multiverse.api.Transaction;
+import org.multiverse.api.Txn;
 
 import java.util.Deque;
 
 public interface TransactionalDeque<E> extends TransactionalQueue<E>, Deque<E> {
 
-    boolean offerFirst(Transaction txn, E e);
+    boolean offerFirst(Txn txn, E e);
 
-    E pollLast(Transaction txn);
+    E pollLast(Txn txn);
 
-    E pollFirst(Transaction txn);
+    E pollFirst(Txn txn);
 
-    E peekFirst(Transaction txn);
+    E peekFirst(Txn txn);
 
     void putFirst(E item);
 
-    void putFirst(Transaction txn, E item);
+    void putFirst(Txn txn, E item);
 
     E takeFirst();
 
-    E takeFirst(Transaction txn);
+    E takeFirst(Txn txn);
 
-    boolean offerLast(Transaction txn, E e);
+    boolean offerLast(Txn txn, E e);
 
-    E peekLast(Transaction txn);
+    E peekLast(Txn txn);
 
     void putLast(E item);
 
-    void putLast(Transaction txn, E item);
+    void putLast(Txn txn, E item);
 
     E takeLast();
 
-    E takeLast(Transaction txn);
+    E takeLast(Txn txn);
 
-    void addFirst(Transaction txn, E e);
+    void addFirst(Txn txn, E e);
 
-    void addLast(Transaction txn, E e);
+    void addLast(Txn txn, E e);
 
-    E removeFirst(Transaction txn);
+    E removeFirst(Txn txn);
 
-    E removeLast(Transaction txn);
+    E removeLast(Txn txn);
 
-    E getFirst(Transaction txn);
+    E getFirst(Txn txn);
 
-    E getLast(Transaction txn);
+    E getLast(Txn txn);
 
-    boolean removeFirstOccurrence(Transaction txn, Object o);
+    boolean removeFirstOccurrence(Txn txn, Object o);
 
-    boolean removeLastOccurrence(Transaction txn, Object o);
+    boolean removeLastOccurrence(Txn txn, Object o);
 
-    void push(Transaction txn, E e);
+    void push(Txn txn, E e);
 
-    E pop(Transaction txn);
+    E pop(Txn txn);
 
-    TransactionalIterator<E> descendingIterator(Transaction txn);
+    TransactionalIterator<E> descendingIterator(Txn txn);
 }

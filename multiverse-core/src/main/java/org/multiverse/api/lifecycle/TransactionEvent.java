@@ -1,7 +1,7 @@
 package org.multiverse.api.lifecycle;
 
 /**
- * An enumeration for all possible events for the {@link org.multiverse.api.Transaction} life-cycle.
+ * An enumeration for all possible events for the {@link org.multiverse.api.Txn} life-cycle.
  *
  * @author Peter Veentjer.
  * @see TransactionListener

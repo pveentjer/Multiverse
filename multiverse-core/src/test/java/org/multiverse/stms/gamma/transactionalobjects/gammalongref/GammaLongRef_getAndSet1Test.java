@@ -12,7 +12,7 @@ import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.exceptions.TransactionMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactions.GammaTransaction;
+import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -23,7 +23,7 @@ import java.util.Collection;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
-import static org.multiverse.api.ThreadLocalTransaction.*;
+import static org.multiverse.api.TxnThreadLocal.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
 
 @RunWith(Parameterized.class)
@@ -38,7 +38,7 @@ public class GammaLongRef_getAndSet1Test {
 
     @Before
     public void setUp() {
-        clearThreadLocalTransaction();
+        clearThreadLocalTxn();
     }
 
     @Parameterized.Parameters
@@ -56,14 +56,14 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long value = ref.getAndSet(initialValue + 2);
         tx.commit();
 
         assertEquals(initialValue, value);
         assertIsCommitted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, initialVersion + 1, initialValue + 2);
     }
 
@@ -73,14 +73,14 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long value = ref.getAndSet(initialValue);
         tx.commit();
 
         assertEquals(initialValue, value);
         assertIsCommitted(tx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertSurplus(ref, 0);
         assertVersionAndValue(ref, initialVersion, initialValue);
     }
@@ -90,8 +90,8 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Write);
         long result = ref.getAndSet(20);
@@ -100,7 +100,7 @@ public class GammaLongRef_getAndSet1Test {
         assertIsActive(tx);
         assertRefHasWriteLock(ref, tx);
         assertSurplus(ref, 1);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
     }
 
@@ -109,8 +109,8 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
         ref.getLock().acquire(LockMode.Exclusive);
         long result = ref.getAndSet(20);
@@ -119,7 +119,7 @@ public class GammaLongRef_getAndSet1Test {
         assertIsActive(tx);
         assertRefHasExclusiveLock(ref, tx);
         assertSurplus(ref, 1);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
     }
 
@@ -128,10 +128,10 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
 
         ref.getLock().acquire(otherTx, LockMode.Write);
 
@@ -141,7 +141,7 @@ public class GammaLongRef_getAndSet1Test {
         assertRefHasWriteLock(ref, otherTx);
         assertSurplus(ref, 1);
         assertIsActive(otherTx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
 
         try {
@@ -154,7 +154,7 @@ public class GammaLongRef_getAndSet1Test {
         assertIsActive(otherTx);
         assertRefHasWriteLock(ref, otherTx);
         assertSurplus(ref, 1);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
     }
 
@@ -163,10 +163,10 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, 10);
         long version = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
 
-        GammaTransaction otherTx = transactionFactory.newTransaction();
+        GammaTxn otherTx = transactionFactory.newTransaction();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
         try {
@@ -179,7 +179,7 @@ public class GammaLongRef_getAndSet1Test {
         assertRefHasExclusiveLock(ref, otherTx);
         assertSurplus(ref, 1);
         assertIsActive(otherTx);
-        assertSame(tx, getThreadLocalTransaction());
+        assertSame(tx, getThreadLocalTxn());
         assertVersionAndValue(ref, version, 10);
     }
 
@@ -195,8 +195,8 @@ public class GammaLongRef_getAndSet1Test {
 
         sleepMs(500);
 
-        GammaTransaction tx = transactionFactory.newTransaction();
-        setThreadLocalTransaction(tx);
+        GammaTxn tx = transactionFactory.newTransaction();
+        setThreadLocalTxn(tx);
         long result = ref.getAndSet(newValue);
         tx.commit();
 
@@ -231,9 +231,9 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.prepare();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.getAndSet(30);
@@ -252,9 +252,9 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.commit();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.getAndSet(initialValue + 1);
@@ -273,9 +273,9 @@ public class GammaLongRef_getAndSet1Test {
         GammaLongRef ref = new GammaLongRef(stm, initialValue);
         long initialVersion = ref.getVersion();
 
-        GammaTransaction tx = transactionFactory.newTransaction();
+        GammaTxn tx = transactionFactory.newTransaction();
         tx.abort();
-        setThreadLocalTransaction(tx);
+        setThreadLocalTxn(tx);
 
         try {
             ref.getAndSet(initialValue + 1);
