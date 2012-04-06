@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.lean.LeanFixedLengthGammaTxn;
 
 public class LeanFixedLengthGammaBenchmark implements GammaConstants {
@@ -20,7 +20,7 @@ public class LeanFixedLengthGammaBenchmark implements GammaConstants {
     @Test
     public void testRead1() {
         final long txCount = 1000 * 1000 * 1000;
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
         LeanFixedLengthGammaTxn tx = new LeanFixedLengthGammaTxn(stm);
 
         long startMs = System.currentTimeMillis();
@@ -44,8 +44,8 @@ public class LeanFixedLengthGammaBenchmark implements GammaConstants {
     @Test
     public void testRead2() {
         final long txCount = 1000 * 1000 * 1000;
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
-        GammaRef<String> ref2 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm);
         LeanFixedLengthGammaTxn tx = new LeanFixedLengthGammaTxn(stm);
 
         long startMs = System.currentTimeMillis();
@@ -70,9 +70,9 @@ public class LeanFixedLengthGammaBenchmark implements GammaConstants {
     @Test
     public void testRead3() {
         final long txCount = 1000 * 1000 * 1000;
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
-        GammaRef<String> ref2 = new GammaRef<String>(stm);
-        GammaRef<String> ref3 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref3 = new GammaTxnRef<String>(stm);
         LeanFixedLengthGammaTxn tx = new LeanFixedLengthGammaTxn(stm);
 
         long startMs = System.currentTimeMillis();

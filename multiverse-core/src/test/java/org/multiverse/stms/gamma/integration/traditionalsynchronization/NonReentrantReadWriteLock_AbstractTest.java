@@ -6,7 +6,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -83,7 +83,7 @@ public abstract class NonReentrantReadWriteLock_AbstractTest {
     }
 
     class ReadWriteLock {
-        final GammaRef<Long> lock = new GammaRef<Long>(stm, 0L);
+        final GammaTxnRef<Long> lock = new GammaTxnRef<Long>(stm, 0L);
         final AtomicLong readers = new AtomicLong();
         final AtomicLong writers = new AtomicLong();
         final TxnExecutor acquireReadLockBlock = newAcquireReadLockBlock();

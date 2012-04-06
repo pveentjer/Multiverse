@@ -8,7 +8,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import java.util.concurrent.TimeUnit;
 
@@ -90,7 +90,7 @@ public class CountDownCommitBarrier_tryJoinCommitWithTimeoutTest {
     public void whenCommittedWhileWaiting() throws InterruptedException {
         barrier = new CountDownCommitBarrier(2);
 
-        final GammaIntRef ref = stm.getDefaultRefFactory().newIntRef(0);
+        final GammaTxnInteger ref = stm.getDefaultRefFactory().newTxnInteger(0);
 
         TestThread t = new TestThread() {
             @Override

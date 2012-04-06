@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -19,8 +19,8 @@ import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class TooManyRetriesRollbackTest {
-    private GammaLongRef modifyRef;
-    private GammaLongRef retryRef;
+    private GammaTxnLong modifyRef;
+    private GammaTxnLong retryRef;
     private volatile boolean finished;
     private GammaStm stm;
 
@@ -28,8 +28,8 @@ public class TooManyRetriesRollbackTest {
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        modifyRef = new GammaLongRef(stm);
-        retryRef = new GammaLongRef(stm);
+        modifyRef = new GammaTxnLong(stm);
+        retryRef = new GammaTxnLong(stm);
         finished = false;
     }
 

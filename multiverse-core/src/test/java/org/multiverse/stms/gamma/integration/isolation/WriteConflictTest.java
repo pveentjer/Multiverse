@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
@@ -34,14 +34,14 @@ public class WriteConflictTest implements GammaConstants {
 
     @Test
     public void whenDirtyCheckAndChange_ThenWriteConflict() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(true)
                 .newTransactionFactory()
                 .newTransaction();
-        GammaRefTranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 
         ref.atomicIncrementAndGet(1);
@@ -60,7 +60,7 @@ public class WriteConflictTest implements GammaConstants {
 
     @Test
     public void whenDirtyCheckAndNoChange_ThenNoWriteConflict() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
@@ -82,14 +82,14 @@ public class WriteConflictTest implements GammaConstants {
 
     @Test
     public void whenNoDirtyCheckAndChange_ThenWriteConflict() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
                 .newTransaction();
-        GammaRefTranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 
         ref.atomicIncrementAndGet(1);
@@ -107,14 +107,14 @@ public class WriteConflictTest implements GammaConstants {
 
     @Test
     public void whenNoDirtyCheckAndNoChange_ThenWriteConflict() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
                 .setDirtyCheckEnabled(false)
                 .newTransactionFactory()
                 .newTransaction();
-        GammaRefTranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal write = ref.openForWrite(tx, LOCKMODE_NONE);
         write.long_value++;
 
         ref.atomicIncrementAndGet(1);

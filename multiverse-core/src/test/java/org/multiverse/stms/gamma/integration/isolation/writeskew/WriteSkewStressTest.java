@@ -9,7 +9,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,7 +62,7 @@ public class WriteSkewStressTest {
             threads[k] = new TransferThread(k);
         }
 
-        GammaLongRef account = customer1.getRandomAccount();
+        GammaTxnLong account = customer1.getRandomAccount();
         GammaTxn tx = stm.newDefaultTxn();
         account.openForWrite(tx, LOCKMODE_NONE).long_value = 1000;
         tx.commit();
@@ -373,10 +373,10 @@ public class WriteSkewStressTest {
             sleepRandomMs(5);
 
             if (sum >= amount) {
-                GammaLongRef fromAccount = from.getRandomAccount();
+                GammaTxnLong fromAccount = from.getRandomAccount();
                 fromAccount.openForWrite(tx, writeLockMode.asInt()).long_value -= amount;
 
-                GammaLongRef toAccount = to.getRandomAccount();
+                GammaTxnLong toAccount = to.getRandomAccount();
                 toAccount.openForWrite(tx, writeLockMode.asInt()).long_value += amount;
             }
 
@@ -389,10 +389,10 @@ public class WriteSkewStressTest {
     }
 
     public class Customer {
-        private GammaLongRef account1 = new GammaLongRef(stm);
-        private GammaLongRef account2 = new GammaLongRef(stm);
+        private GammaTxnLong account1 = new GammaTxnLong(stm);
+        private GammaTxnLong account2 = new GammaTxnLong(stm);
 
-        public GammaLongRef getRandomAccount() {
+        public GammaTxnLong getRandomAccount() {
             return randomBoolean() ? account1 : account2;
         }
 

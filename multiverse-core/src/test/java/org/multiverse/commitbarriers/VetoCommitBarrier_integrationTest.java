@@ -7,7 +7,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
@@ -35,8 +35,8 @@ public class VetoCommitBarrier_integrationTest {
     public void test() throws InterruptedException {
         barrier = new VetoCommitBarrier();
 
-        GammaIntRef ref1 = new GammaIntRef(stm);
-        GammaIntRef ref2 = new GammaIntRef(stm);
+        GammaTxnInteger ref1 = new GammaTxnInteger(stm);
+        GammaTxnInteger ref2 = new GammaTxnInteger(stm);
 
         CommitThread t1 = new CommitThread(1, ref1);
         CommitThread t2 = new CommitThread(2, ref2);
@@ -56,8 +56,8 @@ public class VetoCommitBarrier_integrationTest {
     public void testAbort() throws InterruptedException {
         barrier = new VetoCommitBarrier();
 
-        GammaIntRef ref1 = new GammaIntRef(stm);
-        GammaIntRef ref2 = new GammaIntRef(stm);
+        GammaTxnInteger ref1 = new GammaTxnInteger(stm);
+        GammaTxnInteger ref2 = new GammaTxnInteger(stm);
 
         CommitThread t1 = new CommitThread(1, ref1);
         t1.setPrintStackTrace(false);
@@ -77,9 +77,9 @@ public class VetoCommitBarrier_integrationTest {
     }
 
     public class CommitThread extends TestThread {
-        private GammaIntRef ref;
+        private GammaTxnInteger ref;
 
-        public CommitThread(int id, GammaIntRef ref) {
+        public CommitThread(int id, GammaTxnInteger ref) {
             super("CommitThread-" + id);
             this.ref = ref;
         }

@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.TestUtils.*;
@@ -19,13 +19,13 @@ import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPe
 public class UncontendedCommutePerformanceTest {
     private volatile boolean stop;
     private GammaStm stm;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
     }
 
     @Test

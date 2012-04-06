@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,14 +18,14 @@ public class GammaLongRef_consistentLoadStressTest implements GammaConstants {
 
     private GammaStm stm;
     private volatile boolean stop;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private final AtomicLong inconsistencyCount = new AtomicLong();
 
     @Before
     public void setUp() {
         stm = new GammaStm();
         stop = false;
-        ref = new GammaLongRef(stm, VERSION_UNCOMMITTED + 1);
+        ref = new GammaTxnLong(stm, VERSION_UNCOMMITTED + 1);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class GammaLongRef_consistentLoadStressTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+            Tranlocal tranlocal = new Tranlocal();
             int k = 0;
             while (!stop) {
                 boolean success = ref.load(tx, tranlocal, LOCKMODE_NONE, 100, true);

@@ -9,7 +9,7 @@ import org.multiverse.api.closures.TxnBooleanClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxnFactory;
@@ -26,14 +26,14 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 public class PingPongStressTest {
 
     private volatile boolean stop = false;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private GammaStm stm;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         stop = false;
     }
 

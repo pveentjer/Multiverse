@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.benchmarks;
 import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxn;
 
@@ -122,7 +122,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run1() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 1)
                     .setReadonly(true);
@@ -141,8 +141,8 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run2() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
-            GammaLongRef ref2 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref2 = newReadBiasedLongRef(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 2)
                     .setReadonly(true);
@@ -163,10 +163,10 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run4() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
-            GammaLongRef ref2 = newReadBiasedLongRef(stm);
-            GammaLongRef ref3 = newReadBiasedLongRef(stm);
-            GammaLongRef ref4 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref2 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref3 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref4 = newReadBiasedLongRef(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 4)
                     .setReadonly(true);
@@ -188,14 +188,14 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run8() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
-            GammaLongRef ref2 = newReadBiasedLongRef(stm);
-            GammaLongRef ref3 = newReadBiasedLongRef(stm);
-            GammaLongRef ref4 = newReadBiasedLongRef(stm);
-            GammaLongRef ref5 = newReadBiasedLongRef(stm);
-            GammaLongRef ref6 = newReadBiasedLongRef(stm);
-            GammaLongRef ref7 = newReadBiasedLongRef(stm);
-            GammaLongRef ref8 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref2 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref3 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref4 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref5 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref6 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref7 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref8 = newReadBiasedLongRef(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 8)
                     .setReadonly(true);
@@ -223,22 +223,22 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run16() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
-            GammaLongRef ref2 = newReadBiasedLongRef(stm);
-            GammaLongRef ref3 = newReadBiasedLongRef(stm);
-            GammaLongRef ref4 = newReadBiasedLongRef(stm);
-            GammaLongRef ref5 = newReadBiasedLongRef(stm);
-            GammaLongRef ref6 = newReadBiasedLongRef(stm);
-            GammaLongRef ref7 = newReadBiasedLongRef(stm);
-            GammaLongRef ref8 = newReadBiasedLongRef(stm);
-            GammaLongRef ref9 = newReadBiasedLongRef(stm);
-            GammaLongRef ref10 = newReadBiasedLongRef(stm);
-            GammaLongRef ref11 = newReadBiasedLongRef(stm);
-            GammaLongRef ref12 = newReadBiasedLongRef(stm);
-            GammaLongRef ref13 = newReadBiasedLongRef(stm);
-            GammaLongRef ref14 = newReadBiasedLongRef(stm);
-            GammaLongRef ref15 = newReadBiasedLongRef(stm);
-            GammaLongRef ref16 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref2 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref3 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref4 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref5 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref6 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref7 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref8 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref9 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref10 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref11 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref12 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref13 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref14 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref15 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref16 = newReadBiasedLongRef(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 16)
                     .setReadonly(true);
@@ -275,38 +275,38 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
 
         public void run32() {
-            GammaLongRef ref1 = newReadBiasedLongRef(stm);
-            GammaLongRef ref2 = newReadBiasedLongRef(stm);
-            GammaLongRef ref3 = newReadBiasedLongRef(stm);
-            GammaLongRef ref4 = newReadBiasedLongRef(stm);
-            GammaLongRef ref5 = newReadBiasedLongRef(stm);
-            GammaLongRef ref6 = newReadBiasedLongRef(stm);
-            GammaLongRef ref7 = newReadBiasedLongRef(stm);
-            GammaLongRef ref8 = newReadBiasedLongRef(stm);
-            GammaLongRef ref9 = newReadBiasedLongRef(stm);
-            GammaLongRef ref10 = newReadBiasedLongRef(stm);
-            GammaLongRef ref11 = newReadBiasedLongRef(stm);
-            GammaLongRef ref12 = newReadBiasedLongRef(stm);
-            GammaLongRef ref13 = newReadBiasedLongRef(stm);
-            GammaLongRef ref14 = newReadBiasedLongRef(stm);
-            GammaLongRef ref15 = newReadBiasedLongRef(stm);
-            GammaLongRef ref16 = newReadBiasedLongRef(stm);
-            GammaLongRef ref17 = newReadBiasedLongRef(stm);
-            GammaLongRef ref18 = newReadBiasedLongRef(stm);
-            GammaLongRef ref19 = newReadBiasedLongRef(stm);
-            GammaLongRef ref20 = newReadBiasedLongRef(stm);
-            GammaLongRef ref21 = newReadBiasedLongRef(stm);
-            GammaLongRef ref22 = newReadBiasedLongRef(stm);
-            GammaLongRef ref23 = newReadBiasedLongRef(stm);
-            GammaLongRef ref24 = newReadBiasedLongRef(stm);
-            GammaLongRef ref25 = newReadBiasedLongRef(stm);
-            GammaLongRef ref26 = newReadBiasedLongRef(stm);
-            GammaLongRef ref27 = newReadBiasedLongRef(stm);
-            GammaLongRef ref28 = newReadBiasedLongRef(stm);
-            GammaLongRef ref29 = newReadBiasedLongRef(stm);
-            GammaLongRef ref30 = newReadBiasedLongRef(stm);
-            GammaLongRef ref31 = newReadBiasedLongRef(stm);
-            GammaLongRef ref32 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref1 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref2 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref3 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref4 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref5 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref6 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref7 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref8 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref9 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref10 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref11 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref12 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref13 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref14 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref15 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref16 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref17 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref18 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref19 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref20 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref21 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref22 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref23 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref24 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref25 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref26 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref27 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref28 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref29 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref30 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref31 = newReadBiasedLongRef(stm);
+            GammaTxnLong ref32 = newReadBiasedLongRef(stm);
 
 
             GammaTxnConfig config = new GammaTxnConfig(stm, 32)
@@ -358,7 +358,7 @@ public class UncontendedMultipleReadBenchmark implements GammaConstants {
         }
     }
 
-    private GammaLongRef newReadBiasedLongRef(GammaStm stm) {
-        return makeReadBiased(new GammaLongRef(stm));
+    private GammaTxnLong newReadBiasedLongRef(GammaStm stm) {
+        return makeReadBiased(new GammaTxnLong(stm));
     }
 }

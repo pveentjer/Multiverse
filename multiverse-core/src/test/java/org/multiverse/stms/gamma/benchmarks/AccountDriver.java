@@ -7,7 +7,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnDoubleClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.DoubleRef;
+import org.multiverse.api.references.TxnDouble;
 import org.multiverse.stms.gamma.GammaStm;
 
 import java.util.Random;
@@ -207,10 +207,10 @@ public class AccountDriver extends BenchmarkDriver {
     public class Account {
 
         private final String name;
-        private final DoubleRef balance;
+        private final TxnDouble balance;
 
         public Account(String name, double balance) {
-            this.balance = stm.getDefaultRefFactory().newDoubleRef(balance);
+            this.balance = stm.getDefaultRefFactory().newTxnDouble(balance);
             this.name = name;
         }
 

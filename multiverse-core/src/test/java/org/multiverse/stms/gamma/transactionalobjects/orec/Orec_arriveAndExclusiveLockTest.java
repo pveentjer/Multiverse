@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.stms.gamma.GammaTestUtils.*;
@@ -22,7 +22,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void writeBiased_whenNoLockAcquired() {
-        GammaLongRef orec = new GammaLongRef(stm);
+        GammaTxnLong orec = new GammaTxnLong(stm);
 
         int result = orec.arriveAndExclusiveLock(1);
 
@@ -36,7 +36,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void writeBiased_whenSurplusOfReaders() {
-        GammaLongRef orec = new GammaLongRef(stm);
+        GammaTxnLong orec = new GammaTxnLong(stm);
         orec.arrive(1);
 
         int result = orec.arriveAndExclusiveLock(1);
@@ -51,7 +51,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void writeBiased_whenReadLockAcquiredByOther() {
-        GammaLongRef orec = new GammaLongRef(stm);
+        GammaTxnLong orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_READ);
         long orecValue = orec.orec;
 
@@ -63,7 +63,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void writeBiased_whenWriteLockAcquiredByOther() {
-        GammaLongRef orec = new GammaLongRef(stm);
+        GammaTxnLong orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_WRITE);
         long orecValue = orec.orec;
 
@@ -75,7 +75,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void writeBiased_whenExclusiveLockAcquiredByOther() {
-        GammaLongRef orec = new GammaLongRef(stm);
+        GammaTxnLong orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         long orecValue = orec.orec;
 
@@ -89,7 +89,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void readBiased_whenNoLockAcquired() {
-        GammaLongRef orec = makeReadBiased(new GammaLongRef(stm));
+        GammaTxnLong orec = makeReadBiased(new GammaTxnLong(stm));
 
         int result = orec.arriveAndExclusiveLock(1);
 
@@ -103,7 +103,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void readBiased_whenSurplusOfReaders() {
-        GammaLongRef orec = makeReadBiased(new GammaLongRef(stm));
+        GammaTxnLong orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arrive(1);
 
         int result = orec.arriveAndExclusiveLock(1);
@@ -117,7 +117,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void readBiased_whenReadLockAcquiredByOther() {
-        GammaLongRef orec = makeReadBiased(new GammaLongRef(stm));
+        GammaTxnLong orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_READ);
         long orecValue = orec.orec;
 
@@ -129,7 +129,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void readBiased_whenWriteLockAcquiredByOther() {
-        GammaLongRef orec = makeReadBiased(new GammaLongRef(stm));
+        GammaTxnLong orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_WRITE);
         long orecValue = orec.orec;
 
@@ -141,7 +141,7 @@ public class Orec_arriveAndExclusiveLockTest implements GammaConstants {
 
     @Test
     public void readBiased_whenExclusiveLockAcquiredByOther() {
-        GammaLongRef orec = makeReadBiased(new GammaLongRef(stm));
+        GammaTxnLong orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         long orecValue = orec.orec;
 

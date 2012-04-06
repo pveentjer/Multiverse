@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -56,7 +56,7 @@ public class GammaLongRef_getAndAlter2Test {
 
     @Test
     public void whenNullTransaction_thenNullPointerException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
         LongFunction function = mock(LongFunction.class);
 
@@ -72,7 +72,7 @@ public class GammaLongRef_getAndAlter2Test {
 
     @Test
     public void whenNullFunction_thenNullPointerException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -89,7 +89,7 @@ public class GammaLongRef_getAndAlter2Test {
 
     @Test
     public void whenCommittedTransaction_thenDeadTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -109,7 +109,7 @@ public class GammaLongRef_getAndAlter2Test {
 
     @Test
     public void whenPreparedTransaction_thenPreparedTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -129,7 +129,7 @@ public class GammaLongRef_getAndAlter2Test {
 
     @Test
     public void whenAbortedTransaction() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -150,7 +150,7 @@ public class GammaLongRef_getAndAlter2Test {
     @Test
     public void whenAlterFunctionCausesProblems_thenTransactionAborted() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
@@ -171,7 +171,7 @@ public class GammaLongRef_getAndAlter2Test {
     @Test
     public void whenListenersAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + 1);
@@ -199,7 +199,7 @@ public class GammaLongRef_getAndAlter2Test {
             }
         };
 
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         GammaTxn tx = transactionFactory.newTransaction();
         long result = ref.getAndAlter(tx, function);
         tx.commit();

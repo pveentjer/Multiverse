@@ -3,9 +3,9 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.BaseGammaTxnRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.SpeculativeGammaConfiguration;
@@ -15,7 +15,7 @@ import static org.multiverse.utils.Bugshaker.shakeBugs;
 @SuppressWarnings({"OverlyComplexClass"})
 public final class FatVariableLengthGammaTxn extends GammaTxn {
 
-    public GammaRefTranlocal[] array;
+    public Tranlocal[] array;
     public int size = 0;
     public boolean hasReads = false;
     public long localConflictCount;
@@ -26,7 +26,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
 
     public FatVariableLengthGammaTxn(GammaTxnConfig config) {
         super(config, TRANSACTIONTYPE_FAT_VARIABLE_LENGTH);
-        this.array = new GammaRefTranlocal[config.minimalArrayTreeSize];
+        this.array = new Tranlocal[config.minimalArrayTreeSize];
     }
 
     @Override
@@ -84,13 +84,13 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         for (int k = 0; k < array.length; k++) {
             if (SHAKE_BUGS) shakeBugs();
 
-            final GammaRefTranlocal tranlocal = array[k];
+            final Tranlocal tranlocal = array[k];
 
             if (tranlocal == null) {
                 continue;
             }
 
-            final BaseGammaRef owner = tranlocal.owner;
+            final BaseGammaTxnRef owner = tranlocal.owner;
             final Listeners listeners = owner.commit(tranlocal, pool);
 
             if (listeners != null) {
@@ -110,7 +110,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     private void releaseArray(boolean success) {
         for (int k = 0; k < array.length; k++) {
 
-            final GammaRefTranlocal tranlocal = array[k];
+            final Tranlocal tranlocal = array[k];
 
             if (tranlocal != null) {
                 if (SHAKE_BUGS) shakeBugs();
@@ -161,13 +161,13 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         for (int k = 0; k < array.length; k++) {
             if (SHAKE_BUGS) shakeBugs();
 
-            final GammaRefTranlocal tranlocal = array[k];
+            final Tranlocal tranlocal = array[k];
 
             if (tranlocal == null) {
                 continue;
             }
 
-            final BaseGammaRef owner = tranlocal.owner;
+            final BaseGammaTxnRef owner = tranlocal.owner;
 
             if (!owner.prepare(this, tranlocal)) {
                 return owner;
@@ -197,7 +197,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final GammaRefTranlocal locate(BaseGammaRef o) {
+    public final Tranlocal locate(BaseGammaTxnRef o) {
         if (status != TX_ACTIVE) {
             throw abortLocateOnBadStatus(o);
         }
@@ -210,7 +210,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final GammaRefTranlocal getRefTranlocal(BaseGammaRef ref) {
+    public final Tranlocal getRefTranlocal(BaseGammaTxnRef ref) {
         int indexOf = indexOf(ref, ref.identityHashCode());
         return indexOf == -1 ? null : array[indexOf];
     }
@@ -236,14 +236,14 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         boolean atLeastOneRegistration = false;
 
         for (int k = 0; k < array.length; k++) {
-            final GammaRefTranlocal tranlocal = array[k];
+            final Tranlocal tranlocal = array[k];
             if (tranlocal == null) {
                 continue;
             }
 
             array[k] = null;
 
-            final BaseGammaRef owner = tranlocal.owner;
+            final BaseGammaTxnRef owner = tranlocal.owner;
 
             if (furtherRegistrationNeeded) {
                 switch (owner.registerChangeListener(retryListener, tranlocal, pool, listenerEra)) {
@@ -332,7 +332,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final boolean isReadConsistent(GammaRefTranlocal justAdded) {
+    public final boolean isReadConsistent(Tranlocal justAdded) {
         if (!hasReads) {
             return true;
         }
@@ -364,7 +364,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         for (int k = 0; k < array.length; k++) {
             if (SHAKE_BUGS) shakeBugs();
 
-            final GammaRefTranlocal tranlocal = array[k];
+            final Tranlocal tranlocal = array[k];
 
             //noinspection ObjectEquality
             final boolean skip = tranlocal == null || (!richmansMansConflictScan && justAdded == tranlocal);
@@ -385,7 +385,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         return size;
     }
 
-    public final int indexOf(final BaseGammaRef ref, final int hash) {
+    public final int indexOf(final BaseGammaTxnRef ref, final int hash) {
         int jump = 0;
         boolean goLeft = true;
 
@@ -393,7 +393,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
             final int offset = goLeft ? -jump : jump;
             final int index = (hash + offset) % array.length;
 
-            final GammaRefTranlocal current = array[index];
+            final Tranlocal current = array[index];
             if (current == null || current.owner == null) {
                 return -1;
             }
@@ -411,7 +411,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
         return -1;
     }
 
-    public final void attach(final GammaRefTranlocal tranlocal, final int hash) {
+    public final void attach(final Tranlocal tranlocal, final int hash) {
         int jump = 0;
         boolean goLeft = true;
 
@@ -419,7 +419,7 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
             final int offset = goLeft ? -jump : jump;
             final int index = (hash + offset) % array.length;
 
-            GammaRefTranlocal current = array[index];
+            Tranlocal current = array[index];
             if (current == null) {
                 array[index] = tranlocal;
                 return;
@@ -435,12 +435,12 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
     }
 
     private void expand() {
-        GammaRefTranlocal[] oldArray = array;
+        Tranlocal[] oldArray = array;
         int newSize = oldArray.length * 2;
         array = pool.takeTranlocalArray(newSize);
 
         for (int k = 0; k < oldArray.length; k++) {
-            final GammaRefTranlocal tranlocal = oldArray[k];
+            final Tranlocal tranlocal = oldArray[k];
 
             if (tranlocal == null) {
                 continue;

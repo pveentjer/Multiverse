@@ -7,7 +7,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
@@ -40,7 +40,7 @@ public class VetoCommitBarrier_abortTest {
     @Test
     public void whenPendingTransactions_theyAreAborted() throws InterruptedException {
         barrier = new VetoCommitBarrier();
-        GammaIntRef ref = new GammaIntRef(stm, 0);
+        GammaTxnInteger ref = new GammaTxnInteger(stm, 0);
         IncThread thread1 = new IncThread(ref);
         IncThread thread2 = new IncThread(ref);
 
@@ -82,10 +82,10 @@ public class VetoCommitBarrier_abortTest {
     }
 
     public class IncThread extends TestThread {
-        private final GammaIntRef ref;
+        private final GammaTxnInteger ref;
         private Txn tx;
 
-        public IncThread(GammaIntRef ref) {
+        public IncThread(GammaTxnInteger ref) {
             super("IncThread");
             setPrintStackTrace(false);
             this.ref = ref;

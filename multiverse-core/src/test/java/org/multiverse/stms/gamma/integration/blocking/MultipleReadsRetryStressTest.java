@@ -10,7 +10,7 @@ import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxnFactory;
@@ -23,8 +23,8 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class MultipleReadsRetryStressTest implements GammaConstants {
     private GammaStm stm;
-    private GammaLongRef[] refs;
-    private GammaLongRef stopRef;
+    private GammaTxnLong[] refs;
+    private GammaTxnLong stopRef;
     private volatile boolean stop;
 
     @Before
@@ -32,7 +32,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
-        stopRef = new GammaLongRef(stm, 0);
+        stopRef = new GammaTxnLong(stm, 0);
     }
 
     @Test
@@ -64,9 +64,9 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
     }
 
     public void test(TxnExecutor txnExecutor, int refCount, int threadCount) throws InterruptedException {
-        refs = new GammaLongRef[refCount];
+        refs = new GammaTxnLong[refCount];
         for (int k = 0; k < refs.length; k++) {
-            refs[k] = new GammaLongRef(stm);
+            refs[k] = new GammaTxnLong(stm);
         }
 
         UpdateThread[] threads = new UpdateThread[threadCount];
@@ -90,7 +90,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
 
     private long sumRefs() {
         long result = 0;
-        for (GammaLongRef ref : refs) {
+        for (GammaTxnLong ref : refs) {
             result += ref.atomicGet();
         }
         return result;
@@ -128,7 +128,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                     }
 
                     long sum = 0;
-                    for (GammaLongRef ref : refs) {
+                    for (GammaTxnLong ref : refs) {
                         sum += ref.get();
                     }
 
@@ -136,7 +136,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                         retry();
                     }
 
-                    GammaLongRef ref = refs[TestUtils.randomInt(refs.length)];
+                    GammaTxnLong ref = refs[TestUtils.randomInt(refs.length)];
                     ref.incrementAndGet(1);
                 }
 

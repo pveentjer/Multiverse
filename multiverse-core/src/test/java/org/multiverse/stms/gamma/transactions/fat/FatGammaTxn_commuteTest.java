@@ -11,8 +11,8 @@ import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaTestUtils;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -41,13 +41,13 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
 
     @Test
     public void whenTransactionAbortOnly_thenWriteStillPossible() {
-        GammaLongRef ref = new GammaLongRef(stm, 0);
+        GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         GammaTxn tx = stm.newDefaultTxn();
         tx.setAbortOnly();
         ref.commute(tx, Functions.incLongFunction());
 
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
         assertNotNull(tranlocal);
         assertEquals(TRANLOCAL_COMMUTING, tranlocal.getMode());
         assertTrue(tx.isAbortOnly());
@@ -58,7 +58,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenMultipleCommutesOnSingleRef() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -81,11 +81,11 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
 
     public void whenAlreadyOpenedForRead(LockMode lockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.version;
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
+        Tranlocal tranlocal = ref.openForRead(tx, lockMode.asInt());
         LongFunction incFunction = Functions.incLongFunction();
         ref.commute(tx, incFunction);
 
@@ -101,11 +101,11 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenAlreadyOpenedForReadAndFunctionCausesProblem() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initalVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
         LongFunction function = mock(LongFunction.class);
         when(function.call(anyLong())).thenThrow(new SomeUncheckedException());
 
@@ -131,11 +131,11 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
 
     public void whenAlreadyOpenedForWrite(LockMode lockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.version;
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, lockMode.asInt());
         LongFunction incFunction = Functions.incLongFunction();
         ref.commute(tx, incFunction);
 
@@ -151,11 +151,11 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenAlreadyOpenedForWriteAndFunctionCausesProblem() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initalVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         LongFunction function = mock(LongFunction.class);
         when(function.call(anyLong())).thenThrow(new SomeUncheckedException());
 
@@ -174,13 +174,13 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenNotOpenedBefore() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
 
         assertNotNull(tranlocal);
         assertTrue(tranlocal.isCommuting());
@@ -195,7 +195,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenAlreadyOpenedForCommute() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -203,7 +203,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
         LongFunction function2 = mock(LongFunction.class);
         ref.commute(tx, function1);
         ref.commute(tx, function2);
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
 
         assertNotNull(tranlocal);
         assertTrue(tranlocal.isCommuting());
@@ -225,7 +225,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
 
     public void lockedByOther(LockMode otherLockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -236,7 +236,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
         LongFunction function2 = mock(LongFunction.class);
         ref.commute(tx, function1);
         ref.commute(tx, function2);
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
 
         assertNotNull(tranlocal);
         assertTrue(tranlocal.isCommuting());
@@ -253,8 +253,8 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(tx, initialValue);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        GammaTxnLong ref = new GammaTxnLong(tx, initialValue);
+        Tranlocal tranlocal = tx.locate(ref);
         LongFunction incFunction = Functions.incLongFunction();
         ref.commute(tx, incFunction);
 
@@ -274,8 +274,8 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
         when(function.call(anyLong())).thenThrow(new SomeUncheckedException());
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(tx, initialValue);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        GammaTxnLong ref = new GammaTxnLong(tx, initialValue);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         try {
             ref.commute(tx, function);
@@ -296,11 +296,11 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
 
         GammaTxn tx = newTransaction();
         for (int k = 0; k < maxCapacity; k++) {
-            GammaLongRef ref = new GammaLongRef(stm, 0);
+            GammaTxnLong ref = new GammaTxnLong(stm, 0);
             ref.openForRead(tx, LOCKMODE_NONE);
         }
 
-        GammaLongRef ref = new GammaLongRef(stm, 0);
+        GammaTxnLong ref = new GammaTxnLong(stm, 0);
         try {
             ref.commute(tx, Functions.incLongFunction());
             fail();
@@ -313,7 +313,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenNullTransaction() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
@@ -333,7 +333,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenNullFunction() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
@@ -356,7 +356,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenReadonlyTransaction_thenReadonlyException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
@@ -382,7 +382,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     public void whenStmMismatch() {
         GammaStm otherStm = new GammaStm();
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(otherStm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(otherStm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -404,7 +404,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void commuting_whenCommuting_thenFailure() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -428,7 +428,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenTransactionPrepared_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
@@ -451,7 +451,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenTransactionAborted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
@@ -473,7 +473,7 @@ public abstract class FatGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenTransactionCommitted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();

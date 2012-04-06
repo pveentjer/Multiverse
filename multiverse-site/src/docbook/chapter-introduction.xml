@@ -21,7 +21,7 @@
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             execute(new AtomicVoidClosure()){
@@ -57,8 +57,8 @@
         import static org.multiverse.api.StmUtils.*;
 
         public class Account{
-            final private IntRef amount = newIntRef(0);
-            final private Ref date = newRef(new Date());
+            final private IntRef amount = newTxnInteger(0);
+            final private Ref date = newTxnRef(new Date());
 
             public void transfer(final int a){
                 execute(new AtomicVoidClosure()){

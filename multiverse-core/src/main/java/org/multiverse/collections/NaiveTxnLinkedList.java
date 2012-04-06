@@ -6,9 +6,9 @@ import org.multiverse.api.collections.TxnDeque;
 import org.multiverse.api.collections.TxnIterator;
 import org.multiverse.api.collections.TxnList;
 import org.multiverse.api.exceptions.TodoException;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
-import org.multiverse.api.references.RefFactory;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
+import org.multiverse.api.references.TxnRefFactory;
 
 import java.util.NoSuchElementException;
 
@@ -24,9 +24,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
         implements TxnDeque<E>, TxnList<E> {
 
     private final int capacity;
-    private final IntRef size;
-    private final Ref<Entry<E>> head;
-    private final Ref<Entry<E>> tail;
+    private final TxnInteger size;
+    private final TxnRef<Entry<E>> head;
+    private final TxnRef<Entry<E>> tail;
 
     public NaiveTxnLinkedList(Stm stm) {
         this(stm, Integer.MAX_VALUE);
@@ -40,9 +40,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
         }
 
         this.capacity = capacity;
-        this.size = stm.getDefaultRefFactory().newIntRef(0);
-        this.head = stm.getDefaultRefFactory().newRef(null);
-        this.tail = stm.getDefaultRefFactory().newRef(null);
+        this.size = stm.getDefaultRefFactory().newTxnInteger(0);
+        this.head = stm.getDefaultRefFactory().newTxnRef(null);
+        this.tail = stm.getDefaultRefFactory().newTxnRef(null);
     }
 
     @Override
@@ -640,14 +640,14 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     static class Entry<E> {
-        private final Ref<Entry<E>> next;
-        private final Ref<Entry<E>> previous;
-        private final Ref<E> value;
+        private final TxnRef<Entry<E>> next;
+        private final TxnRef<Entry<E>> previous;
+        private final TxnRef<E> value;
 
-        Entry(RefFactory refFactory, E value) {
-            this.next = refFactory.newRef(null);
-            this.previous = refFactory.newRef(null);
-            this.value = refFactory.newRef(value);
+        Entry(TxnRefFactory refFactory, E value) {
+            this.next = refFactory.newTxnRef(null);
+            this.previous = refFactory.newTxnRef(null);
+            this.value = refFactory.newTxnRef(value);
         }
     }
 }

@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -26,7 +26,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenUnlocked() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -37,7 +37,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenReadLockAlreadyAcquiredByOther_thenExclusiveLockNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -56,7 +56,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenExclusiveLockAlreadyAcquiredByOther_thenExclusiveLockNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
@@ -75,7 +75,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenWriteLockAlreadyAcquiredByOther_thenExclusiveLockNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
@@ -94,7 +94,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenExclusiveLockAcquiredByOther_thenReadNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -109,7 +109,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenPreviouslyReadByOtherThread_thenNoProblems() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.get(otherTx);
@@ -123,7 +123,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenPreviouslyReadByOtherThread_thenWriteSuccessButExclusiveFails() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
@@ -145,7 +145,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenExclusiveLockAcquiredByOther_thenWriteNotAllowed() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
@@ -163,7 +163,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void writeLockIsUpgradableToExclusiveLock() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Write);
@@ -175,7 +175,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenReadLockAcquired_thenUpgradableToExclusiveLock() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -187,7 +187,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenReadLockAlsoAcquiredByOther_thenNotUpgradableToExclusiveLock() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -210,7 +210,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenTransactionCommits_thenExclusiveLockReleased() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -222,7 +222,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenTransactionIsPrepared_thenExclusiveLockRemains() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -234,7 +234,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenTransactionAborts_thenExclusiveLockIsReleased() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -246,7 +246,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenExclusiveLockAlreadyIsAcquired_thenReentrantExclusiveLockIsSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -258,7 +258,7 @@ public class ExclusiveLockTest {
 
     @Test
     public void whenReadConflict_thenExclusiveLockFails() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);

@@ -7,11 +7,11 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnClosure;
 import org.multiverse.api.closures.TxnLongClosure;
 import org.multiverse.api.exceptions.TxnMandatoryException;
-import org.multiverse.api.references.LongRef;
+import org.multiverse.api.references.TxnLong;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.multiverse.api.StmUtils.newLongRef;
+import static org.multiverse.api.StmUtils.newTxnLong;
 import static org.multiverse.api.StmUtils.retry;
 
 /**
@@ -28,8 +28,8 @@ public class OrElseTest {
 
     @Test
     public void whenEitherBranchIsSuccess() {
-        final LongRef ref1 = newLongRef(1);
-        final LongRef ref2 = newLongRef(0);
+        final TxnLong ref1 = newTxnLong(1);
+        final TxnLong ref2 = newTxnLong(0);
 
         long value = StmUtils.atomic(new TxnLongClosure() {
             @Override
@@ -42,9 +42,9 @@ public class OrElseTest {
     }
 
     class GetClosure implements TxnLongClosure {
-        private final LongRef ref;
+        private final TxnLong ref;
 
-        GetClosure(LongRef ref) {
+        GetClosure(TxnLong ref) {
             this.ref = ref;
         }
 
@@ -61,8 +61,8 @@ public class OrElseTest {
     @Test
     @Ignore
     public void whenOrElseBranchIsSuccess() {
-        final LongRef ref1 = newLongRef(0);
-        final LongRef ref2 = newLongRef(2);
+        final TxnLong ref1 = newTxnLong(0);
+        final TxnLong ref2 = newTxnLong(2);
 
         long value = StmUtils.atomic(new TxnLongClosure() {
             @Override

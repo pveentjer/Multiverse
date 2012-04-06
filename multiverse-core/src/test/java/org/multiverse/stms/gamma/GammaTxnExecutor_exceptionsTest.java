@@ -6,7 +6,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -24,7 +24,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void executeChecked_whenCheckedExceptionThrown() {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Exception ex = new Exception();
 
@@ -48,7 +48,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void executeChecked_whenRuntimeExceptionThrown() throws Exception {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
 
@@ -73,7 +73,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void executeChecked_whenErrorThrown() throws Exception {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Error ex = new Error();
 
@@ -97,7 +97,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void execute_whenCheckedExceptionThrown() {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Exception ex = new Exception();
 
@@ -121,7 +121,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void execute_whenRuntimeExceptionThrown() {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final RuntimeException ex = new RuntimeException();
 
@@ -146,7 +146,7 @@ public class GammaTxnExecutor_exceptionsTest implements GammaConstants {
     @Test
     public void execute_whenErrorThrown() {
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         final Error ex = new Error();
 

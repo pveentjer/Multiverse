@@ -6,9 +6,9 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.BooleanRef;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnBoolean;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.multiverse.TestUtils.joinAll;
@@ -77,8 +77,8 @@ public abstract class ConditionVariable_AbstractTest {
     class Stack {
         ConditionVariable isNotFull = new ConditionVariable(true);
         ConditionVariable isNotEmpty = new ConditionVariable(false);
-        Ref<Node> head = newRef();
-        IntRef size = newIntRef();
+        TxnRef<Node> head = newTxnRef();
+        TxnInteger size = newTxnInteger();
         final int capacity;
         final TxnExecutor pushBlock = newPushBlock();
         final TxnExecutor popBlock = newPopBlock();
@@ -134,10 +134,10 @@ public abstract class ConditionVariable_AbstractTest {
     }
 
     class ConditionVariable {
-        final BooleanRef ref;
+        final TxnBoolean ref;
 
         ConditionVariable(boolean value) {
-            this.ref = newBooleanRef(value);
+            this.ref = newTxnBoolean(value);
         }
 
         void awaitTrue() {

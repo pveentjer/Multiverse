@@ -6,10 +6,10 @@ import org.multiverse.SomeUncheckedException;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.IntRef;
+import org.multiverse.api.references.TxnInteger;
 
 import static org.junit.Assert.*;
-import static org.multiverse.api.StmUtils.newIntRef;
+import static org.multiverse.api.StmUtils.newTxnInteger;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class ComposabilityTest {
@@ -22,7 +22,7 @@ public class ComposabilityTest {
     @Test
     public void whenChangeMadeInOneSibling_thenItWillBeVisibleInNextSubling() {
         final int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -90,7 +90,7 @@ public class ComposabilityTest {
     @Test
     public void whenSurroundingTransactionFails_thenChangesInInnerTransactionWillRollback() {
         int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         try {
             StmUtils.atomic(new TxnVoidClosure() {
@@ -116,7 +116,7 @@ public class ComposabilityTest {
     @Test
     public void whenInnerTransactionFails_thenOuterTransactionWillRollback() {
         int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         try {
             StmUtils.atomic(new TxnVoidClosure() {
@@ -142,7 +142,7 @@ public class ComposabilityTest {
     @Test
     public void whenSiblingFails_thenAllRollback() {
         int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         try {
             StmUtils.atomic(new TxnVoidClosure() {
@@ -175,7 +175,7 @@ public class ComposabilityTest {
     @Test
     public void whenOuterTransactionMakesChange_thenItWillBeVisibleInInnerTransaction() {
         final int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -197,7 +197,7 @@ public class ComposabilityTest {
     @Test
     public void whenInnerTransactionMakesChange_thenItWillBeVisibleInOuterTransaction() {
         final int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -220,7 +220,7 @@ public class ComposabilityTest {
     @Test
     public void whenInnerAndOuterChanges_thenWillCommitAsOne() {
         final int initialValue = 10;
-        final IntRef ref = newIntRef(initialValue);
+        final TxnInteger ref = newTxnInteger(initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override

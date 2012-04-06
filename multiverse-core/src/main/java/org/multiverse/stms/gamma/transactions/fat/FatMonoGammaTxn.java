@@ -3,14 +3,14 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.BaseGammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 public final class FatMonoGammaTxn extends GammaTxn {
 
-    public final GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+    public final Tranlocal tranlocal = new Tranlocal();
 
     public FatMonoGammaTxn(GammaStm stm) {
         this(new GammaTxnConfig(stm));
@@ -22,7 +22,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final GammaRefTranlocal locate(BaseGammaRef o) {
+    public final Tranlocal locate(BaseGammaTxnRef o) {
         if (status != TX_ACTIVE) {
             throw abortLocateOnBadStatus(o);
         }
@@ -52,7 +52,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
             notifyListeners(TxnEvent.PrePrepare);
         }
 
-        final BaseGammaRef owner = tranlocal.owner;
+        final BaseGammaTxnRef owner = tranlocal.owner;
 
         if (owner != null) {
             if (hasWrites) {
@@ -93,7 +93,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
         }
 
         status = TX_ABORTED;
-        BaseGammaRef owner = tranlocal.owner;
+        BaseGammaTxnRef owner = tranlocal.owner;
         if (owner != null) {
             owner.releaseAfterFailure(tranlocal, pool);
         }
@@ -117,7 +117,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
 
         notifyListeners(TxnEvent.PrePrepare);
 
-        final BaseGammaRef owner = tranlocal.owner;
+        final BaseGammaTxnRef owner = tranlocal.owner;
         if (owner != null) {
             if (!owner.prepare(this, tranlocal)) {
                 throw abortOnReadWriteConflict(owner);
@@ -128,7 +128,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final GammaRefTranlocal getRefTranlocal(BaseGammaRef ref) {
+    public final Tranlocal getRefTranlocal(BaseGammaTxnRef ref) {
         //noinspection ObjectEquality
         return tranlocal.owner == ref ? tranlocal : null;
     }
@@ -147,7 +147,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
             throw abortRetryOnNoRetryPossible();
         }
 
-        final BaseGammaRef owner = tranlocal.owner;
+        final BaseGammaTxnRef owner = tranlocal.owner;
         if (owner == null) {
             throw abortRetryOnNoRetryPossible();
         }
@@ -219,7 +219,7 @@ public final class FatMonoGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final boolean isReadConsistent(GammaRefTranlocal justAdded) {
+    public final boolean isReadConsistent(Tranlocal justAdded) {
         return true;
     }
 

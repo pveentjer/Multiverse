@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.benchy.BenchyUtils.format;
 import static org.multiverse.TestUtils.joinAll;
@@ -21,7 +21,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
     private long transactionsPerThread;
     private boolean dirtyCheck;
     private GammaStm stm;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private IncThread[] threads;
 
     @Override
@@ -32,7 +32,7 @@ public class ContendedCounterDriver extends BenchmarkDriver {
         System.out.printf("Multiverse > Pessimistic lock level %s \n", lockLevel);
 
         stm = new GammaStm();
-        ref = stm.getRefFactoryBuilder().build().newLongRef(0);
+        ref = stm.getTxRefFactoryBuilder().build().newTxnLong(0);
         threads = new IncThread[threadCount];
         for (int k = 0; k < threads.length; k++) {
             threads[k] = new IncThread(k);

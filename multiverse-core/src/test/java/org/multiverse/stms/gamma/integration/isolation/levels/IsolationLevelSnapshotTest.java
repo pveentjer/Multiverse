@@ -8,7 +8,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
@@ -39,8 +39,8 @@ public class IsolationLevelSnapshotTest {
 
     @Test
     public void causalConsistencyViolationNotPossible() {
-        final GammaLongRef ref1 = new GammaLongRef(stm);
-        final GammaLongRef ref2 = new GammaLongRef(stm);
+        final GammaTxnLong ref1 = new GammaTxnLong(stm);
+        final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
 
@@ -64,8 +64,8 @@ public class IsolationLevelSnapshotTest {
 
     @Test
     public void writeSkewPossible() {
-        final GammaLongRef ref1 = new GammaLongRef(stm);
-        final GammaLongRef ref2 = new GammaLongRef(stm);
+        final GammaTxnLong ref1 = new GammaTxnLong(stm);
+        final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
         ref1.get(tx);

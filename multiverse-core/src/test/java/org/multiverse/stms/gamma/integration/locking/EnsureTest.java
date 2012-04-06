@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class EnsureTest {
 
     @Test
     public void whenOnlyReadsThenIgnored() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
@@ -44,8 +44,8 @@ public class EnsureTest {
     @Test
     public void whenUpdateTransactionButNoConflictOnRead_thenSuccess() {
         long initialValue = 10;
-        GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
-        GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref1 = new GammaTxnLong(stm, initialValue);
+        GammaTxnLong ref2 = new GammaTxnLong(stm, initialValue);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref1.get(tx);
@@ -61,8 +61,8 @@ public class EnsureTest {
     @Test
     public void whenUpdateTransactionAndConflictOnRead_thenReadWriteConflict() {
         long initialValue = 10;
-        GammaLongRef ref1 = new GammaLongRef(stm, initialValue);
-        GammaLongRef ref2 = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref1 = new GammaTxnLong(stm, initialValue);
+        GammaTxnLong ref2 = new GammaTxnLong(stm, initialValue);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref1.get(tx);

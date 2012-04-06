@@ -5,7 +5,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TxnCollection;
 import org.multiverse.api.collections.TxnMap;
 import org.multiverse.api.collections.TxnSet;
-import org.multiverse.api.references.RefFactory;
+import org.multiverse.api.references.TxnRefFactory;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 public abstract class AbstractTxnMap<K, V> implements TxnMap<K, V> {
 
     protected final Stm stm;
-    protected final RefFactory defaultRefFactory;
+    protected final TxnRefFactory defaultRefFactory;
 
     public AbstractTxnMap(Stm stm) {
         if (stm == null) {

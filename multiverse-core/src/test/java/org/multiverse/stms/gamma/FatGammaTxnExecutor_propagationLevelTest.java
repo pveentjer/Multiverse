@@ -9,7 +9,7 @@ import org.multiverse.api.closures.TxnIntClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.exceptions.TxnNotAllowedException;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
@@ -119,7 +119,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.Requires)
                 .newTransactionFactory();
 
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
@@ -147,7 +147,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         final GammaTxn existingTx = stm.newDefaultTxn();
         setThreadLocalTxn(existingTx);
 
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
@@ -174,7 +174,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
                 .setPropagationLevel(PropagationLevel.RequiresNew)
                 .newTxnExecutor();
 
-        final GammaLongRef ref = new GammaLongRef(stm, 0);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override
@@ -202,7 +202,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         final GammaTxn otherTx = stm.newDefaultTxn();
         setThreadLocalTxn(otherTx);
 
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         TxnIntClosure closure = new TxnIntClosure() {
             @Override

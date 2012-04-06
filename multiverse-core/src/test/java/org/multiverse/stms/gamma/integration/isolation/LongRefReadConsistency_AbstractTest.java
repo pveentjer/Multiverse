@@ -7,7 +7,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,7 +28,7 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
  */
 public abstract class LongRefReadConsistency_AbstractTest {
 
-    private GammaLongRef[] refs;
+    private GammaTxnLong[] refs;
 
     private int readerCount = 10;
     private int writerCount = 2;
@@ -48,7 +48,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
     @After
     public void tearDown() {
         System.out.println("Stm.GlobalConflictCount: " + stm.getGlobalConflictCounter().count());
-        for (GammaLongRef ref : refs) {
+        for (GammaTxnLong ref : refs) {
             System.out.println(ref.toDebugString());
         }
     }
@@ -58,9 +58,9 @@ public abstract class LongRefReadConsistency_AbstractTest {
     protected abstract TxnExecutor createWriteBlock();
 
     public void run(int refCount) {
-        refs = new GammaLongRef[refCount];
+        refs = new GammaTxnLong[refCount];
         for (int k = 0; k < refs.length; k++) {
-            refs[k] = new GammaLongRef(stm);
+            refs[k] = new GammaTxnLong(stm);
         }
 
         ReadThread[] readerThreads = new ReadThread[readerCount];

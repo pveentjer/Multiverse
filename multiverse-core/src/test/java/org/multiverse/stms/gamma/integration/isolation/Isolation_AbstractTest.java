@@ -9,7 +9,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static java.lang.System.currentTimeMillis;
@@ -22,7 +22,7 @@ import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPe
 import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondPerThreadAsString;
 
 /**
- * A StressTest that checks if the system is able to deal with concurrent increments on a LongRef
+ * A StressTest that checks if the system is able to deal with concurrent increments on a TxnLong
  * So there is a lot of contention.
  *
  * @author Peter Veentjer
@@ -86,7 +86,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
     public void withMixedSettings() {
         transactionsPerThread = 10000000;
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         UpdateThread[] threads = new UpdateThread[8];
         threads[0] = new UpdateThread(0, ref, LockMode.None, true);
@@ -119,7 +119,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
 
     public void test(LockMode lockMode, boolean dirtyCheckEnabled) {
         UpdateThread[] threads = new UpdateThread[threadCount];
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         for (int k = 0; k < threads.length; k++) {
             threads[k] = new UpdateThread(k, ref, lockMode, dirtyCheckEnabled);
@@ -146,11 +146,11 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
 
     class UpdateThread extends TestThread {
         private final boolean dirtyCheckEnabled;
-        private final GammaLongRef ref;
+        private final GammaTxnLong ref;
         private final LockMode lockMode;
         private long durationMs;
 
-        public UpdateThread(int id, GammaLongRef ref, LockMode lockMode, boolean dirtyCheckEnabled) {
+        public UpdateThread(int id, GammaTxnLong ref, LockMode lockMode, boolean dirtyCheckEnabled) {
             super("UpdateThread-" + id);
             this.ref = ref;
             this.lockMode = lockMode;

@@ -4,7 +4,7 @@ import org.multiverse.api.Stm;
 import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TxnCollection;
 import org.multiverse.api.collections.TxnIterator;
-import org.multiverse.api.references.RefFactory;
+import org.multiverse.api.references.TxnRefFactory;
 
 import java.util.Collection;
 
@@ -13,7 +13,7 @@ import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
 
     protected final Stm stm;
-    protected final RefFactory defaultRefFactory;
+    protected final TxnRefFactory defaultRefFactory;
 
     protected AbstractTxnCollection(Stm stm) {
         if (stm == null) {

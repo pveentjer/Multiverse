@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -22,7 +22,7 @@ public class AtomicReadBiasedWithPeriodicUpdateTest {
 
     @Test
     public void test() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         for (int l = 0; l < 100; l++) {
             long value = ref.atomicGet() + 1;

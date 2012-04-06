@@ -1,14 +1,14 @@
 package org.multiverse.api;
 
 import org.multiverse.api.collections.TxnCollectionsFactory;
-import org.multiverse.api.references.RefFactory;
-import org.multiverse.api.references.RefFactoryBuilder;
+import org.multiverse.api.references.TxnRefFactory;
+import org.multiverse.api.references.TxnRefFactoryBuilder;
 
 /**
  * The main interface for software transactional memory. The main tasks are done by the following structures:
  * <ol>
  * <li>{@link TransactionalObject}: the structure where state and identity are separated and where state change
- * is coordinated through a transaction. An example of the TransactionalObject is the {@link org.multiverse.api.references.Ref},
+ * is coordinated through a transaction. An example of the TransactionalObject is the {@link org.multiverse.api.references.TxnRef},
  * but it could just as easily by a more complex transactional datastructure that is enhanced by instrumentation.
  * </li>
  * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
@@ -29,7 +29,7 @@ import org.multiverse.api.references.RefFactoryBuilder;
  * <p>All functionality like TxnExecutors, Refs, Txn etc can be customized by providing a custom implementation of the
  * factory/builder interfaces:
  * <ol>
- * <li>{@link RefFactoryBuilder} a builder for creating {@link RefFactory}</li>
+ * <li>{@link org.multiverse.api.references.TxnRefFactoryBuilder} a builder for creating {@link org.multiverse.api.references.TxnRefFactory}</li>
  * <li>{@link TxnFactoryBuilder} a builder for creating an {@link TxnExecutor}/{@link Txn}.
  * <li>{@link org.multiverse.api.collections.TxnCollectionsFactory} a factory for creating transactional collections</li>
  * </ol>
@@ -87,19 +87,19 @@ public interface Stm {
     OrElseBlock newOrElseBlock();
 
     /**
-     * Returns the default {@link RefFactory} that can be used for easy and cheap access to a reference factory
-     * instead of setting one up through the {@link RefFactoryBuilder}.
+     * Returns the default {@link org.multiverse.api.references.TxnRefFactory} that can be used for easy and cheap access to a reference factory
+     * instead of setting one up through the {@link org.multiverse.api.references.TxnRefFactoryBuilder}.
      *
-     * @return the default RefFactory.
+     * @return the default TxnRefFactory.
      */
-    RefFactory getDefaultRefFactory();
+    TxnRefFactory getDefaultRefFactory();
 
     /**
-     * Gets the {@link org.multiverse.api.references.RefFactoryBuilder}.
+     * Gets the {@link org.multiverse.api.references.TxnRefFactoryBuilder}.
      *
-     * @return the RefFactoryBuilder.
+     * @return the TxnRefFactoryBuilder.
      */
-    RefFactoryBuilder getRefFactoryBuilder();
+    TxnRefFactoryBuilder getTxRefFactoryBuilder();
 
     /**
      * Gets the default {@link org.multiverse.api.collections.TxnCollectionsFactory}.

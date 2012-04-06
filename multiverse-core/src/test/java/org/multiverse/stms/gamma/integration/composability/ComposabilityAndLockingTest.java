@@ -6,9 +6,9 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.StmUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.LongRef;
+import org.multiverse.api.references.TxnLong;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -27,7 +27,7 @@ public class ComposabilityAndLockingTest {
     @Test
     public void whenEnsuredInOuter_thenCanSafelyBeEnsuredInInner() {
         final int initialValue = 10;
-        final LongRef ref = new GammaLongRef(stm, initialValue);
+        final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -51,7 +51,7 @@ public class ComposabilityAndLockingTest {
     @Test
     public void whenEnsuredInOuter_thenCanSafelyBePrivatizedInInner() {
         final int initialValue = 10;
-        final LongRef ref = new GammaLongRef(stm, initialValue);
+        final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -75,7 +75,7 @@ public class ComposabilityAndLockingTest {
     @Test
     public void whenPrivatizedInOuter_thenCanSafelyBeEnsuredInInner() {
         final int initialValue = 10;
-        final LongRef ref = new GammaLongRef(stm, initialValue);
+        final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override
@@ -99,7 +99,7 @@ public class ComposabilityAndLockingTest {
     @Test
     public void whenPrivatizedInOuter_thenCanSafelyBePrivatizedInInner() {
         final int initialValue = 10;
-        final LongRef ref = new GammaLongRef(stm, initialValue);
+        final TxnLong ref = new GammaTxnLong(stm, initialValue);
 
         StmUtils.atomic(new TxnVoidClosure() {
             @Override

@@ -6,7 +6,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -31,7 +31,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenPrivatizedByOther_thenLockedException() {
         long initialValue = 1;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -52,7 +52,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenEnsuredByOther_thenLockedException() {
         long initialValue = 1;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -73,7 +73,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenActiveTransactionAvailable_thenIgnored() {
         int initialValue = 1;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -92,7 +92,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenExpectedValueFoundAndUpdateIsSame() {
         long initialValue = 1;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         boolean result = ref.atomicCompareAndSet(initialValue, initialValue);
@@ -106,7 +106,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenExpectedValueFound() {
         long initialValue = 1;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long newValue = initialValue + 1;
@@ -121,7 +121,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenExpectedValueNotFound() {
         int initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         boolean result = ref.atomicCompareAndSet(1, 3);
@@ -135,7 +135,7 @@ public class GammaLongRef_atomicCompareAndSetTest {
     @Test
     public void whenListenersAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long newValue = initialValue + 1;

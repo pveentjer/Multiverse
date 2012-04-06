@@ -12,8 +12,8 @@ both share one very important concept: txns.
 
     public class Account{
 
-        private Ref&lt;Date&gt; lastUpdate = newRef();
-        private IntRef balance = newIntRef();
+        private Ref&lt;Date&gt; lastUpdate = newTxnRef();
+        private IntRef balance = newTxnInteger();
 
         public Account(int balance){
             setBalance(balance);

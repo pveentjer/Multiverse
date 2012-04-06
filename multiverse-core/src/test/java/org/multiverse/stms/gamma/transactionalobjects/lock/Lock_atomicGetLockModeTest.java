@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class Lock_atomicGetLockModeTest {
     }
 
     public void test(LockMode lockMode){
-         GammaLongRef ref = new GammaLongRef(stm);
+         GammaTxnLong ref = new GammaTxnLong(stm);
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, lockMode);
 

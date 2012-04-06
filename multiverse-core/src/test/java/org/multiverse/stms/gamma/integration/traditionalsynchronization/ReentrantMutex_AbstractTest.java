@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaTxnExecutor;
 import org.multiverse.stms.gamma.GammaStm;
 
@@ -76,8 +76,8 @@ public abstract class ReentrantMutex_AbstractTest {
     }
 
     class ReentrantMutex {
-        private final Ref<Thread> owner = newRef();
-        private final IntRef count = newIntRef();
+        private final TxnRef<Thread> owner = newTxnRef();
+        private final TxnInteger count = newTxnInteger();
         private final GammaTxnExecutor lockBlock = newLockBlock();
         private final GammaTxnExecutor unlockBlock = newUnlockBlock();
 

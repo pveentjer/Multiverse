@@ -8,7 +8,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 
@@ -35,7 +35,7 @@ public class IsolationLevelSerializableTest {
 
     @Test
     public void repeatableRead_whenTracked_thenNoInconsistentRead() {
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
@@ -55,7 +55,7 @@ public class IsolationLevelSerializableTest {
     @Test
     @Ignore
     public void repeatableRead_whenNotTrackedAndConflictingUpdate_thenReadConflict() {
-        final GammaLongRef ref = makeReadBiased(new GammaLongRef(stm));
+        final GammaTxnLong ref = makeReadBiased(new GammaTxnLong(stm));
 
         transactionFactory = stm.newTxnFactoryBuilder()
                 .setSpeculative(false)
@@ -79,8 +79,8 @@ public class IsolationLevelSerializableTest {
 
     @Test
     public void causalConsistency_whenConflictingWrite_thenReadWriteConflict() {
-        final GammaLongRef ref1 = new GammaLongRef(stm);
-        final GammaLongRef ref2 = new GammaLongRef(stm);
+        final GammaTxnLong ref1 = new GammaTxnLong(stm);
+        final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
 
@@ -104,8 +104,8 @@ public class IsolationLevelSerializableTest {
 
     @Test
     public void writeSkewNotPossible() {
-        final GammaLongRef ref1 = new GammaLongRef(stm);
-        final GammaLongRef ref2 = new GammaLongRef(stm);
+        final GammaTxnLong ref1 = new GammaTxnLong(stm);
+        final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
         ref1.get(tx);

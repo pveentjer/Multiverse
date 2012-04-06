@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnBooleanClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertEquals;
@@ -28,7 +28,7 @@ import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPe
 public class ReadBiasedIsolationStressTest {
 
     private GammaStm stm = (GammaStm) getGlobalStmInstance();
-    private int chanceOfUpdate = new GammaLongRef(stm).getReadBiasedThreshold() * 5;
+    private int chanceOfUpdate = new GammaTxnLong(stm).getReadBiasedThreshold() * 5;
     private int threadCount = 4;
 
     @Before
@@ -81,7 +81,7 @@ public class ReadBiasedIsolationStressTest {
 
     public void test(LockMode lockMode, boolean dirtyCheckEnabled) {
         StressThread[] threads = new StressThread[threadCount];
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         long transactionsPerThread = 100 * 1000 * 1000;
 
         for (int k = 0; k < threads.length; k++) {
@@ -114,13 +114,13 @@ public class ReadBiasedIsolationStressTest {
 
     class StressThread extends TestThread {
         private final boolean dirtyCheckEnabled;
-        private final GammaLongRef ref;
+        private final GammaTxnLong ref;
         private final long count;
         private long durationMs;
         private LockMode lockMode;
         private long incrementCount = 0;
 
-        public StressThread(int id, GammaLongRef ref, long count, LockMode lockMode, boolean dirtyCheckEnabled) {
+        public StressThread(int id, GammaTxnLong ref, long count, LockMode lockMode, boolean dirtyCheckEnabled) {
             super("StressThread-" + id);
             this.ref = ref;
             this.count = count;

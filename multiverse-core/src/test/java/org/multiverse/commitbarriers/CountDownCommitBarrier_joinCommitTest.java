@@ -8,7 +8,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
@@ -64,7 +64,7 @@ public class CountDownCommitBarrier_joinCommitTest {
     public void whenAbortedWhileWaiting() throws InterruptedException {
         barrier = new CountDownCommitBarrier(2);
 
-        final GammaIntRef ref = stm.getDefaultRefFactory().newIntRef(0);
+        final GammaTxnInteger ref = stm.getDefaultRefFactory().newTxnInteger(0);
 
         TestThread t = new TestThread() {
             @Override
@@ -113,7 +113,7 @@ public class CountDownCommitBarrier_joinCommitTest {
     public void whenInterruptedWhileWaiting() throws InterruptedException {
         barrier = new CountDownCommitBarrier(2);
 
-        final GammaIntRef ref = stm.getDefaultRefFactory().newIntRef(0);
+        final GammaTxnInteger ref = stm.getDefaultRefFactory().newTxnInteger(0);
 
         TestThread t = new TestThread() {
             @Override

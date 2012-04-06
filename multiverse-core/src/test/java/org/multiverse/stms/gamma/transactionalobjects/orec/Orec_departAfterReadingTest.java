@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.PanicError;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertOrecValue;
@@ -22,7 +22,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenNoSurplus_thenPanicError() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         long orecValue = orec.orec;
 
         try {
@@ -36,7 +36,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenMuchSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arrive(1);
         orec.arrive(1);
 
@@ -50,7 +50,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenReadLockAndSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arrive(1);
         orec.arrive(1);
         orec.lockAfterArrive(1, LOCKMODE_READ);
@@ -65,7 +65,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenReadLockAndNoAdditionalSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_READ);
 
         long orecValue = orec.orec;
@@ -80,7 +80,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenWriteLockAndSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arrive(1);
         orec.arrive(1);
         orec.arriveAndLock(1, LOCKMODE_WRITE);
@@ -95,7 +95,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenWriteLockAndNoAdditionalSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_WRITE);
 
         long orecValue = orec.orec;
@@ -110,7 +110,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenExclusiveLocked() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arrive(1);
         orec.arrive(1);
         orec.lockAfterArrive(1, LOCKMODE_EXCLUSIVE);
@@ -125,7 +125,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenExclusiveLockAndNoAdditionalSurplus() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arriveAndLock(1, LOCKMODE_EXCLUSIVE);
 
         long orecValue = orec.orec;
@@ -141,7 +141,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenReadBiasedAndLockedForCommit_thenPanicError() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_EXCLUSIVE);
         long orecValue = orec.orec;
 
@@ -156,7 +156,7 @@ public class Orec_departAfterReadingTest {
 
     @Test
     public void whenReadBiasedAndUnlocked_thenPanicError() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         long orecValue = orec.orec;
 
         try {

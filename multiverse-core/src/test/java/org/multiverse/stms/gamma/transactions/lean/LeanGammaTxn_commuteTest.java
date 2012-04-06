@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
 import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertTrue;
@@ -29,7 +29,7 @@ public abstract class LeanGammaTxn_commuteTest<T extends GammaTxn> {
     @Test
     public void whenCommute_thenSpeculativeConfigurationError() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();

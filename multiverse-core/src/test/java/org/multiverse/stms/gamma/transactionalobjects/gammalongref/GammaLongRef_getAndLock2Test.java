@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertSame;
@@ -31,7 +31,7 @@ public class GammaLongRef_getAndLock2Test {
 
     public void whenLockFree(LockMode lockMode){
         String initialValue = "initialValue";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();

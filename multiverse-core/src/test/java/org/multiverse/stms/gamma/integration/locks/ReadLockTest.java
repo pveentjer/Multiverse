@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class ReadLockTest {
 
     @Test
     public void whenUnlocked() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -39,7 +39,7 @@ public class ReadLockTest {
 
     @Test
     public void whenReadLockAlreadyAcquiredByOther_thenReadLockSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -56,7 +56,7 @@ public class ReadLockTest {
 
     @Test
     public void whenWriteLockAlreadyAcquiredByOther_thenReadLockNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
@@ -75,7 +75,7 @@ public class ReadLockTest {
 
     @Test
     public void whenExclusiveLockAlreadyAcquiredByOther_thenReadLockNotPossible() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
@@ -95,7 +95,7 @@ public class ReadLockTest {
     @Test
     public void whenReadLockAcquiredByOther_thenReadPossible() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -112,7 +112,7 @@ public class ReadLockTest {
     @Test
     public void whenReadLockAcquiredByOther_thenWritePossible() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -129,7 +129,7 @@ public class ReadLockTest {
     @Test
     public void whenReadLockAcquiredByOtherAndDirtyTransaction_thenReadFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -151,7 +151,7 @@ public class ReadLockTest {
     @Test
     public void whenReadLockAcquiredByOtherAndDirtyTransaction_thenPrepareFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
@@ -172,7 +172,7 @@ public class ReadLockTest {
 
     @Test
     public void whenPreviouslyReadByOtherThread_thenNoProblems() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.get(otherTx);
@@ -186,7 +186,7 @@ public class ReadLockTest {
 
     @Test
     public void whenReadLockAcquiredAcquired_thenAcquireReadLockSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -199,7 +199,7 @@ public class ReadLockTest {
 
     @Test
     public void whenWriteLockAcquired_thenUpgradableToReadLockIgnored() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Write);
@@ -211,7 +211,7 @@ public class ReadLockTest {
 
     @Test
     public void whenExclusiveLockAcquired_thenUpgradableToReadLockIgnored() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Exclusive);
@@ -223,7 +223,7 @@ public class ReadLockTest {
 
     @Test
     public void whenTransactionCommits_thenReadLockReleased() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -235,7 +235,7 @@ public class ReadLockTest {
 
     @Test
     public void whenTransactionIsPrepared_thenReadLockRemains() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -247,7 +247,7 @@ public class ReadLockTest {
 
     @Test
     public void whenTransactionAborts_thenReadLockIsReleased() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.getLock().acquire(tx, LockMode.Read);
@@ -259,7 +259,7 @@ public class ReadLockTest {
 
     @Test
     public void whenReadWriteConflictAfterInitialRead_thenReadWriteLockFails() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);

@@ -34,8 +34,8 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     public void whenMultipleReadsAndInconsistent() {
         assumeTrue(getMaximumLength() > 1);
 
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
-        GammaRef<String> ref2 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm);
 
         GammaTxn tx = newTransaction();
         ref1.openForWrite(tx, LOCKMODE_NONE);
@@ -59,8 +59,8 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     public void whenMultipleReadsAndPreviousReadLockedExclusively() {
         assumeTrue(getMaximumLength() > 1);
 
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
-        GammaRef<String> ref2 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm);
 
         GammaTxn tx = newTransaction();
         ref1.openForWrite(tx, LOCKMODE_NONE);
@@ -86,13 +86,13 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
         assumeTrue(getMaximumLength() > 1);
 
         String initialValue1 = "foo1";
-        GammaRef<String> ref1 = new GammaRef<String>(stm, initialValue1);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm, initialValue1);
         String initialValue2 = "foo2";
-        GammaRef<String> ref2 = new GammaRef<String>(stm, initialValue2);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm, initialValue2);
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
-        GammaRefTranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
 
         assertIsActive(tx);
 
@@ -113,8 +113,8 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     public void whenMultipleReadsAndConsistent() {
         assumeTrue(getMaximumLength() > 1);
 
-        GammaRef<String> ref1 = new GammaRef<String>(stm);
-        GammaRef<String> ref2 = new GammaRef<String>(stm);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm);
 
         GammaTxn tx = newTransaction();
         ref1.openForWrite(tx, LOCKMODE_NONE);
@@ -136,7 +136,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
 
     public void whenExplicitLocking(LockMode lockMode) {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -158,7 +158,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenIntRef_thenSpeculativeConfigurationError() {
         int initialValue = 10;
-        GammaIntRef ref = new GammaIntRef(stm, initialValue);
+        GammaTxnInteger ref = new GammaTxnInteger(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -177,7 +177,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenBooleanRef_thenSpeculativeConfigurationError() {
         boolean initialValue = true;
-        GammaBooleanRef ref = new GammaBooleanRef(stm, initialValue);
+        GammaTxnBoolean ref = new GammaTxnBoolean(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -194,9 +194,9 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     }
 
     @Test
-    public void whenDoubleRef_thenSpeculativeConfigurationError() {
+    public void whenTxnDouble_thenSpeculativeConfigurationError() {
         double initialValue = 10;
-        GammaDoubleRef ref = new GammaDoubleRef(stm, initialValue);
+        GammaTxnDouble ref = new GammaTxnDouble(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -215,7 +215,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenLongRef_thenSpeculativeConfigurationError() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -234,7 +234,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenExclusiveLockObtainedByOthers() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -264,14 +264,14 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
 
     public void whenNonExclusiveLockAcquiredByOthers(LockMode lockMode) {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, lockMode);
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         assertIsActive(tx);
         assertNotNull(tranlocal);
@@ -298,11 +298,11 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
         T tx = newTransaction();
 
         for (int k = 0; k < maxCapacity; k++) {
-            GammaRef ref = new GammaRef(stm, 0);
+            GammaTxnRef ref = new GammaTxnRef(stm, 0);
             ref.openForWrite(tx, LOCKMODE_NONE);
         }
 
-        GammaRef ref = new GammaRef(stm, 0);
+        GammaTxnRef ref = new GammaTxnRef(stm, 0);
         try {
             ref.openForWrite(tx, LOCKMODE_NONE);
             fail();
@@ -316,11 +316,11 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenNotOpenedBefore() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         assertNotNull(tranlocal);
         assertSame(ref, tranlocal.owner);
@@ -337,12 +337,12 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenAlreadyOpenedForRead() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal read = ref.openForRead(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         assertNotNull(tranlocal);
         assertSame(read, tranlocal);
@@ -360,12 +360,12 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenAlreadyOpenedForWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal first = ref.openForWrite(tx, LOCKMODE_NONE);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal first = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         assertNotNull(tranlocal);
         assertSame(first, tranlocal);
@@ -383,7 +383,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenAlreadyPreparedAndunused() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -404,7 +404,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenAlreadyCommitted() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -424,7 +424,7 @@ public abstract class LeanGammaTxn_openForWriteTest<T extends GammaTxn> implemen
     @Test
     public void whenAlreadyAborted() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();

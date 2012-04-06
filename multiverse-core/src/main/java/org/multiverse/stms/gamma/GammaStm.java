@@ -33,8 +33,8 @@ public final class GammaStm implements Stm {
     public final int spinCount;
     public final BackoffPolicy defaultBackoffPolicy;
     public final GlobalConflictCounter globalConflictCounter = new GlobalConflictCounter();
-    public final GammaRefFactoryImpl defaultRefFactory = new GammaRefFactoryImpl();
-    public final GammaRefFactoryBuilder refFactoryBuilder = new GammaRefFactoryBuilderImpl();
+    public final GammaTxnRefFactoryImpl defaultRefFactory = new GammaTxnRefFactoryImpl();
+    public final GammaTxnRefFactoryBuilder refFactoryBuilder = new GammaTxnRefFactoryBuilderImpl();
     public final GammaTxnExecutor defaultxnExecutor;
     public final GammaTxnConfig defaultConfig;
     public final NaiveTxnCollectionFactory defaultTransactionalCollectionFactory
@@ -289,34 +289,34 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaRefFactory getDefaultRefFactory() {
+    public final GammaTxnRefFactory getDefaultRefFactory() {
         return defaultRefFactory;
     }
 
-    private final class GammaRefFactoryImpl implements GammaRefFactory {
+    private final class GammaTxnRefFactoryImpl implements GammaTxnRefFactory {
         @Override
-        public final <E> GammaRef<E> newRef(E value) {
-            return new GammaRef<E>(GammaStm.this, value);
+        public final <E> GammaTxnRef<E> newTxnRef(E value) {
+            return new GammaTxnRef<E>(GammaStm.this, value);
         }
 
         @Override
-        public final GammaIntRef newIntRef(int value) {
-            return new GammaIntRef(GammaStm.this, value);
+        public final GammaTxnInteger newTxnInteger(int value) {
+            return new GammaTxnInteger(GammaStm.this, value);
         }
 
         @Override
-        public final GammaBooleanRef newBooleanRef(boolean value) {
-            return new GammaBooleanRef(GammaStm.this, value);
+        public final GammaTxnBoolean newTxnBoolean(boolean value) {
+            return new GammaTxnBoolean(GammaStm.this, value);
         }
 
         @Override
-        public final GammaDoubleRef newDoubleRef(double value) {
-            return new GammaDoubleRef(GammaStm.this, value);
+        public final GammaTxnDouble newTxnDouble(double value) {
+            return new GammaTxnDouble(GammaStm.this, value);
         }
 
         @Override
-        public final GammaLongRef newLongRef(long value) {
-            return new GammaLongRef(GammaStm.this, value);
+        public final GammaTxnLong newTxnLong(long value) {
+            return new GammaTxnLong(GammaStm.this, value);
         }
     }
 
@@ -332,14 +332,14 @@ public final class GammaStm implements Stm {
     }
 
     @Override
-    public final GammaRefFactoryBuilder getRefFactoryBuilder() {
+    public final GammaTxnRefFactoryBuilder getTxRefFactoryBuilder() {
         return refFactoryBuilder;
     }
 
-    private final class GammaRefFactoryBuilderImpl implements GammaRefFactoryBuilder {
+    private final class GammaTxnRefFactoryBuilderImpl implements GammaTxnRefFactoryBuilder {
         @Override
-        public GammaRefFactory build() {
-            return new GammaRefFactoryImpl();
+        public GammaTxnRefFactory build() {
+            return new GammaTxnRefFactoryImpl();
         }
     }
 

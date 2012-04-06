@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.Collection;
@@ -39,11 +39,11 @@ public class Lock_acquire1Test {
         return asList(new Boolean[]{true}, new Boolean[]{false});
     }
 
-    public GammaLongRef newLongRef(long initialValue) {
+    public GammaTxnLong newTxnLong(long initialValue) {
         if (readBiased) {
-            return makeReadBiased(new GammaLongRef(stm, initialValue));
+            return makeReadBiased(new GammaTxnLong(stm, initialValue));
         } else {
-            return new GammaLongRef(stm, initialValue);
+            return new GammaTxnLong(stm, initialValue);
         }
     }
 
@@ -52,7 +52,7 @@ public class Lock_acquire1Test {
     @Test
     public void whenNullLock() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -71,7 +71,7 @@ public class Lock_acquire1Test {
     @Test
     public void whenNullTransaction() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         try {
@@ -88,7 +88,7 @@ public class Lock_acquire1Test {
     @Test
     public void free_whenLockModeNone() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -102,7 +102,7 @@ public class Lock_acquire1Test {
     @Test
     public void free_whenLockModeRead() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -117,7 +117,7 @@ public class Lock_acquire1Test {
     @Test
     public void free_whenLockModeWrite() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -131,7 +131,7 @@ public class Lock_acquire1Test {
     @Test
     public void free_whenLockModeCommit() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -145,7 +145,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenReadLockAndUpgradeToNone() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -161,7 +161,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenReadLockedAndUpgradeToWrite() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -176,7 +176,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenReadLockedAndUpgradeToCommit() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -191,7 +191,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenWriteLockedAndUpgradeToNone() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -206,7 +206,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenWriteLockedAndUpgradeToRead() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -221,7 +221,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenWriteLockedAndUpgradeToWrite() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -236,7 +236,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenWriteLockedAndUpgradeToCommit() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -251,7 +251,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenExclusiveLockedAndUpgradeToNone() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -266,7 +266,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenExclusiveLockedAndUpgradeToRead() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -281,7 +281,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenExclusiveLockedAndUpgradeToWrite() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -296,7 +296,7 @@ public class Lock_acquire1Test {
     @Test
     public void selfLocked_whenExclusiveLockedAndUpgradeToCommit() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -315,7 +315,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherHasReadLockedAndNoLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -333,7 +333,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherReadLockedAndReadLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -351,7 +351,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherReadLockedAndWriteLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -373,7 +373,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherReadLockedAndExclusiveLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -395,7 +395,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherWriteLockedAndNoLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -413,7 +413,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherWriteLockedAndReadLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -435,7 +435,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherWriteLockedAndWriteLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -457,7 +457,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherWriteLockedAndExclusiveLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -479,7 +479,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherExclusiveLockedAndNoLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -501,7 +501,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherExclusiveLockedAndReadLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -523,7 +523,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherExclusiveLockedAndWriteLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -545,7 +545,7 @@ public class Lock_acquire1Test {
     @Test
     public void otherLocked_whenOtherExclusiveLockedAndExclusiveLockAcquired() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -569,7 +569,7 @@ public class Lock_acquire1Test {
     @Test
     public void whenTransactionPrepared_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -590,7 +590,7 @@ public class Lock_acquire1Test {
     @Test
     public void whenTransactionAborted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -611,7 +611,7 @@ public class Lock_acquire1Test {
     @Test
     public void whenTransactionCommitted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();

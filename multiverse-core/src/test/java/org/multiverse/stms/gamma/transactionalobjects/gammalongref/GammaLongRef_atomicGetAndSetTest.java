@@ -6,7 +6,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -32,7 +32,7 @@ public class GammaLongRef_atomicGetAndSetTest {
     @Test
     public void whenSuccess() {
         long initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         int newValue = 10;
@@ -49,7 +49,7 @@ public class GammaLongRef_atomicGetAndSetTest {
     @Test
     public void whenActiveTransactionAvailable_thenIgnored() {
         long initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -77,7 +77,7 @@ public class GammaLongRef_atomicGetAndSetTest {
 
     public void whenLockedByOther_thenLockedException(LockMode lockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -97,7 +97,7 @@ public class GammaLongRef_atomicGetAndSetTest {
     @Test
     public void whenNoChange_thenNoCommit() {
         long initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long result = ref.atomicGetAndSet(initialValue);
@@ -113,7 +113,7 @@ public class GammaLongRef_atomicGetAndSetTest {
     @Test
     public void whenListenersAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long newValue = initialValue + 1;

@@ -10,9 +10,9 @@ import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaObjectPool;
-import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.BaseGammaTxnRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 
 import java.util.ArrayList;
 
@@ -129,7 +129,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     // ================= open for read =============================
 
-    public SpeculativeConfigurationError abortOpenForReadOrWriteOnExplicitLockingDetected(BaseGammaRef ref) {
+    public SpeculativeConfigurationError abortOpenForReadOrWriteOnExplicitLockingDetected(BaseGammaTxnRef ref) {
         config.updateSpeculativeConfigurationToUseExplicitLocking();
         abortIfAlive();
 
@@ -137,12 +137,12 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             return SpeculativeConfigurationError.INSTANCE;
         }
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute Ref.openForRead/openForWrite '%s', reason: the transaction is lean, " +
+                format("[%s] Failed to execute TxnRef.openForRead/openForWrite '%s', reason: the transaction is lean, " +
                         "but explicit locking is required",
                         config.familyName, toDebugString(ref)));
     }
 
-    public SpeculativeConfigurationError abortOpenForReadOnNonRefTypeDetected(BaseGammaRef ref) {
+    public SpeculativeConfigurationError abortOpenForReadOnNonRefTypeDetected(BaseGammaTxnRef ref) {
         config.updateSpeculativeConfigurationToUseNonRefType();
         abortIfAlive();
 
@@ -150,7 +150,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             return SpeculativeConfigurationError.INSTANCE;
         }
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute Ref.openForRead/openForWrite '%s', reason: the transaction is lean," +
+                format("[%s] Failed to execute TxnRef.openForRead/openForWrite '%s', reason: the transaction is lean," +
                         " but explicit locking is required",
                         config.familyName, toDebugString(ref)));
 
@@ -159,26 +159,26 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public final StmMismatchException abortOpenForReadOnBadStm(GammaObject o) {
         abortIfAlive();
         return new StmMismatchException(
-                format("[%s] Failed to execute Ref.openForRead '%s', reason: the stm the ref was created " +
+                format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the stm the ref was created " +
                         "with is a different stm than the stm of the transaction",
                         config.familyName, toDebugString(o)));
     }
 
 
-    public IllegalTxnStateException abortOpenForReadOnNullLockMode(BaseGammaRef object) {
+    public IllegalTxnStateException abortOpenForReadOnNullLockMode(BaseGammaTxnRef object) {
         switch (status) {
             case TX_PREPARED:
                 abort();
                 return new PreparedTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the LockMode is null",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the LockMode is null",
                                 config.familyName, toDebugString(object)));
             case TX_ABORTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the Lockmode is null",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the Lockmode is null",
                                 config.familyName, toDebugString(object)));
             case TX_COMMITTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the LockMode is null",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the LockMode is null",
                                 config.familyName, toDebugString(object)));
             default:
                 throw new IllegalStateException();
@@ -190,15 +190,15 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             case TX_PREPARED:
                 abort();
                 return new PreparedTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is prepared",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object)));
             case TX_ABORTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is aborted",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(object)));
             case TX_COMMITTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForRead '%s', reason: the transaction is committed",
+                        format("[%s] Failed to execute TxnRef.openForRead '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(object)));
             default:
                 throw new IllegalStateException();
@@ -210,7 +210,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public final ReadonlyException abortOpenForWriteOnReadonly(GammaObject object) {
         abortIfAlive();
         return new ReadonlyException(
-                format("[%s] Failed to Ref.openForWrite '%s', reason: the transaction is readonly",
+                format("[%s] Failed to TxnRef.openForWrite '%s', reason: the transaction is readonly",
                         config.familyName, toDebugString(object)));
     }
 
@@ -219,14 +219,14 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public final IllegalTxnStateException abortRetryOnNoRetryPossible() {
         abortIfAlive();
         throw new RetryNotPossibleException(
-                format("[%s] Failed to execute Ref.retry, reason: there are no tracked reads",
+                format("[%s] Failed to execute TxnRef.retry, reason: there are no tracked reads",
                         config.familyName));
     }
 
     public final RetryNotAllowedException abortRetryOnNoBlockingAllowed() {
         abortIfAlive();
         return new RetryNotAllowedException(
-                format("[%s] Failed to execute Ref.retry, reason: the transaction doesn't allow blocking",
+                format("[%s] Failed to execute TxnRef.retry, reason: the transaction doesn't allow blocking",
                         config.familyName));
 
     }
@@ -259,7 +259,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
         abortIfAlive();
         return new IllegalArgumentException(
-                format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the object is not new " +
+                format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the object is not new " +
                         "and has previous commits",
                         config.familyName, toDebugString(ref)));
     }
@@ -270,15 +270,15 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             case TX_PREPARED:
                 abort();
                 return new PreparedTxnException(
-                        format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is prepared",
+                        format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(o)));
             case TX_ABORTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is aborted",
+                        format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(o)));
             case TX_COMMITTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is committed",
+                        format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(o)));
             default:
                 throw new IllegalStateException();
@@ -288,7 +288,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public final StmMismatchException abortOpenForConstructionOnBadStm(GammaObject o) {
         abortIfAlive();
         return new StmMismatchException(
-                format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the stm the ref was " +
+                format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the stm the ref was " +
                         "created with is a different stm than the stm of the transaction",
                         config.familyName, toDebugString(o)));
 
@@ -297,33 +297,33 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public ReadonlyException abortOpenForConstructionOnReadonly(GammaObject o) {
         abortIfAlive();
         return new ReadonlyException(
-                format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is readonly",
+                format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the transaction is readonly",
                         config.familyName, toDebugString(o)));
 
     }
 
-    public SpeculativeConfigurationError abortOpenForConstructionRequired(BaseGammaRef ref) {
+    public SpeculativeConfigurationError abortOpenForConstructionRequired(BaseGammaTxnRef ref) {
         config.updateSpeculativeConfigurationToUseConstructedObjects();
         abortIfAlive();
         if (config.controlFlowErrorsReused) {
             return SpeculativeConfigurationError.INSTANCE;
         }
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute Ref.openForConstruction '%s', reason: the transaction is lean, " +
+                format("[%s] Failed to execute TxnRef.openForConstruction '%s', reason: the transaction is lean, " +
                         "but explicit attachments of constructed objects is required",
                         config.familyName, toDebugString(ref)));
     }
 
     // ============================== open for commute ======================
 
-    public SpeculativeConfigurationError abortCommuteOnCommuteDetected(BaseGammaRef ref) {
+    public SpeculativeConfigurationError abortCommuteOnCommuteDetected(BaseGammaTxnRef ref) {
         config.updateSpeculativeConfigurationToUseCommute();
         abortIfAlive();
         if (config.controlFlowErrorsReused) {
             return SpeculativeConfigurationError.INSTANCE;
         }
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute Ref.commute '%s', reason: the transaction is lean, but commute is required",
+                format("[%s] Failed to execute TxnRef.commute '%s', reason: the transaction is lean, but commute is required",
                         config.familyName, toDebugString(ref)));
     }
 
@@ -332,15 +332,15 @@ public abstract class GammaTxn implements GammaConstants, Txn {
             case TX_PREPARED:
                 abort();
                 return new PreparedTxnException(
-                        format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is prepared",
+                        format("[%s] Failed to execute TxnRef.commute '%s' with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object), function));
             case TX_ABORTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is aborted",
+                        format("[%s] Failed to execute TxnRef.commute '%s' with reference '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(object), function));
             case TX_COMMITTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.commute '%s' with reference '%s', reason: the transaction is prepared",
+                        format("[%s] Failed to execute TxnRef.commute '%s' with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(object), function));
             default:
                 throw new IllegalStateException();
@@ -350,7 +350,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public StmMismatchException abortCommuteOnBadStm(GammaObject object) {
         abortIfAlive();
         return new StmMismatchException(
-                format("[%s] Failed to execute Ref.commute '%s', reason: the stm the ref was created with is a different" +
+                format("[%s] Failed to execute TxnRef.commute '%s', reason: the stm the ref was created with is a different" +
                         " stm than the stm of the transaction",
                         config.familyName, toDebugString(object)));
     }
@@ -358,14 +358,14 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public ReadonlyException abortCommuteOnReadonly(final GammaObject object) {
         abortIfAlive();
         return new ReadonlyException(
-                format("[%s] Failed to execute Ref.commute '%s', reason: the transaction is readonly",
+                format("[%s] Failed to execute TxnRef.commute '%s', reason: the transaction is readonly",
                         config.familyName, toDebugString(object)));
     }
 
     public NullPointerException abortCommuteOnNullFunction(final GammaObject object) {
         abortIfAlive();
         return new NullPointerException(
-                format("[%s] Failed to execute Ref.commute '%s', reason: the function is null",
+                format("[%s] Failed to execute TxnRef.commute '%s', reason: the function is null",
                         config.familyName, toDebugString(object)));
     }
 
@@ -465,7 +465,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public TxnExecutionException abortOnOpenForConstructionWhileEvaluatingCommute(GammaObject o) {
         abort();
         return new IllegalCommuteException(
-                format("[%s] Failed to execute Ref.openForConstruction '%s', " +
+                format("[%s] Failed to execute TxnRef.openForConstruction '%s', " +
                         "reason: the transaction is already evaluating a commuting function",
                         config.familyName, toDebugString(o)));
     }
@@ -473,7 +473,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public TxnExecutionException abortOnOpenForReadWhileEvaluatingCommute(GammaObject o) {
         abortIfAlive();
         return new IllegalCommuteException(
-                format("[%s] Failed to execute Ref.openForRead '%s', " +
+                format("[%s] Failed to execute TxnRef.openForRead '%s', " +
                         "reason: the transaction is already evaluating a commuting function",
                         config.familyName, toDebugString(o)));
 
@@ -482,25 +482,25 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public TxnExecutionException abortOnOpenForCommuteWhileEvaluatingCommute(GammaObject o) {
         abortIfAlive();
         return new IllegalCommuteException(
-                format("[%s] Failed to execute Ref.openForCommute '%s', " +
+                format("[%s] Failed to execute TxnRef.openForCommute '%s', " +
                         "reason: the transaction is already evaluating a commuting function",
                         config.familyName, toDebugString(o)));
     }
 
-    public IllegalTxnStateException abortEnsureOnBadStatus(BaseGammaRef o) {
+    public IllegalTxnStateException abortEnsureOnBadStatus(BaseGammaTxnRef o) {
             switch (status) {
             case TX_PREPARED:
                 abort();
                 return new PreparedTxnException(
-                        format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is prepared",
+                        format("[%s] Failed to execute TxnRef.ensure with reference '%s', reason: the transaction is prepared",
                                 config.familyName, toDebugString(o)));
             case TX_ABORTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is aborted",
+                        format("[%s] Failed to execute TxnRef.ensure with reference '%s', reason: the transaction is aborted",
                                 config.familyName, toDebugString(o)));
             case TX_COMMITTED:
                 return new DeadTxnException(
-                        format("[%s] Failed to execute Ref.ensure with reference '%s', reason: the transaction is committed",
+                        format("[%s] Failed to execute TxnRef.ensure with reference '%s', reason: the transaction is committed",
                                 config.familyName, toDebugString(o)));
             default:
                 throw new IllegalStateException();
@@ -515,7 +515,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         }
 
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute opening a Ref, reason: the transaction is too small for this operation",
+                format("[%s] Failed to execute opening a TxnRef, reason: the transaction is too small for this operation",
                         config.familyName));
     }
 
@@ -540,7 +540,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
         }
 
         return new SpeculativeConfigurationError(
-                format("[%s] Failed to execute evaluate the Ref.ensure [%s], reason: the transaction lean and a fat one needs to be used",
+                format("[%s] Failed to execute evaluate the TxnRef.ensure [%s], reason: the transaction lean and a fat one needs to be used",
                         config.familyName, toDebugString(o)));
     }
 
@@ -569,7 +569,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
 
     public abstract void abort();
 
-    public abstract GammaRefTranlocal locate(BaseGammaRef o);
+    public abstract Tranlocal locate(BaseGammaTxnRef o);
 
     @Override
     public final GammaTxnConfig getConfiguration() {
@@ -680,13 +680,13 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     public abstract boolean softReset();
 
     /**
-     * Gets the GammaRefTranlocal for a specific AbstractGammaRef. This method doesn't care about the state of a
+     * Gets the Tranlocal for a specific AbstractGammaTxnRef. This method doesn't care about the state of a
      * transaction.
      *
-     * @param ref the AbstractGammaRef
-     * @return the found GammaRefTranlocal or null if not found.
+     * @param ref the AbstractGammaTxnRef
+     * @return the found Tranlocal or null if not found.
      */
-    public abstract GammaRefTranlocal getRefTranlocal(BaseGammaRef ref);
+    public abstract Tranlocal getRefTranlocal(BaseGammaTxnRef ref);
 
     public final boolean isAlive() {
         return status == TX_ACTIVE || status == TX_PREPARED;
@@ -731,7 +731,7 @@ public abstract class GammaTxn implements GammaConstants, Txn {
     }
 
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
-    public abstract boolean isReadConsistent(GammaRefTranlocal justAdded);
+    public abstract boolean isReadConsistent(Tranlocal justAdded);
 
     public final TxnStatus getStatus() {
         switch (status) {

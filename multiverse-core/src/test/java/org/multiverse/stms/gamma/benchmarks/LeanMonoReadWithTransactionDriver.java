@@ -8,7 +8,7 @@ import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.LeanGammaTxnExecutor;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxn;
 import org.multiverse.stms.gamma.transactions.lean.LeanMonoGammaTxnFactory;
 
@@ -38,7 +38,7 @@ public class LeanMonoReadWithTransactionDriver implements GammaConstants {
     public void test() {
         final long txCount = 1000 * 1000 * 1000;
 
-        final GammaRef<String> ref = new GammaRef<String>(stm, null);
+        final GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, null);
         long initialVersion = ref.getVersion();
 
         final LeanGammaTxnExecutor block = new LeanGammaTxnExecutor(new LeanMonoGammaTxnFactory(stm));

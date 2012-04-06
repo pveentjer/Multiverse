@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.blocking;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactionalobjects.gammalongref.LongRefAwaitThread;
 
 import static org.multiverse.TestUtils.assertAlive;
@@ -23,7 +23,7 @@ public class BlockingTest {
 
     @Test
     public void whenDesiredValueNotAvailable_thenThreadBlocks() {
-        GammaLongRef ref = new GammaLongRef(stm, 0);
+        GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         LongRefAwaitThread t = new LongRefAwaitThread(ref, 1);
         t.start();
@@ -34,7 +34,7 @@ public class BlockingTest {
 
     @Test
     public void whenDesiredValueStillNotAvailable_thenThreadBlocks() {
-        GammaLongRef ref = new GammaLongRef(stm, 0);
+        GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         LongRefAwaitThread t = new LongRefAwaitThread(ref, 2);
         t.start();

@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertNull;
@@ -36,11 +36,11 @@ public abstract class LeanGammaTxn_abortTest<T extends GammaTxn> {
     @Test
     public void whenContainsRead() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
         tx.abort();
 
         assertIsAborted(tx);
@@ -58,11 +58,11 @@ public abstract class LeanGammaTxn_abortTest<T extends GammaTxn> {
     @Test
     public void whenContainsWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tx.abort();
 
         assertIsAborted(tx);

@@ -8,7 +8,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.TxnFactory;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -53,7 +53,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenSuccess() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -71,7 +71,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenReadonlyTransaction_thenReadonlyException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
@@ -95,7 +95,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenReadLockAcquiredByOther_thenDecrementSucceedsButCommitFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = transactionFactory.newTransaction();
@@ -120,7 +120,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenWriteLockAcquiredByOther_thenDecrementSucceedsButCommitFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = transactionFactory.newTransaction();
@@ -145,7 +145,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenPrivatizedByOther_thenDecrementSucceedsButCommitFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = transactionFactory.newTransaction();
@@ -170,7 +170,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenCommittedTransactionFound() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -191,7 +191,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenAbortedTransactionFound_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -212,7 +212,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenPreparedTransactionFound_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -233,7 +233,7 @@ public class GammaLongRef_decrement1WithAmountTest {
     @Test
     public void whenNoTransaction_thenTxnMandatoryException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         try {

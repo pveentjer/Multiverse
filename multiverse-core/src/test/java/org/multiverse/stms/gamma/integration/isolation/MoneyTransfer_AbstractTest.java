@@ -7,8 +7,8 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +22,7 @@ public abstract class MoneyTransfer_AbstractTest {
 
     private volatile boolean stop;
 
-    private GammaLongRef[] accounts;
+    private GammaTxnLong[] accounts;
     protected GammaStm stm;
 
     @Before
@@ -35,7 +35,7 @@ public abstract class MoneyTransfer_AbstractTest {
     @After
     public void tearDown() {
         System.out.println("Stm.GlobalConflictCount: " + stm.getGlobalConflictCounter().count());
-        for (GammaLongRef ref : accounts) {
+        for (GammaTxnLong ref : accounts) {
             System.out.println(ref.toDebugString());
         }
     }
@@ -43,13 +43,13 @@ public abstract class MoneyTransfer_AbstractTest {
     protected abstract TxnExecutor newTxnExecutor();
 
     public void run(int accountCount, int threadCount) {
-        accounts = new GammaLongRef[accountCount];
+        accounts = new GammaTxnLong[accountCount];
 
         long initialAmount = 0;
         for (int k = 0; k < accountCount; k++) {
             long amount = randomInt(1000);
             initialAmount += amount;
-            accounts[k] = new GammaLongRef(stm, amount);
+            accounts[k] = new GammaTxnLong(stm, amount);
         }
 
         TransferThread[] threads = createThreads(threadCount);
@@ -68,7 +68,7 @@ public abstract class MoneyTransfer_AbstractTest {
 
     private long getTotal() {
         long sum = 0;
-        for (GammaLongRef account : accounts) {
+        for (GammaTxnLong account : accounts) {
             sum += account.atomicGet();
         }
         return sum;
@@ -95,15 +95,15 @@ public abstract class MoneyTransfer_AbstractTest {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
-                    GammaLongRef from = accounts[randomInt(accounts.length)];
-                    GammaLongRef to = accounts[randomInt(accounts.length)];
+                    GammaTxnLong from = accounts[randomInt(accounts.length)];
+                    GammaTxnLong to = accounts[randomInt(accounts.length)];
                     int amount = randomInt(100);
 
                     to.openForWrite(btx, LOCKMODE_NONE).long_value += amount;
 
                     sleepRandomMs(10);
 
-                    GammaRefTranlocal toTranlocal = from.openForWrite(btx, LOCKMODE_NONE);
+                    Tranlocal toTranlocal = from.openForWrite(btx, LOCKMODE_NONE);
                     if (toTranlocal.long_value < 0) {
                         throw new NotEnoughMoneyException();
                     }

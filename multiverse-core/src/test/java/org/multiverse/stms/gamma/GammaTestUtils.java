@@ -37,7 +37,7 @@ public class GammaTestUtils implements GammaConstants {
         }
     }
 
-    public static void assertHasCommutingFunctions(GammaRefTranlocal tranlocal, Function... expected) {
+    public static void assertHasCommutingFunctions(Tranlocal tranlocal, Function... expected) {
         CallableNode current = tranlocal.headCallable;
         List<Function> functions = new LinkedList<Function>();
         while (current != null) {
@@ -73,8 +73,8 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasReadLock(BaseGammaRef ref, GammaTxn tx) {
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+    public static void assertRefHasReadLock(BaseGammaTxnRef ref, GammaTxn tx) {
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A Tranlocal should have been available for a ref that has the read lock");
         }
@@ -82,8 +82,8 @@ public class GammaTestUtils implements GammaConstants {
         assertLockMode(ref, LOCKMODE_READ);
     }
 
-    public static void assertRefHasNoLocks(BaseGammaRef ref, GammaTxn tx) {
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+    public static void assertRefHasNoLocks(BaseGammaTxnRef ref, GammaTxn tx) {
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
         if (tranlocal != null) {
             Assert.assertEquals(LOCKMODE_NONE, tranlocal.getLockMode());
         }
@@ -91,8 +91,8 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasWriteLock(BaseGammaRef ref, GammaTxn lockOwner) {
-        GammaRefTranlocal tranlocal = lockOwner.getRefTranlocal(ref);
+    public static void assertRefHasWriteLock(BaseGammaTxnRef ref, GammaTxn lockOwner) {
+        Tranlocal tranlocal = lockOwner.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A Tranlocal should have been available for a ref that has the write lock");
         }
@@ -101,8 +101,8 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasExclusiveLock(BaseGammaRef ref, GammaTxn lockOwner) {
-        GammaRefTranlocal tranlocal = lockOwner.getRefTranlocal(ref);
+    public static void assertRefHasExclusiveLock(BaseGammaTxnRef ref, GammaTxn lockOwner) {
+        Tranlocal tranlocal = lockOwner.getRefTranlocal(ref);
         if (tranlocal == null) {
             fail("A tranlocal should have been stored in the transaction for the ref");
         }
@@ -111,7 +111,7 @@ public class GammaTestUtils implements GammaConstants {
         assertReadLockCount(ref, 0);
     }
 
-    public static void assertRefHasLockMode(BaseGammaRef ref, GammaTxn lockOwner, int lockMode) {
+    public static void assertRefHasLockMode(BaseGammaTxnRef ref, GammaTxn lockOwner, int lockMode) {
         switch (lockMode) {
             case LOCKMODE_NONE:
                 assertRefHasNoLocks(ref, lockOwner);
@@ -130,27 +130,27 @@ public class GammaTestUtils implements GammaConstants {
         }
     }
 
-    public static void assertVersionAndValue(GammaLongRef ref, long version, long value) {
+    public static void assertVersionAndValue(GammaTxnLong ref, long version, long value) {
         Assert.assertEquals("version doesn't match", version, ref.getVersion());
         Assert.assertEquals("value doesn't match", value, ref.atomicWeakGet());
     }
 
-    public static void assertVersionAndValue(GammaBooleanRef ref, long version, boolean value) {
+    public static void assertVersionAndValue(GammaTxnBoolean ref, long version, boolean value) {
         Assert.assertEquals("version doesn't match", version, ref.getVersion());
         Assert.assertEquals("value doesn't match", value, ref.atomicWeakGet());
     }
 
-    public static void assertVersionAndValue(GammaIntRef ref, long version, int value) {
+    public static void assertVersionAndValue(GammaTxnInteger ref, long version, int value) {
         Assert.assertEquals("version doesn't match", version, ref.getVersion());
         Assert.assertEquals("value doesn't match", value, ref.atomicWeakGet());
     }
 
-    public static void assertVersionAndValue(GammaDoubleRef ref, long version, double value) {
+    public static void assertVersionAndValue(GammaTxnDouble ref, long version, double value) {
         Assert.assertEquals("version doesn't match", version, ref.getVersion());
         TestUtils.assertEqualsDouble(format("value doesn't match, expected %s found %s", value, ref.atomicWeakGet()),value, ref.atomicWeakGet());
     }
 
-    public static <E> void assertVersionAndValue(GammaRef<E> ref, long version, E value) {
+    public static <E> void assertVersionAndValue(GammaTxnRef<E> ref, long version, E value) {
         Assert.assertEquals("version doesn't match", version, ref.getVersion());
         Assert.assertSame("value doesn't match", value, ref.atomicWeakGet());
     }

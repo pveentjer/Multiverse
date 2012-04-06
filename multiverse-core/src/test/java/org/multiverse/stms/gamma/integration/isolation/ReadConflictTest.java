@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -25,7 +25,7 @@ public class ReadConflictTest {
 
     @Test
     public void whenAlreadyReadThenNoConflict() {
-        GammaLongRef ref = new GammaLongRef(stm, 5);
+        GammaTxnLong ref = new GammaTxnLong(stm, 5);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);
@@ -42,8 +42,8 @@ public class ReadConflictTest {
 
     @Test
     public void testCausalConsistency() {
-        GammaLongRef ref1 = new GammaLongRef(stm, 0);
-        GammaLongRef ref2 = new GammaLongRef(stm, 0);
+        GammaTxnLong ref1 = new GammaTxnLong(stm, 0);
+        GammaTxnLong ref2 = new GammaTxnLong(stm, 0);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref1.get(tx);

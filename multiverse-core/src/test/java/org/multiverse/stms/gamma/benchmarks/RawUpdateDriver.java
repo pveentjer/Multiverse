@@ -7,8 +7,8 @@ import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaObjectPool;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
@@ -54,9 +54,9 @@ public class RawUpdateDriver implements GammaConstants {
                 new GammaTxnConfig(stm).setWriteLockMode(writeLockMode));
         final GammaObjectPool pool = tx.pool;
 
-        final GammaLongRef ref = new GammaLongRef(stm, 0);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 0);
         final int lockMode = writeLockMode.asInt();
-        final GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        final Tranlocal tranlocal = new Tranlocal();
 
         final long initialVersion = ref.getVersion();
 

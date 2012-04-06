@@ -14,8 +14,8 @@ import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -70,7 +70,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     @Test
     public void conflict_whenArriveByOther() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -123,7 +123,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -146,14 +146,14 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     @Test
     public void whenContainsCommute() {
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long globalConflictCount = stm.globalConflictCounter.count();
         LongFunction function = Functions.incLongFunction();
         GammaTxn tx = newTransaction();
         ref.commute(tx, function);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
 
         tx.prepare();
 
@@ -170,7 +170,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     @Test
     public void whenContainsMultipleCommutes() {
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long globalConflictCount = stm.globalConflictCounter.count();
@@ -181,7 +181,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         ref.commute(tx, function1);
         ref.commute(tx, function2);
         ref.commute(tx, function3);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
 
         tx.prepare();
 
@@ -198,7 +198,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
     @Test
     public void whenContainsCommuteThatCausesProblems() {
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long globalConflictCount = stm.globalConflictCounter.count();
@@ -206,7 +206,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         when(function.call(anyLong())).thenThrow(new SomeUncheckedException());
         GammaTxn tx = newTransaction();
         ref.commute(tx, function);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
 
         try {
             tx.prepare();
@@ -231,7 +231,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
 
     public void whenContainsCommuteThatIsLocked(LockMode lockMode) {
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long globalConflictCount = stm.globalConflictCounter.count();
@@ -239,7 +239,7 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         when(function.call(anyLong())).thenThrow(new SomeUncheckedException());
         GammaTxn tx = newTransaction();
         ref.commute(tx, function);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
 
         GammaTxn otherTx = newTransaction();
         ref.getLock().acquire(otherTx, lockMode);
@@ -265,8 +265,8 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
 
         GammaTxn tx = newTransaction();
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(tx, initialValue);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        GammaTxnLong ref = new GammaTxnLong(tx, initialValue);
+        Tranlocal tranlocal = tx.locate(ref);
 
         tx.prepare();
 
@@ -293,14 +293,14 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTxn tx = newTransaction(config);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tx.prepare();
 
         assertIsPrepared(tx);
@@ -324,14 +324,14 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(false);
 
         GammaTxn tx = newTransaction(config);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tranlocal.long_value++;
         tx.prepare();
 
@@ -356,14 +356,14 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTxn tx = newTransaction(config);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tx.prepare();
 
         assertIsPrepared(tx);
@@ -387,14 +387,14 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setDirtyCheckEnabled(true);
 
         GammaTxn tx = newTransaction(config);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tranlocal.long_value++;
         tx.prepare();
 
@@ -414,11 +414,11 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         T otherTx = newTransaction();
@@ -442,11 +442,11 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         T otherTx = newTransaction();
@@ -469,11 +469,11 @@ public abstract class FatGammaTxn_prepareTest<T extends GammaTxn> implements Gam
         long globalConflictCount = stm.globalConflictCounter.count();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         T otherTx = newTransaction();

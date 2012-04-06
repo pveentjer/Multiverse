@@ -3,7 +3,7 @@ package org.multiverse.stms.gamma.integration.isolation;
 import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -23,7 +23,7 @@ public class DirtyCheckTest {
     @Test
     public void whenNoDirtyCheckAndNonDirtyWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
@@ -41,7 +41,7 @@ public class DirtyCheckTest {
     @Test
     public void whenNoDirtyCheckAndDirtyWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
 
@@ -61,7 +61,7 @@ public class DirtyCheckTest {
     @Test
     public void whenDirtyCheckAndNonDirtyWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
@@ -79,7 +79,7 @@ public class DirtyCheckTest {
     @Test
     public void whenDirtyCheckAndDirtyWrite() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()

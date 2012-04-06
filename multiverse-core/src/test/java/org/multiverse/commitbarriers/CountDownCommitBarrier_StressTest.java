@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import java.util.Vector;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -31,7 +31,7 @@ public class CountDownCommitBarrier_StressTest {
     private int spawnCountPerThread = 2 * 1000;
     private int spawnCount = 5;
 
-    private GammaIntRef[] refs;
+    private GammaTxnInteger[] refs;
     private ThreadPoolExecutor executor =
             new ThreadPoolExecutor(50, 50, 0, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
     private ThreadPoolExecutor spawnExecutor =
@@ -44,9 +44,9 @@ public class CountDownCommitBarrier_StressTest {
         stm = new GammaStm();
         commitInc = new AtomicLong();
         totalInc = new AtomicLong();
-        refs = new GammaIntRef[refCount];
+        refs = new GammaTxnInteger[refCount];
         for (int k = 0; k < refCount; k++) {
-            refs[k] = stm.getDefaultRefFactory().newIntRef(0);
+            refs[k] = stm.getDefaultRefFactory().newTxnInteger(0);
         }
     }
 

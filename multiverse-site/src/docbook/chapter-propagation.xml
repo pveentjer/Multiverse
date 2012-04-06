@@ -60,7 +60,7 @@
               .setPropagationLevel(PropagationLevel.Requires)
               .newAtomicBlock();
 
-         private final IntRef amount = newIntRef(0);
+         private final IntRef amount = newTxnInteger(0);
 
          public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){

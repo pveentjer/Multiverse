@@ -10,8 +10,8 @@ import org.multiverse.api.closures.TxnIntClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -80,8 +80,8 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
 
         final TxnExecutor sizeBlock = stm.newTxnFactoryBuilder().newTxnExecutor();
 
-        final GammaIntRef size = new GammaIntRef(stm);
-        final GammaRef<Node<Connection>> head = new GammaRef<Node<Connection>>(stm);
+        final GammaTxnInteger size = new GammaTxnInteger(stm);
+        final GammaTxnRef<Node<Connection>> head = new GammaTxnRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
             stm.getDefaultTxnExecutor().atomic(new TxnVoidClosure() {

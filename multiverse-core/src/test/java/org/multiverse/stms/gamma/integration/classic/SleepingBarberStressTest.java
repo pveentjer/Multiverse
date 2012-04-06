@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.BooleanRef;
-import org.multiverse.api.references.IntRef;
+import org.multiverse.api.references.TxnBoolean;
+import org.multiverse.api.references.TxnInteger;
 
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.StmUtils.*;
@@ -103,8 +103,8 @@ public class SleepingBarberStressTest {
     }
 
     static class BarberShop {
-        private BooleanRef closed = newBooleanRef(false);
-        private IntRef freeSeats = newIntRef(5);
+        private TxnBoolean closed = newTxnBoolean(false);
+        private TxnInteger freeSeats = newTxnInteger(5);
 
         void atomicClose() {
             closed.atomicSet(false);

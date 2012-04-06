@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
@@ -55,7 +55,7 @@ public class MonoUpdateDriver implements GammaConstants {
                         .setDirtyCheckEnabled(false)
                         .setWriteLockMode(writeLockMode));
 
-        final GammaLongRef ref = new GammaLongRef(stm, 0);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 0);
         long initialVersion = ref.getVersion();
 
         long startMs = System.currentTimeMillis();

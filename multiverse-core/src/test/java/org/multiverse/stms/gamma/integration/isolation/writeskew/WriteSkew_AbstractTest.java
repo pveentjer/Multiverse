@@ -7,7 +7,7 @@ import org.multiverse.api.IsolationLevel;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -35,8 +35,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
 
     @Test
     public void whenWriteSkewAllowed_thenNotDetected() {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
@@ -62,8 +62,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
     }
 
     public void whenWritesLocked_thenWriteSkewNotDetected(LockMode writeLockMode) {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
@@ -89,8 +89,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
     }
 
     public void whenReadsLocked_thenWriteSkewNotPossible(LockMode readLockMode) {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
@@ -124,8 +124,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
     }
 
     public void whenLocked_thenWriteSkewNotPossible(LockMode lockMode) {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
@@ -152,8 +152,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
 
     @Test
     public void whenEnsured_thenWriteSkewNotPossible() {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)
@@ -175,8 +175,8 @@ public abstract class WriteSkew_AbstractTest<T extends GammaTxn> {
 
     @Test
     public void whenSerializedIsolationLevel_thenWriteSkewNotPossible() {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setSpeculative(false)

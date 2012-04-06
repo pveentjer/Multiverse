@@ -5,7 +5,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
@@ -29,7 +29,7 @@ public class UncontendedLeanUpdateBenchmark implements GammaConstants {
         int[] processors = generateProcessorRange();
 
         System.out.printf("Multiverse> Uncontended update lean-transaction benchmark\n");
-        System.out.printf("Multiverse> 1 GammaRef per transaction\n");
+        System.out.printf("Multiverse> 1 GammaTxnRef per transaction\n");
         System.out.printf("Multiverse> %s Transactions per thread\n", format(transactionCount));
         System.out.printf("Multiverse> Running with the following processor range %s\n", Arrays.toString(processors));
         Result[] result = new Result[processors.length];
@@ -93,7 +93,7 @@ public class UncontendedLeanUpdateBenchmark implements GammaConstants {
         }
 
         public void doRun() {
-            GammaLongRef ref = new GammaLongRef(stm);
+            GammaTxnLong ref = new GammaTxnLong(stm);
 
             //FatArrayTreeGammaTxn tx = new FatArrayTreeGammaTxn(stm);
             //FatArrayGammaTxn tx = new FatArrayGammaTxn(stm,1);

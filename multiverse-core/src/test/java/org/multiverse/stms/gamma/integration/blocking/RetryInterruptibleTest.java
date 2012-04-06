@@ -8,7 +8,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertTrue;
@@ -20,19 +20,19 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class RetryInterruptibleTest {
 
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private GammaStm stm;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
     }
 
     @Test
     public void test() throws InterruptedException {
-        ref = new GammaLongRef(stm, 0);
+        ref = new GammaTxnLong(stm, 0);
 
         AwaitThread t = new AwaitThread();
         t.start();

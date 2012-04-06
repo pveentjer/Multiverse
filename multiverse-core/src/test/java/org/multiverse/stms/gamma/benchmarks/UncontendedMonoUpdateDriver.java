@@ -5,7 +5,7 @@ import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
@@ -71,7 +71,7 @@ public class UncontendedMonoUpdateDriver extends BenchmarkDriver {
         }
 
         public void doRun() {
-            final GammaLongRef ref = new GammaLongRef(stm);
+            final GammaTxnLong ref = new GammaTxnLong(stm);
 
             FatMonoGammaTxn tx = new FatMonoGammaTxn(
                     new GammaTxnConfig(stm)

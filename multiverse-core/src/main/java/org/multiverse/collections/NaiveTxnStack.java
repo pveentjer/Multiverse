@@ -4,8 +4,8 @@ import org.multiverse.api.Stm;
 import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TxnIterator;
 import org.multiverse.api.collections.TxnStack;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
 
 import java.util.NoSuchElementException;
 
@@ -14,8 +14,8 @@ import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements TxnStack<E> {
 
     private final int capacity;
-    private final Ref<Node<E>> head;
-    private final IntRef size;
+    private final TxnRef<Node<E>> head;
+    private final TxnInteger size;
 
     public NaiveTxnStack(Stm stm) {
         this(stm, Integer.MAX_VALUE);
@@ -29,8 +29,8 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
         }
 
         this.capacity = capacity;
-        this.head = stm.getDefaultRefFactory().newRef(null);
-        this.size = stm.getDefaultRefFactory().newIntRef(0);
+        this.head = stm.getDefaultRefFactory().newTxnRef(null);
+        this.size = stm.getDefaultRefFactory().newTxnInteger(0);
     }
 
     @Override
@@ -172,10 +172,10 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     static class It<E> extends AbstractTxnIterator<E> {
-        final Ref<Node<E>> node;
+        final TxnRef<Node<E>> node;
 
         It(Stm stm, Node<E> node) {
-            this.node = stm.getDefaultRefFactory().newRef(node);
+            this.node = stm.getDefaultRefFactory().newTxnRef(node);
         }
 
         @Override

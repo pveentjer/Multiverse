@@ -50,7 +50,7 @@
             Check out at the following code fragment for an example:
         <programlisting language="java">
      public class Foo{
-          private final IntRef value = newIntRef();
+          private final IntRef value = newTxnInteger();
 
           public void write(final int newValue){
             execute(new AtomicVoidClosure()){

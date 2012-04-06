@@ -11,7 +11,7 @@ import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.TooManyRetriesException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
@@ -54,7 +54,7 @@ public class VetoCommitBarrier_joinCommitTest {
     @Ignore
     public void whenTransactionPreparable_thenAdded() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
-        GammaIntRef ref = new GammaIntRef(stm);
+        GammaTxnInteger ref = new GammaTxnInteger(stm);
         IncThread thread = new IncThread(ref, barrier);
         thread.start();
 
@@ -69,7 +69,7 @@ public class VetoCommitBarrier_joinCommitTest {
     public void whenTransactionPrepared_thenAdded() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        GammaIntRef ref = new GammaIntRef(stm);
+        GammaTxnInteger ref = new GammaTxnInteger(stm);
         IncThread thread = new IncThread(ref, barrier, true);
         thread.start();
 
@@ -83,7 +83,7 @@ public class VetoCommitBarrier_joinCommitTest {
     @Ignore
     public void whenPrepareFails() throws InterruptedException {
         final VetoCommitBarrier group = new VetoCommitBarrier();
-        final GammaIntRef ref = new GammaIntRef(stm);
+        final GammaTxnInteger ref = new GammaTxnInteger(stm);
 
         FailToPrepareThread thread = new FailToPrepareThread(group, ref);
         thread.start();
@@ -103,9 +103,9 @@ public class VetoCommitBarrier_joinCommitTest {
 
     class FailToPrepareThread extends TestThread {
         final VetoCommitBarrier group;
-        final GammaIntRef ref;
+        final GammaTxnInteger ref;
 
-        FailToPrepareThread(VetoCommitBarrier group, GammaIntRef ref) {
+        FailToPrepareThread(VetoCommitBarrier group, GammaTxnInteger ref) {
             super("FailedToPrepareThread");
             this.group = group;
             this.ref = ref;
@@ -202,15 +202,15 @@ public class VetoCommitBarrier_joinCommitTest {
     }
 
     public class IncThread extends TestThread {
-        private final GammaIntRef ref;
+        private final GammaTxnInteger ref;
         private final VetoCommitBarrier barrier;
         private boolean prepare;
 
-        public IncThread(GammaIntRef ref, VetoCommitBarrier barrier) {
+        public IncThread(GammaTxnInteger ref, VetoCommitBarrier barrier) {
             this(ref, barrier, false);
         }
 
-        public IncThread(GammaIntRef ref, VetoCommitBarrier barrier, boolean prepare) {
+        public IncThread(GammaTxnInteger ref, VetoCommitBarrier barrier, boolean prepare) {
             super("IncThread");
             this.barrier = barrier;
             this.ref = ref;

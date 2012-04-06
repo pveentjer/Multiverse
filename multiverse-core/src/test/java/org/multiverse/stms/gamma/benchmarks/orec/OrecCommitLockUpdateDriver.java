@@ -6,14 +6,14 @@ import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GlobalConflictCounter;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.benchy.BenchyUtils.*;
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
 
 public class OrecCommitLockUpdateDriver extends BenchmarkDriver implements GammaConstants {
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private GlobalConflictCounter globalConflictCounter;
     private GammaStm stm;
     private int threadCount;
@@ -27,7 +27,7 @@ public class OrecCommitLockUpdateDriver extends BenchmarkDriver implements Gamma
         System.out.printf("Multiverse > Thread count is %s\n", threadCount);
 
         stm = new GammaStm();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         globalConflictCounter = stm.getGlobalConflictCounter();
 
         threads = new UpdateThread[threadCount];
@@ -63,7 +63,7 @@ public class OrecCommitLockUpdateDriver extends BenchmarkDriver implements Gamma
         @Override
         public void doRun() throws Exception {
             final long _cycles = operationCount;
-            final GammaLongRef _orec = new GammaLongRef(stm);
+            final GammaTxnLong _orec = new GammaTxnLong(stm);
 
             for (long k = 0; k < _cycles; k++) {
                 int arriveStatus = _orec.arriveAndLock(0, LOCKMODE_EXCLUSIVE);

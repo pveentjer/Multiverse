@@ -6,8 +6,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
@@ -81,7 +81,7 @@ public class BoxingOverheadDriver extends BenchmarkDriver implements GammaConsta
 
             final long _transactionCount = transactionsPerThread;
             if (withBoxing) {
-                GammaRef<Long> ref = new GammaRef<Long>(stm, new Long(0));
+                GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, new Long(0));
                 for (long k = 0; k < _transactionCount; k++) {
                     ref.openForWrite(tx, LOCKMODE_NONE).long_value++;
                     tx.commit();
@@ -89,7 +89,7 @@ public class BoxingOverheadDriver extends BenchmarkDriver implements GammaConsta
                 }
                 assertEquals(_transactionCount, (long) ref.atomicGet());
             } else {
-                GammaLongRef ref = new GammaLongRef(stm);
+                GammaTxnLong ref = new GammaTxnLong(stm);
                 for (long k = 0; k < _transactionCount; k++) {
                     ref.openForWrite(tx, LOCKMODE_NONE).long_value++;
                     tx.commit();

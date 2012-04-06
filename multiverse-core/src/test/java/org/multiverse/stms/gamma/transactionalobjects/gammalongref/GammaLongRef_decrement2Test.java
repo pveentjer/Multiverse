@@ -8,7 +8,7 @@ import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.exceptions.ReadonlyException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
@@ -30,7 +30,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenSuccess() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -47,7 +47,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenReadonlyTransaction_thenReadonlyException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
@@ -70,7 +70,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenEnsuredByOther_thenDecrementSucceedsButCommitFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -94,7 +94,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenPrivatizedByOther_thenDecrementSucceedsButCommitFails() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -118,7 +118,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenCommittedTransactionFound() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -138,7 +138,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenAbortedTransactionFound_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -158,7 +158,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenPreparedTransactionFound_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -178,7 +178,7 @@ public class GammaLongRef_decrement2Test {
     @Test
     public void whenNoTransaction_thenTxnMandatoryException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         try {

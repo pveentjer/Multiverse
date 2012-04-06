@@ -33,7 +33,7 @@
                  .setIsolationLevel(IsolationLevel.Serializable)
                  .newAtomicBlock();
 
-        private final IntRef value = newIntRef(0);
+        private final IntRef value = newTxnInteger(0);
 
         public void await(final int a){
             awaitBlock.execute(new AtomicVoidClosure()){

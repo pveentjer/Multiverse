@@ -8,7 +8,7 @@ import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -35,7 +35,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenFunctionCausesException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
@@ -58,7 +58,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenNullFunction_thenNullPointerException() {
         int initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         try {
@@ -75,7 +75,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenSuccess() {
         int initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongFunction function = Functions.incLongFunction(1);
@@ -91,7 +91,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenNoChange() {
         int initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long version = ref.getVersion();
 
         LongFunction function = identityLongFunction();
@@ -107,7 +107,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenActiveTransactionAvailable_thenIgnored() {
         long initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -129,7 +129,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenEnsuredByOther_thenLockedException() {
         int initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -152,7 +152,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenPrivatizedByOther() {
         int initialValue = 5;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -175,7 +175,7 @@ public class GammaLongRef_atomicAlterAndGetTest {
     @Test
     public void whenListenersAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + 1);

@@ -7,7 +7,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -78,13 +78,13 @@ public abstract class Semaphore_AbstractTest {
 
     class Semaphore {
 
-        private GammaRef<Long> ref;
+        private GammaTxnRef<Long> ref;
         private AtomicLong users = new AtomicLong();
         private TxnExecutor upBlock = newUpBlock();
         private TxnExecutor downBlock = newDownBlock();
 
         public Semaphore(int initial) {
-            ref = new GammaRef<Long>(stm, new Long(initial));
+            ref = new GammaTxnRef<Long>(stm, new Long(initial));
         }
 
         public void up() {

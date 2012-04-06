@@ -5,7 +5,7 @@ package org.multiverse.api.predicates;
  *
  * @author Peter Veentjer.
  */
-#if(${transactionalObject.referenceInterface} eq 'Ref')
+#if(${transactionalObject.referenceInterface} eq 'TxnRef')
 public interface ${transactionalObject.predicateClass}${transactionalObject.typeParameter}{
 
     /**
@@ -19,7 +19,7 @@ public interface ${transactionalObject.predicateClass}${transactionalObject.type
 #else
 public abstract class ${transactionalObject.predicateClass} implements Predicate<${transactionalObject.objectType}>{
 
-#if(${transactionalObject.referenceInterface} eq 'LongRef')
+#if(${transactionalObject.referenceInterface} eq 'TxnLong')
     public static LongPredicate newEqualsPredicate(final long value) {
         return new LongPredicate() {
             @Override
@@ -73,7 +73,7 @@ public abstract class ${transactionalObject.predicateClass} implements Predicate
             }
         };
     }
-#elseif (${transactionalObject.referenceInterface} eq 'IntRef')
+#elseif (${transactionalObject.referenceInterface} eq 'TxnInteger')
      public static IntPredicate newEqualsPredicate(final int value) {
         return new IntPredicate() {
             @Override
@@ -127,7 +127,7 @@ public abstract class ${transactionalObject.predicateClass} implements Predicate
             }
         };
     }
-#elseif (${transactionalObject.referenceInterface} eq 'BooleanRef')
+#elseif (${transactionalObject.referenceInterface} eq 'TxnBoolean')
    public static BooleanPredicate newEqualsPredicate(final boolean value) {
         return new BooleanPredicate() {
             @Override
@@ -146,7 +146,7 @@ public abstract class ${transactionalObject.predicateClass} implements Predicate
         };
     }
 
-#elseif (${transactionalObject.referenceInterface} eq 'DoubleRef')
+#elseif (${transactionalObject.referenceInterface} eq 'TxnDouble')
     public static DoublePredicate newEqualsPredicate(final double value) {
       return new DoublePredicate() {
           @Override

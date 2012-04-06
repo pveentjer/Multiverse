@@ -8,8 +8,8 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.functions.Function;
 import org.multiverse.api.lifecycle.TxnListener;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
@@ -39,9 +39,9 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
     @Test
     public void whenTransactionGrowing() {
-        final GammaRef<Long>[] refs = new GammaRef[1000];
+        final GammaTxnRef<Long>[] refs = new GammaTxnRef[1000];
         for (int k = 0; k < refs.length; k++) {
-            refs[k] = new GammaRef<Long>(stm, 0L);
+            refs[k] = new GammaTxnRef<Long>(stm, 0L);
         }
 
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
@@ -64,13 +64,13 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
                 transactions.add(btx);
 
-                for (GammaRef<Long> ref : refs) {
+                for (GammaTxnRef<Long> ref : refs) {
                     ref.set(1L);
                 }
             }
         });
 
-        for (GammaRef ref : refs) {
+        for (GammaTxnRef ref : refs) {
             assertEquals(1L, ref.atomicGet());
         }
 
@@ -84,7 +84,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     @Test
     public void whenCommute() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
-        final GammaRef<String> ref = new GammaRef<String>(stm);
+        final GammaTxnRef<String> ref = new GammaTxnRef<String>(stm);
         final Function<String> function = mock(Function.class);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
@@ -109,7 +109,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     @Test
     public void whenEnsure() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
-        final GammaRef<String> ref = new GammaRef<String>(stm);
+        final GammaTxnRef<String> ref = new GammaTxnRef<String>(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)
@@ -147,7 +147,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 GammaTxn btx = (GammaTxn) tx;
                 transactions.add(btx);
 
-                new GammaRef(btx);
+                new GammaTxnRef(btx);
             }
         });
 
@@ -159,7 +159,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     @Test
     public void whenNonRef() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
@@ -183,7 +183,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
     @Test
     public void whenExplicitLocking() {
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
-        final GammaRef ref = new GammaRef(stm);
+        final GammaTxnRef ref = new GammaTxnRef(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setSpeculative(true)
@@ -236,8 +236,8 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
 
     @Test
     public void whenTimeoutAvailable_thenCopied() {
-        final GammaLongRef ref1 = new GammaLongRef(stm);
-        final GammaLongRef ref2 = new GammaLongRef(stm);
+        final GammaTxnLong ref1 = new GammaTxnLong(stm);
+        final GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         final List<GammaTxn> transactions = new LinkedList<GammaTxn>();
 

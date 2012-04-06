@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -26,13 +26,13 @@ public class GammaLongRef_atomicGetTest {
     @Test(expected = LockedException.class)
     public void whenUnconstructed() {
         GammaTxn tx = stm.newDefaultTxn();
-        GammaLongRef ref = new GammaLongRef(tx);
+        GammaTxnLong ref = new GammaTxnLong(tx);
         ref.atomicGet();
     }
 
     @Test
     public void whenActiveTransactionAvailable_thenIgnored() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
 
         GammaTxn tx = stm.newDefaultTxn();
         setThreadLocalTxn(tx);
@@ -45,7 +45,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenUpdatedBiasedOnUnlocked() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
 
         long result = ref.atomicGet();
         assertEquals(100, result);
@@ -54,7 +54,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenUpdateBiasedAndPrivatizedByOther_thenLockedException() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -74,7 +74,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenUpdateBiasedAndEnsuredByOther() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -91,7 +91,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenReadBiasedAndUnlocked() {
-        GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
+        GammaTxnLong ref = makeReadBiased(new GammaTxnLong(stm, 100));
 
         long result = ref.atomicGet();
         assertEquals(100, result);
@@ -100,7 +100,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenReadBiasedAndPrivatizedByOther_thenLockedException() {
-        GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
+        GammaTxnLong ref = makeReadBiased(new GammaTxnLong(stm, 100));
         long version = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -120,7 +120,7 @@ public class GammaLongRef_atomicGetTest {
 
     @Test
     public void whenReadBiasedAndEnsuredByOther_thenLockedException() {
-        GammaLongRef ref = makeReadBiased(new GammaLongRef(stm, 100));
+        GammaTxnLong ref = makeReadBiased(new GammaTxnLong(stm, 100));
         long version = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();

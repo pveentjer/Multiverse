@@ -7,7 +7,7 @@ import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
@@ -31,7 +31,7 @@ public class GammaLongRef_await2WithValueTest {
 
     @Test
     public void whenNullTransaction_thenNullPointerException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             ref.await(null, 10);
@@ -42,7 +42,7 @@ public class GammaLongRef_await2WithValueTest {
 
     @Test
     public void whenPreparedTransaction_thenPreparedTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         GammaTxn tx = stm.newDefaultTxn();
         tx.prepare();
 
@@ -57,7 +57,7 @@ public class GammaLongRef_await2WithValueTest {
 
     @Test
     public void whenAbortedTransaction_thenDeadTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
 
@@ -72,7 +72,7 @@ public class GammaLongRef_await2WithValueTest {
 
     @Test
     public void whenCommittedTransaction_thenDeadTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         GammaTxn tx = stm.newDefaultTxn();
         tx.abort();
 
@@ -87,7 +87,7 @@ public class GammaLongRef_await2WithValueTest {
 
     @Test
     public void whenBlockingNotAllowed_thenRetryNotAllowedException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         GammaTxn tx = stm.newTxnFactoryBuilder()
                 .setBlockingAllowed(false)
                 .setSpeculative(false)

@@ -25,7 +25,7 @@
             .newTransactionFactoryBuilder()
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){
@@ -68,7 +68,7 @@
                         .setFamilyName("Account.transfer")
                         .newAtomicBlock();
 
-                    private final IntRef amount = newIntRef(0);
+                    private final IntRef amount = newTxnInteger(0);
 
                     public void transfer(final int a){
                         transferBlock.execute(new AtomicVoidClosure()){
@@ -103,7 +103,7 @@
             .setReadonly(true)
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){
@@ -155,7 +155,7 @@
             .setMaximumRetries(200)
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){

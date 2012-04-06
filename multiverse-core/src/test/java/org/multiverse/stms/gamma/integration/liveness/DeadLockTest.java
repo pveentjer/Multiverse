@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -25,8 +25,8 @@ public class DeadLockTest implements GammaConstants {
 
     @Test
     public void test() {
-        GammaLongRef ref1 = new GammaLongRef(stm);
-        GammaLongRef ref2 = new GammaLongRef(stm);
+        GammaTxnLong ref1 = new GammaTxnLong(stm);
+        GammaTxnLong ref2 = new GammaTxnLong(stm);
 
         GammaTxn tx1 = stm.newDefaultTxn();
         GammaTxn tx2 = stm.newDefaultTxn();

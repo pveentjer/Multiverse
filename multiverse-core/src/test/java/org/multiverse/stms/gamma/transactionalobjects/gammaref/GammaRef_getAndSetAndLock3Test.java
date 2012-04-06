@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertSame;
@@ -31,14 +31,14 @@ public class GammaRef_getAndSetAndLock3Test {
 
     public void whenLockFree(LockMode lockMode) {
         String initialValue = "initialValue";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
         String newValue = "newValue";
         String result = ref.getAndSetAndLock(tx, newValue, lockMode);
 
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        Tranlocal tranlocal = tx.locate(ref);
 
         assertSame(initialValue, result);
         assertSame(newValue, tranlocal.ref_value);

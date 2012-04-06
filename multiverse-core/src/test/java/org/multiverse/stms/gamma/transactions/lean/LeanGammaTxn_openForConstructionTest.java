@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.exceptions.SpeculativeConfigurationError;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertTrue;
@@ -26,7 +26,7 @@ public abstract class LeanGammaTxn_openForConstructionTest<T extends GammaTxn> {
     public void whenOpenedForConstruction_thenSpeculativeConfigurationError() {
         T tx = newTransaction();
         try {
-            new GammaRef(tx);
+            new GammaTxnRef(tx);
             fail();
         } catch (SpeculativeConfigurationError expected) {
         }

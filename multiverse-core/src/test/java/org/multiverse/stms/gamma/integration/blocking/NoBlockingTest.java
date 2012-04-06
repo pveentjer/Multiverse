@@ -8,8 +8,8 @@ import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryNotAllowedException;
 import org.multiverse.api.exceptions.RetryNotPossibleException;
 import org.multiverse.api.functions.Functions;
-import org.multiverse.api.references.LongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.api.references.TxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -41,7 +41,7 @@ public class NoBlockingTest {
 
     @Test
     public void whenContainsCommute_thenNoRetryPossibleException() {
-        final LongRef ref = newLongRef();
+        final TxnLong ref = newTxnLong();
 
         try {
             atomic(new TxnVoidClosure() {
@@ -63,7 +63,7 @@ public class NoBlockingTest {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
-                    GammaLongRef ref = new GammaLongRef(btx);
+                    GammaTxnLong ref = new GammaTxnLong(btx);
                     retry();
                 }
             });
@@ -74,7 +74,7 @@ public class NoBlockingTest {
 
     @Test
     public void whenBlockingNotAllowed_thenNoBlockingRetryAllowedException() {
-        final LongRef ref = newLongRef();
+        final TxnLong ref = newTxnLong();
 
         TxnExecutor block = getGlobalStmInstance()
                 .newTxnFactoryBuilder()

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -22,7 +22,7 @@ public class ReadBiasedTest implements GammaConstants {
 
     @Test
     public void test() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         for (int k = 0; k < 10000; k++) {

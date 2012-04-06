@@ -6,8 +6,8 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
@@ -35,7 +35,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
     @Test
     public void conflict_whenArriveByOther() {
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -64,7 +64,7 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -82,11 +82,11 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         Long initialValue = 10L;
-        GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
+        GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tx.prepare();
 
          assertIsPrepared(tx);
@@ -102,11 +102,11 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         Long initialValue = 10L;
-        GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
+        GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
         tx.prepare();
 
@@ -126,11 +126,11 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         Long initialValue = 10L;
-        GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
+        GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         FatMonoGammaTxn otherTx = new FatMonoGammaTxn(stm);
@@ -154,11 +154,11 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         Long initialValue = 10L;
-        GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
+        GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         FatMonoGammaTxn otherTx = new FatMonoGammaTxn(stm);
@@ -181,11 +181,11 @@ public abstract class LeanGammaTxn_prepareTest<T extends GammaTxn> {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         Long initialValue = 10L;
-        GammaRef<Long> ref = new GammaRef<Long>(stm, initialValue);
+        GammaTxnRef<Long> ref = new GammaTxnRef<Long>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.long_value++;
 
         FatMonoGammaTxn otherTx = new FatMonoGammaTxn(stm);

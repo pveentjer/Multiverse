@@ -2,8 +2,8 @@ package org.multiverse.stms.gamma.transactions.fat;
 
 import org.junit.Test;
 import org.multiverse.api.exceptions.ReadWriteConflict;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static org.junit.Assert.*;
@@ -30,7 +30,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
 
     @Test
         public void richmansConflict_multipleReadsOnSameRef() {
-            GammaLongRef ref = new GammaLongRef(stm);
+            GammaTxnLong ref = new GammaTxnLong(stm);
 
             GammaTxnConfig config = new GammaTxnConfig(stm)
                     .setMaximumPoorMansConflictScanLength(0);
@@ -56,11 +56,11 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
         causeLotsOfConflicts(stm);
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         FatVariableLengthGammaTxn tx = new FatVariableLengthGammaTxn(config);
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         assertNotNull(tranlocal);
         assertTrue(tranlocal.hasDepartObligation);
@@ -86,10 +86,10 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
 
         causeLotsOfConflicts(stm);
 
-        GammaLongRef ref1 = new GammaLongRef(stm, 10);
+        GammaTxnLong ref1 = new GammaTxnLong(stm, 10);
 
         long initialValue2 = 10;
-        GammaLongRef ref2 = new GammaLongRef(stm, initialValue2);
+        GammaTxnLong ref2 = new GammaTxnLong(stm, initialValue2);
         long initialVersion2 = ref2.getVersion();
 
         FatVariableLengthGammaTxn tx = new FatVariableLengthGammaTxn(config);
@@ -98,7 +98,7 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
         causeLotsOfConflicts(stm);
         long newConflictCount = stm.getGlobalConflictCounter().count();
 
-        GammaRefTranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
 
         assertNotNull(tranlocal2);
         assertTrue(tranlocal2.hasDepartObligation);
@@ -124,10 +124,10 @@ public class FatVariableLengthGammaTxn_openForWriteTest extends FatGammaTxn_open
 
         causeLotsOfConflicts(stm);
 
-        GammaLongRef ref1 = new GammaLongRef(stm, 10);
+        GammaTxnLong ref1 = new GammaTxnLong(stm, 10);
 
         long initialValue2 = 10;
-        GammaLongRef ref2 = new GammaLongRef(stm, initialValue2);
+        GammaTxnLong ref2 = new GammaTxnLong(stm, initialValue2);
         long initialVersion2 = ref2.getVersion();
 
         FatVariableLengthGammaTxn tx = new FatVariableLengthGammaTxn(config);

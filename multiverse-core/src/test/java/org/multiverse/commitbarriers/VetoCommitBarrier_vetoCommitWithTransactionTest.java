@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -62,7 +62,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
     public void whenPendingTransaction() throws InterruptedException {
         final VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        final GammaIntRef ref = new GammaIntRef(stm);
+        final GammaTxnInteger ref = new GammaTxnInteger(stm);
 
         TestThread t = new TestThread() {
             @Override
@@ -95,7 +95,7 @@ public class VetoCommitBarrier_vetoCommitWithTransactionTest implements GammaCon
 
     @Test
     public void whenTransactionFailedToPrepare_thenBarrierNotAbortedOrCommitted() {
-        final GammaIntRef ref = new GammaIntRef(stm);
+        final GammaTxnInteger ref = new GammaTxnInteger(stm);
 
         GammaTxn tx = stm.newDefaultTxn();
         ref.get(tx);

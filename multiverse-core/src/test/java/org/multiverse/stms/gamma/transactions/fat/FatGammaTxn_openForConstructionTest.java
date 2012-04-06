@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.exceptions.*;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -28,7 +28,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
 
     @Test
     public void whenReadonlyTransaction() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxnConfig config = new GammaTxnConfig(stm)
                 .setReadonly(true);
@@ -47,8 +47,8 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
     public void whenSuccess() {
         T tx = newTransaction();
         long initialVersion = 10;
-        GammaLongRef ref = new GammaLongRef(tx, initialVersion);
-        GammaRefTranlocal tranlocal = tx.locate(ref);
+        GammaTxnLong ref = new GammaTxnLong(tx, initialVersion);
+        Tranlocal tranlocal = tx.locate(ref);
 
         assertNotNull(tranlocal);
         assertRefHasExclusiveLock(ref, tx);
@@ -64,8 +64,8 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
     public void whenAlreadyOpenedForConstruction() {
         T tx = newTransaction();
         long initialVersion = 10;
-        GammaLongRef ref = new GammaLongRef(tx, initialVersion);
-        GammaRefTranlocal tranlocal = ref.openForConstruction(tx);
+        GammaTxnLong ref = new GammaTxnLong(tx, initialVersion);
+        Tranlocal tranlocal = ref.openForConstruction(tx);
 
         assertNotNull(tranlocal);
         assertRefHasExclusiveLock(ref, tx);
@@ -80,7 +80,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
     @Test
     public void whenStmMismatch() {
         GammaStm otherStm = new GammaStm();
-        GammaLongRef ref = new GammaLongRef(otherStm);
+        GammaTxnLong ref = new GammaTxnLong(otherStm);
 
         GammaTxn tx = newTransaction();
         try {
@@ -102,7 +102,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         tx.evaluatingCommute = true;
 
         try{
-            new GammaLongRef(tx, initialValue);
+            new GammaTxnLong(tx, initialValue);
             fail();
         }catch(IllegalCommuteException expected){
         }
@@ -116,7 +116,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         tx.prepare();
 
         try {
-            new GammaLongRef(tx);
+            new GammaTxnLong(tx);
             fail();
         } catch (PreparedTxnException expected) {
         }
@@ -129,7 +129,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
         tx.abort();
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             ref.openForConstruction(tx);
@@ -145,7 +145,7 @@ public abstract class FatGammaTxn_openForConstructionTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
         tx.commit();
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             ref.openForConstruction(tx);

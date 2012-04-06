@@ -8,8 +8,8 @@ import org.multiverse.api.LockMode;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaTestUtils;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.Collection;
@@ -45,8 +45,8 @@ public class GammaLongRef_loadTest implements GammaConstants {
         );
     }
 
-    public GammaLongRef newLongRef(long initialValue) {
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+    public GammaTxnLong newTxnLong(long initialValue) {
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         if (readBiased) {
             ref = GammaTestUtils.makeReadBiased(ref);
         }
@@ -58,14 +58,14 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenNotLockedByOtherAndNoLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.None);
 
         GammaTxn tx = stm.newDefaultTxn();
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_NONE, 1, arriveNeeded);
 
         assertTrue(result);
@@ -85,13 +85,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenNotLockedByOtherAndReadLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.None);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_READ, 1, arriveNeeded);
 
@@ -113,13 +113,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenNotLockedByOtherAndWriteLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.None);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_WRITE, 1, arriveNeeded);
 
@@ -140,13 +140,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenNotLockedByOtherAndExclusiveLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.None);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, arriveNeeded);
 
@@ -167,13 +167,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenReadLockedByOtherAndNoLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_NONE, 1, arriveNeeded);
 
@@ -195,13 +195,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenReadLockedByOtherAndReadLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_READ, 1, arriveNeeded);
 
@@ -223,13 +223,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenReadLockedByOtherAndWriteLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_WRITE, 1, arriveNeeded);
 
@@ -247,13 +247,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenReadLockedByOtherAndExclusiveLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Read);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, arriveNeeded);
 
@@ -271,13 +271,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenWriteLockedByOtherAndNoLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_NONE, 1, arriveNeeded);
 
@@ -297,13 +297,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenWritetLockedByOtherAndReadLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_READ, 1, arriveNeeded);
 
@@ -319,13 +319,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenWriteLockedByOtherAndWriteLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_WRITE, 1, arriveNeeded);
 
@@ -341,13 +341,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenWriteLockedByOtherAndExclusiveLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Write);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, arriveNeeded);
 
@@ -363,13 +363,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenExclusiveLockedByOtherAndNoLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx, tranlocal, LOCKMODE_NONE, 1, arriveNeeded);
 
@@ -385,13 +385,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenExclusiveLockedByOtherAndReadLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_READ, 1, arriveNeeded);
 
@@ -407,13 +407,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenExclusiveLockedByOtherAndWriteLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_WRITE, 1, arriveNeeded);
 
@@ -429,13 +429,13 @@ public class GammaLongRef_loadTest implements GammaConstants {
     @Test
     public void locking_whenExclusiveLockedByOtherAndExclusiveLockNeeded() {
         long initialValue = 10;
-        GammaLongRef ref = newLongRef(initialValue);
+        GammaTxnLong ref = newTxnLong(initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, LockMode.Exclusive);
 
-        GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        Tranlocal tranlocal = new Tranlocal();
         GammaTxn tx = stm.newDefaultTxn();
         boolean result = ref.load(tx,tranlocal, LOCKMODE_EXCLUSIVE, 1, arriveNeeded);
 

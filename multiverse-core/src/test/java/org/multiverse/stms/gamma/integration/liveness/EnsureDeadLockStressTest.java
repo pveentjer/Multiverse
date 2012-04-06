@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
@@ -20,7 +20,7 @@ public class EnsureDeadLockStressTest {
     private int refCount = 5;
     private volatile boolean stop;
     private GammaStm stm;
-    private GammaLongRef[] refs;
+    private GammaTxnLong[] refs;
 
     @Before
     public void setUp() {
@@ -28,9 +28,9 @@ public class EnsureDeadLockStressTest {
         stm = (GammaStm) getGlobalStmInstance();
         stop = false;
 
-        refs = new GammaLongRef[refCount];
+        refs = new GammaTxnLong[refCount];
         for (int k = 0; k < refCount; k++) {
-            refs[k] = new GammaLongRef(stm);
+            refs[k] = new GammaTxnLong(stm);
         }
     }
 

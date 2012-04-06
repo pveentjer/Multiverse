@@ -5,7 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.multiverse.MultiverseConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.utils.ToolUnsafe;
 import sun.misc.Unsafe;
 
@@ -20,7 +20,7 @@ public class BasicPerformanceDriver {
     @Test
     public void test() {
         GammaStm stm = new GammaStm();
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         final long transactionCount = 1000 * 1000 * 1000;
 

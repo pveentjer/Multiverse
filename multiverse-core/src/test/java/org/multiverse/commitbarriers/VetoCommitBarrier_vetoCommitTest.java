@@ -7,7 +7,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaIntRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnInteger;
 
 import static org.junit.Assert.*;
 import static org.multiverse.TestUtils.*;
@@ -40,9 +40,9 @@ public class VetoCommitBarrier_vetoCommitTest {
     public void whenPendingTransactions() {
         VetoCommitBarrier barrier = new VetoCommitBarrier();
 
-        GammaIntRef ref1 = new GammaIntRef(stm);
-        GammaIntRef ref2 = new GammaIntRef(stm);
-        GammaIntRef ref3 = new GammaIntRef(stm);
+        GammaTxnInteger ref1 = new GammaTxnInteger(stm);
+        GammaTxnInteger ref2 = new GammaTxnInteger(stm);
+        GammaTxnInteger ref3 = new GammaTxnInteger(stm);
 
         IncThread thread1 = new IncThread(ref1, barrier);
         IncThread thread2 = new IncThread(ref2, barrier);
@@ -86,11 +86,11 @@ public class VetoCommitBarrier_vetoCommitTest {
     }
 
     public class IncThread extends TestThread {
-        private final GammaIntRef ref;
+        private final GammaTxnInteger ref;
         private final VetoCommitBarrier barrier;
         private Txn tx;
 
-        public IncThread(GammaIntRef ref, VetoCommitBarrier barrier) {
+        public IncThread(GammaTxnInteger ref, VetoCommitBarrier barrier) {
             super("IncThread");
             this.barrier = barrier;
             this.ref = ref;

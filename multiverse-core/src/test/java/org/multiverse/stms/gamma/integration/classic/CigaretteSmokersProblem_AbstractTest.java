@@ -7,8 +7,8 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnBooleanClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.BooleanRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnBoolean;
+import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.junit.Assert.assertEquals;
@@ -23,10 +23,10 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 public abstract class CigaretteSmokersProblem_AbstractTest {
     private static final int SMOKE_TIME_SECONDS = 10;
 
-    private BooleanRef tobaccoAvailable;
-    private BooleanRef paperAvailable;
-    private BooleanRef matchesAvailable;
-    private Ref<Thread> notifier;
+    private TxnBoolean tobaccoAvailable;
+    private TxnBoolean paperAvailable;
+    private TxnBoolean matchesAvailable;
+    private TxnRef<Thread> notifier;
     private ArbiterThread arbiterThread;
     private SmokerThread paperProvider;
     private SmokerThread matchProvider;
@@ -41,10 +41,10 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        tobaccoAvailable = newBooleanRef();
-        paperAvailable = newBooleanRef();
-        matchesAvailable = newBooleanRef();
-        notifier = newRef();
+        tobaccoAvailable = newTxnBoolean();
+        paperAvailable = newTxnBoolean();
+        matchesAvailable = newTxnBoolean();
+        notifier = newTxnRef();
         arbiterThread = new ArbiterThread();
         paperProvider = new SmokerThread("PaperProviderThread", tobaccoAvailable, matchesAvailable);
         matchProvider = new SmokerThread("MatchProvidedThread", tobaccoAvailable, paperAvailable);
@@ -140,10 +140,10 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
 
     class SmokerThread extends TestThread {
         private int count;
-        private BooleanRef item1;
-        private BooleanRef item2;
+        private TxnBoolean item1;
+        private TxnBoolean item2;
 
-        public SmokerThread(String name, BooleanRef item1, BooleanRef item2) {
+        public SmokerThread(String name, TxnBoolean item1, TxnBoolean item2) {
             super(name);
             this.item1 = item1;
             this.item2 = item2;

@@ -6,30 +6,30 @@ import org.benchy.TestCaseResult;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GlobalConflictCounter;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 public class OrecNormalReadsDriver extends BenchmarkDriver implements GammaConstants {
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private GlobalConflictCounter globalConflictCounter;
     private GammaStm stm;
 
     private long operationCount = 1000 * 1000 * 1000;
-    private GammaLongRef orec;
+    private GammaTxnLong orec;
 
     @Override
     public void setUp() {
         System.out.printf("Multiverse > Operation count is %s\n", operationCount);
 
         stm = new GammaStm();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         globalConflictCounter = stm.getGlobalConflictCounter();
-        orec = new GammaLongRef(stm);
+        orec = new GammaTxnLong(stm);
     }
 
     @Override
     public void run(TestCaseResult testCaseResult) {
         final long _cycles = operationCount;
-        final GammaLongRef _orec = orec;
+        final GammaTxnLong _orec = orec;
 
          for (long k = 0; k < _cycles; k++) {
             int arriveStatus = _orec.arrive(0);

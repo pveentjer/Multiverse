@@ -7,8 +7,8 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryInterruptedException;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +31,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
     @Test
     public void whenNoTimeoutAndInterruptible() throws InterruptedException {
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setInterruptible(true)
@@ -54,7 +54,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
     @Test
     public void whenTimeoutAndInterruptible() throws InterruptedException {
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
@@ -78,10 +78,10 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
 
     class WaitWithoutTimeoutThread extends TestThread {
-        final GammaLongRef ref;
+        final GammaTxnLong ref;
         private TxnExecutor block;
 
-        public WaitWithoutTimeoutThread(GammaLongRef ref, TxnExecutor block) {
+        public WaitWithoutTimeoutThread(GammaTxnLong ref, TxnExecutor block) {
             this.ref = ref;
             this.block = block;
         }
@@ -92,7 +92,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
                 @Override
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
-                    GammaRefTranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
+                    Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                     if (write.long_value == 0) {
                         retry();
                     }

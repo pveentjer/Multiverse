@@ -6,7 +6,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.PanicError;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.transactionalobjects.AbstractGammaObject;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.assertOrecValue;
@@ -23,7 +23,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void whenUpdateBiasedAndNoSurplus_thenPanicError() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         long orecValue = orec.orec;
 
         try {
@@ -37,7 +37,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void whenUpdateBiasedAndNotLocked_thenPanicError() {
-        AbstractGammaObject orec = new GammaLongRef(stm);
+        AbstractGammaObject orec = new GammaTxnLong(stm);
         orec.arrive(1);
         long orecValue = orec.orec;
 
@@ -52,7 +52,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void readBiased_whenReadLockedAcquiredOnce() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_READ);
 
         orec.unlockByUnregistered();
@@ -62,7 +62,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void readBiased_whenReadLockAcquiredMultipleTimes() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_READ);
         orec.arriveAndLock(1, LOCKMODE_READ);
         orec.arriveAndLock(1, LOCKMODE_READ);
@@ -75,7 +75,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void readBiased_whenWriteLockAcquired() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_WRITE);
 
         orec.unlockByUnregistered();
@@ -85,7 +85,7 @@ public class Orec_unlockByUnregisteredTest {
 
     @Test
     public void readBiased_whenExclusiveLockAcquired() {
-        AbstractGammaObject orec = makeReadBiased(new GammaLongRef(stm));
+        AbstractGammaObject orec = makeReadBiased(new GammaTxnLong(stm));
         orec.arriveAndLock(1, LOCKMODE_EXCLUSIVE);
 
         orec.unlockByUnregistered();

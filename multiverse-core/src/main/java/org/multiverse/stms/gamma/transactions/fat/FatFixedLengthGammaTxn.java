@@ -3,9 +3,9 @@ package org.multiverse.stms.gamma.transactions.fat;
 import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.Listeners;
-import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.BaseGammaTxnRef;
 import org.multiverse.stms.gamma.transactionalobjects.GammaObject;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -18,7 +18,7 @@ import static org.multiverse.utils.Bugshaker.shakeBugs;
  */
 public final class FatFixedLengthGammaTxn extends GammaTxn {
 
-    public GammaRefTranlocal head;
+    public Tranlocal head;
     public int size = 0;
     public boolean hasReads = false;
     public long localConflictCount;
@@ -34,9 +34,9 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
 
         listenersArray = new Listeners[config.maxFixedLengthTransactionSize];
 
-        GammaRefTranlocal h = null;
+        Tranlocal h = null;
         for (int k = 0; k < config.maxFixedLengthTransactionSize; k++) {
-            GammaRefTranlocal newNode = new GammaRefTranlocal();
+            Tranlocal newNode = new Tranlocal();
             if (h != null) {
                 h.previous = newNode;
                 newNode.next = h;
@@ -93,11 +93,11 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
 
     private Listeners[] commitChain() {
         int listenersIndex = 0;
-        GammaRefTranlocal node = head;
+        Tranlocal node = head;
         do {
             if (SHAKE_BUGS) shakeBugs();
 
-            final BaseGammaRef owner = node.owner;
+            final BaseGammaTxnRef owner = node.owner;
             //if we are at the end, we can return the listenersArray.
             if (owner == null) {
                 return listenersArray;
@@ -139,15 +139,15 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
     }
 
     @SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
-    private BaseGammaRef prepareChainForCommit() {
+    private BaseGammaTxnRef prepareChainForCommit() {
         if (skipPrepare()) {
             return null;
         }
 
-        GammaRefTranlocal node = head;
+        Tranlocal node = head;
 
         do {
-            final BaseGammaRef owner = node.owner;
+            final BaseGammaTxnRef owner = node.owner;
 
             if (owner == null) {
                 return null;
@@ -180,9 +180,9 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
     }
 
     private void releaseChain(final boolean success) {
-        GammaRefTranlocal node = head;
+        Tranlocal node = head;
         while (node != null) {
-            final BaseGammaRef owner = node.owner;
+            final BaseGammaTxnRef owner = node.owner;
 
             if (owner == null) {
                 return;
@@ -200,8 +200,8 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final GammaRefTranlocal getRefTranlocal(final BaseGammaRef ref) {
-        GammaRefTranlocal node = head;
+    public final Tranlocal getRefTranlocal(final BaseGammaTxnRef ref) {
+        Tranlocal node = head;
         while (node != null) {
             //noinspection ObjectEquality
             if (node.owner == ref) {
@@ -237,9 +237,9 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
         boolean furtherRegistrationNeeded = true;
         boolean atLeastOneRegistration = false;
 
-        GammaRefTranlocal tranlocal = head;
+        Tranlocal tranlocal = head;
         do {
-            final BaseGammaRef owner = tranlocal.owner;
+            final BaseGammaTxnRef owner = tranlocal.owner;
 
             if (furtherRegistrationNeeded) {
                 switch (owner.registerChangeListener(retryListener, tranlocal, pool, listenerEra)) {
@@ -272,7 +272,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
 
 
     @Override
-    public final GammaRefTranlocal locate(BaseGammaRef o) {
+    public final Tranlocal locate(BaseGammaTxnRef o) {
         if (status != TX_ACTIVE) {
             throw abortLocateOnBadStatus(o);
         }
@@ -327,7 +327,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
         return true;
     }
 
-    public final void shiftInFront(GammaRefTranlocal newHead) {
+    public final void shiftInFront(Tranlocal newHead) {
         //noinspection ObjectEquality
         if (newHead == head) {
             return;
@@ -345,7 +345,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
     }
 
     @Override
-    public final boolean isReadConsistent(GammaRefTranlocal justAdded) {
+    public final boolean isReadConsistent(Tranlocal justAdded) {
         if (!hasReads) {
             return true;
         }
@@ -374,7 +374,7 @@ public final class FatFixedLengthGammaTxn extends GammaTxn {
         }
 
         //doing a full conflict scan
-        GammaRefTranlocal node = head;
+        Tranlocal node = head;
         while (node != null) {
             if (SHAKE_BUGS) shakeBugs();
 

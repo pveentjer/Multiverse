@@ -9,7 +9,7 @@ import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.functions.Function;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -49,7 +49,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
     @Test
     public void whenOnlyContainsConstructed() {
         GammaTxn tx = newTransaction();
-        GammaRef<String> ref = new GammaRef<String>(tx, "foo");
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(tx, "foo");
 
         try {
             tx.retry();
@@ -64,7 +64,7 @@ public abstract class FatGammaTxn_retryTest<T extends GammaTxn> {
     @Test
     public void whenOnlyContainsCommute() {
         String intialValue = "initialValue";
-        GammaRef<String> ref = new GammaRef<String>(stm, intialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, intialValue);
 
         GammaTxn tx = newTransaction();
         Function<String> function = mock(Function.class);

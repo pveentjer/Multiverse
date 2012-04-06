@@ -15,8 +15,8 @@
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final IntRef amount = newIntRef(0);
-        private final Ref&lt;Date&gt; lastModified = newRef(new Date());
+        private final IntRef amount = newTxnInteger(0);
+        private final Ref&lt;Date&gt; lastModified = newTxnRef(new Date());
 
         ...
     }
@@ -43,7 +43,7 @@
                     <para>LongRef: a transactional ref for the primitive long.</para>
                 </listitem>
                 <listitem>
-                    <para>DoubleRef: a transactional ref for the primitive double.</para>
+                    <para>TxnDouble: a transactional ref for the primitive double.</para>
                  </listitem>
                  <listitem>
                    <para>Ref: a transactional ref for storing a object reference.</para>

@@ -7,7 +7,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
@@ -111,7 +111,7 @@ public abstract class NonReentrantMutex_AbstractTest {
     }
 
     class NonReentrantMutex {
-        final GammaRef locked = new GammaRef(stm, null);
+        final GammaTxnRef locked = new GammaTxnRef(stm, null);
         final TxnExecutor lockBlock = newLockBlock();
         final TxnExecutor unlockBlock = newUnlockBlock();
 

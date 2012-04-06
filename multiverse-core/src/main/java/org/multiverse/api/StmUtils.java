@@ -19,7 +19,7 @@ import static org.multiverse.api.TxnThreadLocal.getRequiredThreadLocalTxn;
  */
 public final class StmUtils {
 
-    private final static RefFactory refFactory
+    private final static TxnRefFactory refFactory
         = getGlobalStmInstance().getDefaultRefFactory();
     private final static TxnExecutor defaultTxnExecutor
         = getGlobalStmInstance().getDefaultTxnExecutor();
@@ -520,100 +520,100 @@ public final class StmUtils {
     }
 
     /**
-     * Creates a committed {@link IntRef} with the provided value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnInteger} with the provided value using the {@link GlobalStmInstance}.
      *
-     * @param value the initial value of the IntRef
-     * @return the created IntRef.
+     * @param value the initial value of the TnxInteger
+     * @return the created TnxInteger.
      */
-    public static IntRef newIntRef(int value) {
-        return refFactory.newIntRef(value);
+    public static TxnInteger newTxnInteger(int value) {
+        return refFactory.newTxnInteger(value);
     }
 
     /**
-     * Creates a committed {@link IntRef} with 0 as initial value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnInteger} with 0 as initial value using the {@link GlobalStmInstance}.
      *
-     * @return the created IntRef.
+     * @return the created TxnInteger.
      */
-    public static IntRef newIntRef() {
-        return refFactory.newIntRef(0);
+    public static TxnInteger newTxnInteger() {
+        return refFactory.newTxnInteger(0);
     }
 
     /**
-     * Creates a committed {@link LongRef} with 0 as initial value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnLong} with 0 as initial value using the {@link GlobalStmInstance}.
      *
-     * @return the created LongRef.
+     * @return the created TnxLong.
      */
-    public static LongRef newLongRef() {
-        return refFactory.newLongRef(0);
+    public static TxnLong newTxnLong() {
+        return refFactory.newTxnLong(0);
     }
 
     /**
-     * Creates a committed {@link LongRef} with the provided value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnLong} with the provided value using the {@link GlobalStmInstance}.
      *
-     * @param value the initial value of the LongRef.
-     * @return the created LongRef.
+     * @param value the initial value of the TxnLong.
+     * @return the created TnxLong.
      */
-    public static LongRef newLongRef(long value) {
-        return refFactory.newLongRef(value);
+    public static TxnLong newTxnLong(long value) {
+        return refFactory.newTxnLong(value);
     }
 
     /**
-     * Creates a committed {@link DoubleRef} with 0 as initial value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnDouble} with 0 as initial value using the {@link GlobalStmInstance}.
      *
-     * @return the created DoubleRef.
+     * @return the created TxnDouble.
      */
-    public static DoubleRef newDoubleRef() {
-        return refFactory.newDoubleRef(0);
+    public static TxnDouble newTxnDouble() {
+        return refFactory.newTxnDouble(0);
     }
 
     /**
-     * Creates a committed {@link DoubleRef} with the provided value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnDouble} with the provided value using the {@link GlobalStmInstance}.
      *
      * @param value the initial value.
-     * @return the created DoubleRef.
+     * @return the created TnxDouble.
      */
-    public static DoubleRef newDoubleRef(double value) {
-        return refFactory.newDoubleRef(value);
+    public static TxnDouble newTxnDouble(double value) {
+        return refFactory.newTxnDouble(value);
     }
 
     /**
-     * Creates a committed {@link BooleanRef} with false as initial value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnBoolean} with false as initial value using the {@link GlobalStmInstance}.
      *
-     * @return the created BooleanRef.
+     * @return the created TxnBoolean.
      */
-    public static BooleanRef newBooleanRef() {
-        return refFactory.newBooleanRef(false);
+    public static TxnBoolean newTxnBoolean() {
+        return refFactory.newTxnBoolean(false);
     }
 
     /**
-     * Creates a committed {@link BooleanRef} with the provided value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnBoolean} with the provided value using the {@link GlobalStmInstance}.
      *
      * @param value the initial value
-     * @return the created BooleanRef.
+     * @return the created TxnBoolean.
      */
-    public static BooleanRef newBooleanRef(boolean value) {
-        return refFactory.newBooleanRef(value);
+    public static TxnBoolean newTxnBoolean(boolean value) {
+        return refFactory.newTxnBoolean(value);
     }
 
     /**
-     * Creates a committed {@link Ref} with null as initial value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnRef} with null as initial value using the {@link GlobalStmInstance}.
      *
-     * @param <E> the type of the Ref.
+     * @param <E> the type of the TxnRef.
      * @return the created Ref.
      */
-    public static <E> Ref<E> newRef() {
-        return refFactory.newRef(null);
+    public static <E> TxnRef<E> newTxnRef() {
+        return refFactory.newTxnRef(null);
     }
 
     /**
-     * Creates a committed {@link Ref} with the provided value using the {@link GlobalStmInstance}.
+     * Creates a committed {@link TxnRef} with the provided value using the {@link GlobalStmInstance}.
      *
-     * @param value the initial value of the Ref.
-     * @param <E>   the type of the Ref.
-     * @return the created Ref.
+     * @param value the initial value of the TxnRef.
+     * @param <E>   the type of the TxnRef.
+     * @return the created TxnRef.
      */
-    public static <E> Ref<E> newRef(E value) {
-        return refFactory.newRef(value);
+    public static <E> TxnRef<E> newTxnRef(E value) {
+        return refFactory.newTxnRef(value);
     }
 
     /**

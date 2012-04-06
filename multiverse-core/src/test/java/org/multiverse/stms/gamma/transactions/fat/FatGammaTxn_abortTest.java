@@ -10,8 +10,8 @@ import org.multiverse.api.lifecycle.TxnEvent;
 import org.multiverse.api.lifecycle.TxnListener;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
@@ -77,8 +77,8 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
     @Test
     public void locking_whenHasConstructed_thenRemainLocked() {
         GammaTxn tx = newTransaction();
-        GammaLongRef ref = new GammaLongRef(tx);
-        GammaRefTranlocal write = tx.getRefTranlocal(ref);
+        GammaTxnLong ref = new GammaTxnLong(tx);
+        Tranlocal write = tx.getRefTranlocal(ref);
         tx.abort();
 
         assertIsAborted(tx);
@@ -94,13 +94,13 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
     @Test
     public void whenContainsCommutes() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
         LongFunction function = mock(LongFunction.class);
         ref.commute(tx, function);
-        GammaRefTranlocal tranlocal = tx.getRefTranlocal(ref);
+        Tranlocal tranlocal = tx.getRefTranlocal(ref);
         tx.abort();
 
         assertIsAborted(tx);
@@ -119,11 +119,11 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
 
     public void whenHasRead(LockMode readLockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, readLockMode.asInt());
+        Tranlocal tranlocal = ref.openForRead(tx, readLockMode.asInt());
         tx.abort();
 
         assertIsAborted(tx);
@@ -144,11 +144,11 @@ public abstract class FatGammaTxn_abortTest<T extends GammaTxn> implements Gamma
 
     public void whenHasWrite(LockMode writeLockMode) {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
+        Tranlocal tranlocal = ref.openForWrite(tx, writeLockMode.asInt());
         tx.abort();
 
         assertEquals(TxnStatus.Aborted, tx.getStatus());

@@ -7,7 +7,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -29,7 +29,7 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
  */
 public abstract class RefReadConsistency_AbstractTest {
 
-    private GammaRef<String>[] refs;
+    private GammaTxnRef<String>[] refs;
     private final AtomicBoolean inconsistencyDetected = new AtomicBoolean();
 
     private int readerCount = 10;
@@ -49,7 +49,7 @@ public abstract class RefReadConsistency_AbstractTest {
     @After
     public void tearDown() {
         System.out.println("Stm.GlobalConflictCount: " + stm.getGlobalConflictCounter().count());
-        for (GammaRef ref : refs) {
+        for (GammaTxnRef ref : refs) {
             System.out.println(ref.toDebugString());
         }
     }
@@ -59,9 +59,9 @@ public abstract class RefReadConsistency_AbstractTest {
     protected abstract TxnExecutor createWriteBlock();
 
     public void run(int refCount) {
-        refs = new GammaRef[refCount];
+        refs = new GammaTxnRef[refCount];
         for (int k = 0; k < refs.length; k++) {
-            refs[k] = new GammaRef<String>(stm);
+            refs[k] = new GammaTxnRef<String>(stm);
         }
 
         ReadThread[] readerThreads = new ReadThread[readerCount];

@@ -6,13 +6,13 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.IntRef;
+import org.multiverse.api.references.TxnInteger;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static junit.framework.Assert.assertEquals;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.newIntRef;
+import static org.multiverse.api.StmUtils.newTxnInteger;
 import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
@@ -96,16 +96,16 @@ public abstract class ProducerConsumer_AbstractTest {
     }
 
     class Buffer {
-        private final IntRef size = newIntRef();
-        private final IntRef[] items;
+        private final TxnInteger size = newTxnInteger();
+        private final TxnInteger[] items;
         private final TxnExecutor takeBlock = newTakeBlock();
         private final TxnExecutor putBlock = newPutBlock();
 
 
         Buffer() {
-            this.items = new IntRef[MAX_CAPACITY];
+            this.items = new TxnInteger[MAX_CAPACITY];
             for (int k = 0; k < items.length; k++) {
-                items[k] = newIntRef();
+                items[k] = newTxnInteger();
             }
         }
 

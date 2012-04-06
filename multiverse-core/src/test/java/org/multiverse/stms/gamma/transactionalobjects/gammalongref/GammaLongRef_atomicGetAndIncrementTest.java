@@ -6,7 +6,7 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.LockedException;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -28,7 +28,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenSuccess() {
         int initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long result = ref.atomicGetAndIncrement(1);
@@ -43,7 +43,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenNoChange() {
         int initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         long result = ref.atomicGetAndIncrement(0);
@@ -58,7 +58,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenActiveTransactionAvailable_thenIgnored() {
         int initialValue = 2;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -77,7 +77,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenPrivatizedByOther_thenLockedException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -97,7 +97,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenEnsuredByOther_thenLockedException() {
         int initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = stm.newDefaultTxn();
@@ -117,7 +117,7 @@ public class GammaLongRef_atomicGetAndIncrementTest {
     @Test
     public void whenListenersAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         int amount = 1;

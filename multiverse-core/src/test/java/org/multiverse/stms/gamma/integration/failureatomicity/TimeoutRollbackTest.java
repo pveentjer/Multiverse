@@ -7,7 +7,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.TimeUnit;
@@ -19,16 +19,16 @@ import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class TimeoutRollbackTest {
-    private GammaLongRef modifyRef;
-    private GammaLongRef awaitRef;
+    private GammaTxnLong modifyRef;
+    private GammaTxnLong awaitRef;
     private GammaStm stm;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        modifyRef = new GammaLongRef(stm);
-        awaitRef = new GammaLongRef(stm);
+        modifyRef = new GammaTxnLong(stm);
+        awaitRef = new GammaTxnLong(stm);
     }
 
     @Test

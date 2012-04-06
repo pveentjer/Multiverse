@@ -6,8 +6,8 @@ import org.multiverse.api.LockMode;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 import org.multiverse.stms.gamma.transactions.fat.FatVariableLengthGammaTxn;
@@ -38,7 +38,7 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
     @Test
     public void conflict_whenReadByOther(){
         String initialValue = null;
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
@@ -78,18 +78,18 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
 
         String initialValue1 = "foo1";
         String updateValue1 = "bar1";
-        GammaRef<String> ref1 = new GammaRef<String>(stm, initialValue1);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm, initialValue1);
         long initialVersion1 = ref1.getVersion();
 
         String initialValue2 = "foo2";
         String updateValue2 = "bar1";
-        GammaRef<String> ref2 = new GammaRef<String>(stm, initialValue2);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm, initialValue2);
         long initialVersion2 = ref2.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
         tranlocal1.ref_value = updateValue1;
-        GammaRefTranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
         tranlocal2.ref_value = updateValue2;
         tx.commit();
 
@@ -120,16 +120,16 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         String initialValue1 = "foo1";
-        GammaRef<String> ref1 = new GammaRef<String>(stm, initialValue1);
+        GammaTxnRef<String> ref1 = new GammaTxnRef<String>(stm, initialValue1);
         long initialVersion1 = ref1.getVersion();
 
         String initialValue2 = "foo2";
-        GammaRef<String> ref2 = new GammaRef<String>(stm, initialValue2);
+        GammaTxnRef<String> ref2 = new GammaTxnRef<String>(stm, initialValue2);
         long initialVersion2 = ref2.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
-        GammaRefTranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal1 = ref1.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal2 = ref2.openForWrite(tx, LOCKMODE_NONE);
         tx.commit();
 
         assertIsCommitted(tx);
@@ -158,11 +158,11 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.ref_value = initialValue;
         tx.commit();
 
@@ -187,11 +187,11 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
 
         String initialValue = "foo";
         String newValue = "bar";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
         tranlocal.ref_value = newValue;
         tx.commit();
 
@@ -221,11 +221,11 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForWrite(tx, LOCKMODE_NONE);
 
         GammaTxn otherTx = stm.newDefaultTxn();
         ref.getLock().acquire(otherTx, lockMode);
@@ -253,11 +253,11 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
         tx.commit();
 
         assertIsCommitted(tx);
@@ -290,7 +290,7 @@ public abstract class LeanGammaTxn_commitTest<T extends GammaTxn> {
         long globalConflictCount = stm.globalConflictCounter.count();
 
         String initialValue = "foo";
-        GammaRef<String> ref = new GammaRef<String>(stm, initialValue);
+        GammaTxnRef<String> ref = new GammaTxnRef<String>(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         T tx = newTransaction();

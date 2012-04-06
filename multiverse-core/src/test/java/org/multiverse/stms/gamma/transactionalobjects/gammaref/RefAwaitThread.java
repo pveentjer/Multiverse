@@ -4,13 +4,13 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.predicates.Predicate;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 public class RefAwaitThread<T> extends TestThread {
-    private final GammaRef<T> ref;
+    private final GammaTxnRef<T> ref;
     private final Predicate<T> predicate;
 
-    public RefAwaitThread(GammaRef<T> ref, final T awaitValue) {
+    public RefAwaitThread(GammaTxnRef<T> ref, final T awaitValue) {
         this(ref, new Predicate<T>() {
             @Override
             public boolean evaluate(T current) {
@@ -19,7 +19,7 @@ public class RefAwaitThread<T> extends TestThread {
         });
     }
 
-    public RefAwaitThread(GammaRef ref, Predicate<T> predicate) {
+    public RefAwaitThread(GammaTxnRef ref, Predicate<T> predicate) {
         this.ref = ref;
         this.predicate = predicate;
     }

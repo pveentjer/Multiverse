@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
@@ -22,7 +22,7 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
  * @author Peter Veentjer.
  */
 public class ReadCommittedStressTest {
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
 
     private int readThreadCount = 10;
     private int modifyThreadCount = 2;
@@ -34,7 +34,7 @@ public class ReadCommittedStressTest {
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         stop = false;
     }
 

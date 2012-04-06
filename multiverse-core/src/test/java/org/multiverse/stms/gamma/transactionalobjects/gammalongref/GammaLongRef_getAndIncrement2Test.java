@@ -8,7 +8,7 @@ import org.multiverse.api.TxnFactory;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -52,7 +52,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenTransactionNull_thenNullPointerException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         try {
@@ -66,7 +66,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenTransactionCommitted_thenDeadTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -83,7 +83,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenTransactionAborted_thenDeadTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -100,7 +100,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenTransactionPrepared_thenPreparedTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -117,7 +117,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenNoChange() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -131,7 +131,7 @@ public class GammaLongRef_getAndIncrement2Test {
 
     @Test
     public void whenSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();

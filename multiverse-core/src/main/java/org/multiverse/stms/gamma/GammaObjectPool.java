@@ -1,8 +1,8 @@
 package org.multiverse.stms.gamma;
 
-import org.multiverse.stms.gamma.transactionalobjects.BaseGammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.BaseGammaTxnRef;
 import org.multiverse.stms.gamma.transactionalobjects.CallableNode;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 
 import java.util.ArrayList;
 
@@ -53,8 +53,8 @@ public final class GammaObjectPool {
     private final boolean arrayListPoolingEnabled;
     private final boolean callableNodePoolingEnabled;
 
-    private final GammaRefTranlocal[] tranlocalsGammaRef = new GammaRefTranlocal[100];
-    private int lastUsedGammaRef = -1;
+    private final Tranlocal[] tranlocals = new Tranlocal[100];
+    private int lastUsedGammaTxnRef = -1;
 
     private final Listeners[] listenersPool = new Listeners[100];
     private int listenersPoolIndex = -1;
@@ -75,51 +75,51 @@ public final class GammaObjectPool {
     }
 
     /**
-     * Takes a GammaRefTranlocal from the pool for the specified GammaRef.
+     * Takes a Tranlocal from the pool for the specified GammaTxnRef.
      *
-     * @param owner the GammaRef to get the GammaRefTranlocal for.
+     * @param owner the GammaTxnRef to get the Tranlocal for.
      * @return the pooled tranlocal, or null if none is found.
      * @throws NullPointerException if owner is null.
      */
-    public GammaRefTranlocal take(final BaseGammaRef owner) {
+    public Tranlocal take(final BaseGammaTxnRef owner) {
         if (owner == null) {
             throw new NullPointerException();
         }
 
-        if (lastUsedGammaRef == -1) {
-            GammaRefTranlocal tranlocal = new GammaRefTranlocal();
+        if (lastUsedGammaTxnRef == -1) {
+            Tranlocal tranlocal = new Tranlocal();
             tranlocal.owner = owner;
             return tranlocal;
         }
 
-        GammaRefTranlocal tranlocal = tranlocalsGammaRef[lastUsedGammaRef];
+        Tranlocal tranlocal = tranlocals[lastUsedGammaTxnRef];
         tranlocal.owner = owner;
-        tranlocalsGammaRef[lastUsedGammaRef] = null;
-        lastUsedGammaRef--;
+        tranlocals[lastUsedGammaTxnRef] = null;
+        lastUsedGammaTxnRef--;
         return tranlocal;
     }
 
     /**
-     * Puts an old GammaRefTranlocal in this pool. If the tranlocal is allowed to be null,
+     * Puts an old Tranlocal in this pool. If the tranlocal is allowed to be null,
      * the call is ignored. The same goes for when the tranlocal is permanent, since you
      * can't now how many transactions are still using it.
      *
-     * @param tranlocal the GammaRefTranlocal to pool.
+     * @param tranlocal the Tranlocal to pool.
      */
-    public void put(final GammaRefTranlocal tranlocal) {
+    public void put(final Tranlocal tranlocal) {
         if (!tranlocalPoolingEnabled) {
             return;
         }
 
-        if (lastUsedGammaRef == tranlocalsGammaRef.length - 1) {
+        if (lastUsedGammaTxnRef == tranlocals.length - 1) {
             return;
         }
 
-        lastUsedGammaRef++;
-        tranlocalsGammaRef[lastUsedGammaRef] = tranlocal;
+        lastUsedGammaTxnRef++;
+        tranlocals[lastUsedGammaTxnRef] = tranlocal;
     }
 
-    private GammaRefTranlocal[][] tranlocalArrayPool = new GammaRefTranlocal[8193][];
+    private Tranlocal[][] tranlocalArrayPool = new Tranlocal[8193][];
 
     /**
      * Puts a GammaTranlocal array in the pool.
@@ -127,7 +127,7 @@ public final class GammaObjectPool {
      * @param array the GammaTranlocal array to put in the pool.
      * @throws NullPointerException is array is null.
      */
-    public void putTranlocalArray(final GammaRefTranlocal[] array) {
+    public void putTranlocalArray(final Tranlocal[] array) {
         if (array == null) {
             throw new NullPointerException();
         }
@@ -161,24 +161,24 @@ public final class GammaObjectPool {
      * @return the GammaTranlocal array taken from the pool, or null if none available.
      * @throws IllegalArgumentException if size smaller than 0.
      */
-    public GammaRefTranlocal[] takeTranlocalArray(final int size) {
+    public Tranlocal[] takeTranlocalArray(final int size) {
         if (size < 0) {
             throw new IllegalArgumentException();
         }
 
         if (!tranlocalArrayPoolingEnabled) {
-            return new GammaRefTranlocal[size];
+            return new Tranlocal[size];
         }
 
         if (size >= tranlocalArrayPool.length) {
-            return new GammaRefTranlocal[size];
+            return new Tranlocal[size];
         }
 
         if (tranlocalArrayPool[size] == null) {
-            return new GammaRefTranlocal[size];
+            return new Tranlocal[size];
         }
 
-        GammaRefTranlocal[] array = tranlocalArrayPool[size];
+        Tranlocal[] array = tranlocalArrayPool[size];
         tranlocalArrayPool[size] = null;
         return array;
     }

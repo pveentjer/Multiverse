@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import static junit.framework.Assert.assertSame;
@@ -38,10 +38,10 @@ public class FatVariableLengthGammaTxn_openingManyItemsTest implements GammaCons
                 .setMaximumPoorMansConflictScanLength(refCount);
         FatVariableLengthGammaTxn tx = new FatVariableLengthGammaTxn(config);
 
-        GammaLongRef[] refs = new GammaLongRef[refCount];
-        GammaRefTranlocal[] tranlocals = new GammaRefTranlocal[refCount];
+        GammaTxnLong[] refs = new GammaTxnLong[refCount];
+        Tranlocal[] tranlocals = new Tranlocal[refCount];
         for (int k = 0; k < refCount; k++) {
-            GammaLongRef ref = new GammaLongRef(stm);
+            GammaTxnLong ref = new GammaTxnLong(stm);
             refs[k] = ref;
             tranlocals[k] = reading ? ref.openForRead(tx, LOCKMODE_NONE) : ref.openForWrite(tx, LOCKMODE_NONE);
         }
@@ -52,8 +52,8 @@ public class FatVariableLengthGammaTxn_openingManyItemsTest implements GammaCons
         System.out.println("usage percentage: " + (100 * tx.getUsage()));
 
         for (int k = 0; k < refCount; k++) {
-            GammaLongRef ref = refs[k];
-            GammaRefTranlocal found = reading ? ref.openForRead(tx, LOCKMODE_NONE) : ref.openForWrite(tx, LOCKMODE_NONE);
+            GammaTxnLong ref = refs[k];
+            Tranlocal found = reading ? ref.openForRead(tx, LOCKMODE_NONE) : ref.openForWrite(tx, LOCKMODE_NONE);
             assertNotNull(found);
             assertSame(ref, found.owner);
             assertSame("tranlocal is incorrect at " + k, tranlocals[k], found);

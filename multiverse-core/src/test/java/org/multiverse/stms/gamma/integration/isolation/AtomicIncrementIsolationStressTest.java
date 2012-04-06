@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static java.lang.System.currentTimeMillis;
 import static org.junit.Assert.assertEquals;
@@ -28,7 +28,7 @@ public class AtomicIncrementIsolationStressTest {
     public void test() {
         int threadCount = 2;
         UpdateThread[] threads = new UpdateThread[threadCount];
-        GammaLongRef ref = new GammaLongRef(stm, 0);
+        GammaTxnLong ref = new GammaTxnLong(stm, 0);
         long transactionsPerThread = 200 * 1000 * 1000;
 
         for (int k = 0; k < threads.length; k++) {
@@ -57,11 +57,11 @@ public class AtomicIncrementIsolationStressTest {
     }
 
     class UpdateThread extends TestThread {
-        private final GammaLongRef ref;
+        private final GammaTxnLong ref;
         private final long count;
         private long durationMs;
 
-        public UpdateThread(int id, GammaLongRef ref, long count) {
+        public UpdateThread(int id, GammaTxnLong ref, long count) {
             super("UpdateThread-" + id);
             this.ref = ref;
             this.count = count;

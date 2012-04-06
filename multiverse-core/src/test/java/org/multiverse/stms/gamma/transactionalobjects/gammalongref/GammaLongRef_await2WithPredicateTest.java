@@ -11,9 +11,9 @@ import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.RetryError;
 import org.multiverse.api.predicates.LongPredicate;
-import org.multiverse.api.references.LongRef;
+import org.multiverse.api.references.TxnLong;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.fail;
@@ -37,7 +37,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenPredicateEvaluatesToFalse() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newTxnFactoryBuilder()
@@ -59,7 +59,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenPredicateReturnsTrue() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -73,7 +73,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenPredicateThrowsException_thenTransactionAborted() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongPredicate predicate = mock(LongPredicate.class);
@@ -95,7 +95,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenNullPredicate_thenTransactionAbortedAndNullPointerException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -113,7 +113,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenNullTransaction_thenNullPointerException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongPredicate predicate = mock(LongPredicate.class);
@@ -131,7 +131,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenTransactionPrepared_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -152,7 +152,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenTransactionAborted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -173,7 +173,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Test
     public void whenTransactionCommitted_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = stm.newDefaultTxn();
@@ -195,7 +195,7 @@ public class GammaLongRef_await2WithPredicateTest {
     @Ignore
     public void whenSomeWaitingNeeded() {
         int initialValue = 0;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         AwaitThread thread1 = new AwaitThread(0, 10, ref);
@@ -222,9 +222,9 @@ public class GammaLongRef_await2WithPredicateTest {
 
     public class AwaitThread extends TestThread {
         private long minimumValue;
-        private LongRef ref;
+        private TxnLong ref;
 
-        public AwaitThread(int id, long minimumValue, LongRef ref) {
+        public AwaitThread(int id, long minimumValue, TxnLong ref) {
             super("AwaitThread-" + id);
             this.minimumValue = minimumValue;
             this.ref = ref;

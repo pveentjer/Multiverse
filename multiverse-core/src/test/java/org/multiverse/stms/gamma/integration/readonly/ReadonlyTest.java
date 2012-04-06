@@ -9,7 +9,7 @@ import org.multiverse.api.closures.TxnLongClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.ReadonlyException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -28,7 +28,7 @@ public class ReadonlyTest {
 
     @Test
     public void whenReadonly_thenUpdateFails() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         try {
             updateInReadonlyMethod(ref, 10);
             fail();
@@ -38,7 +38,7 @@ public class ReadonlyTest {
         assertEquals(0, ref.atomicGet());
     }
 
-    public void updateInReadonlyMethod(final GammaLongRef ref, final int newValue) {
+    public void updateInReadonlyMethod(final GammaTxnLong ref, final int newValue) {
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
@@ -70,7 +70,7 @@ public class ReadonlyTest {
             @Override
             public void execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
-                GammaLongRef ref = new GammaLongRef(btx);
+                GammaTxnLong ref = new GammaTxnLong(btx);
                 ref.openForConstruction(btx).long_value = value;
             }
         });
@@ -98,13 +98,13 @@ public class ReadonlyTest {
 
     @Test
     public void whenReadonly_thenReadAllowed() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long result = readInReadonlyMethod(ref);
         assertEquals(10, result);
         assertEquals(10, ref.atomicGet());
     }
 
-    public long readInReadonlyMethod(final GammaLongRef ref) {
+    public long readInReadonlyMethod(final GammaTxnLong ref) {
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setReadonly(true)
                 .newTxnExecutor();
@@ -120,21 +120,21 @@ public class ReadonlyTest {
 
     @Test
     public void whenUpdate_thenCreationOfNewTransactionalObjectsSucceeds() {
-        GammaLongRef ref = update_createNewTransactionObject(100);
+        GammaTxnLong ref = update_createNewTransactionObject(100);
         assertNotNull(ref);
         assertEquals(100, ref.atomicGet());
     }
 
-    public GammaLongRef update_createNewTransactionObject(final int value) {
+    public GammaTxnLong update_createNewTransactionObject(final int value) {
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return block.atomic(new TxnClosure<GammaLongRef>() {
+        return block.atomic(new TxnClosure<GammaTxnLong>() {
             @Override
-            public GammaLongRef execute(Txn tx) throws Exception {
+            public GammaTxnLong execute(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
-                GammaLongRef ref = new GammaLongRef(btx);
+                GammaTxnLong ref = new GammaTxnLong(btx);
                 ref.openForConstruction(btx).long_value = value;
                 return ref;
             }
@@ -163,14 +163,14 @@ public class ReadonlyTest {
 
     @Test
     public void whenUpdate_thenReadSucceeds() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long result = readInUpdateMethod(ref);
         assertEquals(10, result);
         assertEquals(10, ref.atomicGet());
     }
 
 
-    public long readInUpdateMethod(final GammaLongRef ref) {
+    public long readInUpdateMethod(final GammaTxnLong ref) {
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
@@ -186,12 +186,12 @@ public class ReadonlyTest {
 
     @Test
     public void whenUpdate_thenUpdateSucceeds() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         updateInUpdateMethod(ref, 10);
         assertEquals(10, ref.atomicGet());
     }
 
-    public void updateInUpdateMethod(final GammaLongRef ref, final int newValue) {
+    public void updateInUpdateMethod(final GammaTxnLong ref, final int newValue) {
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setReadonly(false)
                 .newTxnExecutor();
@@ -208,14 +208,14 @@ public class ReadonlyTest {
 
     @Test
     public void whenDefault_thenUpdateSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
         defaultTransactionalMethod(ref);
 
         assertEquals(1, ref.atomicGet());
     }
 
 
-    public void defaultTransactionalMethod(final GammaLongRef ref) {
+    public void defaultTransactionalMethod(final GammaTxnLong ref) {
         stm.newTxnFactoryBuilder().newTxnExecutor().atomic(new TxnVoidClosure() {
             @Override
             public void execute(Txn tx) throws Exception {

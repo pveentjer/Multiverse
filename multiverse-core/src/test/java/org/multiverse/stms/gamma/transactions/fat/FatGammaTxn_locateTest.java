@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.*;
@@ -39,25 +39,25 @@ public abstract class FatGammaTxn_locateTest<T extends GammaTxn> {
 
     @Test
     public void whenNotFound() {
-        GammaLongRef ref = new GammaLongRef(stm);
-        GammaLongRef otherRef = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
+        GammaTxnLong otherRef = new GammaTxnLong(stm);
 
         GammaTxn tx = newTransaction();
         ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaRefTranlocal found = tx.locate(otherRef);
+        Tranlocal found = tx.locate(otherRef);
         assertNull(found);
         assertIsActive(tx);
     }
 
     @Test
     public void whenFound() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = newTransaction();
-        GammaRefTranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
+        Tranlocal tranlocal = ref.openForRead(tx, LOCKMODE_NONE);
 
-        GammaRefTranlocal found = tx.locate(ref);
+        Tranlocal found = tx.locate(ref);
         assertSame(tranlocal, found);
         assertIsActive(tx);
     }
@@ -67,7 +67,7 @@ public abstract class FatGammaTxn_locateTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
         tx.prepare();
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             tx.locate(ref);
@@ -83,7 +83,7 @@ public abstract class FatGammaTxn_locateTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
         tx.commit();
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             tx.locate(ref);
@@ -99,7 +99,7 @@ public abstract class FatGammaTxn_locateTest<T extends GammaTxn> {
         GammaTxn tx = newTransaction();
         tx.abort();
 
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         try {
             tx.locate(ref);

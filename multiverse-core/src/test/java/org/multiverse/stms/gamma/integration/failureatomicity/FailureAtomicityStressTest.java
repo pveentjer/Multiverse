@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.DeadTxnException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -21,14 +21,14 @@ public class FailureAtomicityStressTest {
 
     private int modifyThreadCount = 10;
     private boolean stop;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private GammaStm stm;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = (GammaStm) getGlobalStmInstance();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         stop = false;
     }
 

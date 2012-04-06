@@ -8,8 +8,8 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnBooleanClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
 import org.multiverse.stms.gamma.GammaStm;
 
 import static org.benchy.BenchyUtils.format;
@@ -219,8 +219,8 @@ public class SimpleStackDriver extends BenchmarkDriver {
     }
 
     class Stack<E> {
-        private final Ref<StackNode<E>> head = stm.getDefaultRefFactory().newRef(null);
-        private final IntRef size = stm.getRefFactoryBuilder().build().newIntRef(0);
+        private final TxnRef<StackNode<E>> head = stm.getDefaultRefFactory().newTxnRef(null);
+        private final TxnInteger size = stm.getTxRefFactoryBuilder().build().newTxnInteger(0);
 
         public void push(Txn tx, final E item) {
             if (capacity != Integer.MAX_VALUE) {

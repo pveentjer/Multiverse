@@ -9,7 +9,7 @@ import org.multiverse.api.closures.TxnClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnRef;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -107,7 +107,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
     }
 
     class Stack<E> {
-        private final GammaRef<Node<E>> head = new GammaRef<Node<E>>(stm);
+        private final GammaTxnRef<Node<E>> head = new GammaTxnRef<Node<E>>(stm);
         private final TxnExecutor pushExecutor = newPushTxnExecutor();
 
         private final TxnExecutor popExecutor = newPopTxnExecutor();

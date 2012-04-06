@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.api.functions.LongFunction;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -56,7 +56,7 @@ public class GammaLongRef_alterAndGet1Test {
 
     @Test
     public void whenActiveTransactionAvailableAndNullFunction_thenNullPointerException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         GammaTxn tx = transactionFactory.newTransaction();
         setThreadLocalTxn(tx);
@@ -73,7 +73,7 @@ public class GammaLongRef_alterAndGet1Test {
 
     @Test
     public void whenFunctionCausesException() {
-        GammaLongRef ref = new GammaLongRef(stm);
+        GammaTxnLong ref = new GammaTxnLong(stm);
 
         LongFunction function = mock(LongFunction.class);
         RuntimeException ex = new RuntimeException();
@@ -96,7 +96,7 @@ public class GammaLongRef_alterAndGet1Test {
     @Test
     public void whenActiveTransactionAvailable() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -114,7 +114,7 @@ public class GammaLongRef_alterAndGet1Test {
     @Test
     public void whenActiveTransactionAvailableButNoChange_thenNoWrite() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -132,7 +132,7 @@ public class GammaLongRef_alterAndGet1Test {
     @Test
     public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongFunction function = mock(LongFunction.class);
@@ -155,7 +155,7 @@ public class GammaLongRef_alterAndGet1Test {
     @Test
     public void whenNoTransactionAvailable_thenNoTransactionFoundException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
         LongFunction function = Functions.incLongFunction(1);
 
@@ -179,7 +179,7 @@ public class GammaLongRef_alterAndGet1Test {
         tx.commit();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
         LongFunction function = Functions.incLongFunction(1);
 
@@ -204,7 +204,7 @@ public class GammaLongRef_alterAndGet1Test {
         tx.abort();
 
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
         LongFunction function = incLongFunction(1);
 
@@ -224,7 +224,7 @@ public class GammaLongRef_alterAndGet1Test {
     @Test
     public void whenListenersAvailable_thenTheyAreNotified() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         LongRefAwaitThread thread = new LongRefAwaitThread(ref, initialValue + 1);

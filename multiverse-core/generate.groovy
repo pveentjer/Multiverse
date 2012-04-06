@@ -2,7 +2,7 @@ import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 
-@Grab(group = 'org.apache.velocity', module = 'velocity', version = '1.7.0')
+@Grab(group = 'org.apache.velocity', module = 'velocity', version = '1.6.4')
 
 class TxnClosure {
     String type
@@ -33,7 +33,7 @@ VelocityEngine engine = new VelocityEngine();
 engine.init();
 
 def refs = createTransactionalObjects();
-def txnClosures = createClosures();
+def txnClosures = createClosures();TxnClosure
 def txnExecutors = [new TxnExecutor(name: 'FatGammaTxnExecutor', lean: false),
         new TxnExecutor(name: 'LeanGammaTxnExecutor', lean: true)]
 
@@ -61,32 +61,32 @@ for (def txnExecutor in txnExecutors) {
 
 List<TxnClosure> createClosures() {
     def result = []
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnClosure',
             type: 'E',
             typeParameter: '<E>'
     )
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnIntClosure',
             type: 'int',
             typeParameter: ''
     )
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnLongClosure',
             type: 'long',
             typeParameter: ''
     )
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnDoubleClosure',
             type: 'double',
             typeParameter: ''
     )
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnBooleanClosure',
             type: 'boolean',
             typeParameter: ''
     )
-    result.add new TxnClosure(
+    result << new TxnClosure(
             name: 'TxnVoidClosure',
             type: 'void',
             typeParameter: ''
@@ -101,7 +101,7 @@ List<TransactionalObject> createTransactionalObjects() {
             objectType: '',
             typeParameter: '<E>',
             initialValue: 'null',
-            referenceInterface: 'Ref',
+            referenceInterface: 'TxnRef',
             functionClass: 'Function',
             isReference: true,
             isNumber: false,
@@ -110,7 +110,7 @@ List<TransactionalObject> createTransactionalObjects() {
     result.add new TransactionalObject(
             type: 'int',
             objectType: 'Integer',
-            referenceInterface: 'IntRef',
+            referenceInterface: 'TxnInteger',
             typeParameter: '',
             initialValue: '0',
             functionClass: 'IntFunction',
@@ -121,7 +121,7 @@ List<TransactionalObject> createTransactionalObjects() {
     result.add new TransactionalObject(
             type: 'boolean',
             objectType: 'Boolean',
-            referenceInterface: 'BooleanRef',
+            referenceInterface: 'TxnBoolean',
             typeParameter: '',
             initialValue: 'false',
             functionClass: 'BooleanFunction',
@@ -132,7 +132,7 @@ List<TransactionalObject> createTransactionalObjects() {
     result.add new TransactionalObject(
             type: 'double',
             objectType: 'Double',
-            referenceInterface: 'DoubleRef',
+            referenceInterface: 'TxnDouble',
             typeParameter: '',
             initialValue: '0',
             functionClass: 'DoubleFunction',
@@ -141,7 +141,7 @@ List<TransactionalObject> createTransactionalObjects() {
             predicateClass: "DoublePredicate",
             incFunctionMethod: '')
     result.add new TransactionalObject(
-            referenceInterface: 'LongRef',
+            referenceInterface: 'TxnLong',
             type: 'long',
             objectType: 'Long',
             typeParameter: '',
@@ -291,7 +291,7 @@ void generateRefs(VelocityEngine engine, TransactionalObject transactionalObject
         return;
     }
 
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/references/Ref.vm');
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/references/TxnRef.vm');
 
     VelocityContext context = new VelocityContext()
     context.put('transactionalObject', transactionalObject)
@@ -305,7 +305,7 @@ void generateRefs(VelocityEngine engine, TransactionalObject transactionalObject
 }
 
 void generateRefFactory(VelocityEngine engine, List<TransactionalObject> refs) {
-    Template t = engine.getTemplate('src/main/java/org/multiverse/api/references/RefFactory.vm');
+    Template t = engine.getTemplate('src/main/java/org/multiverse/api/references/TxnRefFactory.vm');
 
     VelocityContext context = new VelocityContext()
     context.put('refs', refs)
@@ -313,7 +313,7 @@ void generateRefFactory(VelocityEngine engine, List<TransactionalObject> refs) {
     StringWriter writer = new StringWriter()
     t.merge(context, writer)
 
-    File file = new File('src/main/java/org/multiverse/api/references/RefFactory.java')
+    File file = new File('src/main/java/org/multiverse/api/references/TxnRefFactory.java')
     file.createNewFile()
     file.text = writer.toString()
 }

@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.multiverse.TestUtils.*;
@@ -24,7 +24,7 @@ public class DeadLockStressTest {
     private volatile boolean stop;
     private int refCount = 100;
     private int threadCount = 10;
-    private GammaLongRef[] refs;
+    private GammaTxnLong[] refs;
     private ChangeThread[] threads;
     private GammaStm stm;
     private Mode mode;
@@ -59,9 +59,9 @@ public class DeadLockStressTest {
     public void test(Mode mode) {
         this.mode = mode;
 
-        refs = new GammaLongRef[refCount];
+        refs = new GammaTxnLong[refCount];
         for (int k = 0; k < refCount; k++) {
-            refs[k] = new GammaLongRef(stm);
+            refs[k] = new GammaTxnLong(stm);
         }
 
         threads = new ChangeThread[threadCount];
@@ -166,7 +166,7 @@ public class DeadLockStressTest {
                 }
 
                 int index = randomInt(refs.length);
-                GammaLongRef ref = refs[index];
+                GammaTxnLong ref = refs[index];
                 ref.getAndSet(tx, ref.get(tx) + 1);
             }
         }

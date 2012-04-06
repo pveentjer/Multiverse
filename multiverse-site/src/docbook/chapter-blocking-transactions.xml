@@ -18,7 +18,7 @@
        import static org.multiverse.api.StmUtils.*;
 
        public class Counter{
-           private final IntRef value = newIntRef(0);
+           private final IntRef value = newTxnInteger(0);
 
            public void increment(){
                 execute(new AtomicVoidClosure()){
@@ -120,7 +120,7 @@
                  .setBlockingAllowed(false)
                  .newAtomicBlock();
 
-        private final IntRef value = newIntRef(0);
+        private final IntRef value = newTxnInteger(0);
 
         public void await(final int a){
             awaitBlock.execute(new AtomicVoidClosure()){
@@ -158,7 +158,7 @@
                  .setTimeoutNs(TimeUnit.SECONDS.toNanos(10))
                  .newAtomicBlock();
 
-        private final IntRef value = newIntRef(0);
+        private final IntRef value = newTxnInteger(0);
 
         public void await(final int a){
             awaitBlock.execute(new AtomicVoidClosure()){
@@ -193,7 +193,7 @@
                  .setInterruptible(true)
                  .newAtomicBlock();
 
-        private final IntRef value = newIntRef(0);
+        private final IntRef value = newTxnInteger(0);
 
         public void await(final int a){
             awaitBlock.execute(new AtomicVoidClosure()){

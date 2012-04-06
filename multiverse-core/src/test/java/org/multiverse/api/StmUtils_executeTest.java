@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.InvisibleCheckedException;
-import org.multiverse.api.references.IntRef;
+import org.multiverse.api.references.TxnInteger;
 
 import static org.junit.Assert.*;
 import static org.multiverse.api.StmUtils.*;
@@ -24,7 +24,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteSuccess() {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
 
         atomic(new TxnVoidClosure() {
             @Override
@@ -38,7 +38,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteThrowsCheckedException() {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
         final Exception ex = new Exception();
 
         try {
@@ -60,7 +60,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteThrowsUncheckedException() {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
         final RuntimeException ex = new RuntimeException();
 
         try {
@@ -81,7 +81,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteCheckedSuccess() throws Exception {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
 
         atomicChecked(new TxnVoidClosure() {
             @Override
@@ -95,7 +95,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteCheckedThrowsCheckedException() {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
         final Exception ex = new Exception();
 
         try {
@@ -117,7 +117,7 @@ public class StmUtils_executeTest {
 
     @Test
     public void whenExecuteCheckedThrowsUncheckedException() {
-        final IntRef ref = newIntRef();
+        final TxnInteger ref = newTxnInteger();
         final RuntimeException ex = new RuntimeException();
 
         try {

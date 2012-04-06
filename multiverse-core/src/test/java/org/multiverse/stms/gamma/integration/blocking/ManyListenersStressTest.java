@@ -6,7 +6,7 @@ import org.multiverse.TestThread;
 import org.multiverse.TestUtils;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.LongRef;
+import org.multiverse.api.references.TxnLong;
 
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.startAll;
@@ -18,7 +18,7 @@ public class ManyListenersStressTest {
     private int refCount = 10;
     private int threadCount = 5;
     private volatile boolean stop;
-    private LongRef[] refs;
+    private TxnLong[] refs;
     private StressThread[] threads;
 
     @Before
@@ -31,9 +31,9 @@ public class ManyListenersStressTest {
             threads[k] = new StressThread(k + 1, k == threadCount - 1 ? 1 : k + 2);
         }
 
-        refs = new LongRef[refCount];
+        refs = new TxnLong[refCount];
         for (int k = 0; k < refCount; k++) {
-            refs[k] = newLongRef(0);
+            refs[k] = newTxnLong(0);
         }
     }
 
@@ -65,7 +65,7 @@ public class ManyListenersStressTest {
                 atomic(new TxnVoidClosure() {
                     @Override
                     public void execute(Txn tx) throws Exception {
-                        for (LongRef ref : refs) {
+                        for (TxnLong ref : refs) {
                             final long value = ref.get();
 
                             if (value == -1) {

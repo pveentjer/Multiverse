@@ -5,7 +5,7 @@ import org.multiverse.TestThread;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.LongRef;
+import org.multiverse.api.references.TxnLong;
 import org.multiverse.stms.gamma.GammaStm;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.newLongRef;
+import static org.multiverse.api.StmUtils.newTxnLong;
 import static org.multiverse.api.StmUtils.retry;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
@@ -153,7 +153,7 @@ public abstract class ReadersWritersProblem_AbstractTest {
     class ReadersWritersLock {
 
         //-1  is write lock, 0 = free, positive number is readLock count.
-        private final LongRef readerCount = newLongRef();
+        private final TxnLong readerCount = newTxnLong();
         private TxnExecutor acquireReadLockBlock;
         private TxnExecutor acquireWriteLockBlock;
 

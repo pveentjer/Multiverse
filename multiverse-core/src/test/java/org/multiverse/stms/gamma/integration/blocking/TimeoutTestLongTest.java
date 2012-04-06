@@ -7,14 +7,14 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
-import org.multiverse.api.references.IntRef;
+import org.multiverse.api.references.TxnInteger;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.multiverse.TestUtils.assertNothingThrown;
 import static org.multiverse.TestUtils.sleepMs;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
-import static org.multiverse.api.StmUtils.newIntRef;
+import static org.multiverse.api.StmUtils.newTxnInteger;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 
 public class TimeoutTestLongTest {
@@ -26,7 +26,7 @@ public class TimeoutTestLongTest {
 
     @Test
     public void whenNoRetryNeeded() throws InterruptedException {
-        IntRef ref = newIntRef(1);
+        TxnInteger ref = newTxnInteger(1);
 
         WaitAndTimeoutThread thread = new WaitAndTimeoutThread(ref);
         thread.start();
@@ -37,7 +37,7 @@ public class TimeoutTestLongTest {
 
     @Test
     public void whenTimeout() throws InterruptedException {
-        IntRef ref = newIntRef();
+        TxnInteger ref = newTxnInteger();
 
         WaitAndTimeoutThread thread = new WaitAndTimeoutThread(ref);
         thread.setPrintStackTrace(false);
@@ -51,7 +51,7 @@ public class TimeoutTestLongTest {
 
     @Test
     public void whenValueUpdatedInTime() throws InterruptedException {
-        IntRef ref = newIntRef();
+        TxnInteger ref = newTxnInteger();
 
         WaitAndTimeoutThread thread = new WaitAndTimeoutThread(ref);
         thread.start();
@@ -64,10 +64,10 @@ public class TimeoutTestLongTest {
     }
 
     class WaitAndTimeoutThread extends TestThread {
-        private final IntRef ref;
+        private final TxnInteger ref;
 
 
-        WaitAndTimeoutThread(IntRef ref) {
+        WaitAndTimeoutThread(TxnInteger ref) {
             super("WaitAndTimeoutThread");
             this.ref = ref;
         }

@@ -5,8 +5,8 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TxnCollection;
 import org.multiverse.api.collections.TxnSet;
 import org.multiverse.api.exceptions.TodoException;
-import org.multiverse.api.references.IntRef;
-import org.multiverse.api.references.Ref;
+import org.multiverse.api.references.TxnInteger;
+import org.multiverse.api.references.TxnRef;
 
 import java.util.Map;
 
@@ -24,9 +24,9 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
      */
     static final int MAXIMUM_CAPACITY = 1 << 30;
 
-    private final IntRef size;
-    private final Ref<Ref<NaiveEntry>[]> table;
-    private final IntRef threshold;
+    private final TxnInteger size;
+    private final TxnRef<TxnRef<NaiveEntry>[]> table;
+    private final TxnInteger threshold;
 
     /**
      * The load factor for the hash table.
@@ -37,16 +37,16 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
 
     public NaiveTxnHashMap(Stm stm) {
         super(stm);
-        this.size = defaultRefFactory.newIntRef(0);
-        this.threshold = defaultRefFactory.newIntRef((int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR));
+        this.size = defaultRefFactory.newTxnInteger(0);
+        this.threshold = defaultRefFactory.newTxnInteger((int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR));
         this.loadFactor = DEFAULT_LOAD_FACTOR;
 
-        Ref<NaiveEntry>[] entries = new Ref[DEFAULT_INITIAL_CAPACITY];
+        TxnRef<NaiveEntry>[] entries = new TxnRef[DEFAULT_INITIAL_CAPACITY];
         for (int k = 0; k < entries.length; k++) {
-            entries[k] = defaultRefFactory.newRef(null);
+            entries[k] = defaultRefFactory.newTxnRef(null);
         }
 
-        table = defaultRefFactory.newRef(entries);
+        table = defaultRefFactory.newTxnRef(entries);
     }
 
     public float getLoadFactor() {
@@ -59,7 +59,7 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
             return;
         }
 
-        Ref<NaiveEntry>[] tab = table.get();
+        TxnRef<NaiveEntry>[] tab = table.get();
         for (int i = 0; i < tab.length; i++) {
             tab[i].set(null);
         }
@@ -130,16 +130,16 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     void resize(Txn tx, int newCapacity) {
-        Ref<NaiveEntry>[] oldTable = table.get(tx);
+        TxnRef<NaiveEntry>[] oldTable = table.get(tx);
         int oldCapacity = oldTable.length;
         if (oldCapacity == MAXIMUM_CAPACITY) {
             threshold.set(Integer.MAX_VALUE);
             return;
         }
 
-        Ref<NaiveEntry>[] newTable = new Ref[newCapacity];
+        TxnRef<NaiveEntry>[] newTable = new TxnRef[newCapacity];
         for (int k = 0; k < newTable.length; k++) {
-            newTable[k] = defaultRefFactory.newRef(null);
+            newTable[k] = defaultRefFactory.newTxnRef(null);
         }
 
         transfer(tx, newTable);
@@ -147,8 +147,8 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
         threshold.set(tx, (int) (newCapacity * loadFactor));
     }
 
-    void transfer(Txn tx, Ref<NaiveEntry>[] newTable) {
-        Ref<NaiveEntry>[] src = table.get(tx);
+    void transfer(Txn tx, TxnRef<NaiveEntry>[] newTable) {
+        TxnRef<NaiveEntry>[] src = table.get(tx);
         int newCapacity = newTable.length;
         for (int j = 0; j < src.length; j++) {
             NaiveEntry<K, V> e = src[j].get(tx);
@@ -212,12 +212,12 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     private class NaiveEntry<K, V> implements Map.Entry<K, V> {
         final K key;
         final int hash;
-        final Ref<V> value;
-        final Ref<NaiveEntry<K, V>> next;
+        final TxnRef<V> value;
+        final TxnRef<NaiveEntry<K, V>> next;
 
         NaiveEntry(int hash, K key, V value, NaiveEntry<K, V> next) {
-            this.value = defaultRefFactory.newRef(value);
-            this.next = defaultRefFactory.newRef(next);
+            this.value = defaultRefFactory.newTxnRef(value);
+            this.next = defaultRefFactory.newTxnRef(next);
             this.key = key;
             this.hash = hash;
         }

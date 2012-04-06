@@ -11,7 +11,7 @@ import org.multiverse.api.exceptions.PreparedTxnException;
 import org.multiverse.api.exceptions.ReadWriteConflict;
 import org.multiverse.api.exceptions.TxnMandatoryException;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 import org.multiverse.stms.gamma.transactions.GammaTxnFactory;
 import org.multiverse.stms.gamma.transactions.fat.FatFixedLengthGammaTxnFactory;
@@ -53,7 +53,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenPreparedTransactionAvailable_thenPreparedTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -76,7 +76,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenActiveTransactionAvailable_thenPreparedTxnException() {
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -103,7 +103,7 @@ public class GammaLongRef_set1Test {
     @Test
     public void whenLocked_thenReadWriteConflict() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn otherTx = transactionFactory.newTransaction();
@@ -130,7 +130,7 @@ public class GammaLongRef_set1Test {
     @Test
     public void whenNoChange() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -151,7 +151,7 @@ public class GammaLongRef_set1Test {
     @Test
     public void whenNoTransactionFound_thenNoTransactionFoundException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         try {
@@ -169,7 +169,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenPrivatizedBySelf_thenSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -189,7 +189,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenEnsuredBySelf_thenSuccess() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -209,7 +209,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenPrivatizedByOtherAndFirstTimeRead_thenReadConflict() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -235,7 +235,7 @@ public class GammaLongRef_set1Test {
 
     @Test
     public void whenEnsuredByOther_thenSetPossibleButCommitFails() {
-        GammaLongRef ref = new GammaLongRef(stm, 100);
+        GammaTxnLong ref = new GammaTxnLong(stm, 100);
         long version = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -273,7 +273,7 @@ public class GammaLongRef_set1Test {
     @Test
     public void whenCommittedTransactionAvailable_thenExecutedAtomically() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, 10);
+        GammaTxnLong ref = new GammaTxnLong(stm, 10);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();
@@ -298,7 +298,7 @@ public class GammaLongRef_set1Test {
     @Test
     public void whenAbortedTransactionAvailable_thenDeadTxnException() {
         long initialValue = 10;
-        GammaLongRef ref = new GammaLongRef(stm, initialValue);
+        GammaTxnLong ref = new GammaTxnLong(stm, initialValue);
         long initialVersion = ref.getVersion();
 
         GammaTxn tx = transactionFactory.newTransaction();

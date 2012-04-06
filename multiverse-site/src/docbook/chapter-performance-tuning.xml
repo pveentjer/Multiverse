@@ -12,7 +12,7 @@
 <sect1>
     <title>Primitive refs</title>
     <para>
-        Multiverse provides support for various primitives refs: IntRef, LongRef, BooleanRef and DoubleRef. Using a primitive instead of a
+        Multiverse provides support for various primitives refs: IntRef, LongRef, BooleanRef and TxnDouble. Using a primitive instead of a
         normal ref in combination with wrapper types, has the advantage that no autoboxing is needed. Doing millions of wrapper creations per
         second, can seriously limit performance and scalability.
     </para>
@@ -39,7 +39,7 @@
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             execute(new AtomicVoidClosure()){
@@ -67,7 +67,7 @@
             .newTransactionFactoryBuilder()
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){
@@ -134,7 +134,7 @@
             .newTransactionFactoryBuilder()
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void transfer(final int a){
             transferBlock.execute(new AtomicVoidClosure()){
@@ -161,7 +161,7 @@
                    .newTransactionFactoryBuilder()
                    .newAtomicBlock();
 
-        private final IntRef ref = newIntRef(0);
+        private final IntRef ref = newTxnInteger(0);
 
         public void internalMethod(Transaction tx){
            ref.set(tx, 2);
@@ -201,7 +201,7 @@
                     .newTransactionFactoryBuilder()
                     .newAtomicBlock();
 
-         private final IntRef ref = newIntRef(0);
+         private final IntRef ref = newTxnInteger(0);
 
          public void method1(){
              method1Block.execute(new AtomicVoidClosure()){
@@ -236,7 +236,7 @@
                     .newTransactionFactoryBuilder()
                     .newAtomicBlock();
 
-         private final IntRef ref = newIntRef(0);
+         private final IntRef ref = newTxnInteger(0);
 
          public void method1(){
              method1Block.execute(new AtomicVoidClosure()){

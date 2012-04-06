@@ -5,7 +5,7 @@ import org.benchy.TestCaseResult;
 import org.multiverse.TestThread;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 
 import static org.benchy.BenchyUtils.format;
 import static org.multiverse.TestUtils.joinAll;
@@ -27,9 +27,9 @@ public class AtomicIncrementDriver extends BenchmarkDriver implements GammaConst
 
         stm = new GammaStm();
         threads = new IncThread[threadCount];
-        GammaLongRef ref = sharedRef ? new GammaLongRef(stm) : null;
+        GammaTxnLong ref = sharedRef ? new GammaTxnLong(stm) : null;
         for (int k = 0; k < threads.length; k++) {
-            threads[k] = new IncThread(k, ref == null ? new GammaLongRef(stm) : ref);
+            threads[k] = new IncThread(k, ref == null ? new GammaTxnLong(stm) : ref);
         }
     }
 
@@ -61,9 +61,9 @@ public class AtomicIncrementDriver extends BenchmarkDriver implements GammaConst
 
     class IncThread extends TestThread {
         private long durationMs;
-        private final GammaLongRef ref;
+        private final GammaTxnLong ref;
 
-        public IncThread(int id, GammaLongRef ref) {
+        public IncThread(int id, GammaTxnLong ref) {
             super("IncThread-" + id);
             setPriority(Thread.MAX_PRIORITY);
             this.ref = ref;

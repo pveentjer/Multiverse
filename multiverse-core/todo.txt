@@ -137,7 +137,7 @@ when a normal transaction... when a lock is acquired, a retry error should also 
 
 - testing: local conflict counter should be set if needed when the flatten commute is called.
 
-- testing: GammaRef_getAndAlterTest
+- testing: GammaTxnRef_getAndAlterTest
 
 - testing: PhantomReadTest
 

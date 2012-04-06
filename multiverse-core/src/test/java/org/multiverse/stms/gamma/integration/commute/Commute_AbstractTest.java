@@ -8,7 +8,7 @@ import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnLongClosure;
 import org.multiverse.api.functions.Functions;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +19,7 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 public abstract class Commute_AbstractTest {
     protected GammaStm stm;
     private volatile boolean stop;
-    private GammaLongRef[] refs;
+    private GammaTxnLong[] refs;
     private int refCount = 10;
     private int workerCount = 2;
 
@@ -34,9 +34,9 @@ public abstract class Commute_AbstractTest {
 
     @Test
     public void test() {
-        refs = new GammaLongRef[refCount];
+        refs = new GammaTxnLong[refCount];
         for (int k = 0; k < refCount; k++) {
-            refs[k] = new GammaLongRef(stm);
+            refs[k] = new GammaTxnLong(stm);
         }
 
         WorkerThread[] workers = new WorkerThread[workerCount];
@@ -52,9 +52,9 @@ public abstract class Commute_AbstractTest {
         assertEquals(count(workers), count(refs));
     }
 
-    public long count(GammaLongRef[] refs) {
+    public long count(GammaTxnLong[] refs) {
         long result = 0;
-        for (GammaLongRef ref : refs) {
+        for (GammaTxnLong ref : refs) {
             result += ref.atomicGet();
         }
         return result;

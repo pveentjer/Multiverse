@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.GammaTxnConfig;
 
 import java.util.Random;
@@ -41,12 +41,12 @@ public class FatFixedLengthGammaTxn_stressTest implements GammaConstants {
     }
 
     public void integrationTest_whenMultipleUpdatesAndDirtyCheck(final boolean dirtyCheck, final boolean transactionReuse) {
-        GammaLongRef[] refs = new GammaLongRef[30];
+        GammaTxnLong[] refs = new GammaTxnLong[30];
         long created = 0;
 
         //create the references
         for (int k = 0; k < refs.length; k++) {
-            refs[k] = new GammaLongRef(stm, 0);
+            refs[k] = new GammaTxnLong(stm, 0);
         }
 
         //atomicChecked all transactions

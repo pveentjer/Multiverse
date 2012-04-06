@@ -29,7 +29,7 @@
             .newTransactionFactoryBuilder()
             .newAtomicBlock();
 
-        private final IntRef amount = newIntRef(0);
+        private final IntRef amount = newTxnInteger(0);
 
         public void foo(){
             execute(new AtomicVoidClosure()){

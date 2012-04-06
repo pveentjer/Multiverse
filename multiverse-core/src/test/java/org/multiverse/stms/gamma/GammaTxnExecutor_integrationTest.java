@@ -7,7 +7,7 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.closures.TxnLongClosure;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.TooManyRetriesException;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
 import org.multiverse.stms.gamma.transactions.fat.FatMonoGammaTxn;
 
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
     @Test
     public void whenRead() {
-        final GammaLongRef ref = new GammaLongRef(stm, 10);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 10);
 
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
         long result = block.atomic(new TxnLongClosure() {
@@ -44,7 +44,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
     @Test
     public void whenUpdate() {
-        final GammaLongRef ref = new GammaLongRef(stm, 0);
+        final GammaTxnLong ref = new GammaTxnLong(stm, 0);
 
         TxnExecutor block = stm.newTxnFactoryBuilder().newTxnExecutor();
         block.atomic(new TxnVoidClosure() {
@@ -59,7 +59,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
     @Test
     public void whenTooManyRetries() {
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         FatMonoGammaTxn otherTx = new FatMonoGammaTxn(stm);
         ref.openForWrite(otherTx, LOCKMODE_EXCLUSIVE);
@@ -84,7 +84,7 @@ public class GammaTxnExecutor_integrationTest implements GammaConstants {
 
     @Test
     public void whenMultipleUpdatesDoneInSingleTransaction() {
-        final GammaLongRef ref = new GammaLongRef(stm);
+        final GammaTxnLong ref = new GammaTxnLong(stm);
 
         TxnExecutor block = stm.newTxnFactoryBuilder()
                 .setDirtyCheckEnabled(false)

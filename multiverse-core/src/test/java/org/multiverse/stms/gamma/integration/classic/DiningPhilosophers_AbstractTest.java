@@ -5,8 +5,8 @@ import org.multiverse.TestThread;
 import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
-import org.multiverse.api.references.BooleanRef;
-import org.multiverse.api.references.RefFactory;
+import org.multiverse.api.references.TxnBoolean;
+import org.multiverse.api.references.TxnRefFactory;
 import org.multiverse.stms.gamma.GammaConstants;
 import org.multiverse.stms.gamma.GammaStm;
 import org.multiverse.stms.gamma.GammaStmConfig;
@@ -25,9 +25,9 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
     private int philosopherCount = 10;
     private volatile boolean stop;
 
-    private BooleanRef[] forks;
+    private TxnBoolean[] forks;
     protected GammaStm stm;
-    private RefFactory refFactory;
+    private TxnRefFactory refFactory;
 
     @Before
     public void setUp() {
@@ -35,7 +35,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         GammaStmConfig config = new GammaStmConfig();
         //config.backoffPolicy = new SpinningBackoffPolicy();
         stm = new GammaStm(config);
-        refFactory = stm.getRefFactoryBuilder().build();
+        refFactory = stm.getTxRefFactoryBuilder().build();
         stop = false;
     }
 
@@ -63,7 +63,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
     }
 
     public void assertAllForksHaveReturned() {
-        for (BooleanRef fork : forks) {
+        for (TxnBoolean fork : forks) {
             assertFalse(fork.atomicGet());
         }
     }
@@ -71,28 +71,28 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
     public PhilosopherThread[] createPhilosopherThreads() {
         PhilosopherThread[] threads = new PhilosopherThread[philosopherCount];
         for (int k = 0; k < philosopherCount; k++) {
-            BooleanRef leftFork = forks[k];
-            BooleanRef rightFork = k == philosopherCount - 1 ? forks[0] : forks[k + 1];
+            TxnBoolean leftFork = forks[k];
+            TxnBoolean rightFork = k == philosopherCount - 1 ? forks[0] : forks[k + 1];
             threads[k] = new PhilosopherThread(k, leftFork, rightFork);
         }
         return threads;
     }
 
     public void createForks() {
-        forks = new BooleanRef[philosopherCount];
+        forks = new TxnBoolean[philosopherCount];
         for (int k = 0; k < forks.length; k++) {
-            forks[k] = refFactory.newBooleanRef(false);
+            forks[k] = refFactory.newTxnBoolean(false);
         }
     }
 
     class PhilosopherThread extends TestThread {
         private int eatCount = 0;
-        private final BooleanRef leftFork;
-        private final BooleanRef rightFork;
+        private final TxnBoolean leftFork;
+        private final TxnBoolean rightFork;
         private final TxnExecutor releaseForksBlock = newReleaseForksBlock();
         private final TxnExecutor takeForksBlock = newTakeForksBlock();
 
-        PhilosopherThread(int id, BooleanRef leftFork, BooleanRef rightFork) {
+        PhilosopherThread(int id, TxnBoolean leftFork, TxnBoolean rightFork) {
             super("PhilosopherThread-" + id);
             this.leftFork = leftFork;
             this.rightFork = rightFork;

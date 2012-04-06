@@ -11,75 +11,75 @@ public class StmUtils_newRefsTest {
 
     @Test
     public void whenNewRefWithDefaultValue() {
-        Ref<String> ref = newRef();
+        TxnRef<String> ref = newTxnRef();
         assertNotNull(ref);
         assertNull(ref.atomicGet());
     }
 
     @Test
-    public void whenNewRef() {
+    public void whennewTxnRef() {
         String value = "foo";
-        Ref<String> ref = newRef(value);
+        TxnRef<String> ref = newTxnRef(value);
         assertNotNull(ref);
         assertSame(value, ref.atomicGet());
     }
 
     @Test
-    public void whenNewIntRefWithDefaultValue() {
-        IntRef ref = newIntRef();
+    public void whennewTxnIntegerWithDefaultValue() {
+        TxnInteger ref = newTxnInteger();
         assertNotNull(ref);
         assertEquals(0, ref.atomicGet());
     }
 
     @Test
-    public void whenNewIntRef() {
+    public void whennewTxnInteger() {
         int value = 10;
-        IntRef ref = newIntRef(value);
+        TxnInteger ref = newTxnInteger(value);
         assertNotNull(ref);
         assertEquals(value, ref.atomicGet());
     }
 
     @Test
-    public void whenNewLongRefWithDefaultValue() {
-        LongRef ref = newLongRef();
+    public void whennewTxnLongWithDefaultValue() {
+        TxnLong ref = newTxnLong();
         assertNotNull(ref);
         assertEquals(0, ref.atomicGet());
     }
 
     @Test
-    public void whenNewLongRef() {
+    public void whennewTxnLong() {
         int value = 10;
-        LongRef ref = newLongRef(value);
+        TxnLong ref = newTxnLong(value);
         assertNotNull(ref);
         assertEquals(value, ref.atomicGet());
     }
 
     @Test
-    public void whenNewBooleanRefWithDefaultValue() {
-        BooleanRef ref = newBooleanRef();
+    public void whennewTxnBooleanWithDefaultValue() {
+        TxnBoolean ref = newTxnBoolean();
         assertNotNull(ref);
         assertFalse(ref.atomicGet());
     }
 
     @Test
-    public void whenNewBooleanRef() {
+    public void whennewTxnBoolean() {
         boolean value = true;
-        BooleanRef ref = newBooleanRef(value);
+        TxnBoolean ref = newTxnBoolean(value);
         assertNotNull(ref);
         assertTrue(ref.atomicGet());
     }
 
     @Test
-    public void whenNewDoubleRefWithDefaultValue() {
-        DoubleRef ref = newDoubleRef();
+    public void whennewTxnDoubleWithDefaultValue() {
+        TxnDouble ref = newTxnDouble();
         assertNotNull(ref);
         assertEqualsDouble(0, ref.atomicGet());
     }
 
     @Test
-    public void whenNewDoubleRef() {
+    public void whennewTxnDouble() {
         double value = 10;
-        DoubleRef ref = newDoubleRef(value);
+        TxnDouble ref = newTxnDouble(value);
         assertNotNull(ref);
         assertEqualsDouble(value, ref.atomicGet());
     }

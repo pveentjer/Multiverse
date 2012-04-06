@@ -7,8 +7,8 @@ import org.multiverse.api.Txn;
 import org.multiverse.api.TxnExecutor;
 import org.multiverse.api.closures.TxnVoidClosure;
 import org.multiverse.api.exceptions.RetryTimeoutException;
-import org.multiverse.stms.gamma.transactionalobjects.GammaLongRef;
-import org.multiverse.stms.gamma.transactionalobjects.GammaRefTranlocal;
+import org.multiverse.stms.gamma.transactionalobjects.GammaTxnLong;
+import org.multiverse.stms.gamma.transactionalobjects.Tranlocal;
 import org.multiverse.stms.gamma.transactions.GammaTxn;
 
 import java.util.concurrent.TimeUnit;
@@ -21,14 +21,14 @@ import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
 public class GammaTxnExecutor_timeoutTest {
 
     private GammaStm stm;
-    private GammaLongRef ref;
+    private GammaTxnLong ref;
     private long timeoutNs;
 
     @Before
     public void setUp() {
         clearThreadLocalTxn();
         stm = new GammaStm();
-        ref = new GammaLongRef(stm);
+        ref = new GammaTxnLong(stm);
         timeoutNs = TimeUnit.SECONDS.toNanos(2);
     }
 
@@ -111,7 +111,7 @@ public class GammaTxnExecutor_timeoutTest {
                 public void execute(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
 
-                    GammaRefTranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
+                    Tranlocal write = ref.openForWrite(btx, LOCKMODE_NONE);
                     if (write.long_value == 0) {
                         retry();
                     }
