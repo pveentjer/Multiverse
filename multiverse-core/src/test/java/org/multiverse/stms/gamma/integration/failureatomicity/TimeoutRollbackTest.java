@@ -47,7 +47,7 @@ public class TimeoutRollbackTest {
                 .setTimeoutNs(TimeUnit.SECONDS.toNanos(1))
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;

@@ -78,7 +78,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
             }
         }
     }
@@ -102,7 +102,7 @@ public class UncontendedCommutePerformanceTest {
             };
 
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
             }
         }
     }

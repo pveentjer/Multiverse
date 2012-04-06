@@ -11,11 +11,11 @@ import org.multiverse.api.references.TxnRefFactoryBuilder;
  * is coordinated through a transaction. An example of the TxnObject is the {@link org.multiverse.api.references.TxnRef},
  * but it could just as easily by a more complex transactional datastructure that is enhanced by instrumentation.
  * </li>
- * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomicChecked, isolated and consistent.
+ * <li>{@link Txn}: responsible for making sure that all changes on transactionalobjects are atomic, isolated and consistent.
  * </li>
  * <li>{@link TxnExecutor}: responsible for starting/committing/aborting/retrying transactions. The TxnExecutor executes an
  * {@link org.multiverse.api.callables.TxnCallable} (there are different tastes for return values). The TxnCallable contains
- * the logic that needs to be executed atomicChecked, isolated and consistent.
+ * the logic that needs to be executed atomic, isolated and consistent.
  * </li>
  * </ol>
  *
@@ -49,11 +49,11 @@ import org.multiverse.api.references.TxnRefFactoryBuilder;
 public interface Stm {
 
     /**
-     * Gets the {@link TxnFactoryBuilder} that needs to be used to atomicChecked a {@link Txn} created by this Stm.
+     * Gets the {@link TxnFactoryBuilder} that needs to be used to execute a {@link Txn} created by this Stm.
      * See the {@link TxnFactoryBuilder} for more info. The TxnFactoryBuilder also is responsible for creating
      * the TxnExecutor since the Txn and TxnExecutor can be tightly coupled.
      *
-     * @return the TxnFactoryBuilder that is used to atomicChecked transactions on this Stm.
+     * @return the TxnFactoryBuilder that is used to execute transactions on this Stm.
      */
     TxnFactoryBuilder newTxnFactoryBuilder();
 

@@ -232,7 +232,7 @@ public class GammaTxnLong_await2WithPredicateTest {
 
         @Override
         public void doRun() throws Exception {
-            ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            ref.getStm().getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.await(tx, newLargerThanOrEqualsPredicate(minimumValue));

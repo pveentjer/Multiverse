@@ -53,7 +53,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 System.out.println(tx.getClass());
@@ -92,7 +92,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -116,7 +116,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setSpeculative(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -141,7 +141,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -166,7 +166,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -190,7 +190,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -215,7 +215,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());
@@ -247,7 +247,7 @@ public class GammaTxnExecutor_speculativeTest implements GammaConstants {
                 .setDirtyCheckEnabled(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertSame(tx, getThreadLocalTxn());

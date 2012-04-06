@@ -34,7 +34,7 @@ public class GammaTxnExecutor_blockingTest {
         sleepMs(1000);
         assertAlive(t);
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -56,7 +56,7 @@ public class GammaTxnExecutor_blockingTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

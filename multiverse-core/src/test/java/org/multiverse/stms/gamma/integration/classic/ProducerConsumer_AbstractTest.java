@@ -110,7 +110,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         int take() {
-            return takeBlock.atomic(new TxnCallable<Integer>() {
+            return takeBlock.execute(new TxnCallable<Integer>() {
                 @Override
                 public Integer call(Txn tx) throws Exception {
                     if (size.get() == 0) {
@@ -124,7 +124,7 @@ public abstract class ProducerConsumer_AbstractTest {
         }
 
         void put(final int item) {
-            putBlock.atomic(new TxnVoidCallable() {
+            putBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (size.get() >= MAX_CAPACITY) {

@@ -82,7 +82,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                 count++;
                 switch (TestUtils.randomInt(3)) {
                     case 0:
-                        executor.atomic(new TxnVoidCallable() {
+                        executor.execute(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -96,7 +96,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 1:
-                        executor.atomic(new TxnVoidCallable() {
+                        executor.execute(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -110,7 +110,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         });
                         break;
                     case 2:
-                        executor.atomic(new TxnVoidCallable() {
+                        executor.execute(new TxnVoidCallable() {
                             @Override
                             public void call(Txn tx) {
                                 if (notifier.get() != null) {
@@ -127,7 +127,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
                         throw new RuntimeException();
                 }
             }
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     notifier.awaitNull();
@@ -163,7 +163,7 @@ public abstract class CigaretteSmokersProblem_AbstractTest {
         }
 
         private boolean makeCigarette() {
-            return executor.atomic(new TxnBooleanCallable() {
+            return executor.execute(new TxnBooleanCallable() {
                 @Override
                 public boolean call(Txn tx) throws Exception {
                     if (notifier.get() != SmokerThread.this) {

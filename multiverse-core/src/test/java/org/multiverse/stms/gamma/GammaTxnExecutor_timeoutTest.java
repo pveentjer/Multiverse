@@ -60,7 +60,7 @@ public class GammaTxnExecutor_timeoutTest {
         sleepMs(500);
         assertAlive(t);
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -75,7 +75,7 @@ public class GammaTxnExecutor_timeoutTest {
 
     @Test
     public void whenNoWaitingNeededAndZeroTimeout() {
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -106,7 +106,7 @@ public class GammaTxnExecutor_timeoutTest {
 
         @Override
         public void doRun() throws Exception {
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

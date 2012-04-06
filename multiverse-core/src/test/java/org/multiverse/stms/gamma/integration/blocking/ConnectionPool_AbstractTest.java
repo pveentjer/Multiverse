@@ -84,7 +84,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         final GammaTxnRef<Node<Connection>> head = new GammaTxnRef<Node<Connection>>(stm);
 
         ConnectionPool(final int poolsize) {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) {
                     size.set(poolsize);
@@ -99,7 +99,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         Connection takeConnection() {
-            return takeConnectionBlock.atomic(new TxnCallable<Connection>() {
+            return takeConnectionBlock.execute(new TxnCallable<Connection>() {
                 @Override
                 public Connection call(Txn tx) {
                     if (size.get() == 0) {
@@ -115,7 +115,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         void returnConnection(final Connection c) {
-            returnConnectionBlock.atomic(new TxnVoidCallable() {
+            returnConnectionBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     size.incrementAndGet(1);
@@ -127,7 +127,7 @@ public abstract class ConnectionPool_AbstractTest implements GammaConstants {
         }
 
         int size() {
-            return sizeBlock.atomic(new TxnIntCallable() {
+            return sizeBlock.execute(new TxnIntCallable() {
                 @Override
                 public int call(Txn tx) throws Exception {
                     return size.get();

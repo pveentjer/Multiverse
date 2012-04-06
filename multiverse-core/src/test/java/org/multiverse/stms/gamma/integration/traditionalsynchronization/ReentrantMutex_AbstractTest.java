@@ -82,7 +82,7 @@ public abstract class ReentrantMutex_AbstractTest {
         private final GammaTxnExecutor unlockBlock = newUnlockBlock();
 
         public void lock(final Thread thread) {
-            lockBlock.atomic(new TxnVoidCallable() {
+            lockBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (owner.get() == null) {
@@ -102,7 +102,7 @@ public abstract class ReentrantMutex_AbstractTest {
         }
 
         public void unlock(final Thread thread) {
-            unlockBlock.atomic(new TxnVoidCallable() {
+            unlockBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (owner.get() != thread) {

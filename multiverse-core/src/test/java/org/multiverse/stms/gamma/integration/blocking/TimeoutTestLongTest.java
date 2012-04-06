@@ -79,7 +79,7 @@ public class TimeoutTestLongTest {
                     .setTimeoutNs(TimeUnit.SECONDS.toNanos(5))
                     .newTxnExecutor();
 
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.await(1);

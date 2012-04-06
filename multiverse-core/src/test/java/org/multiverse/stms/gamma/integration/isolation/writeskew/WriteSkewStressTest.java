@@ -296,7 +296,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReadLevel() {
-            pessimisticReadsBlock.atomic(new TxnVoidCallable() {
+            pessimisticReadsBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -306,7 +306,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWriteLevel() {
-            pessimisticWritesBlock.atomic(new TxnVoidCallable() {
+            pessimisticWritesBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -316,7 +316,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSerializedIsolation() {
-            serializedBlock.atomic(new TxnVoidCallable() {
+            serializedBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -326,7 +326,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithSnapshotIsolation() {
-            snapshotBlock.atomic(new TxnVoidCallable() {
+            snapshotBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -336,7 +336,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticReads() {
-            snapshotBlock.atomic(new TxnVoidCallable() {
+            snapshotBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;
@@ -346,7 +346,7 @@ public class WriteSkewStressTest {
         }
 
         private void runWithPessimisticWrites() {
-            snapshotBlock.atomic(new TxnVoidCallable() {
+            snapshotBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

@@ -115,7 +115,7 @@ public abstract class MoneyTransfer_AbstractTest {
             int k = 0;
             while (!stop) {
                 try {
-                    executor.atomic(callable);
+                    executor.execute(callable);
                     if ((k % 500) == 0) {
                         System.out.printf("%s is at iteration %s\n", getName(), k);
                     }

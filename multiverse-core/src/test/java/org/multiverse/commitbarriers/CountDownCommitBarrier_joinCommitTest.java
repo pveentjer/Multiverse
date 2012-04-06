@@ -69,7 +69,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+                stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.set(tx, 10);
@@ -118,7 +118,7 @@ public class CountDownCommitBarrier_joinCommitTest {
         TestThread t = new TestThread() {
             @Override
             public void doRun() throws Exception {
-                stm.getDefaultTxnExecutor().atomicChecked(new TxnVoidCallable() {
+                stm.getDefaultTxnExecutor().executeChecked(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         ref.set(tx, 10);

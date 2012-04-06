@@ -105,7 +105,7 @@ public abstract class Commute_AbstractTest {
             int k = 0;
             while (!stop) {
                 TxnLongCallable callable = randomOneOf(10) ? nonCommutingCallable : commutingCallable;
-                count += executor.atomic(callable);
+                count += executor.execute(callable);
                 k++;
 
                 if (k % 100000 == 0) {

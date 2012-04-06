@@ -21,7 +21,7 @@ public class JoinCommitThread extends TestThread {
 
     @Override
     public void doRun() throws Exception {
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertNotNull(tx);

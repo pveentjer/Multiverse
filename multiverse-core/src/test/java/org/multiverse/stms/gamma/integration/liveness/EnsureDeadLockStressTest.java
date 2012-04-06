@@ -81,7 +81,7 @@ public class EnsureDeadLockStressTest {
 
             int k = 0;
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
                 sleepMs(10);
                 k++;
 

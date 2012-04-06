@@ -78,7 +78,7 @@ public class ReadCommittedStressTest {
 
             while (!stop) {
                 try {
-                    executor.atomic(callable);
+                    executor.execute(callable);
                     fail();
                 } catch (DeadTxnException ignore) {
                 }
@@ -122,11 +122,11 @@ public class ReadCommittedStressTest {
             while (!stop) {
                 switch (k % 2) {
                     case 0:
-                        readonlyReadtrackingBlock.atomic(callable);
+                        readonlyReadtrackingBlock.execute(callable);
                         break;
                     case 1:
                     case 3:
-                        updateReadtrackingBlock.atomic(callable);
+                        updateReadtrackingBlock.execute(callable);
                         break;
                     default:
                         throw new IllegalStateException();

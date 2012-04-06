@@ -3,7 +3,7 @@ package org.multiverse.api;
 /**
  * The interface each transactional object needs to implement.
  *
- * <p>A TxnObject is an object where all reads/writes are managed through a {@link Txn} (unless an atomicChecked
+ * <p>A TxnObject is an object where all reads/writes are managed through a {@link Txn} (unless an atomic
  * method is used).
  *
  * <p>Each TxnObject belongs to 1 {@link Stm} instance.

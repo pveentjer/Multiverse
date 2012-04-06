@@ -86,7 +86,7 @@ public class VetoCommitBarrier_integrationTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.getAndIncrement(tx, 1);

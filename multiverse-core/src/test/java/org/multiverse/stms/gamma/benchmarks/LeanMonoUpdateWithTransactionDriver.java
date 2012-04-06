@@ -51,7 +51,7 @@ public class LeanMonoUpdateWithTransactionDriver implements GammaConstants {
         long globalConflictCount = stm.getGlobalConflictCounter().count();
 
         for (long k = 0; k < txCount; k++) {
-            executor.atomic(callable);
+            executor.execute(callable);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

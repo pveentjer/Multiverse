@@ -36,7 +36,7 @@ import org.multiverse.api.callables.*;
  *
  * <h3>Configuration</h3>
  *
- * <p>The {@link TxnExecutor} can be configured through the {@link TxnFactoryBuilder}. So that for more detail since
+ * <p>The {@link TxnExecutor} can be configured through the {@link TxnFactoryBuilder}. So see that for more details since
  * there are tons of settings to choose from.
  *
  * <h3>Thread-safety</h3>
@@ -118,7 +118,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    ${callable.typeParameter} ${callable.type} atomic(${callable.name}${callable.typeParameter} callable);
+    ${callable.typeParameter} ${callable.type} execute(${callable.name}${callable.typeParameter} callable);
 
    /**
     * Executes the callable.
@@ -130,7 +130,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    ${callable.typeParameter} ${callable.type} atomicChecked(${callable.name}${callable.typeParameter} callable)throws Exception;
+    ${callable.typeParameter} ${callable.type} executeChecked(${callable.name}${callable.typeParameter} callable)throws Exception;
 
 #end
 }

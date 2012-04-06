@@ -108,7 +108,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
                 sleepRandomUs(100);
 
                 k++;
@@ -152,7 +152,7 @@ public abstract class LongRefReadConsistency_AbstractTest {
             int mod = 1;
             int k = 0;
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
                 k++;
 
                 if (k % mod == 0) {

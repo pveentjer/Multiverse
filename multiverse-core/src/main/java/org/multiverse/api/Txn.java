@@ -32,7 +32,7 @@ import org.multiverse.api.lifecycle.TxnListener;
  * <li>permanent listeners: are registered once and will always remain. It can be done on the
  * TxnExecutor level using the {@link TxnFactoryBuilder#addPermanentListener(org.multiverse.api.lifecycle.TxnListener)}
  * or it can be done on the Stm level. Permanent listeners are suited for products that want to integrate with Multiverse and always
- * atomicChecked some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
+ * execute some logic at important transaction events. Registration of permanent can also be done on the {@link Stm} level. See
  * the implementations for more details. Permanent listeners are always executed after the normal listeners.
  * </li>
  * </ol>
@@ -40,8 +40,8 @@ import org.multiverse.api.lifecycle.TxnListener;
  * <h3>Storing transaction references</h3>
  *
  * <p>Txn instances should not be stored since they are likely to be pooled by the STM. So it could be that the same
- * transaction instance is re-used to atomicChecked a completely unrelated piece of logic, and it can also be that different instances
- * are used to atomicChecked the same logic.
+ * transaction instance is re-used to execute a completely unrelated piece of logic, and it can also be that different instances
+ * are used to execute the same logic.
  *
  * @author Peter Veentjer.
  */

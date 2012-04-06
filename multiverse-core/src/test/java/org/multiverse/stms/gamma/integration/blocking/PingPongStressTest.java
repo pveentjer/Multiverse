@@ -76,7 +76,7 @@ public class PingPongStressTest {
         sleepMs(30 * 1000);
         stop = true;
 
-        stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 ref.set(-abs(ref.get()));
@@ -142,7 +142,7 @@ public class PingPongStressTest {
                     System.out.println(getName() + " " + count);
                 }
 
-                if (!executor.atomic(callable)) {
+                if (!executor.execute(callable)) {
                     break;
                 }
                 count++;

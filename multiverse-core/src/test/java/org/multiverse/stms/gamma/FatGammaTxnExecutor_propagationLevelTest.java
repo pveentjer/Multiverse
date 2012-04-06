@@ -41,7 +41,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         TxnVoidCallable callable = mock(TxnVoidCallable.class);
 
         try {
-            executor.atomic(callable);
+            executor.execute(callable);
             fail();
         } catch (TxnNotAllowedException expected) {
         }
@@ -65,7 +65,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTxn());
@@ -80,7 +80,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
         TxnVoidCallable callable = mock(TxnVoidCallable.class);
 
         try {
-            executor.atomic(callable);
+            executor.execute(callable);
             fail();
         } catch (TxnMandatoryException expected) {
         }
@@ -106,7 +106,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -131,7 +131,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = new FatGammaTxnExecutor(txFactory).atomic(callable);
+        int result = new FatGammaTxnExecutor(txFactory).execute(callable);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTxn());
@@ -159,7 +159,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = new FatGammaTxnExecutor(txFactory).atomic(callable);
+        int result = new FatGammaTxnExecutor(txFactory).execute(callable);
 
         assertEquals(10, result);
         assertSame(existingTx, getThreadLocalTxn());
@@ -186,7 +186,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(10, result);
         assertEquals(1, ref.atomicGet());
@@ -215,7 +215,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(1, result);
         assertEquals(11, ref.atomicGet());
@@ -240,7 +240,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(10, result);
         assertIsActive(otherTx);
@@ -261,7 +261,7 @@ public class FatGammaTxnExecutor_propagationLevelTest implements GammaConstants 
             }
         };
 
-        int result = executor.atomic(callable);
+        int result = executor.execute(callable);
 
         assertEquals(10, result);
         assertNull(getThreadLocalTxn());

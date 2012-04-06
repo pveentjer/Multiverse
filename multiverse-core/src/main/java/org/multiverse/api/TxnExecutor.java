@@ -115,7 +115,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-    <E> E atomic(TxnCallable<E> callable);
+    <E> E execute(TxnCallable<E> callable);
 
    /**
     * Executes the callable.
@@ -125,7 +125,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-    <E> E atomicChecked(TxnCallable<E> callable)throws Exception;
+    <E> E executeChecked(TxnCallable<E> callable)throws Exception;
 
    /**
     * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
@@ -137,7 +137,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-     int atomic(TxnIntCallable callable);
+     int execute(TxnIntCallable callable);
 
    /**
     * Executes the callable.
@@ -147,7 +147,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-     int atomicChecked(TxnIntCallable callable)throws Exception;
+     int executeChecked(TxnIntCallable callable)throws Exception;
 
    /**
     * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
@@ -159,7 +159,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-     long atomic(TxnLongCallable callable);
+     long execute(TxnLongCallable callable);
 
    /**
     * Executes the callable.
@@ -169,7 +169,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-     long atomicChecked(TxnLongCallable callable)throws Exception;
+     long executeChecked(TxnLongCallable callable)throws Exception;
 
    /**
     * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
@@ -181,7 +181,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-     double atomic(TxnDoubleCallable callable);
+     double execute(TxnDoubleCallable callable);
 
    /**
     * Executes the callable.
@@ -191,7 +191,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-     double atomicChecked(TxnDoubleCallable callable)throws Exception;
+     double executeChecked(TxnDoubleCallable callable)throws Exception;
 
    /**
     * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
@@ -203,7 +203,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-     boolean atomic(TxnBooleanCallable callable);
+     boolean execute(TxnBooleanCallable callable);
 
    /**
     * Executes the callable.
@@ -213,7 +213,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-     boolean atomicChecked(TxnBooleanCallable callable)throws Exception;
+     boolean executeChecked(TxnBooleanCallable callable)throws Exception;
 
    /**
     * Executes the transactional callable. If in the execution of the callable a checked exception is thrown, the exception
@@ -224,7 +224,7 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws org.multiverse.api.exceptions.InvisibleCheckedException if a checked exception is thrown by the callable.
     */
-     void atomic(TxnVoidCallable callable);
+     void execute(TxnVoidCallable callable);
 
    /**
     * Executes the callable.
@@ -233,6 +233,6 @@ public interface TxnExecutor extends MultiverseConstants{
     * @throws NullPointerException if callable is null.
     * @throws Exception if the execute call fails.
     */
-     void atomicChecked(TxnVoidCallable callable)throws Exception;
+     void executeChecked(TxnVoidCallable callable)throws Exception;
 
 }

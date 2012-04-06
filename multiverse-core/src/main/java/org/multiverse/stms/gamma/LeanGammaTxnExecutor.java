@@ -30,18 +30,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final <E> E atomicChecked(
+    public final <E> E executeChecked(
         final TxnCallable<E> callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final <E> E atomic(final TxnCallable<E> callable){
+    public final <E> E execute(final TxnCallable<E> callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -136,18 +136,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
      @Override
-    public final  int atomicChecked(
+    public final  int executeChecked(
         final TxnIntCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  int atomic(final TxnIntCallable callable){
+    public final  int execute(final TxnIntCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -242,18 +242,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
      @Override
-    public final  long atomicChecked(
+    public final  long executeChecked(
         final TxnLongCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  long atomic(final TxnLongCallable callable){
+    public final  long execute(final TxnLongCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -348,18 +348,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
      @Override
-    public final  double atomicChecked(
+    public final  double executeChecked(
         final TxnDoubleCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  double atomic(final TxnDoubleCallable callable){
+    public final  double execute(final TxnDoubleCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -454,18 +454,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
      @Override
-    public final  boolean atomicChecked(
+    public final  boolean executeChecked(
         final TxnBooleanCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  boolean atomic(final TxnBooleanCallable callable){
+    public final  boolean execute(final TxnBooleanCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -560,18 +560,18 @@ public final class LeanGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
      @Override
-    public final  void atomicChecked(
+    public final  void executeChecked(
         final TxnVoidCallable callable)throws Exception{
 
         try{
-            atomic(callable);
+            execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
     @Override
-    public final  void atomic(final TxnVoidCallable callable){
+    public final  void execute(final TxnVoidCallable callable){
 
         if(callable == null){
             throw new NullPointerException();

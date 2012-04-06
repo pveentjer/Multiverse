@@ -180,7 +180,7 @@ public final class StandardThreadFactory implements ThreadFactory {
      * The consequence is that the priority of this StandardThreadFactory is higher than the maximum
      * priority of the ThreadGroup and this means that thread creation could fail because threads are
      * created with a too high priority. This race problem is very hard to prevent because the check/getAndSet
-     * can't be done atomicChecked because the ThreadGroup is exposed.
+     * can't be done atomically because the ThreadGroup is exposed.
      *
      * @param priority the new priority.
      * @throws IllegalArgumentException if priority is smaller than {@link Thread#MIN_PRIORITY} or

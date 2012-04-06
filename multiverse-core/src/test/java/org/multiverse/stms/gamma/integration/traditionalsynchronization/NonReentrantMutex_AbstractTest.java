@@ -135,11 +135,11 @@ public abstract class NonReentrantMutex_AbstractTest {
         };
 
         public void lock() {
-            lockBlock.atomic(lockCallable);
+            lockBlock.execute(lockCallable);
         }
 
         public void unlock() {
-            unlockBlock.atomic(unlockCallable);
+            unlockBlock.execute(unlockCallable);
         }
     }
 }

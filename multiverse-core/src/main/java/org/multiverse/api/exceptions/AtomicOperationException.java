@@ -1,7 +1,7 @@
 package org.multiverse.api.exceptions;
 
 /**
- * A {@link TxnExecutionException} thrown when an atomicChecked operation has failed (e.g. because the ref
+ * A {@link TxnExecutionException} thrown when an atomic operation has failed (e.g. because the ref
  * was locked).
  *
  * @author Peter Veentjer.

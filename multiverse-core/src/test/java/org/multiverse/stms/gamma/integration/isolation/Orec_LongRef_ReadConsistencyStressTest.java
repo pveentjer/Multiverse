@@ -110,7 +110,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
 
             int iteration = 0;
             while (!stop) {
-                executor.atomic(callable);
+                executor.execute(callable);
                 sleepRandomUs(100);
                 iteration++;
 
@@ -456,7 +456,7 @@ public class Orec_LongRef_ReadConsistencyStressTest implements GammaConstants {
         }
 
         private void singleRun() {
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     fullRead((GammaTxn) tx);

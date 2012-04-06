@@ -133,7 +133,7 @@ public class DeadLockStressTest {
         }
 
         public void normal() {
-            normalBlock.atomic(new TxnVoidCallable() {
+            normalBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -142,7 +142,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeReadLevel() {
-            pessimisticReadLevelBlock.atomic(new TxnVoidCallable() {
+            pessimisticReadLevelBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);
@@ -151,7 +151,7 @@ public class DeadLockStressTest {
         }
 
         public void privatizeWriteLevel() {
-            pessimisticWriteLevelBlock.atomic(new TxnVoidCallable() {
+            pessimisticWriteLevelBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     doIt((GammaTxn) tx);

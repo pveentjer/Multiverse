@@ -148,7 +148,7 @@ public class MultipleReadsRetryStressTest implements GammaConstants {
                 }
 
                 try {
-                    txnExecutor.atomic(callable);
+                    txnExecutor.execute(callable);
                 } catch (StopException e) {
                     break;
                 }

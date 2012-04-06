@@ -137,9 +137,9 @@ public final class StmUtils {
      */
     public static ${callable.typeParameter} ${callable.type} atomic(${callable.name}${callable.typeParameter} callable){
 #if(${callable.type} eq 'void')
-        defaultTxnExecutor.atomic(callable);
+        defaultTxnExecutor.execute(callable);
 #else
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
 #end
     }
 
@@ -160,9 +160,9 @@ public final class StmUtils {
     */
    public static ${callable.typeParameter} ${callable.type} atomicChecked(${callable.name}${callable.typeParameter} callable) throws Exception{
 #if(${callable.type} eq 'void')
-       defaultTxnExecutor.atomicChecked(callable);
+       defaultTxnExecutor.executeChecked(callable);
 #else
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
 #end
    }
 

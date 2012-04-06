@@ -98,7 +98,7 @@ public class VetoCommitBarrier_vetoCommitTest {
 
         @Override
         public void doRun() throws Exception {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn txn) throws Exception {
                     IncThread.this.txn = txn;

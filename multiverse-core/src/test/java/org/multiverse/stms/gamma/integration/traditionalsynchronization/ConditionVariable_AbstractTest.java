@@ -88,7 +88,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         void push(final String item) {
-            pushBlock.atomic(new TxnVoidCallable() {
+            pushBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     isNotFull.awaitTrue();
@@ -105,7 +105,7 @@ public abstract class ConditionVariable_AbstractTest {
         }
 
         String pop() {
-            return popBlock.atomic(new TxnCallable<String>() {
+            return popBlock.execute(new TxnCallable<String>() {
                 @Override
                 public String call(Txn tx) throws Exception {
                     isNotEmpty.awaitTrue();

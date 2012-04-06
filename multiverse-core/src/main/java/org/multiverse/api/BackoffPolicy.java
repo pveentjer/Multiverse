@@ -1,7 +1,7 @@
 package org.multiverse.api;
 
 /**
- * A policy to be used when {@link Txn} or an atomicChecked operation can't make any progress, e.g.
+ * A policy to be used when {@link Txn} or an atomic operation can't make any progress, e.g.
  * because there a {@link org.multiverse.api.exceptions.ReadWriteConflict}. If the next attempt would
  * be done without waiting, the contention is going to increase. It can be better to back off to give the
  * contending Transactions some time to complete so that the chance increases that the failing Txn

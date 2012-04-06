@@ -27,7 +27,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenTxnIntCallableUsed() {
-        int result = executor.atomic(new TxnIntCallable() {
+        int result = executor.execute(new TxnIntCallable() {
             @Override
             public int call(Txn tx) throws Exception {
                 return 10;
@@ -39,7 +39,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenTxnLongCallableUsed() {
-        long result = executor.atomic(new TxnLongCallable() {
+        long result = executor.execute(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
                 return 10;
@@ -51,7 +51,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenTxnVoidCallableUsed() {
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
             }
@@ -60,7 +60,7 @@ public class GammaTxnExecutorTest {
 
     @Test
     public void whenTxnCallableUsed() {
-        String result = executor.atomic(new TxnCallable<String>() {
+        String result = executor.execute(new TxnCallable<String>() {
             @Override
             public String call(Txn tx) throws Exception {
                 return "foo";

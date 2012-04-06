@@ -32,17 +32,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
     }
 
     @Override
-    public final <E> E atomicChecked(
+    public final <E> E executeChecked(
         final TxnCallable<E> callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public <E> E atomic(final TxnCallable<E> callable){
+     public <E> E execute(final TxnCallable<E> callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -74,7 +74,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if (TRACING_ENABLED) {
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -145,7 +145,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if(TRACING_ENABLED){
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -159,7 +159,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
                         }
@@ -192,7 +192,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private <E> E atomic(
+    private <E> E execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnCallable<E> callable)throws Exception{
         Error cause = null;
 
@@ -266,17 +266,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
          @Override
-    public final  int atomicChecked(
+    public final  int executeChecked(
         final TxnIntCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  int atomic(final TxnIntCallable callable){
+     public  int execute(final TxnIntCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -308,7 +308,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if (TRACING_ENABLED) {
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -379,7 +379,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if(TRACING_ENABLED){
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -393,7 +393,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
                         }
@@ -426,7 +426,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private  int atomic(
+    private  int execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnIntCallable callable)throws Exception{
         Error cause = null;
 
@@ -500,17 +500,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
          @Override
-    public final  long atomicChecked(
+    public final  long executeChecked(
         final TxnLongCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  long atomic(final TxnLongCallable callable){
+     public  long execute(final TxnLongCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -542,7 +542,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if (TRACING_ENABLED) {
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -613,7 +613,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if(TRACING_ENABLED){
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -627,7 +627,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
                         }
@@ -660,7 +660,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private  long atomic(
+    private  long execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnLongCallable callable)throws Exception{
         Error cause = null;
 
@@ -734,17 +734,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
          @Override
-    public final  double atomicChecked(
+    public final  double executeChecked(
         final TxnDoubleCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  double atomic(final TxnDoubleCallable callable){
+     public  double execute(final TxnDoubleCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -776,7 +776,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if (TRACING_ENABLED) {
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -847,7 +847,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if(TRACING_ENABLED){
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -861,7 +861,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
                         }
@@ -894,7 +894,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private  double atomic(
+    private  double execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnDoubleCallable callable)throws Exception{
         Error cause = null;
 
@@ -968,17 +968,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
          @Override
-    public final  boolean atomicChecked(
+    public final  boolean executeChecked(
         final TxnBooleanCallable callable)throws Exception{
 
         try{
-            return atomic(callable);
+            return execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  boolean atomic(final TxnBooleanCallable callable){
+     public  boolean execute(final TxnBooleanCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -1010,7 +1010,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if (TRACING_ENABLED) {
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -1081,7 +1081,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
                     } else {
                         if(TRACING_ENABLED){
                             if (txnConfig.getTraceLevel().isLoggableFrom(TraceLevel.Coarse)) {
@@ -1095,7 +1095,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
                         }
@@ -1128,7 +1128,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private  boolean atomic(
+    private  boolean execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnBooleanCallable callable)throws Exception{
         Error cause = null;
 
@@ -1202,17 +1202,17 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
 
          @Override
-    public final  void atomicChecked(
+    public final  void executeChecked(
         final TxnVoidCallable callable)throws Exception{
 
         try{
-            atomic(callable);
+            execute(callable);
         }catch(InvisibleCheckedException e){
             throw e.getCause();
         }
     }
 
-     public  void atomic(final TxnVoidCallable callable){
+     public  void execute(final TxnVoidCallable callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -1244,7 +1244,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        atomic(tx, transactionContainer,pool, callable);
+                        execute(tx, transactionContainer,pool, callable);
                         return;
                     } else {
                         if (TRACING_ENABLED) {
@@ -1319,7 +1319,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
 
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
-                        atomic(tx, transactionContainer, pool, callable);
+                        execute(tx, transactionContainer, pool, callable);
                         return;
                     } else {
                         if(TRACING_ENABLED){
@@ -1334,7 +1334,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
                         try {
-                            atomic(tx, transactionContainer, pool, callable);
+                            execute(tx, transactionContainer, pool, callable);
                             return;
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
@@ -1369,7 +1369,7 @@ public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
         }
     }
 
-    private  void atomic(
+    private  void execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final TxnVoidCallable callable)throws Exception{
         Error cause = null;
 

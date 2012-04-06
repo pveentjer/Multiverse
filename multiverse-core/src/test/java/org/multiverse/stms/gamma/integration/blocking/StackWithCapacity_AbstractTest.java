@@ -110,7 +110,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         private final TxnExecutor popBlock = newPopBlock();
 
         public void push(final E item) {
-            pushBlock.atomic(new TxnVoidCallable() {
+            pushBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (size.get() >= maxCapacity) {
@@ -124,7 +124,7 @@ public abstract class StackWithCapacity_AbstractTest implements GammaConstants {
         }
 
         public E pop() {
-            return popBlock.atomic(new TxnCallable<E>() {
+            return popBlock.execute(new TxnCallable<E>() {
                 @Override
                 public E call(Txn tx) throws Exception {
                     if (head.isNull()) {

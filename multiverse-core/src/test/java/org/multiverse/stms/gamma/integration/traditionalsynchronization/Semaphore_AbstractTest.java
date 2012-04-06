@@ -88,7 +88,7 @@ public abstract class Semaphore_AbstractTest {
         }
 
         public void up() {
-            upBlock.atomic(new TxnVoidCallable() {
+            upBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.set(ref.get() + 1);
@@ -104,7 +104,7 @@ public abstract class Semaphore_AbstractTest {
         public void down() {
             users.decrementAndGet();
 
-            downBlock.atomic(new TxnVoidCallable() {
+            downBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (ref.get() == 0) {

@@ -74,7 +74,7 @@ public class CountDownCommitBarrier_IntegrationTest {
         public void doRun() throws Exception {
             final TxnLong ref = stm.getDefaultRefFactory().newTxnLong(1);
 
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn txn) throws Exception {
                     AwaitThread.this.txn = txn;

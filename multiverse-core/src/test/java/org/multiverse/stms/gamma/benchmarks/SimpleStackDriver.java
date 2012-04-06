@@ -117,7 +117,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
         private void runWithoutPooledCallables() {
             while (!shutdown) {
-                pushBlock.atomic(new TxnVoidCallable() {
+                pushBlock.execute(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         stack.push(tx, "item");
@@ -128,7 +128,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
 
             for (int k = 0; k < popThreadCount; k++) {
-                pushBlock.atomic(new TxnVoidCallable() {
+                pushBlock.execute(new TxnVoidCallable() {
                     @Override
                     public void call(Txn tx) throws Exception {
                         stack.push(tx, "end");
@@ -143,13 +143,13 @@ public class SimpleStackDriver extends BenchmarkDriver {
 
             while (!shutdown) {
                 pushCallable.item = "item";
-                pushBlock.atomic(pushCallable);
+                pushBlock.execute(pushCallable);
                 count++;
             }
 
             for (int k = 0; k < popThreadCount; k++) {
                 pushCallable.item = "end";
-                pushBlock.atomic(pushCallable);
+                pushBlock.execute(pushCallable);
             }
         }
 
@@ -190,7 +190,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
         private void runWithPooledCallable() {
             boolean end = false;
             while (!end) {
-                end = popBlock.atomic(new TxnBooleanCallable() {
+                end = popBlock.execute(new TxnBooleanCallable() {
                     @Override
                     public boolean call(Txn tx) throws Exception {
                         return !stack.pop(tx).equals("end");
@@ -205,7 +205,7 @@ public class SimpleStackDriver extends BenchmarkDriver {
             PopCallable popCallable = new PopCallable();
             boolean end = false;
             while (!end) {
-                end = popBlock.atomic(popCallable);
+                end = popBlock.execute(popCallable);
                 count++;
             }
         }

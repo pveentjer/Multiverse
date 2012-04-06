@@ -103,7 +103,7 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
         final GammaTxnInteger size = new GammaTxnInteger(stm);
 
         public void push(final E item) {
-            pushBlock.atomic(new TxnVoidCallable() {
+            pushBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (size.get() >= maxCapacity) {
@@ -118,7 +118,7 @@ public abstract class QueueWithCapacity_AbstractTest implements GammaConstants {
         }
 
         public E pop() {
-            return popBlock.atomic(new TxnCallable<E>() {
+            return popBlock.execute(new TxnCallable<E>() {
                 @Override
                 public E call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

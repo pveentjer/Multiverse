@@ -49,8 +49,7 @@ public class FatFixedLengthGammaTxn_stressTest implements GammaConstants {
             refs[k] = new GammaTxnLong(stm, 0);
         }
 
-        //atomicChecked all transactions
-        Random random = new Random();
+         Random random = new Random();
         int transactionCount = 100000;
 
         GammaTxnConfig config = new GammaTxnConfig(stm, refs.length)

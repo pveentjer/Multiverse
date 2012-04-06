@@ -113,7 +113,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         private final TxnExecutor popExecutor = newPopTxnExecutor();
 
         public void push(final E item) {
-            pushExecutor.atomic(new TxnVoidCallable() {
+            pushExecutor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     head.set(new Node<E>(item, head.get()));
@@ -122,7 +122,7 @@ public abstract class StackWithoutCapacity_AbstractTest implements GammaConstant
         }
 
         public E pop() {
-            return popExecutor.atomic(new TxnCallable<E>() {
+            return popExecutor.execute(new TxnCallable<E>() {
                 @Override
                 public E call(Txn tx) throws Exception {
                     Node<E> node = head.awaitNotNullAndGet();

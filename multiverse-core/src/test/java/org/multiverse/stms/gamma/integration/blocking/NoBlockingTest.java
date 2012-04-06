@@ -82,7 +82,7 @@ public class NoBlockingTest {
                 .newTxnExecutor();
 
         try {
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     ref.set(1);

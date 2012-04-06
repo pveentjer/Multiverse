@@ -71,7 +71,7 @@ public class FatMonoUpdateWithTransactionDriver implements GammaConstants {
         long startMs = System.currentTimeMillis();
 
         for (long k = 0; k < txCount; k++) {
-            executor.atomic(callable);
+            executor.execute(callable);
         }
 
         long durationMs = System.currentTimeMillis() - startMs;

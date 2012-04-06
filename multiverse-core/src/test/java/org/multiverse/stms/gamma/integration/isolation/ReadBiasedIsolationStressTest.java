@@ -152,7 +152,7 @@ public class ReadBiasedIsolationStressTest {
             long startMs = currentTimeMillis();
 
             for (long k = 0; k < count; k++) {
-                if (executor.atomic(callable)) {
+                if (executor.execute(callable)) {
                     incrementCount++;
                 }
 

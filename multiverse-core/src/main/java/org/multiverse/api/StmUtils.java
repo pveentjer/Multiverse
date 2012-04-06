@@ -133,7 +133,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static <E> E atomic(TxnCallable<E> callable){
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -150,7 +150,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static <E> E atomicChecked(TxnCallable<E> callable) throws Exception{
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
    }
 
    /**
@@ -201,7 +201,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static  int atomic(TxnIntCallable callable){
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -218,7 +218,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static  int atomicChecked(TxnIntCallable callable) throws Exception{
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
    }
 
    /**
@@ -269,7 +269,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static  long atomic(TxnLongCallable callable){
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -286,7 +286,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static  long atomicChecked(TxnLongCallable callable) throws Exception{
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
    }
 
    /**
@@ -337,7 +337,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static  double atomic(TxnDoubleCallable callable){
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -354,7 +354,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static  double atomicChecked(TxnDoubleCallable callable) throws Exception{
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
    }
 
    /**
@@ -405,7 +405,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static  boolean atomic(TxnBooleanCallable callable){
-        return defaultTxnExecutor.atomic(callable);
+        return defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -422,7 +422,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static  boolean atomicChecked(TxnBooleanCallable callable) throws Exception{
-       return defaultTxnExecutor.atomicChecked(callable);
+       return defaultTxnExecutor.executeChecked(callable);
    }
 
    /**
@@ -472,7 +472,7 @@ public final class StmUtils {
      *                                  if the callable throws a checked exception.
      */
     public static  void atomic(TxnVoidCallable callable){
-        defaultTxnExecutor.atomic(callable);
+        defaultTxnExecutor.execute(callable);
     }
 
    /**
@@ -488,7 +488,7 @@ public final class StmUtils {
     * @throws Exception is the callable throws an Exception
     */
    public static  void atomicChecked(TxnVoidCallable callable) throws Exception{
-       defaultTxnExecutor.atomicChecked(callable);
+       defaultTxnExecutor.executeChecked(callable);
    }
 
    /**

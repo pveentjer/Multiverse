@@ -122,7 +122,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void releaseForks() {
-            releaseForksBlock.atomic(new TxnVoidCallable() {
+            releaseForksBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     leftFork.set(false);
@@ -133,7 +133,7 @@ public abstract class DiningPhilosophers_AbstractTest implements GammaConstants 
         }
 
         public void takeForks() {
-            takeForksBlock.atomic(new TxnVoidCallable() {
+            takeForksBlock.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     if (leftFork.get() || rightFork.get()) {

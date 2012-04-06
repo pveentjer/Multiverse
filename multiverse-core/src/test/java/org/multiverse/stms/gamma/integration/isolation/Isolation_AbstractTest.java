@@ -173,7 +173,7 @@ public abstract class Isolation_AbstractTest implements GammaConstants {
             long startMs = currentTimeMillis();
 
             for (long k = 0; k < transactionsPerThread; k++) {
-                executor.atomic(callable);
+                executor.execute(callable);
 
                 if (k % 500000 == 0) {
                     System.out.printf("%s is at %s\n", getName(), k);

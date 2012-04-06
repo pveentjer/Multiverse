@@ -37,14 +37,14 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 
 #foreach($callable in $callables)
     @Override
-    public final ${callable.typeParameter} ${callable.type} atomicChecked(
+    public final ${callable.typeParameter} ${callable.type} executeChecked(
         final ${callable.name}${callable.typeParameter} callable)throws Exception{
 
         try{
 #if(${callable.type} eq 'void')
-            atomic(callable);
+            execute(callable);
 #else
-            return atomic(callable);
+            return execute(callable);
 #end
         }catch(InvisibleCheckedException e){
             throw e.getCause();
@@ -53,7 +53,7 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
 
 #if(${txnExecutor.lean})
     @Override
-    public final ${callable.typeParameter} ${callable.type} atomic(final ${callable.name}${callable.typeParameter} callable){
+    public final ${callable.typeParameter} ${callable.type} execute(final ${callable.name}${callable.typeParameter} callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -88,7 +88,7 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         }
 
 #else ## end of txnExecutor.lean
-    public ${callable.typeParameter} ${callable.type} atomic(final ${callable.name}${callable.typeParameter} callable){
+    public ${callable.typeParameter} ${callable.type} execute(final ${callable.name}${callable.typeParameter} callable){
 
         if(callable == null){
             throw new NullPointerException();
@@ -121,10 +121,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
 #if($callable.type eq 'void')
-                        atomic(tx, transactionContainer,pool, callable);
+                        execute(tx, transactionContainer,pool, callable);
                         return;
 #else
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
 #end
                     } else {
                         if (TRACING_ENABLED) {
@@ -212,10 +212,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         tx = txnFactory.newTransaction(pool);
                         transactionContainer.txn = tx;
 #if($callable.type eq 'void')
-                        atomic(tx, transactionContainer, pool, callable);
+                        execute(tx, transactionContainer, pool, callable);
                         return;
 #else
-                        return atomic(tx, transactionContainer, pool, callable);
+                        return execute(tx, transactionContainer, pool, callable);
 #end
                     } else {
                         if(TRACING_ENABLED){
@@ -231,10 +231,10 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
                         transactionContainer.txn = tx;
                         try {
 #if($callable.type eq 'void')
-                            atomic(tx, transactionContainer, pool, callable);
+                            execute(tx, transactionContainer, pool, callable);
                             return;
 #else
-                            return atomic(tx, transactionContainer, pool, callable);
+                            return execute(tx, transactionContainer, pool, callable);
 #end
                         } finally {
                             transactionContainer.txn = suspendedTransaction;
@@ -273,7 +273,7 @@ public final class ${txnExecutor.name} extends AbstractGammaTxnExecutor{
         }
     }
 
-    private ${callable.typeParameter} ${callable.type} atomic(
+    private ${callable.typeParameter} ${callable.type} execute(
         GammaTxn tx, final TxnThreadLocal.Container transactionContainer, GammaTxnPool pool, final ${callable.name}${callable.typeParameter} callable)throws Exception{
         Error cause = null;
 

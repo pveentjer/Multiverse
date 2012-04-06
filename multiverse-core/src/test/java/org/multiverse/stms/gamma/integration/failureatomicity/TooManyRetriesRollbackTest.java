@@ -54,7 +54,7 @@ public class TooManyRetriesRollbackTest {
                 .setMaxRetries(10)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -89,7 +89,7 @@ public class TooManyRetriesRollbackTest {
             };
 
             while (!finished) {
-                executor.atomic(callable);
+                executor.execute(callable);
             }
         }
     }

@@ -26,7 +26,7 @@ public class TxnRefAwaitThread<T> extends TestThread {
 
     @Override
     public void doRun() throws Exception {
-        ref.getStm().getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+        ref.getStm().getDefaultTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 System.out.println("Starting wait and ref.value found: " + ref.get());

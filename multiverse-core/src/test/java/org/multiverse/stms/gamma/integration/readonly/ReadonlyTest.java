@@ -43,7 +43,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -66,7 +66,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -88,7 +88,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        return executor.atomic(new TxnCallable<Integer>() {
+        return executor.execute(new TxnCallable<Integer>() {
             @Override
             public Integer call(Txn tx) throws Exception {
                 return new Integer(value);
@@ -109,7 +109,7 @@ public class ReadonlyTest {
                 .setReadonly(true)
                 .newTxnExecutor();
 
-        return executor.atomic(new TxnLongCallable() {
+        return executor.execute(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -130,7 +130,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return executor.atomic(new TxnCallable<GammaTxnLong>() {
+        return executor.execute(new TxnCallable<GammaTxnLong>() {
             @Override
             public GammaTxnLong call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -153,7 +153,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return executor.atomic(new TxnCallable<Integer>() {
+        return executor.execute(new TxnCallable<Integer>() {
             @Override
             public Integer call(Txn tx) throws Exception {
                 return new Integer(value);
@@ -175,7 +175,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        return executor.atomic(new TxnLongCallable() {
+        return executor.execute(new TxnLongCallable() {
             @Override
             public long call(Txn tx) throws Exception {
                 GammaTxn btx = (GammaTxn) tx;
@@ -196,7 +196,7 @@ public class ReadonlyTest {
                 .setReadonly(false)
                 .newTxnExecutor();
 
-        executor.atomic(new TxnVoidCallable() {
+        executor.execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertFalse(tx.getConfig().isReadonly());
@@ -216,7 +216,7 @@ public class ReadonlyTest {
 
 
     public void defaultTransactionalMethod(final GammaTxnLong ref) {
-        stm.newTxnFactoryBuilder().newTxnExecutor().atomic(new TxnVoidCallable() {
+        stm.newTxnFactoryBuilder().newTxnExecutor().execute(new TxnVoidCallable() {
             @Override
             public void call(Txn tx) throws Exception {
                 assertFalse(tx.getConfig().isReadonly());

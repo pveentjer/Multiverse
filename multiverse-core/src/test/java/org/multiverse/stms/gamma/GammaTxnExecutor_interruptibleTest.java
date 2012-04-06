@@ -88,7 +88,7 @@ public class GammaTxnExecutor_interruptibleTest implements GammaConstants {
 
         @Override
         public void doRun() throws Exception {
-            executor.atomic(new TxnVoidCallable() {
+            executor.execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     GammaTxn btx = (GammaTxn) tx;

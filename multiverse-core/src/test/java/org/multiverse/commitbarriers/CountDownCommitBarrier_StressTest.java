@@ -137,7 +137,7 @@ public class CountDownCommitBarrier_StressTest {
         }
 
         public void doRun() {
-            stm.getDefaultTxnExecutor().atomic(new TxnVoidCallable() {
+            stm.getDefaultTxnExecutor().execute(new TxnVoidCallable() {
                 @Override
                 public void call(Txn tx) throws Exception {
                     sleepRandomMs(10);
