@@ -48,7 +48,28 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.5</version>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*LongTest.java</exclude>
+                        <exclude>**/*longTest.java</exclude>
+                        <exclude>**/*StressTest.java</exclude>
+                        <exclude>**/*stressTest.java</exclude>
+                        <exclude>**/*PerformanceTest.java</exclude>
+                        <exclude>**/*performanceTest.java</exclude>
+                    </excludes>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <forkMode>once</forkMode>
+                </configuration>
+            </plugin>
         </plugins>
+
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
@@ -84,15 +105,22 @@
 
     <profiles>
         <profile>
-            <id>stress</id>
+            <id>stresstest</id>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.12</version>
                         <configuration>
+                            <excludes>
+                                <exclude>WeNeedToSaySomethingBecauseElseToProfileWontOverlayToOriginalSurefireConfig</exclude>
+                            </excludes>
                             <includes>
                                 <include>**/*LongTest.java</include>
+                                <include>**/*longTest.java</include>
+                                <include>**/*StressTest.java</include>
+                                <include>**/*stressTest.java</include>
                             </includes>
                             <argLine>-Xmx256m</argLine>
                             <forkMode>once</forkMode>
