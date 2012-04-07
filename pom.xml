@@ -5,7 +5,7 @@
 
     <groupId>org.multiverse</groupId>
     <artifactId>multiverse</artifactId>
-    <version>0.7.1-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <name>Multiverse Parent Project</name>
     <description>
         A Software Transactional Memory implementation for the JVM.
