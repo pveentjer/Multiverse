@@ -13,11 +13,18 @@
     </description>
 
     <properties>
+        <sourceEncoding>UTF-8</sourceEncoding>
         <java.version>1.6</java.version>
         <junit.version>4.10</junit.version>
         <mockito.version>1.9.0</mockito.version>
-        <sourceEncoding>UTF-8</sourceEncoding>
+        <spring.version>3.1</spring.version>
     </properties>
+
+    <modules>
+        <module>multiverse-core</module>
+        <module>multiverse-spring</module>
+        <!-- module>multiverse-core-benchmarks</module -->
+    </modules>
 
     <scm>
         <connection>scm:git:git://github.com/pveentjer/Multiverse.git</connection>
@@ -76,11 +83,6 @@
        </site -->
         <downloadUrl>http://dist.codehaus.org/multiverse/</downloadUrl>
     </distributionManagement>
-
-    <modules>
-        <module>multiverse-core</module>
-        <!-- module>multiverse-core-benchmarks</module -->
-    </modules>
 
     <profiles>
         <profile>
