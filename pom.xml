@@ -12,13 +12,37 @@
         A Software Transactional Memory implementation for the JVM.
     </description>
 
+    <properties>
+        <java.version>1.6</java.version>
+        <junit.version>4.10</junit.version>
+        <mockito.version>1.9.0</mockito.version>
+        <sourceEncoding>UTF-8</sourceEncoding>
+    </properties>
+
     <scm>
         <connection>scm:git:git://github.com/pveentjer/Multiverse.git</connection>
         <developerConnection>scm:git:git@github.com:pveentjer/Multiverse.git</developerConnection>
         <url>http://github.com/pveentjer/Multiverse</url>
     </scm>
 
-      <build>
+    <organization>
+        <name>Multiverse</name>
+        <url>http://multiverse.codehaus.org</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>pveentjer</id>
+            <name>Peter Veentjer</name>
+            <timezone>+2</timezone>
+            <email>alarmnummer AT gmail DOTCOM</email>
+            <roles>
+                <role>Founder</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <build>
         <plugins>
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -55,7 +79,7 @@
 
     <modules>
         <module>multiverse-core</module>
-        <!-- module>multiverse-core-drivers</module -->
+        <!-- module>multiverse-core-benchmarks</module -->
     </modules>
 
     <profiles>
@@ -78,4 +102,93 @@
             </build>
         </profile>
     </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <encoding>${sourceEncoding}</encoding>
+                    <quiet>true</quiet>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>default</id>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jxr-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <encoding>${sourceEncoding}</encoding>
+                    <tags>
+                        <tag>FIXME</tag>
+                        <tag>Fixme</tag>
+                        <tag>fixme</tag>
+                        <tag>TODO</tag>
+                        <tag>todo</tag>
+                        <tag>Todo</tag>
+                        <tag>@todo</tag>
+                        <tag>@deprecated</tag>
+                    </tags>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.0-beta-3</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <xmlPath>${basedir}/changes.xml</xmlPath>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <configuration>
+                    <showSuccess>false</showSuccess>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.0.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <sourceEncoding>${sourceEncoding}</sourceEncoding>
+                    <targetJdk>${java.version}</targetJdk>
+                </configuration>
+            </plugin>
+            <!--
+            plugin> <groupId>com.atlassian.maven.plugins</groupId> <artifactId>maven-clover2-plugin</artifactId> <configuration> <generateHistorical>true</generateHistorical> </configuration> </plugin
+            -->
+        </plugins>
+    </reporting>
 </project>
