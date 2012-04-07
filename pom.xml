@@ -59,8 +59,7 @@
 
     <modules>
         <module>multiverse-core</module>
-        <module>multiverse-site</module>
-        <!-- module>multiverse-core-drivers</module -->
+       <!-- module>multiverse-core-drivers</module -->
     </modules>
 
 </project>
