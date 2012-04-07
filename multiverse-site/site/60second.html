@@ -29,7 +29,7 @@ Underneath you can see a small example of an Account with 2 mutable fields: bala
                     balance.inc(amount);
                     lastUpdate.set(date);
 
-                    if(balance.get()<&lt;0){
+                    if(balance.get()&lt;0){
                         throw new IllegalStateException("Not enough money");
                     }
                 }
