@@ -34,7 +34,7 @@ def lastupdate = String.format("%te %<tB %<tY", new GregorianCalendar())
 
 def basedir = './'
 
-def templatecontent = new File(basedir + '/multiverse-site/site/pagetemplate.html').text
+def templatecontent = new File(basedir + 'site/pagetemplate.html').text
 
 def menus = [
         new Menu(name: 'Menu', items: [
@@ -50,7 +50,7 @@ def menus = [
         new Menu(name: 'Documentation', items: [
                 new MenuItem(title: 'Overview', pageid: 'documentationoverview'),
                 new MenuItem(title: 'Reference Manual', url: 'manual/index.html'),
-                new MenuItem(title: 'Javadoc', url: 'javadoc/index.html')
+                new MenuItem(title: 'Javadoc', url: 'apidocs/index.html')
         ])
 ]
 
@@ -68,7 +68,7 @@ def pages = [
         new Page(pageid: 'sponsors')
 ]
 
-def outputdirectory = "multiverse-site/build/site"
+def outputdirectory = "target/site"
 
 //=============== template engine ==================
 
@@ -83,7 +83,7 @@ for (page in pages) {
   def filename = "${page.pageid}.html"
   def engine = new GStringTemplateEngine()
   def template = engine.createTemplate(templatecontent)
-  def pagecontent = new File("$basedir/multiverse-site/site/$filename").text
+  def pagecontent = new File("site/$filename").text
   def binding = [menus: menus,
           pagecontent: pagecontent,
           page: page,
@@ -96,15 +96,9 @@ for (page in pages) {
 }
 
 def output = new File("$outputdirectory/style.css")
-output.text = new File("$basedir/multiverse-site/site/style.css").text
-
-def settingsxml = new File("$outputdirectory/settings.xml")
-settingsxml.text = new File("$basedir/multiverse-site/site/settings.xml").text
+output.text = new File("$basedir/site/style.css").text
 
 def index = new File("$outputdirectory/index.html")
-index.text = new File("$basedir/multiverse-site/site/index.html").text
-
-//def pomxml = new File("$outputdirectory/pom.xml")
-//pomxml.text = new File("$basedir/multiverse-site/site/pom.xml").text
+index.text = new File("$basedir/site/index.html").text
 
 println('finished')
