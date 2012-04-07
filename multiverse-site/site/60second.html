@@ -1,81 +1,78 @@
 <h1>60 Second guide to Multiverse</h1>
 
-Multiverse is a Software Transansactional Memory implementation and meant as an alternative to traditional lock
-based concurrency. If you have worked with databases before, Transactional Memory should feel familiar because
-both share one very important concept: txns.
-<p>
-    In Multiverse a normal POJO can be made transactional by adding the <tt>TransactionalObject</tt> annotation, e.g.:
+Multiverse is a Software Transansactional Memory (STM) implementation and meant as an alternative to traditional lock
+based concurrency control. If you have worked with databases before, STM should feel familiar because
+both share one very important concept: transactions. Mutuable state that needs be accessed transactionally should be stored
+in transactional references (comparible to the atomic references from java.util.concurrent.atomic package).
+</p>
+
+Underneath you can see a small example of an Account with 2 mutable fields: balance and lastUpdate. These 2 fields
+        will be updated atomically in the incBalance method using a transaction.
 <pre>
 
-    import org.multiverse.api.*;
+    import org.multiverse.api.references.*;
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
 
-        private Ref&lt;Date&gt; lastUpdate = newTxnRef();
-        private IntRef balance = newTxnInteger();
+        private final TxnRef&lt;Date&gt; lastUpdate;
+        private final TxnInteger balance = newTxnInteger();
 
         public Account(int balance){
-            setBalance(balance);
+            this.lastUpdate = newTxnRef&lt;Date&gt;(new Date());
+            this.balance = newTxnInteger(balance);
         }
 
-        public int getLastUpdate(){
-            return lastUpdate;
-        }
+        public void incBalance(final int amount, final Date date){
+            atomic(new Runnable(){
+                public void run(){
+                    balance.inc(amount);
+                    lastUpdate.set(date);
 
-        public int getBalance(){
-            return balance;
-        }
-
-        public void setBalance(int newBalance){
-            lastUpdate = new Date();
-    
-            if(newBalance &lt; 0){
-                throw new IllegalStateException("negative balance not allowed");
-            }
-            balance = newBalance;
+                    if(balance.get()<&lt;0){
+                        throw new IllegalStateException("Not enough money");
+                    }
+                }
+            });
         }
     }
 </pre>
-All <b>instance</b> methods of this Account class will now be transactional and give you the following features:
+The transactional behavior of the incBalance method gives us:
 <ol>
-    <li><b>failure atomicity:</b> all writes will commit or none will commit. For an example check the
-        setBalance method where the lastUpdate is set even though the call could fail.
+    <li><b>failure atomicity:</b> all writes will commit or none will commit. In this case it could happen that
+        money is withdrawn and the balance becomes negative. At the end this will be detected, but the changes are
+        already made. The STM will make sure that these changes will never be committed.
     </li>
     <li><b>isolation: </b> all reads and writes are thread-safe and are isolated from
-        other txns. A txn automatically gets a Oracle version of the SERIALIZABLE isolation level.
+        other transaction. A txn automatically gets a Oracle version of the SERIALIZABLE isolation level.
         You don't need to deal with lower isolation levels like READ_UNCOMMITTED, READ_COMMITTED or
         REPEATABLE_READ.
     </li>
-    <li><b>no deadlocks</b> between txns because deadlocks are prevented by Multiverse.
+    <li><b>no deadlocks</b> between transactions because deadlocks are prevented by Multiverse.
 </ol>
-Another big advantage is that the methods have become composable, so you can combine methods while keeping the
-transactional properties. This is very hard to realize with a traditional lock based approach. Composing can be
-done by creating a new instance method on a transactional object that calls the composing operations, or
-by adding a <tt>TransactionalMethod</tt> annotation around a normal method of a non transactional object, or around a
-static method of a transactional object, e.g.:
+
+<h2>Composing transactional methods</h2>
+
+Transactional methods can also be composed in new transactional methods, e.g.
 
 <pre>
-    import org.multiverse.annotations.TransactionalMethod;
-    import org.multiverse.annotations.TransactionalObject;
+    public static void transfer(final Account from, final Account to, final int amount){
+        atomic(new Runnable(){
+            public void run(){
+                Date date = new Date();
 
-    @TransactionalObject
-    public class Account{
-
-        ...
-
-        @TransactionalMethod
-        public static void transfer(Account from, Account to, int amount){
-            from.setBalance(from.getBalance()-amount);
-            to.setBalance(to.getBalance()+amount);
-        }
+                from.incBalance(-amount, date);
+                to.incBalance(amount, date);
+             }
+        });
     }
 </pre>
-Money can safely be transferred from one account to another using the
-<tt>transfer</tt> method: no race problems, partial
-writes or deadlocks are possible.
+    With lock based concurrency control this is dangerous to do since you can quickly run into a deadlock (e.g. when
+        2 threads are transferring money from 2 accounts in the opposite direction). But with STM, deadlocks
+        will be prevented and transactions retried automatically.
+
 <p/>
-These examples only scratch the surface of Multiverse, but just having transactional methods can be
+This example only scratches the surface of Multiverse, but just having transactional methods can be
 a very big step forward in a lot of cases. For more advanced features and in-depth documention, the
 <a href="manual.html">manual</a> or <a href="documentationoverview.html">documentation overview</a>
 are the best places to get started.

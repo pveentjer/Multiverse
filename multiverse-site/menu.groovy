@@ -40,26 +40,8 @@ def menus = [
         new Menu(name: 'Menu', items: [
                 new MenuItem(title: 'Overview', pageid: 'overview'),
                 new MenuItem(title: 'Download', pageid: 'download'),
-                new MenuItem(title: 'Features', pageid: 'features', items: [
-                        new SubMenuItem(title: 'Release 0.7', pageid: 'release-0.7'),
-                        new SubMenuItem(title: 'Release 0.6', pageid: 'release-0.6'),
-                        new SubMenuItem(title: 'Release 0.5', pageid: 'release-0.5'),
-                        new SubMenuItem(title: 'Release 0.4', pageid: 'release-0.4'),
-                        new SubMenuItem(title: 'Release 0.3', pageid: 'release-0.3')
-                ]),
-                new MenuItem(title: 'Benchmarks', pageid: 'benchmarks', items: [
-                        new SubMenuItem(title: 'Atomic Operations', pageid: 'benchmark-atomic'),
-                        new SubMenuItem(title: 'Update', pageid: 'benchmark-update'),
-                        new SubMenuItem(title: 'Read', pageid: 'benchmark-read'),
-                        new SubMenuItem(title: 'Miscellaneous', pageid: 'benchmark-misc'),
-                        new SubMenuItem(title: 'Test Rig', pageid: 'benchmark-testrig')
-                ]),
-                new MenuItem(title: 'Mission Statement', pageid: 'missionstatement'),
-                new MenuItem(title: 'NoSQL', pageid: 'nosql'),
                 new MenuItem(title: 'Sponsors', pageid: 'sponsors'),
-                new MenuItem(title: 'Team', pageid: 'team'),
                 new MenuItem(title: 'Development', pageid: 'development'),
-                new MenuItem(title: 'Support', pageid: 'support'),
                 new MenuItem(title: 'Blog', url: 'http://pveentjer.wordpress.com'),
                 new MenuItem(title: 'License', pageid: 'license')
         ]),
@@ -71,38 +53,18 @@ def menus = [
         ])
 ]
 
-//this is redundant information, all pages can be derived from the menu.
+//TODO: this is redundant information, all pages can be derived from the menu.
 def pages = [
         new Page(pageid: '60second'),
-        new Page(pageid: 'architecture'),
-        new Page(pageid: 'benchmarks'),
-        new Page(pageid: 'benchmark-atomic'),
-        new Page(pageid: 'benchmark-misc'),
-        new Page(pageid: 'benchmark-testrig'),
-        new Page(pageid: 'benchmark-update'),
-        new Page(pageid: 'benchmark-read'),
-        new Page(pageid: 'contact'),
+        new Page(pageid: 'missionstatement'),
         new Page(pageid: 'development'),
-        new Page(pageid: 'developconfiguration'),
         new Page(pageid: 'documentationoverview'),
         new Page(pageid: 'download'),
         new Page(pageid: 'faq'),
         new Page(pageid: 'features'),
-        new Page(pageid: 'release-0.3'),
-        new Page(pageid: 'release-0.4'),
-        new Page(pageid: 'release-0.5'),
-        new Page(pageid: 'release-0.6'),
-        new Page(pageid: 'release-0.7'),
-        new Page(pageid: 'flyingstart'),
         new Page(pageid: 'license'),
-        new Page(pageid: 'missionstatement'),
-        new Page(pageid: 'nosql'),
-        new Page(pageid: 'otherjvmlanguages'),
         new Page(pageid: 'overview'),
-        new Page(pageid: 'sponsors'),
-        new Page(pageid: 'support'),
-        new Page(pageid: 'team'),
-        new Page(pageid: 'tutorial')
+        new Page(pageid: 'sponsors')
 ]
 
 def outputdirectory = "multiverse-site/build/site"

@@ -3,26 +3,26 @@
     <li>
         <b>Reduce complexity of concurrency control</b> where applicable by raising the abstraction level. The goal
         is not to replace traditional concurrency control completely, but to provide an alternative programming
-        model. I see Multiverse as filling the gap between traditional databases and traditional concurrency
-        control. In the future, extensions for durability and clustering are expected.
+        model. Multiverse can be seen as filling the gap between traditional databases and traditional lock based concurrency
+        control.
     </li>
     <li>
-        <b>Seamless integration in the Java Language</b>. In most cases this can be done through annotations
-        in combination with instrumentation. So you don't need to extend any classes, implement interfaces
-        impose limitations on the type of fields, or otherwise damage your oo design.
+        <b>Seamless integration in the Java projects</b>. Multiverse doesn't rely on instrumentation, so can seamlessly
+        be integrated in complexer builds. Multiverse also tries to stay out of the design of projects that use it as much
+        as possible.
     </li>
     <li>
-        <b>To be integrated in other JVM based languages</b> like Scala, Groovy or JRuby. The STM implementation
-        itself doesn't care about the language used, it only cares about classes implementing certain
-        interfaces. So it should be possible to combine transactional objects written in different
-        languages, in the same STM.
+        <b>To be integrated in other JVM based languages</b> like Scala, Groovy or JRuby. Although Multiverse has been
+        written with Java in mind, it can also be integrated in other languages. Multiverse is uses under water in the
+        Groovy Parallel Systems Library: <a href="http://gpars.codehaus.org/">GPars</a>  and in the past has been used
+        as the STM implementation in Scala based Actor framework <a href="http://akka.io/">Akka</a>.
     </li>
     <li>
         <b>Production environment quality.</b> Multiverse is not an academic experiment. The goal is
-        to create a product that can be used in the most demanding production environments.
+        to create a library that can be used in the most demanding production environments.
     </li>
     <li>
-        <b>Provide a framework for STM experiments.</b> It should be easy to swap/tune the STM implementation
-        without changing everything.
+        <b>Provide a framework for STM experiments.</b> It should be easy to swap/tune the STM implementation without
+        causing a big impact.
     </li>
 </ol>
