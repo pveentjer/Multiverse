@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>multiverse-core-drivers</artifactId>
+    <artifactId>multiverse-core-benchmark</artifactId>
     <name>The Multiverse Code (so API and implementation)</name>
 
     <description>
