@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <groupId>org.multiverse</groupId>
+    <artifactId>multiverse</artifactId>
+    <version>0.7.0-SNAPSHOT</version>
+    <name>Multiverse Parent Project</name>
+    <description>
+        A Software Transactional Memory implementation for the JVM.
+    </description>
+
+    <scm>
+        <connection>scm:git:git://github.com/pveentjer/Multiverse.git</connection>
+        <developerConnection>scm:git:git@github.com:pveentjer/Multiverse.git</developerConnection>
+        <url>http://github.com/pveentjer/Multiverse</url>
+    </scm>
+
+    <repositories>
+
+
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav-jackrabbit</artifactId>
+                <version>1.0-beta-7</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>multiverse-releases</id>
+            <name>Multiverse Central Repository</name>
+            <url>dav:https://dav.codehaus.org/repository/multiverse/</url>
+        </repository>
+        <snapshotRepository>
+            <id>multiverse-snapshots</id>
+            <name>Multiverse Central Development Repository</name>
+            <url>dav:https://dav.codehaus.org/snapshots.repository/multiverse/</url>
+        </snapshotRepository>
+        <!-- site>
+          <id>multiverse-site</id>
+          <name>Multiverse Maven site</name>
+          <url>dav:https://dav.codehaus.org/multiverse/maven-site</url>
+       </site -->
+        <downloadUrl>http://dist.codehaus.org/multiverse/</downloadUrl>
+    </distributionManagement>
+
+    <modules>
+        <module>multiverse-core</module>
+    </modules>
+
+</project>

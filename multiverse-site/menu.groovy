@@ -39,6 +39,7 @@ def templatecontent = new File(basedir + '/multiverse-site/site/pagetemplate.htm
 def menus = [
         new Menu(name: 'Menu', items: [
                 new MenuItem(title: 'Overview', pageid: 'overview'),
+                new MenuItem(title: '60 Second guide', pageid: '60second'),
                 new MenuItem(title: 'Download', pageid: 'download'),
                 new MenuItem(title: 'Sponsors', pageid: 'sponsors'),
                 new MenuItem(title: 'Development', pageid: 'development'),

@@ -4,5 +4,8 @@
 out/
 multiverse-core/build/
 multiverse-site/build/
+multiverse-core/target/
 *.iml
 .idea/
+gradle.properties
+release.properties

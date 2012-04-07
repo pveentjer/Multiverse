@@ -1,5 +1,6 @@
 import org.codehaus.groovy.ant.Groovy
 
+
 def executeBenchmark(String filepath) {
     execute("benchy-execute -p ${processorCount} -cp multiverse-gamma/build/classes/main:multiverse-gamma/build/classes/test ${filepath}")
 }
@@ -28,7 +29,7 @@ project(':multiverse-core') {
     apply plugin: 'project-reports'
 
     sourceCompatibility = 1.6
-    version = '0.7-RC-2-SNAPSHOT'
+    version = '0.7.0'
     group = 'org.multiverse'
 
     //install.dependsOn ':build'
@@ -58,8 +59,8 @@ project(':multiverse-core') {
         testCompile group: 'junit', name: 'junit', version: '4.10'
         testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.0'
         testCompile group: 'org.benchy', name: 'benchy-driver', version: '0.1-SNAPSHOT'
-        deployerJars "org.apache.maven.wagon:wagon-ssh:1.0-beta-2"
-        deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '1.0-beta-6'
+        deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+        deployerJars group: 'org.apache.maven.wagon', name: 'wagon-webdav-jackrabbit', version: '2.2'
     }
 
     task benchmarkUncontendedMonoUpdate << {
@@ -191,23 +192,21 @@ project(':multiverse-core') {
         archives javadocJar
     }
 
-    //uploadArchives() {
-    //    repositories.mavenDeployer {
-    //        name = 'sshDeployer'
-    //        uniqueVersion = false
-    //        configuration = configurations.deployerJars
-    //        repository(
-    //                id: 'multiverse-releases',
-    //                url: 'dav:https://dav.codehaus.org/repository/multiverse/') {
-    //            authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
-    //        }
-    //        snapshotRepository(
-    //                id: 'multiverse-snapshots',
-    //                url: 'dav:https://dav.codehaus.org/snapshots.repository/multiverse/') {
-    //            authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
-    //        }
-    //    }
-   // }
+    uploadArchives() {
+        repositories.mavenDeployer {
+            name = 'sshDeployer'
+            uniqueVersion = false
+            configuration = configurations.deployerJars
+            repository(
+                url: 'dav.codehaus.org/repository/multiverse/') {
+                authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
+            }
+            snapshotRepository(
+                    url: 'dav.codehaus.org/snapshots.repository/multiverse/') {
+                authentication(userName: "$codehaus_loginname", password: "$codehaus_password")
+            }
+        }
+    }
 }
 
 project(':multiverse-site') {
