@@ -68,12 +68,6 @@
             <version>1.9.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.benchy</groupId>
-            <artifactId>benchy-driver</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 
