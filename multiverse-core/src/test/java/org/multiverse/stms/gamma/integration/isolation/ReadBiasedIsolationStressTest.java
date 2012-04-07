@@ -16,8 +16,8 @@ import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.TestUtils.randomOneOf;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
-import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondAsString;
-import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondPerThreadAsString;
+import static org.multiverse.stms.gamma.BenchmarkUtils.transactionsPerSecondAsString;
+import static org.multiverse.stms.gamma.BenchmarkUtils.transactionsPerSecondPerThreadAsString;
 
 /**
  * A Stress test that checks if the system is able to deal with mostly reading transactions and doesn't cause

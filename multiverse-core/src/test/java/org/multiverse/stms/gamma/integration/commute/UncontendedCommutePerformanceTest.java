@@ -14,7 +14,7 @@ import org.multiverse.stms.gamma.transactions.GammaTxn;
 import static org.multiverse.TestUtils.*;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
-import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondAsString;
+import static org.multiverse.stms.gamma.BenchmarkUtils.transactionsPerSecondAsString;
 
 public class UncontendedCommutePerformanceTest {
     private volatile boolean stop;

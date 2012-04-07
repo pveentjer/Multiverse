@@ -1,4 +1,4 @@
-package org.multiverse.stms.gamma.benchmarks;
+package org.multiverse.stms.gamma;
 
 import java.text.NumberFormat;
 import java.util.*;

@@ -11,8 +11,8 @@ import static org.junit.Assert.assertEquals;
 import static org.multiverse.TestUtils.joinAll;
 import static org.multiverse.api.GlobalStmInstance.getGlobalStmInstance;
 import static org.multiverse.api.TxnThreadLocal.clearThreadLocalTxn;
-import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondAsString;
-import static org.multiverse.stms.gamma.benchmarks.BenchmarkUtils.transactionsPerSecondPerThreadAsString;
+import static org.multiverse.stms.gamma.BenchmarkUtils.transactionsPerSecondAsString;
+import static org.multiverse.stms.gamma.BenchmarkUtils.transactionsPerSecondPerThreadAsString;
 
 public class AtomicIncrementIsolationStressTest {
 

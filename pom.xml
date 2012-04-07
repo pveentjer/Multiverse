@@ -60,6 +60,7 @@
 
     <modules>
         <module>multiverse-core</module>
+        <!-- module>multiverse-core-drivers</module -->
     </modules>
 
 </project>

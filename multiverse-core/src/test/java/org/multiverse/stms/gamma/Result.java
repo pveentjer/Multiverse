@@ -1,4 +1,4 @@
-package org.multiverse.stms.gamma.benchmarks;
+package org.multiverse.stms.gamma;
 
 /**
  * @author Peter Veentjer
