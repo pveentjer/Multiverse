@@ -17,6 +17,8 @@
         <junit.version>4.10</junit.version>
         <mockito.version>1.9.0</mockito.version>
         <sourceEncoding>UTF-8</sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <scm>
@@ -114,7 +116,8 @@
                         <version>2.12</version>
                         <configuration>
                             <excludes>
-                                <exclude>WeNeedToSaySomethingBecauseElseToProfileWontOverlayToOriginalSurefireConfig</exclude>
+                                <exclude>WeNeedToSaySomethingBecauseElseToProfileWontOverlayToOriginalSurefireConfig
+                                </exclude>
                             </excludes>
                             <includes>
                                 <include>**/*LongTest.java</include>
@@ -153,6 +156,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jxr-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -174,6 +178,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
             </plugin>
             <plugin>
                 <artifactId>maven-changes-plugin</artifactId>
@@ -191,6 +196,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.9</version>
                 <configuration>
                     <showSuccess>false</showSuccess>
                 </configuration>
