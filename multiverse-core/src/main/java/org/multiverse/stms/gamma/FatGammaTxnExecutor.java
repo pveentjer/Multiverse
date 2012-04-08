@@ -20,18 +20,6 @@ import static org.multiverse.api.TxnThreadLocal.*;
 public final class FatGammaTxnExecutor extends AbstractGammaTxnExecutor{
     private static final Logger logger = Logger.getLogger(FatGammaTxnExecutor.class.getName());
 
-    public void execute(Runnable runnable){
-        throw new UnsupportedOperationException();
-    }
-
-    public <E> E execute(Callable<E> callable){
-        throw new UnsupportedOperationException();
-    }
-
-    public <E> E executeChecked(Callable<E> callable)throws Exception{
-        throw new UnsupportedOperationException();
-    }
-
     private final PropagationLevel propagationLevel;
 
     public FatGammaTxnExecutor(final GammaTxnFactory txnFactory) {

@@ -19,7 +19,7 @@ import static java.lang.String.format;
 public final class VetoCommitBarrier extends CommitBarrier {
 
     /**
-     * Creates a new VetoCommitBarrier that uses an unfair Lock.
+     * Creates a new VetoCommitBarrier that uses an unfair TxnLock.
      */
     public VetoCommitBarrier() {
         this(false);

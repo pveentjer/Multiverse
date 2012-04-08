@@ -1,6 +1,6 @@
 package org.multiverse.stms.gamma.transactionalobjects;
 
-import org.multiverse.api.Lock;
+import org.multiverse.api.TxnLock;
 import org.multiverse.api.LockMode;
 import org.multiverse.api.Txn;
 import org.multiverse.api.exceptions.PanicError;
@@ -15,7 +15,7 @@ import static java.lang.String.format;
 import static org.multiverse.api.TxnThreadLocal.getThreadLocalTxn;
 
 @SuppressWarnings({"OverlyComplexClass"})
-public abstract class AbstractGammaObject implements GammaObject, Lock {
+public abstract class AbstractGammaObject implements GammaObject, TxnLock {
 
     public static final long MASK_OREC_EXCLUSIVELOCK = 0x8000000000000000L;
     public static final long MASK_OREC_UPDATELOCK = 0x4000000000000000L;
@@ -73,7 +73,7 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
     }
 
     @Override
-    public final Lock getLock() {
+    public final TxnLock getLock() {
         return this;
     }
 
@@ -570,7 +570,7 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
             int readLockCount = getReadLockCount(current);
 
             if (readLockCount == 0 && !hasWriteOrExclusiveLock(current)) {
-                throw new PanicError("No Lock acquired " + toOrecString(current));
+                throw new PanicError("No TxnLock acquired " + toOrecString(current));
             }
 
             boolean isReadBiased = isReadBiased(current);
@@ -748,7 +748,7 @@ public abstract class AbstractGammaObject implements GammaObject, Lock {
             }
 
             if (lockMode == 0) {
-                throw new PanicError("No Lock " + toOrecString(current));
+                throw new PanicError("No TxnLock " + toOrecString(current));
             }
 
             if (getSurplus(current) > 1) {

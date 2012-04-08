@@ -23,15 +23,15 @@ public interface TxnObject {
     Stm getStm();
 
     /**
-     * Gets the {@link Lock} that belongs to this TxnObject. This call doesn't cause any locking, it
+     * Gets the {@link TxnLock} that belongs to this TxnObject. This call doesn't cause any locking, it
      * only provides access to the object that is able to lock. The returned value will never be null.
      *
      * <p>This call also doesn't rely on a {@link Txn}.
      *
-     * @return the Lock
+     * @return the TxnLock
      * @throws UnsupportedOperationException if this operation is not supported.
      */
-    Lock getLock();
+    TxnLock getLock();
 
     /**
      * Returns the current version of the transactional object. Each time an update happens, the value is increased. It depends
@@ -52,7 +52,7 @@ public interface TxnObject {
      * <p>This can safely be called on an TxnObject that already is locked, although it doesn't provide much value
      * since with a locked TxnObject, since the writeskew problem can't occur anymore because it can't be changed.
      *
-     * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
+     * <p>Unlike the {@link TxnLock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
      *
      * <p>This method has no effect if the {@link Txn} is readonly, because a writeskew is not possible with a
@@ -76,7 +76,7 @@ public interface TxnObject {
      * <p>This can safely be called on an TxnObject that already is locked, although it doesn't provide much value
      * since with a locked TxnObject, since the writeskew problem can't occur anymore because it can't be changed.
      *
-     * <p>Unlike the {@link Lock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
+     * <p>Unlike the {@link TxnLock#acquire(LockMode)} which is pessimistic, ensure is optimistic. This means that a conflict
      * can be detected once the transaction commits.
      *
      * <p>This method has no effect if the {@link Txn} is readonly, because a writeskew is not possible with a

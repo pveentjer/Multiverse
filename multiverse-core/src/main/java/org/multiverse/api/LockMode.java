@@ -7,7 +7,7 @@ import org.multiverse.MultiverseConstants;
  *
  * <p>Normally transactions are very optimistic (e.g. fail during execution or at the end because some read or
  * write conflict was detected), but in some cases a more pessimistic approach is better.  For more information
- * see {@link Lock}.
+ * see {@link TxnLock}.
  *
  * @author Peter Veentjer.
  * @see TxnFactoryBuilder#setReadLockMode(LockMode)
@@ -15,7 +15,7 @@ import org.multiverse.MultiverseConstants;
  * @see TxnConfig#getReadLockMode()
  * @see TxnConfig#getWriteLockMode()
  * @see TxnObject#getLock()
- * @see Lock
+ * @see TxnLock
  */
 public enum LockMode implements MultiverseConstants {
 
@@ -43,7 +43,7 @@ public enum LockMode implements MultiverseConstants {
      * no other transaction can acquire any lock or can do any reading/writing (unless the transaction previously has read the
      * transactional object).
      *
-     * <p>The ExclusiveLock is the Lock acquired by the STM once a Txn is prepared for writing changes to a TxnObject.
+     * <p>The ExclusiveLock is the TxnLock acquired by the STM once a Txn is prepared for writing changes to a TxnObject.
      */
     Exclusive(LOCKMODE_EXCLUSIVE);
 
