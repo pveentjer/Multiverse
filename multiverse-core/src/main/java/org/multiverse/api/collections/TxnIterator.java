@@ -4,6 +4,12 @@ import org.multiverse.api.Txn;
 
 import java.util.Iterator;
 
+/**
+ * A Transactional version of the {@link Iterator}. For every method in the
+ * Iterator interface, a new method with a transaction parameter has been added.
+ *
+ * @param <E>
+ */
 public interface TxnIterator<E> extends Iterator<E> {
 
     /**
