@@ -10,8 +10,6 @@ import org.multiverse.api.Txn;
  */
 public interface TxnStack<E> extends TxnCollection<E> {
 
-    int getCapacity();
-
     void push(E item);
 
     void push(Txn txn, E item);

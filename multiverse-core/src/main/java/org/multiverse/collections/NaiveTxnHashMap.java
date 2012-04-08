@@ -54,8 +54,8 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     @Override
-    public void clear(Txn tx) {
-        if (size.get(tx) == 0) {
+    public void clear(Txn tnx) {
+        if (size.get(tnx) == 0) {
             return;
         }
 
@@ -67,28 +67,28 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     @Override
-    public int size(Txn tx) {
-        return size.get(tx);
+    public int size(Txn tnx) {
+        return size.get(tnx);
     }
 
     @Override
-    public V get(Txn tx, Object key) {
-        NaiveEntry<K, V> entry = getEntry(tx, key);
-        return entry == null ? null : entry.value.get(tx);
+    public V get(Txn tnx, Object key) {
+        NaiveEntry<K, V> entry = getEntry(tnx, key);
+        return entry == null ? null : entry.value.get(tnx);
     }
 
-    private NaiveEntry<K, V> getEntry(Txn tx, Object key) {
+    private NaiveEntry<K, V> getEntry(Txn tnx, Object key) {
         if (key == null) {
             return null;
         }
 
-        if (size.get(tx) == 0) {
+        if (size.get(tnx) == 0) {
             return null;
         }
 
         int hash = key.hashCode();
 
-        for (NaiveEntry<K, V> entry = table.get(tx)[indexFor(hash, table.get(tx).length)].get(tx); entry != null; entry = entry.next.get(tx)) {
+        for (NaiveEntry<K, V> entry = table.get(tnx)[indexFor(hash, table.get(tnx).length)].get(tnx); entry != null; entry = entry.next.get(tnx)) {
             Object k;
             if (entry.hash == hash && ((k = entry.key) == key || key.equals(k))) {
                 return entry;
@@ -98,39 +98,39 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     @Override
-    public V put(Txn tx, K key, V value) {
+    public V put(Txn tnx, K key, V value) {
         if (key == null) {
             throw new NullPointerException();
         }
 
         int hash = key.hashCode();
 
-        int i = indexFor(hash, table.get(tx).length);
-        for (NaiveEntry<K, V> entry = table.get(tx)[i].get(tx); entry != null; entry = entry.next.get()) {
+        int i = indexFor(hash, table.get(tnx).length);
+        for (NaiveEntry<K, V> entry = table.get(tnx)[i].get(tnx); entry != null; entry = entry.next.get()) {
             Object foundKey;
             if (entry.hash == hash && ((foundKey = entry.key) == key || key.equals(foundKey))) {
-                V oldValue = entry.value.get(tx);
-                entry.value.set(tx, value);
+                V oldValue = entry.value.get(tnx);
+                entry.value.set(tnx, value);
                 //entry.recordAccess(this);
                 return oldValue;
             }
         }
 
-        addEntry(tx, hash, key, value, i);
+        addEntry(tnx, hash, key, value, i);
         return null;
     }
 
-    void addEntry(Txn tx, int hash, K key, V value, int bucketIndex) {
-        NaiveEntry<K, V> e = table.get(tx)[bucketIndex].get(tx);
-        table.get(tx)[bucketIndex].set(new NaiveEntry<K, V>(hash, key, value, e));
-        size.increment(tx);
-        if (size.get(tx) >= threshold.get(tx)) {
-            resize(tx, 2 * table.get(tx).length);
+    void addEntry(Txn tnx, int hash, K key, V value, int bucketIndex) {
+        NaiveEntry<K, V> e = table.get(tnx)[bucketIndex].get(tnx);
+        table.get(tnx)[bucketIndex].set(new NaiveEntry<K, V>(hash, key, value, e));
+        size.increment(tnx);
+        if (size.get(tnx) >= threshold.get(tnx)) {
+            resize(tnx, 2 * table.get(tnx).length);
         }
     }
 
-    void resize(Txn tx, int newCapacity) {
-        TxnRef<NaiveEntry>[] oldTable = table.get(tx);
+    void resize(Txn tnx, int newCapacity) {
+        TxnRef<NaiveEntry>[] oldTable = table.get(tnx);
         int oldCapacity = oldTable.length;
         if (oldCapacity == MAXIMUM_CAPACITY) {
             threshold.set(Integer.MAX_VALUE);
@@ -142,23 +142,23 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
             newTable[k] = defaultRefFactory.newTxnRef(null);
         }
 
-        transfer(tx, newTable);
-        table.set(tx, newTable);
-        threshold.set(tx, (int) (newCapacity * loadFactor));
+        transfer(tnx, newTable);
+        table.set(tnx, newTable);
+        threshold.set(tnx, (int) (newCapacity * loadFactor));
     }
 
-    void transfer(Txn tx, TxnRef<NaiveEntry>[] newTable) {
-        TxnRef<NaiveEntry>[] src = table.get(tx);
+    void transfer(Txn tnx, TxnRef<NaiveEntry>[] newTable) {
+        TxnRef<NaiveEntry>[] src = table.get(tnx);
         int newCapacity = newTable.length;
         for (int j = 0; j < src.length; j++) {
-            NaiveEntry<K, V> e = src[j].get(tx);
+            NaiveEntry<K, V> e = src[j].get(tnx);
             if (e != null) {
                 src[j] = null;
                 do {
-                    NaiveEntry<K, V> next = e.next.get(tx);
+                    NaiveEntry<K, V> next = e.next.get(tnx);
                     int i = indexFor(e.hash, newCapacity);
-                    e.next.set(tx, newTable[i].get(tx));
-                    newTable[i].set(tx, e);
+                    e.next.set(tnx, newTable[i].get(tnx));
+                    newTable[i].set(tnx, e);
                     e = next;
                 } while (e != null);
             }
@@ -170,13 +170,13 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     @Override
-    public V remove(Txn tx, Object key) {
+    public V remove(Txn tnx, Object key) {
         throw new TodoException();
     }
 
     @Override
-    public String toString(Txn tx) {
-        int s = size.get(tx);
+    public String toString(Txn tnx) {
+        int s = size.get(tnx);
         if (s == 0) {
             return "[]";
         }
@@ -185,27 +185,27 @@ public final class NaiveTxnHashMap<K, V> extends AbstractTxnMap<K, V> {
     }
 
     @Override
-    public TxnSet<Entry<K, V>> entrySet(Txn tx) {
+    public TxnSet<Entry<K, V>> entrySet(Txn tnx) {
         throw new TodoException();
     }
 
     @Override
-    public TxnSet<K> keySet(Txn tx) {
+    public TxnSet<K> keySet(Txn tnx) {
         throw new TodoException();
     }
 
     @Override
-    public boolean containsKey(Txn tx, Object key) {
-        return getEntry(tx, key) != null;
+    public boolean containsKey(Txn tnx, Object key) {
+        return getEntry(tnx, key) != null;
     }
 
     @Override
-    public boolean containsValue(Txn tx, Object value) {
+    public boolean containsValue(Txn tnx, Object value) {
         throw new TodoException();
     }
 
     @Override
-    public TxnCollection<V> values(Txn tx) {
+    public TxnCollection<V> values(Txn tnx) {
         throw new TodoException();
     }
 

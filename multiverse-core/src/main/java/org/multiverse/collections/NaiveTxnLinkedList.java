@@ -56,13 +56,13 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E set(Txn tx, int index, E element) {
-        return entry(tx, index).value.getAndSet(tx, element);
+    public E set(Txn txn, int index, E element) {
+        return entry(txn, index).value.getAndSet(txn, element);
     }
 
     @Override
-    public int size(Txn tx) {
-        return size.get(tx);
+    public int size(Txn txn) {
+        return size.get(txn);
     }
 
     @Override
@@ -71,18 +71,18 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public int indexOf(Txn tx, Object item) {
+    public int indexOf(Txn txn, Object item) {
         if (item == null) {
             return -1;
         }
 
         int index = 0;
-        Entry<E> node = head.get(tx);
+        Entry<E> node = head.get(txn);
         while (node != null) {
-            if (node.value.get(tx).equals(item)) {
+            if (node.value.get(txn).equals(item)) {
                 return index;
             }
-            node = node.next.get(tx);
+            node = node.next.get(txn);
             index++;
         }
 
@@ -95,76 +95,76 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public int lastIndexOf(Txn tx, Object item) {
+    public int lastIndexOf(Txn txn, Object item) {
         if (item == null) {
             return -1;
         }
 
-        int index = size.get(tx) - 1;
-        Entry<E> node = tail.get(tx);
+        int index = size.get(txn) - 1;
+        Entry<E> node = tail.get(txn);
         while (node != null) {
-            if (node.value.get(tx).equals(item)) {
+            if (node.value.get(txn).equals(item)) {
                 return index;
             }
-            node = node.previous.get(tx);
+            node = node.previous.get(txn);
             index--;
         }
 
         return -1;
     }
 
-    private Entry<E> entry(Txn tx, int index) {
+    private Entry<E> entry(Txn txn, int index) {
         if (index < 0) {
             throw new IndexOutOfBoundsException();
         }
 
-        int s = size.get(tx);
+        int s = size.get(txn);
         if (index >= s) {
             throw new IndexOutOfBoundsException();
         }
 
         if (index < (s >> 1)) {
             int i = 0;
-            Entry<E> node = head.get(tx);
+            Entry<E> node = head.get(txn);
             while (true) {
                 if (i == index) {
                     return node;
                 }
-                node = node.next.get(tx);
+                node = node.next.get(txn);
                 i++;
             }
         } else {
             int i = s - 1;
-            Entry<E> node = tail.get(tx);
+            Entry<E> node = tail.get(txn);
             while (true) {
                 if (i == index) {
                     return node;
                 }
-                node = node.previous.get(tx);
+                node = node.previous.get(txn);
                 i--;
             }
         }
     }
 
     @Override
-    public boolean contains(Txn tx, Object o) {
-        return indexOf(tx, o) != -1;
+    public boolean contains(Txn txn, Object o) {
+        return indexOf(txn, o) != -1;
     }
 
     @Override
-    public boolean remove(Txn tx, Object o) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    public boolean remove(Txn txn, Object o) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void clear(Txn tx) {
-        if (size.get(tx) == 0) {
+    public void clear(Txn txn) {
+        if (size.get(txn) == 0) {
             return;
         }
 
-        size.set(tx, 0);
-        head.set(tx, null);
-        tail.set(tx, null);
+        size.set(txn, 0);
+        head.set(txn, null);
+        tail.set(txn, null);
     }
 
     // ==================== needs sorting =====================================
@@ -176,8 +176,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E element(Txn tx) {
-        return getFirst(tx);
+    public E element(Txn txn) {
+        return getFirst(txn);
     }
 
     @Override
@@ -186,8 +186,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E pop(Txn tx) {
-        return removeFirst(tx);
+    public E pop(Txn txn) {
+        return removeFirst(txn);
     }
 
     @Override
@@ -196,8 +196,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void push(Txn tx, E e) {
-        addFirst(tx, e);
+    public void push(Txn txn, E e) {
+        addFirst(txn, e);
     }
 
     // =============== remove ==============
@@ -208,8 +208,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E remove(Txn tx, int index) {
-        Entry entry = entry(tx, index);
+    public E remove(Txn txn, int index) {
+        Entry entry = entry(txn, index);
         throw new UnsupportedOperationException();
     }
 
@@ -219,8 +219,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E removeFirst(Txn tx) {
-        E element = pollFirst(tx);
+    public E removeFirst(Txn txn) {
+        E element = pollFirst(txn);
         if (element == null) {
             throw new NoSuchElementException("NaiveTxnLinkedList is empty");
         }
@@ -233,8 +233,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E removeLast(Txn tx) {
-        E element = pollLast(tx);
+    public E removeLast(Txn txn) {
+        E element = pollLast(txn);
         if (element == null) {
             throw new NoSuchElementException("NaiveTxnLinkedList is empty");
         }
@@ -247,8 +247,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E remove(Txn tx) {
-        return removeFirst(tx);
+    public E remove(Txn txn) {
+        return removeFirst(txn);
     }
 
     @Override
@@ -257,7 +257,7 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public boolean removeFirstOccurrence(Txn tx, Object o) {
+    public boolean removeFirstOccurrence(Txn txn, Object o) {
         throw new TodoException();
     }
 
@@ -267,7 +267,7 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public boolean removeLastOccurrence(Txn tx, Object o) {
+    public boolean removeLastOccurrence(Txn txn, Object o) {
         throw new TodoException();
     }
 
@@ -280,8 +280,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E getFirst(Txn tx) {
-        E result = pollFirst(tx);
+    public E getFirst(Txn txn) {
+        E result = pollFirst(txn);
         if (result == null) {
             throw new NoSuchElementException("NaiveTxnLinkedList is empty");
         }
@@ -294,8 +294,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E getLast(Txn tx) {
-        E result = pollLast(tx);
+    public E getLast(Txn txn) {
+        E result = pollLast(txn);
         if (result == null) {
             throw new NoSuchElementException("NaiveTxnLinkedList is empty");
         }
@@ -308,8 +308,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E get(Txn tx, int index) {
-        return entry(tx, index).value.get(tx);
+    public E get(Txn txn, int index) {
+        return entry(txn, index).value.get(txn);
     }
 
     // ============== adds ================
@@ -320,8 +320,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void addFirst(Txn tx, E e) {
-        if (!offerFirst(tx, e)) {
+    public void addFirst(Txn txn, E e) {
+        if (!offerFirst(txn, e)) {
             throw new IllegalStateException("NaiveTxnLinkedList full");
         }
     }
@@ -332,15 +332,15 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void addLast(Txn tx, E e) {
-        if (!offerLast(tx, e)) {
+    public void addLast(Txn txn, E e) {
+        if (!offerLast(txn, e)) {
             throw new IllegalStateException("NaiveTxnLinkedList full");
         }
     }
 
     @Override
-    public boolean add(Txn tx, E e) {
-        if (!offer(tx, e)) {
+    public boolean add(Txn txn, E e) {
+        if (!offer(txn, e)) {
             throw new IllegalStateException("NaiveTxnLinkedList full");
         }
 
@@ -355,9 +355,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void putFirst(Txn tx, E item) {
-        if (!offerFirst(tx, item)) {
-            tx.retry();
+    public void putFirst(Txn txn, E item) {
+        if (!offerFirst(txn, item)) {
+            txn.retry();
         }
     }
 
@@ -367,8 +367,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void put(Txn tx, E item) {
-        putLast(tx, item);
+    public void put(Txn txn, E item) {
+        putLast(txn, item);
     }
 
     @Override
@@ -377,9 +377,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public void putLast(Txn tx, E item) {
-        if (!offerLast(tx, item)) {
-            tx.retry();
+    public void putLast(Txn txn, E item) {
+        if (!offerLast(txn, item)) {
+            txn.retry();
         }
     }
 
@@ -391,8 +391,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E take(Txn tx) {
-        return takeLast(tx);
+    public E take(Txn txn) {
+        return takeLast(txn);
     }
 
     @Override
@@ -401,10 +401,10 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E takeFirst(Txn tx) {
-        E item = pollFirst(tx);
+    public E takeFirst(Txn txn) {
+        E item = pollFirst(txn);
         if (item == null) {
-            tx.retry();
+            txn.retry();
         }
         return item;
     }
@@ -415,10 +415,10 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E takeLast(Txn tx) {
-        E item = pollLast(tx);
+    public E takeLast(Txn txn) {
+        E item = pollLast(txn);
         if (item == null) {
-            tx.retry();
+            txn.retry();
         }
 
         return item;
@@ -432,26 +432,26 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public boolean offerFirst(Txn tx, E item) {
+    public boolean offerFirst(Txn txn, E item) {
         if (item == null) {
             throw new NullPointerException();
         }
 
-        int s = size.get(tx);
+        int s = size.get(txn);
         if (s == capacity) {
             return false;
         }
 
         Entry<E> node = new Entry<E>(defaultRefFactory, item);
         if (s == 0) {
-            head.set(tx, node);
-            tail.set(tx, node);
+            head.set(txn, node);
+            tail.set(txn, node);
         } else {
-            node.next.set(tx, head.get(tx));
-            head.get(tx).previous.set(tx, node);
-            head.set(tx, node);
+            node.next.set(txn, head.get(txn));
+            head.get(txn).previous.set(txn, node);
+            head.set(txn, node);
         }
-        size.increment(tx);
+        size.increment(txn);
         return true;
     }
 
@@ -461,26 +461,26 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public boolean offerLast(Txn tx, E item) {
+    public boolean offerLast(Txn txn, E item) {
         if (item == null) {
             throw new NullPointerException();
         }
 
-        int s = size.get(tx);
+        int s = size.get(txn);
         if (s == capacity) {
             return false;
         }
 
         Entry<E> node = new Entry<E>(defaultRefFactory, item);
         if (s == 0) {
-            head.set(tx, node);
-            tail.set(tx, node);
+            head.set(txn, node);
+            tail.set(txn, node);
         } else {
-            node.previous.set(tx, tail.get(tx));
-            tail.get(tx).next.set(tx, node);
-            tail.set(tx, node);
+            node.previous.set(txn, tail.get(txn));
+            tail.get(txn).next.set(txn, node);
+            tail.set(txn, node);
         }
-        size.increment(tx);
+        size.increment(txn);
         return true;
     }
 
@@ -490,8 +490,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public boolean offer(Txn tx, E item) {
-        return offerLast(tx, item);
+    public boolean offer(Txn txn, E item) {
+        return offerLast(txn, item);
     }
 
     // ================ polls =======================
@@ -502,8 +502,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E pollFirst(Txn tx) {
-        int s = size.get(tx);
+    public E pollFirst(Txn txn) {
+        int s = size.get(txn);
 
         if (s == 0) {
             return null;
@@ -511,17 +511,17 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
 
         E item;
         if (s == 1) {
-            item = tail.get(tx).value.get(tx);
-            head.set(tx, null);
-            tail.set(tx, null);
+            item = tail.get(txn).value.get(txn);
+            head.set(txn, null);
+            tail.set(txn, null);
         } else {
-            Entry<E> oldHead = head.get(tx);
-            item = oldHead.value.get(tx);
-            Entry<E> newHead = oldHead.next.get(tx);
-            head.set(tx, newHead);
-            newHead.previous.set(tx, null);
+            Entry<E> oldHead = head.get(txn);
+            item = oldHead.value.get(txn);
+            Entry<E> newHead = oldHead.next.get(txn);
+            head.set(txn, newHead);
+            newHead.previous.set(txn, null);
         }
-        size.decrement(tx);
+        size.decrement(txn);
         return item;
     }
 
@@ -531,8 +531,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E pollLast(Txn tx) {
-        int s = size.get(tx);
+    public E pollLast(Txn txn) {
+        int s = size.get(txn);
 
         if (s == 0) {
             return null;
@@ -540,17 +540,17 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
 
         E item;
         if (s == 1) {
-            item = head.get(tx).value.get(tx);
-            head.set(tx, null);
-            tail.set(tx, null);
+            item = head.get(txn).value.get(txn);
+            head.set(txn, null);
+            tail.set(txn, null);
         } else {
-            Entry<E> oldTail = tail.get(tx);
-            item = oldTail.value.get(tx);
-            Entry<E> newTail = oldTail.previous.get(tx);
-            tail.set(tx, newTail);
-            newTail.next.set(tx, null);
+            Entry<E> oldTail = tail.get(txn);
+            item = oldTail.value.get(txn);
+            Entry<E> newTail = oldTail.previous.get(txn);
+            tail.set(txn, newTail);
+            newTail.next.set(txn, null);
         }
-        size.decrement(tx);
+        size.decrement(txn);
         return item;
     }
 
@@ -560,8 +560,8 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E poll(Txn tx) {
-        return pollLast(tx);
+    public E poll(Txn txn) {
+        return pollLast(txn);
     }
 
     // =============== peeks =================
@@ -572,9 +572,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E peekFirst(Txn tx) {
-        Entry<E> h = head.get(tx);
-        return h == null ? null : h.value.get(tx);
+    public E peekFirst(Txn txn) {
+        Entry<E> h = head.get(txn);
+        return h == null ? null : h.value.get(txn);
     }
 
     @Override
@@ -583,9 +583,9 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E peekLast(Txn tx) {
-        Entry<E> t = tail.get(tx);
-        return t == null ? null : t.value.get(tx);
+    public E peekLast(Txn txn) {
+        Entry<E> t = tail.get(txn);
+        return t == null ? null : t.value.get(txn);
     }
 
     @Override
@@ -594,14 +594,14 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public E peek(Txn tx) {
-        return peekFirst(tx);
+    public E peek(Txn txn) {
+        return peekFirst(txn);
     }
 
     // ================ misc ==========================
 
     @Override
-    public TxnIterator<E> iterator(Txn tx) {
+    public TxnIterator<E> iterator(Txn txn) {
         throw new TodoException();
     }
 
@@ -611,7 +611,7 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
     }
 
     @Override
-    public TxnIterator<E> descendingIterator(Txn tx) {
+    public TxnIterator<E> descendingIterator(Txn txn) {
         throw new TodoException();
     }
 
@@ -619,18 +619,18 @@ public final class NaiveTxnLinkedList<E> extends AbstractTxnCollection<E>
 
 
     @Override
-    public String toString(Txn tx) {
-        int s = size(tx);
+    public String toString(Txn txn) {
+        int s = size(txn);
         if (s == 0) {
             return "[]";
         }
 
         StringBuffer sb = new StringBuffer();
         sb.append('[');
-        Entry<E> node = head.get(tx);
+        Entry<E> node = head.get(txn);
         do {
-            sb.append(node.value.get(tx));
-            node = node.next.get(tx);
+            sb.append(node.value.get(txn));
+            node = node.next.get(txn);
             if (node != null) {
                 sb.append(", ");
             }

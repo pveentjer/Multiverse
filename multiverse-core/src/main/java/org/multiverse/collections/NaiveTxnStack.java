@@ -34,24 +34,23 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public int size(Txn tx) {
-        return size.get(tx);
+    public int size(Txn txn) {
+        return size.get(txn);
     }
 
-    @Override
     public int getCapacity() {
         return capacity;
     }
 
     @Override
-    public void clear(Txn tx) {
-        int s = size.get(tx);
+    public void clear(Txn txn) {
+        int s = size.get(txn);
         if (s == 0) {
             return;
         }
 
-        size.set(tx, 0);
-        head.set(tx, null);
+        size.set(txn, 0);
+        head.set(txn, null);
     }
 
     @Override
@@ -60,12 +59,12 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public boolean offer(Txn tx, E item) {
-        if (capacity == size(tx)) {
+    public boolean offer(Txn txn, E item) {
+        if (capacity == size(txn)) {
             return false;
         }
 
-        push(tx, item);
+        push(txn, item);
         return true;
     }
 
@@ -75,12 +74,12 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public E poll(Txn tx) {
-        if (size.get(tx) == 0) {
+    public E poll(Txn txn) {
+        if (size.get(txn) == 0) {
             return null;
         }
 
-        return pop(tx);
+        return pop(txn);
     }
 
     @Override
@@ -89,8 +88,8 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public E peek(Txn tx) {
-        Node<E> h = head.get(tx);
+    public E peek(Txn txn) {
+        Node<E> h = head.get(txn);
         return h == null ? null : h.value;
     }
 
@@ -100,17 +99,17 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public void push(Txn tx, E item) {
+    public void push(Txn txn, E item) {
         if (item == null) {
             throw new NullPointerException();
         }
 
-        if (size.get(tx) == capacity) {
-            tx.retry();
+        if (size.get(txn) == capacity) {
+            txn.retry();
         }
 
-        head.set(tx, new Node<E>(head.get(tx), item));
-        size.increment(tx);
+        head.set(txn, new Node<E>(head.get(txn), item));
+        size.increment(txn);
     }
 
     @Override
@@ -119,20 +118,20 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public E pop(Txn tx) {
-        if (size.get(tx) == 0) {
-            tx.retry();
+    public E pop(Txn txn) {
+        if (size.get(txn) == 0) {
+            txn.retry();
         }
 
-        Node<E> node = head.get(tx);
-        head.set(tx, node.next);
-        size.decrement(tx);
+        Node<E> node = head.get(txn);
+        head.set(txn, node.next);
+        size.decrement(txn);
         return node.value;
     }
 
     @Override
-    public boolean add(Txn tx, E e) {
-        if (!offer(tx, e)) {
+    public boolean add(Txn txn, E e) {
+        if (!offer(txn, e)) {
             throw new IllegalStateException("NaiveTxnStack full");
         }
 
@@ -140,17 +139,17 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public TxnIterator<E> iterator(Txn tx) {
-        return new It<E>(stm, head.get(tx));
+    public TxnIterator<E> iterator(Txn txn) {
+        return new It<E>(stm, head.get(txn));
     }
 
     @Override
-    public boolean contains(Txn tx, Object o) {
+    public boolean contains(Txn txn, Object o) {
         if (o == null) {
             return false;
         }
 
-        int s = size.get(tx);
+        int s = size.get(txn);
 
         if (s == 0) {
             return false;
@@ -167,7 +166,7 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
     }
 
     @Override
-    public boolean remove(Txn tx, Object o) {
+    public boolean remove(Txn txn, Object o) {
         throw new UnsupportedOperationException();
     }
 
@@ -179,37 +178,37 @@ public final class NaiveTxnStack<E> extends AbstractTxnCollection<E> implements 
         }
 
         @Override
-        public boolean hasNext(Txn tx) {
+        public boolean hasNext(Txn txn) {
             return node.get() != null;
         }
 
         @Override
-        public E next(Txn tx) {
-            Node<E> n = node.get(tx);
+        public E next(Txn txn) {
+            Node<E> n = node.get(txn);
 
             if (n == null) {
                 throw new NoSuchElementException();
             }
 
             E value = n.value;
-            node.set(tx, n.next);
+            node.set(txn, n.next);
             return value;
         }
 
         @Override
-        public void remove(Txn tx) {
+        public void remove(Txn txn) {
             throw new UnsupportedOperationException();
         }
     }
 
     @Override
-    public String toString(Txn tx) {
-        int s = size.get(tx);
+    public String toString(Txn txn) {
+        int s = size.get(txn);
         if (s == 0) {
             return "[]";
         }
 
-        StringBuffer sb = new StringBuffer("[");
+        StringBuilder sb = new StringBuilder("[");
         Node<E> node = head.get();
 
         while (node != null) {

@@ -3,7 +3,8 @@ package org.multiverse.api.exceptions;
 /**
  * A {@link RuntimeException} thrown when something fails while executing a {@link org.multiverse.api.Txn}.
  *
- * <p>This exception is not caught by the {@link org.multiverse.api.TxnExecutor}.
+ * <p>This exception is not caught by the {@link org.multiverse.api.TxnExecutor} because it indicates
+ * a programmer error (just like an IllegalArgumentException).
  *
  * @author Peter Veentjer.
  */

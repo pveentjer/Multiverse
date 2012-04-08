@@ -40,8 +40,8 @@ public abstract class AbstractTxnMap<K, V> implements TxnMap<K, V> {
     }
 
     @Override
-    public boolean isEmpty(Txn tx) {
-        return size(tx) == 0;
+    public boolean isEmpty(Txn txn) {
+        return size(txn) == 0;
     }
 
     @Override
@@ -104,9 +104,9 @@ public abstract class AbstractTxnMap<K, V> implements TxnMap<K, V> {
     }
 
     @Override
-    public void putAll(Txn tx, Map<? extends K, ? extends V> m) {
+    public void putAll(Txn txn, Map<? extends K, ? extends V> m) {
         for (Map.Entry<? extends K, ? extends V> e : m.entrySet()){
-            put(tx, e.getKey(), e.getValue());
+            put(txn, e.getKey(), e.getValue());
         }
     }
 

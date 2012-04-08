@@ -34,8 +34,8 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
     }
 
     @Override
-    public boolean isEmpty(final Txn tx) {
-        return size(tx) == 0;
+    public boolean isEmpty(final Txn txn) {
+        return size(txn) == 0;
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
     }
 
     @Override
-    public boolean containsAll(Txn tx, Collection<?> c) {
+    public boolean containsAll(Txn txn, Collection<?> c) {
         if (c == null) {
             throw new NullPointerException();
         }
@@ -68,12 +68,12 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
             return true;
         }
 
-        if (isEmpty(tx)) {
+        if (isEmpty(txn)) {
             return false;
         }
 
         for (Object item : c) {
-            if (!contains(tx, item)) {
+            if (!contains(txn, item)) {
                 return false;
             }
         }
@@ -97,7 +97,7 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
     }
 
     @Override
-    public boolean addAll(final Txn tx, final Collection<? extends E> c) {
+    public boolean addAll(final Txn txn, final Collection<? extends E> c) {
         if (c == null) {
             throw new NullPointerException();
         }
@@ -108,7 +108,7 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
 
         boolean change = false;
         for (E item : c) {
-            if (add(tx, item)) {
+            if (add(txn, item)) {
                 change = true;
             }
         }
@@ -122,19 +122,19 @@ public abstract class AbstractTxnCollection<E> implements TxnCollection<E> {
     }
 
     @Override
-    public boolean addAll(final Txn tx, final TxnCollection<? extends E> c) {
+    public boolean addAll(final Txn txn, final TxnCollection<? extends E> c) {
         if (c == null) {
             throw new NullPointerException();
         }
 
-        if (c.isEmpty(tx)) {
+        if (c.isEmpty(txn)) {
             return false;
         }
 
         boolean change = false;
-        for (TxnIterator<? extends E> it = c.iterator(tx); it.hasNext(tx);) {
+        for (TxnIterator<? extends E> it = c.iterator(txn); it.hasNext(txn);) {
 
-            if (add(tx, it.next(tx))) {
+            if (add(txn, it.next(txn))) {
                 change = true;
             }
         }

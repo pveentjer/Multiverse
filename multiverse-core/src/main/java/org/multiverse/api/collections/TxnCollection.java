@@ -6,6 +6,9 @@ import org.multiverse.api.Txn;
 import java.util.Collection;
 
 /**
+ * A {@link Collection} that is transactional. For all methods provided by the
+ * Collection interface, and additional method with a transaction parameter is
+ * added.
  *
  * @param <E>
  * @author Peter Veentjer.
