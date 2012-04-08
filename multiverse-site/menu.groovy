@@ -49,7 +49,7 @@ def menus = [
 
         new Menu(name: 'Documentation', items: [
                 new MenuItem(title: 'Overview', pageid: 'documentationoverview'),
-                new MenuItem(title: 'Reference Manual', url: 'manual/index.html'),
+                new MenuItem(title: 'Reference Manual', url: 'manual.html'),
                 new MenuItem(title: 'Javadoc', url: 'apidocs/index.html')
         ])
 ]
@@ -100,5 +100,8 @@ output.text = new File("$basedir/site/style.css").text
 
 def index = new File("$outputdirectory/index.html")
 index.text = new File("$basedir/site/index.html").text
+
+def manual = new File("$outputdirectory/manual.html")
+manual.text = new File("$basedir/site/manual.html").text
 
 println('finished')

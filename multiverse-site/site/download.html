@@ -1,8 +1,52 @@
 <h2>Download</h2>
 
-<h3>Releases</h3>
 Multiverse <a href="http://repository.codehaus.org/org/multiverse/multiverse-core/0.7.0/">0.7.0</a> is the most recent final release.
+<br/>
+<br/>
+To include the jar in your Maven build, add the following snippet to your pom.xml.
+
+<pre>
+    &lt;dependencies&gt;
+         &lt;dependency&gt;
+             &lt;groupId&gt;org.multiverse&lt;/groupId&gt;
+             &lt;artifactId&gt;multiverse-core&lt;/artifactId&gt;
+             &lt;version&gt;0.7.0&lt;/version&gt;
+         &lt;/dependency&gt;
+         ....
+     &lt;/dependencies&gt;
+
+     &lt;repositories&gt;
+         &lt;repository&gt;
+             &lt;id&gt;codehaus&lt;/id&gt;
+             &lt;name&gt;Codehaus Release Repo&lt;/name&gt;
+             &lt;url&gt;http://dist.codehaus.org/&lt;/url&gt;
+         &lt;/repository&gt;
+     &lt;/repositories&gt;
+</pre>
 
 <h3>Snapshots</h3>
 Multiverse <a href="http://snapshots.repository.codehaus.org/org/multiverse/multiverse-core/0.8.0-SNAPSHOT">0.8.0-SNAPSHOT</a> is the most
-        recent development version.
+recent development version.
+<br/>
+<br/>
+To include the jar in your Maven build, add the following snippet to your pom.xml:
+
+<pre>
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.multiverse&lt;/groupId&gt;
+            &lt;artifactId&gt;multiverse-core&lt;/artifactId&gt;
+            &lt;version&gt;0.8.0-SNAPSHOT&lt;/version&gt;
+        &lt;/dependency&gt;
+            ....
+    &lt;/dependencies&gt;
+
+    &lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;codehaus-snapshot&lt;/id&gt;
+            &lt;name&gt;Codehaus Snapshot Repo&lt;/name&gt;
+            &lt;url&gt;http://snapshots.repository.codehaus.org&lt;/url&gt;
+        &lt;/repository&gt;
+            ...
+    &lt;/repositories&gt;
+</pre>

@@ -1,6 +1,5 @@
 <h1>Development</h1>
-On this page you can find all information related to developing Multiverse. For more information about how to set up
-your project that depends on Multiverse, check the <a href="developconfiguration.html">following</a> page.
+On this page you can find all information related to developing Multiverse.
 
 <h2>Links</h2>
 Underneath you can find the most important links:
@@ -9,17 +8,11 @@ Underneath you can find the most important links:
 </ul>
 
 <h2>Building the project</h2>
-You need to install <a href="http://www.gradle.org">Gradle</a> 1.0 Milestone 9
-(<a href="http://services.gradle.org/distributions/gradle-1.0-milestone-9-bin.zip">download</a>). If you go to the root directory
-and type 'gradle -i' (the -i adds progress information) the project will automatically be compiled and the
-artifacts will also be stored in your local maven repository. Other important commands:
+
 <pre>
-    //builds the jar from scratch (unit tests are not executed)
-    gradle -i clean install
+    //build the project
+    mvn clean install
 
-    //runs the tests
-    gradle -i test
-
-    //runs the integration tests (this can some time).
-    gradle -i integrationtest
+    //build the project including the stresstests (the normal tests are skipped).
+    mvn -Pstresstest clean install
 </pre>

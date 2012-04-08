@@ -124,6 +124,7 @@
                             </includes>
                             <argLine>-Xmx256m</argLine>
                             <forkMode>once</forkMode>
+                            <redirectTestOutputToFile>false</redirectTestOutputToFile>
                         </configuration>
                     </plugin>
                 </plugins>

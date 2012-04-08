@@ -13,5 +13,5 @@ popd
 mkdir target/site/
 cp -R ../multiverse-core/target/site/apidocs target/site/apidocs
 
-echo "Generating the webiste"
+echo "Generating the website"
 groovy menu.groovy
