@@ -11,3 +11,8 @@ multiverse-site/target/
 gradle.properties
 release.properties
 target/
+*.ipr
+*.iws
+*.classpath
+*.project
+*.settings

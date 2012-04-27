@@ -4,7 +4,6 @@ import org.multiverse.api.Stm;
 import org.multiverse.api.Txn;
 import org.multiverse.api.collections.TxnIterator;
 import org.multiverse.api.collections.TxnSet;
-import org.multiverse.api.exceptions.TodoException;
 
 import java.util.Map;
 
@@ -87,6 +86,20 @@ public final class NaiveTxnHashSet<E>
 
     @Override
     public String toString(Txn tx) {
-        throw new TodoException();
+        TxnIterator<E> it = iterator(tx);
+        if(! it.hasNext(tx)) {
+            return "[]";
+        }
+        StringBuilder result = new StringBuilder();
+        result.append('[');
+        while(it.hasNext(tx)) {
+            E item = it.next(tx);
+            result.append(item);
+            if(it.hasNext(tx)) {
+              result.append(",");
+            }
+        }
+        result.append(']');
+        return result.toString();
     }
 }
