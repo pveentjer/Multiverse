@@ -12,8 +12,8 @@ Example
     import static org.multiverse.api.StmUtils.*;
 
     public class Account{
-        private final TxnRef<Date> lastModified = newTxnRef();
-        private final TxnLong amount = newTxnLong();
+        private final TxnRef<Date> lastModified = new TxnRef();
+        private final TxnLong amount = new TxnLong();
 
         public Account(long amount){
            this.amount.set(amount);
@@ -43,7 +43,7 @@ Example
         }
     }
 
-    And it can be called like this:
+    # And it can be called like this:
 
     Account account1 = new Account(10);
     Account account2 = new Account(20)
