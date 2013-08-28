@@ -391,7 +391,10 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
 
         do {
             final int offset = goLeft ? -jump : jump;
-            final int index = (hash + offset) % array.length;
+            int index = (hash + offset) % array.length;
+            if(index<0){
+                index = index+array.length;
+            }
 
             final Tranlocal current = array[index];
             if (current == null || current.owner == null) {
@@ -417,7 +420,10 @@ public final class FatVariableLengthGammaTxn extends GammaTxn {
 
         do {
             final int offset = goLeft ? -jump : jump;
-            final int index = (hash + offset) % array.length;
+            int index = (hash + offset) % array.length;
+            if(index<0){
+                index = index+array.length;
+            }
 
             Tranlocal current = array[index];
             if (current == null) {
