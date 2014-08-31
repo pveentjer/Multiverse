@@ -1,4 +1,4 @@
-package org.multiverse.stms.gamma.transactionalobjects.baseGammaTxnRef;
+package org.multiverse.stms.gamma.transactionalobjects.refs;
 
 import org.junit.Before;
 import org.junit.Test;
